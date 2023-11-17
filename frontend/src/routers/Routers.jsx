@@ -1,5 +1,6 @@
 import LemNhem from "@/components/LemNhem";
 import { MainLayout } from "@/layouts";
+import { Signing } from "@/pages";
 import { useRoutes } from "react-router-dom";
 
 const Routers = () => {
@@ -13,8 +14,8 @@ const Routers = () => {
           element: <LemNhem />,
         },
         {
-          path: "/signing/:signing_token",
-          element: <MainLayout />,
+          path: "/view/signing/:signing_token",
+          element: <Signing />,
         },
       ],
     },

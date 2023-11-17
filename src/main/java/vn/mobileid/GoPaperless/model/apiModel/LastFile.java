@@ -1,0 +1,112 @@
+package vn.mobileid.GoPaperless.model.apiModel;
+
+public class LastFile {
+    private int pplWorkflowId;
+    private int firstPplFileSignedId;
+    private int lastPplFileSignedId;
+    private String lastPplFileName;
+    private String lastPplFileUuid;
+    private int fileSize;
+    private String fileType;
+    private String uploadToken;
+    private int documentId;
+    private String workflowDocumentName;
+    private String workflowDocumentFormat;
+    private int enterpriseId;
+
+    public int getPplWorkflowId() {
+        return pplWorkflowId;
+    }
+
+    public void setPplWorkflowId(int pplWorkflowId) {
+        this.pplWorkflowId = pplWorkflowId;
+    }
+
+    public int getFirstPplFileSignedId() {
+        return firstPplFileSignedId;
+    }
+
+    public void setFirstPplFileSignedId(int firstPplFileSignedId) {
+        this.firstPplFileSignedId = firstPplFileSignedId;
+    }
+
+    public int getLastPplFileSignedId() {
+        return lastPplFileSignedId;
+    }
+
+    public void setLastPplFileSignedId(int lastPplFileSignedId) {
+        this.lastPplFileSignedId = lastPplFileSignedId;
+    }
+
+    public String getLastPplFileName() {
+        return lastPplFileName;
+    }
+
+    public void setLastPplFileName(String lastPplFileName) {
+        this.lastPplFileName = lastPplFileName;
+    }
+
+    public String getLastPplFileUuid() {
+        return lastPplFileUuid;
+    }
+
+    public void setLastPplFileUuid(String lastPplFileUuid) {
+        this.lastPplFileUuid = lastPplFileUuid;
+    }
+
+    public int getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(int fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getUploadToken() {
+        return uploadToken;
+    }
+
+    public void setUploadToken(String uploadToken) {
+        this.uploadToken = uploadToken;
+    }
+
+    public int getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(int documentId) {
+        this.documentId = documentId;
+    }
+
+    public String getWorkflowDocumentName() {
+        return workflowDocumentName;
+    }
+
+    public void setWorkflowDocumentName(String workflowDocumentName) {
+        this.workflowDocumentName = workflowDocumentName;
+    }
+
+    public String getWorkflowDocumentFormat() {
+        return workflowDocumentFormat;
+    }
+
+    public void setWorkflowDocumentFormat(String workflowDocumentFormat) {
+        this.workflowDocumentFormat = workflowDocumentFormat;
+    }
+
+    public int getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(int enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+}

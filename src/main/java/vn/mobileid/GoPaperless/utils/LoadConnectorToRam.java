@@ -8,6 +8,8 @@ import vn.mobileid.GoPaperless.process.ProcessDb;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 @Component
@@ -26,8 +28,11 @@ public class LoadConnectorToRam implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0) {
         System.out.println("*********Load ConnectorToRAM started*********");
         try {
-            Enterprise enterprise = new Enterprise();
-            connect.USP_GW_ENTERPRISE_LIST(enterprise);
+            List<Enterprise> enterpriseList = new ArrayList<>();
+            connect.USP_GW_ENTERPRISE_LIST(enterpriseList);
+            if(enterpriseList.size() > 0 && enterpriseList != null){
+                LoadParamSystem.updateParamEnterpriseSystem(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE, enterpriseList);
+            }
             System.out.println("*********load enterprise ram done started*********");
         } catch (Exception e) {
             e.printStackTrace();

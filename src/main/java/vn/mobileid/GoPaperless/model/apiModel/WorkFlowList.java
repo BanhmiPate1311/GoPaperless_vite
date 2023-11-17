@@ -4,6 +4,8 @@ public class WorkFlowList {
     private int Id;
     private String WorkFlowType;
     private int WorkFlowStatus;
+    private int EnterpriseId;
+    private int DocumentId;
     private String PostBackUrl;
     private String RedirectUri;
     private String FileUuid;
@@ -34,6 +36,22 @@ public class WorkFlowList {
 
     public void setWorkFlowStatus(int workFlowStatus) {
         WorkFlowStatus = workFlowStatus;
+    }
+
+    public int getEnterpriseId() {
+        return EnterpriseId;
+    }
+
+    public void setEnterpriseId(int enterpriseId) {
+        EnterpriseId = enterpriseId;
+    }
+
+    public int getDocumentId() {
+        return DocumentId;
+    }
+
+    public void setDocumentId(int documentId) {
+        DocumentId = documentId;
     }
 
     public String getPostBackUrl() {

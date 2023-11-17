@@ -2,14 +2,15 @@ package vn.mobileid.GoPaperless.process;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import vn.mobileid.GoPaperless.model.apiModel.Enterprise;
-import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
+import vn.mobileid.GoPaperless.model.apiModel.*;
 import vn.mobileid.GoPaperless.utils.CommonFunction;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ProcessDb {
@@ -70,9 +71,12 @@ public class ProcessDb {
 //                response.setId(rs.getInt("ID"));
 //                response.setPostBackUrl(CommonFunction.CheckTextNull(rs.getString("POSTBACK_URL")));
 //                response.setWorkFlowStatus(rs.getInt("WORKFLOW_STATUS"));
+                response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
+                response.setDocumentId(rs.getInt("DOCUMENT_ID"));
                 response.setWorkFlowDocumentName(rs.getString("WORKFLOW_DOCUMENT_NAME"));
                 response.setWorkFlowDocumentFormat(rs.getString("WORKFLOW_DOCUMENT_FORMAT"));
                 response.setVisibleHeaderFooter(rs.getInt("VISIBLE_HEADER_FOOTER"));
+
             }
         } catch (Exception e) {
             System.out.println("USP_GW_PPL_WORKFLOW_GET: " + e.getMessage());
@@ -88,7 +92,7 @@ public class ProcessDb {
         }
     }
 
-    public void USP_GW_ENTERPRISE_LIST(Enterprise enterprise) throws Exception {
+    public void USP_GW_ENTERPRISE_LIST(List<Enterprise> enterpriseList) throws Exception {
         CallableStatement proc_stmt = null;
         Connection conns = null;
         ResultSet rs = null;
@@ -100,12 +104,157 @@ public class ProcessDb {
 
             rs = proc_stmt.executeQuery();
             while (rs.next()) {
+                Enterprise enterprise = new Enterprise();
                 enterprise.setId(rs.getInt("ID"));
                 enterprise.setMetadataGatewayView(rs.getString("METADATA_GATEWAY_VIEW"));
                 enterprise.setLogo(rs.getString("LOGO"));
+                enterpriseList.add(enterprise);
             }
         } catch (Exception e) {
             System.out.println("USP_GW_PPL_WORKFLOW_GET: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_PPL_WORKFLOW_GET_FIRST_FILE(FirstFile response, String pSIGNING_TOKEN) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        ArrayList<FirstFile> tempList = new ArrayList<>();
+        String convrtr = "0";
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_GET_FIRST_FILE(?,?) }");
+            proc_stmt.setString("pSIGNING_TOKEN", pSIGNING_TOKEN);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+//            System.out.println("USP_PPL_WORKFLOW_GET_FIRST_FILE: " + proc_stmt.toString());
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+
+                response.setId(rs.getInt("PPL_FILE_ID"));
+                response.setFileId(rs.getInt("PPL_FILE_ID"));
+                response.setFileName(rs.getString("FIRST_PPL_FILE_NAME"));
+                response.setFileUuid(rs.getString("FIRST_PPL_FILE_UUID"));
+                response.setUploadToken(rs.getString("UPLOAD_TOKEN"));
+                response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
+                response.setWorkflowDocumentName(rs.getString("WORKFLOW_DOCUMENT_NAME"));
+                response.setWorkflowDocumentFormat(rs.getString("WORKFLOW_DOCUMENT_FORMAT"));
+                response.setWorkflowId(rs.getInt("PPL_WORKFLOW_ID"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("USP_GW_PPL_WORKFLOW_GET_FIRST_FILE: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_PPL_WORKFLOW_PARTICIPANTS_LIST(List<Participants> responseList, String signingToken) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        String convrtr = "0";
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_LIST(?,?) }");
+            proc_stmt.setString("pSIGNING_TOKEN", signingToken);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+//            System.out.println("USP_PPL_WORKFLOW_GET_FIRST_FILE: " + proc_stmt.toString());
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                Participants response = new Participants();
+                response.setId(rs.getInt("ID"));
+                response.setPplWorkflowId(rs.getInt("PPL_WORKFLOW_ID"));
+                response.setSignerId(rs.getString("SIGNER_ID"));
+                response.setFirstName(rs.getString("FIRST_NAME"));
+                response.setLastName(rs.getString("LAST_NAME"));
+                response.setEmail(rs.getString("EMAIL"));
+                response.setMetaInformation(rs.getString("META_INFORMATION"));
+                response.setSignerStatus(rs.getInt("SIGNER_STATUS"));
+                response.setSignerToken(rs.getString("SIGNER_TOKEN"));
+                response.setSigningOptions(rs.getString("SIGNING_OPTIONS"));
+                response.setAnnotation(rs.getString("ANNOTATION"));
+//                response.setSignedType(rs.getString("SIGNED_TYPE"));
+//                response.setSignedTime(rs.getString("SIGNED_TIME"));
+                response.setCustomReason(rs.getString("CUSTOM_REASON"));
+                response.setSigningPurpose(rs.getString("SIGNING_PURPOSE"));
+                response.setCertificate(rs.getString("CERTIFICATE"));
+
+                responseList.add(response);
+            }
+
+        } catch (Exception e) {
+            System.out.println("USP_GW_PPL_WORKFLOW_PARTICIPANTS_LIST: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_PPL_WORKFLOW_GET_LAST_FILE(LastFile response, String pSIGNING_TOKEN) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        ArrayList<FirstFile> tempList = new ArrayList<>();
+        String convrtr = "0";
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_GET_LAST_FILE(?,?) }");
+            proc_stmt.setString("pSIGNING_TOKEN", pSIGNING_TOKEN);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+//            System.out.println("USP_PPL_WORKFLOW_GET_FIRST_FILE: " + proc_stmt.toString());
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+
+                response.setPplWorkflowId(rs.getInt("PPL_WORKFLOW_ID"));
+                response.setFirstPplFileSignedId(rs.getInt("FIRST_PPL_FILE_SIGNED_ID"));
+                response.setLastPplFileSignedId(rs.getInt("LAST_PPL_FILE_SIGNED_ID"));
+                response.setLastPplFileName(rs.getString("LAST_PPL_FILE_NAME"));
+                response.setLastPplFileUuid(rs.getString("LAST_PPL_FILE_UUID"));
+                response.setFileSize(rs.getInt("FILE_SIZE"));
+                response.setFileType(rs.getString("FILE_TYPE"));
+                response.setUploadToken(rs.getString("UPLOAD_TOKEN"));
+                response.setDocumentId(rs.getInt("DOCUMENT_ID"));
+                response.setWorkflowDocumentName(rs.getString("WORKFLOW_DOCUMENT_NAME"));
+                response.setWorkflowDocumentFormat(rs.getString("WORKFLOW_DOCUMENT_FORMAT"));
+                response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("USP_GW_PPL_WORKFLOW_GET_LAST_FILE: " + e.getMessage());
         } finally {
             if (rs != null) {
                 rs.close();

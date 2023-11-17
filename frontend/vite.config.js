@@ -9,4 +9,22 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  base: "/view",
+  optimizeDeps: {
+    esbuildOptions: {
+      // Node.js global to browser globalThis
+      define: {
+        global: "globalThis",
+      },
+    },
+  },
+  server: {
+    proxy: {
+      "/view/apigw": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });

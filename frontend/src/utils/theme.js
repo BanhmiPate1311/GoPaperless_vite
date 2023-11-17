@@ -3,6 +3,10 @@ import { red } from "@mui/material/colors";
 
 // Create a theme instance.
 export let theme = createTheme({
+  GoPaperless: {
+    headerHeight: "55px",
+    footerBarHeight: "66px",
+  },
   typography: {
     fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
     h6: {
