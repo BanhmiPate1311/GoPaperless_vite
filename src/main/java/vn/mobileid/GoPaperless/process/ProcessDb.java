@@ -3,7 +3,6 @@ package vn.mobileid.GoPaperless.process;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.mobileid.GoPaperless.model.apiModel.*;
-import vn.mobileid.GoPaperless.utils.CommonFunction;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -259,6 +258,75 @@ public class ProcessDb {
             if (rs != null) {
                 rs.close();
             }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public int USP_GW_SIGNER_CHECK_EXIST(String pSIGNING_TOKEN, String pSIGNER_TOKEN) throws Exception {
+        int convrtr = 0;
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_SIGNER_CHECK_EXIST(?,?,?,?) }");
+
+            proc_stmt.setString("pSIGNING_TOKEN", pSIGNING_TOKEN);
+            proc_stmt.setString("pSIGNER_TOKEN", pSIGNER_TOKEN);
+
+            proc_stmt.registerOutParameter("pIS_EXIST", java.sql.Types.INTEGER);
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+
+            proc_stmt.execute();
+//            pIS_EXIST[0] = proc_stmt.getInt("pIS_EXIST");
+            convrtr = proc_stmt.getInt("pIS_EXIST");
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
+
+    public String USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(int pPPL_FILE_ID, List<PplFileDetail> listPplFileDetail) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        ResultSet rs = null;
+
+        try {
+            System.out.println("pPPL_FILE_ID: " + pPPL_FILE_ID);
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(?,?) }");
+            proc_stmt.setInt("pPPL_FILE_ID", pPPL_FILE_ID);
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                PplFileDetail pplFileDetail = new PplFileDetail();
+                pplFileDetail.setId(rs.getInt("ID"));
+                pplFileDetail.setPpl_file_id(rs.getInt("PPL_FILE_ID"));
+                pplFileDetail.setPpl_file_attr_type_id(rs.getInt("PPL_FILE_ATTR_TYPE_ID"));
+                pplFileDetail.setValue(rs.getString("VALUE"));
+                pplFileDetail.setHmac(rs.getString("HMAC"));
+                pplFileDetail.setCreated_by(rs.getString("CREATED_BY"));
+                pplFileDetail.setCreated_at(rs.getDate("CREATED_AT"));
+                pplFileDetail.setLast_modified_by(rs.getString("LAST_MODIFIED_BY"));
+                pplFileDetail.setLast_modified_at(rs.getDate("LAST_MODIFIED_AT"));
+                listPplFileDetail.add(pplFileDetail);
+            }
+            return convrtr;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
             if (proc_stmt != null) {
                 proc_stmt.close();
             }

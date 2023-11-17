@@ -120,6 +120,9 @@ export const LanguageSelect = ({ color = "white" }) => {
         endIcon={<ArrowDropDownIcon />}
         style={{ color: color, zIndex: "2" }}
         disabled={isValidationPath}
+        sx={{
+          p: 0,
+        }}
       >
         {lang}
       </Button>

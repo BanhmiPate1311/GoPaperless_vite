@@ -9,6 +9,7 @@ export const Header = ({ headerFooter }) => {
     headerFooter.metadataGatewayView !== "null" &&
     headerFooter.metadataGatewayView !== undefined;
   let metaData = null;
+  // console.log("check: ", check);
   if (check) {
     metaData = JSON.parse(headerFooter.metadataGatewayView);
     // console.log("metaData: ", metaData);

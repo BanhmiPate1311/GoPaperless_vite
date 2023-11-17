@@ -20,7 +20,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/view/apigw": {
+      "/view/uiApi": {
         target: "http://localhost:8080",
         changeOrigin: true,
         secure: false,

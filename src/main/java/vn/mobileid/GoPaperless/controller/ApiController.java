@@ -1,7 +1,6 @@
 package vn.mobileid.GoPaperless.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/apigw")
+@RequestMapping("/uiApi")
 public class ApiController {
 
-    @Autowired
-    private ProcessDb connect;
+    private final ProcessDb connect;
+
+    public ApiController(ProcessDb connect) {
+        this.connect = connect;
+    }
 
     @PostMapping("/checkHeader")
     public ResponseEntity<?> checkHeader(@RequestBody ApiDtoRequest request) throws Exception {
@@ -36,6 +38,7 @@ public class ApiController {
         connect.USP_GW_PPL_WORKFLOW_GET(participants, signingToken);
         Map<String, Object> map = new HashMap<>();
         map.put("documenId", participants.getDocumentId());
+        map.put("headerVisible", participants.getVisibleHeaderFooter());
         if (participants.getVisibleHeaderFooter() == 1) {
             List<Enterprise> enterprises = LoadParamSystem.getParamEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
 
@@ -139,7 +142,24 @@ public class ApiController {
             signingWorkflowDto.setParticipantsList(participantsList);
         }
 
-
         return new ResponseEntity<>(signingWorkflowDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/checkWorkFlow")
+    public ResponseEntity<?> checkWorkFlow(@RequestBody ApiDtoRequest request) throws Exception {
+        System.out.println("checkWorkFlow");
+
+        int valid = connect.USP_GW_SIGNER_CHECK_EXIST(request.getSigningToken(), request.getSignerToken());
+
+        return new ResponseEntity<>(valid, HttpStatus.OK);
+    }
+
+    @PostMapping("/getSignedInfo")
+    public ResponseEntity<?> getSignedInfo(@RequestBody ApiDtoRequest request) throws Exception {
+        System.out.println("getSignedInfo");
+        List<PplFileDetail> listPplFileDetail = new ArrayList<>();
+        connect.USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(request.getFileId(), listPplFileDetail);
+
+        return new ResponseEntity<>(listPplFileDetail, HttpStatus.OK);
     }
 }
