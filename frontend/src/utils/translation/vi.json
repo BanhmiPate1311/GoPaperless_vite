@@ -2,5 +2,16 @@
   "signing": {
     "copyright": "Bản quyền",
     "version": "Phiên bản"
+  },
+  "batch": {
+    "collapse": "Thu gọn tất cả",
+    "documents": "Tài liệu",
+    "expand": "Mở rộng tất cả",
+    "notification": "Bạn phải xem lại tài liệu trước khi ký.",
+    "signers": "Người ký",
+    "title": "Nhiều thỏa thuận-kiểm tra",
+    "viewed": "Đã xem",
+    "waiting": "Đang chờ chữ ký",
+    "waitingmysignature": "Đang chờ chữ ký của tôi"
   }
 }

@@ -2,5 +2,16 @@
   "signing": {
     "copyright": "Urheberrecht",
     "version": "Ausführung"
+  },
+  "batch": {
+    "collapse": "Alles kollabieren",
+    "documents": "Dokumente",
+    "expand": "Alles erweitern",
+    "notification": "Sie müssen die Dokumente überprüfen, bevor Sie sie unterschreiben.",
+    "signers": "Unterzeichner",
+    "title": "Mehrfach-Übereinstimmungs-Test",
+    "viewed": "Gesehen",
+    "waiting": "Warten auf Unterschrift",
+    "waitingmysignature": "Warte auf meine Unterschrift"
   }
 }

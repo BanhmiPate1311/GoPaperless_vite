@@ -2,5 +2,16 @@
   "signing": {
     "copyright": "版 权",
     "version": "版 本"
+  },
+  "batch": {
+    "collapse": "全 部 收 縮",
+    "documents": "文 件",
+    "expand": "展 開 全 部",
+    "notification": "您 必 須 在 簽 署 文 件 之 前 查 看 這 些 文 件。",
+    "signers": "簽 名 者",
+    "title": "多 重 協 議 測 試",
+    "viewed": "看 過",
+    "waiting": "等 待 簽 名",
+    "waitingmysignature": "等待我的签名"
   }
 }

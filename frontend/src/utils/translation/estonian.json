@@ -2,5 +2,16 @@
   "signing": {
     "copyright": "Autoriõigus",
     "version": "Versioon"
+  },
+  "batch": {
+    "collapse": "Ahenda kõik",
+    "documents": "Dokumendid",
+    "expand": "Laienda kõik",
+    "notification": "Enne allkirjastamist peate dokumendid üle vaatama.",
+    "signers": "Allakirjutajad",
+    "title": "mitmelepingu-test",
+    "viewed": "Vaatud",
+    "waiting": "Ootan allkirja",
+    "waitingmysignature": "Ootan minu allkirja"
   }
 }

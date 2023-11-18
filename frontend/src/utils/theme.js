@@ -24,6 +24,18 @@ export let theme = createTheme({
       light: "#EDF7FA",
       main: "#00A8CC",
     },
+    signing: {
+      light: "#E8EBF0",
+      main: "#E8EBF0",
+    },
+    signingtext1: {
+      light: "#1C1C1C",
+      main: "#1C1C1C",
+    },
+    signingtext2: {
+      light: "#6B7280",
+      main: "#6B7280",
+    },
     error: {
       main: red.A400,
     },
@@ -101,6 +113,14 @@ export let theme = createTheme({
           },
         },
       ],
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        dense: {
+          height: 48,
+          minHeight: 48,
+        },
+      },
     },
   },
 });

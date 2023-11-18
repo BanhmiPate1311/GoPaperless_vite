@@ -1,6 +1,13 @@
 import { SigningContent } from "@/components/SigningContent";
 import { apiService } from "@/services/api_service";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Container from "@mui/material/Container";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router-dom";
 import { NotFound } from "../NotFound";
@@ -56,14 +63,43 @@ export const Signing = () => {
     return <NotFound />;
   } else {
     return (
-      <Box
-        // mt={(theme) => theme.GoPaperless.headerHeight}
-        // height={(theme) =>
-        //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
-        // }
-        height="100%"
-      >
-        {workFlow && <SigningContent workFlow={workFlow} />}
+      <Box>
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar className="cuong" position="static">
+            <Toolbar
+              variant="dense"
+              sx={{ backgroundColor: "signing.main", gap: 1 }}
+            >
+              <Chip label="PDF" size="small" color="primary" />
+              <Typography
+                color="signingtext1.main"
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1 }}
+              >
+                DOCUMENTS INFORMATION
+              </Typography>
+              <VisibilityIcon sx={{ color: "signingtext1.main" }} />
+              <Chip
+                label="Download completed"
+                component="a"
+                href="#basic-chip"
+                icon={<SaveAltIcon fontSize="small" />}
+                clickable
+              />
+            </Toolbar>
+          </AppBar>
+        </Box>
+        <Container
+          maxWidth="lg"
+          // mt={(theme) => theme.GoPaperless.headerHeight}
+          // height={(theme) =>
+          //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
+          // }
+          height="100%"
+        >
+          {workFlow && <SigningContent workFlow={workFlow} />}
+        </Container>
       </Box>
     );
   }

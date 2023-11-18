@@ -47,7 +47,7 @@ export const MainLayout = () => {
       }}
     >
       <Container
-        maxWidth="lg"
+        maxWidth={false}
         disableGutters
         sx={{
           height: (theme) =>

@@ -2,5 +2,16 @@
   "signing": {
     "copyright": "Copyright",
     "version": "Version"
+  },
+  "batch": {
+    "collapse": "Collapse all",
+    "documents": "Documents",
+    "expand": "Expand all",
+    "notification": "You must review the documents before signing them.",
+    "signers": "Signers",
+    "title": "multiple-agreement-test",
+    "viewed": "Viewed",
+    "waiting": "Waiting for signature",
+    "waitingmysignature": "Waiting for my signature"
   }
 }

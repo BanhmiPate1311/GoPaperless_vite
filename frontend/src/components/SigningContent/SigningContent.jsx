@@ -1,5 +1,6 @@
 // import React from 'react'
 import { apiService } from "@/services/api_service";
+import Stack from "@mui/material/Stack";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
@@ -21,7 +22,7 @@ export const SigningContent = ({ workFlow }) => {
     },
   });
   console.log("getSignedInfo: ", signedInfo);
-  return <div>SigningContent</div>;
+  return <Stack>SigningContent</Stack>;
 };
 
 SigningContent.propTypes = {
