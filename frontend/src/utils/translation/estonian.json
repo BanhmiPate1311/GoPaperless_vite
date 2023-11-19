@@ -13,5 +13,15 @@
     "viewed": "Vaatud",
     "waiting": "Ootan allkirja",
     "waitingmysignature": "Ootan minu allkirja"
+  },
+  "context-menu": {
+    "signature": "Allkiri",
+    "initials": "Initsiaalid",
+    "name": "Nimi",
+    "email": "Meil",
+    "jobtitle": "Töö Nimetus",
+    "company": "Ettevõte",
+    "qrcode": "QR Kood",
+    "addtext": "Lisa Tekst"
   }
 }

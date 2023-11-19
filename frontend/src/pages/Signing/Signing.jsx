@@ -2,6 +2,7 @@ import { SigningContent } from "@/components/SigningContent";
 import { apiService } from "@/services/api_service";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
@@ -46,7 +47,7 @@ export const Signing = () => {
             ...participant,
             annotation: parsedAnnotation,
             metaInformation: parsedMetaInformation,
-            signingOptions: parsedSigningOptions.signing_options,
+            signingOptions: parsedSigningOptions?.signing_options,
           };
         }
       );
@@ -54,21 +55,28 @@ export const Signing = () => {
       // Return the data with transformed participantsList
       return {
         ...newData,
-        participantsList: transformedParticipantsList,
+        participants: transformedParticipantsList,
+        signerToken: signerToken,
       };
     },
+    staleTime: 10 * 1000,
   });
-  console.log("workFlow: ", workFlow);
+
   if (workFlowValid && workFlowValid.data === 0) {
     return <NotFound />;
   } else {
     return (
-      <Box>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar className="cuong" position="static">
+      <Stack height="100%" overflow="auto">
+        <Box>
+          <AppBar
+            position="static"
+            sx={{
+              height: (theme) => theme.GoPaperless.appBarHeight,
+            }}
+          >
             <Toolbar
               variant="dense"
-              sx={{ backgroundColor: "signing.main", gap: 1 }}
+              sx={{ backgroundColor: "signingSubBackground.main", gap: 1 }}
             >
               <Chip label="PDF" size="small" color="primary" />
               <Typography
@@ -96,11 +104,13 @@ export const Signing = () => {
           // height={(theme) =>
           //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
           // }
-          height="100%"
+          sx={{
+            height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
+          }}
         >
           {workFlow && <SigningContent workFlow={workFlow} />}
         </Container>
-      </Box>
+      </Stack>
     );
   }
 };

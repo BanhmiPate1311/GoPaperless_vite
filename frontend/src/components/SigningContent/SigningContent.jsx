@@ -1,11 +1,15 @@
 // import React from 'react'
 import { apiService } from "@/services/api_service";
-import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+// import Stack from "@mui/material/Stack";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
+import { PdfViewer } from "../PdfViewer";
 
 export const SigningContent = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
+  // eslint-disable-next-line no-unused-vars
   const { data: signedInfo } = useQuery({
     queryKey: ["getSignedInfo"],
     queryFn: () => apiService.getSignedInfo(workFlow),
@@ -21,8 +25,26 @@ export const SigningContent = ({ workFlow }) => {
       return transformer;
     },
   });
-  console.log("getSignedInfo: ", signedInfo);
-  return <Stack>SigningContent</Stack>;
+  // console.log("getSignedInfo: ", signedInfo);
+  return (
+    <Container
+      disableGutters
+      maxWidth="lg"
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", lg: "row" },
+        height: "100%",
+        pt: 2,
+        gap: 4,
+      }}
+    >
+      {/* width={{ xs: "100%", lg: "70%" }} */}
+      <Box width={{ xs: "100%", lg: "70%" }} overflow="auto">
+        <PdfViewer workFlow={workFlow} />
+      </Box>
+      <Box width={{ xs: "100%", lg: "30%" }}>SigningContent2</Box>
+    </Container>
+  );
 };
 
 SigningContent.propTypes = {

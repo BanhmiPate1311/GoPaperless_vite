@@ -1,6 +1,7 @@
 package vn.mobileid.GoPaperless.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import vn.mobileid.GoPaperless.dto.apiDto.ApiDtoRequest;
 import vn.mobileid.GoPaperless.dto.apiDto.SigningWorkflowDto;
 import vn.mobileid.GoPaperless.model.apiModel.*;
 import vn.mobileid.GoPaperless.process.ProcessDb;
+import vn.mobileid.GoPaperless.service.FpsService;
 import vn.mobileid.GoPaperless.utils.CommonFunction;
 import vn.mobileid.GoPaperless.utils.Difinitions;
 import vn.mobileid.GoPaperless.utils.LoadParamSystem;
@@ -25,9 +27,11 @@ import java.util.Map;
 public class ApiController {
 
     private final ProcessDb connect;
+    private final FpsService fpsService;
 
-    public ApiController(ProcessDb connect) {
+    public ApiController(ProcessDb connect, FpsService fpsService) {
         this.connect = connect;
+        this.fpsService = fpsService;
     }
 
     @PostMapping("/checkHeader")
@@ -99,10 +103,13 @@ public class ApiController {
             signingWorkflowDto.setFileName(lastFile.getLastPplFileName());
             signingWorkflowDto.setFileSize(lastFile.getFileSize());
             signingWorkflowDto.setEnterpriseId(lastFile.getEnterpriseId());
-            signingWorkflowDto.setWorkflowId(lastFile.getPplWorkflowId());
+            signingWorkflowDto.setWorkFlowId(lastFile.getPplWorkflowId());
             signingWorkflowDto.setDocumentName(lastFile.getWorkflowDocumentName());
             signingWorkflowDto.setSigningToken(signingToken);
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
+
+            String base64 = fpsService.getBase64ImagePdf(lastFile.getDocumentId());
+            signingWorkflowDto.setPdfBase64(base64);
         } catch (Exception e) {
             System.out.println("getLastFile: " + e.getMessage());
             throw new Exception(e.getMessage());

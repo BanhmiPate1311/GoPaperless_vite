@@ -38,7 +38,7 @@ export const MainLayout = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: "#E8EBF0",
+        backgroundColor: "signingBackground.main",
         padding:
           headerFooter?.headerVisible !== 0
             ? (theme) =>

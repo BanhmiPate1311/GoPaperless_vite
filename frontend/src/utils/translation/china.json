@@ -13,5 +13,15 @@
     "viewed": "看 過",
     "waiting": "等 待 簽 名",
     "waitingmysignature": "等待我的签名"
+  },
+  "context-menu": {
+    "signature": "签名",
+    "initials": "缩写",
+    "name": "姓名",
+    "email": "电子邮件",
+    "jobtitle": "职称",
+    "company": "公司",
+    "qrcode": "二维码",
+    "addtext": "添加文字"
   }
 }

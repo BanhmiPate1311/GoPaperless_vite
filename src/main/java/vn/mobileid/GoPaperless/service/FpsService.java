@@ -1,0 +1,253 @@
+package vn.mobileid.GoPaperless.service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import vn.mobileid.GoPaperless.dto.fpsDto.AccessTokenDto;
+import vn.mobileid.GoPaperless.model.fpsModel.BasicFieldAttribute;
+import vn.mobileid.GoPaperless.model.fpsModel.Signature;
+
+import java.util.*;
+
+@Service
+public class FpsService {
+    private String accessToken;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public void getAccessToken() {
+        System.out.println("getAccessToken");
+        String authorizeUrl = "https://fps.mobile-id.vn/fps/v1/authenticate";
+
+        // Tạo HttpHeaders để đặt các headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Tạo dữ liệu JSON cho yêu cầu POST
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("grant_type", "client_credentials");
+        requestData.put("client_id", "Dokobit_Gateway");
+        requestData.put("remember_me_enabled", false);
+        requestData.put("client_secret", "TmFtZTogRG9rb2JpdCBHYXRld2F5IFdlYgpDcmVhdGVkIGF0OiAxNjk3NjAzNDE5CkNyZWF0ZWQgYnk6IEdpYVRLClZlcnNpb24gY2xpZW50IFNlY3JldDogMSA=");
+
+        // Tạo HttpEntity với dữ liệu JSON và headers
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        ResponseEntity<AccessTokenDto> responseEntity = restTemplate.exchange(authorizeUrl, HttpMethod.POST, httpEntity, AccessTokenDto.class);
+        this.accessToken = Objects.requireNonNull(responseEntity.getBody()).getAccess_token();
+    }
+
+    public String getBase64ImagePdf(int documentId) throws Exception {
+        System.out.println("getBase64ImagePdf");
+        String getImageBase64Url = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<byte[]> response = restTemplate.exchange(getImageBase64Url, HttpMethod.GET, httpEntity, byte[].class);
+            // convert array of bytes into base64
+            return java.util.Base64.getEncoder().encodeToString(response.getBody());
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return getBase64ImagePdf(documentId);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String getFields(int documentId) throws Exception {
+        System.out.println("getFields");
+        String getImageBasse64Url = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields";
+
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(getImageBasse64Url, HttpMethod.GET, httpEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return getFields(documentId);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public List<Signature> getVerification(int documentId) throws Exception {
+        System.out.println("getVerification");
+        if (accessToken == null) {
+            getAccessToken();
+        }
+        String verificationUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/verification";
+
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(headers);
+
+        try {
+            ParameterizedTypeReference<List<Signature>> responseType = new ParameterizedTypeReference<List<Signature>>() {
+            };
+
+            ResponseEntity<List<Signature>> response = restTemplate.exchange(verificationUrl, HttpMethod.GET, httpEntity, responseType);
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return getVerification(documentId);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String addSignature(int documentId, String field, BasicFieldAttribute data, boolean drag) throws Exception {
+        System.out.println("addSignature");
+        String addSignatureUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/" + field;
+
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+        if (drag) {
+            headers.set("x-dimension-unit", "percentage");
+        }
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("field_name", data.getFieldName());
+        requestData.put("page", data.getPage());
+        requestData.put("dimension", data.getDimension());
+        requestData.put("visible_enabled", data.getVisibleEnabled());
+        List<String> list = new ArrayList<>();
+        list.add("ESEAL");
+        requestData.put("level_of_assurance", list);
+
+        // Convert requestData to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestDataJson = objectMapper.writeValueAsString(requestData);
+
+        // Log the JSON string
+        System.out.println("Request Data as JSON: " + requestDataJson);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error  đây: ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return addSignature(documentId, field, data, drag);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String putSignature(int documentId, String field, BasicFieldAttribute data) throws Exception {
+        System.out.println("putSignature");
+        String putSignatureUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/" + field;
+
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+        headers.set("x-dimension-unit", "percentage");
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("field_name", data.getFieldName());
+        requestData.put("page", data.getPage());
+        requestData.put("dimension", data.getDimension());
+        requestData.put("visible_enabled", data.getVisibleEnabled());
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(putSignatureUrl, HttpMethod.PUT, httpEntity, String.class);
+            // Get the response body as a String
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return putSignature(documentId, field, data);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String deleteSignatue(int documentId, String field_name) throws Exception {
+        String deleteSignatureUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields";
+
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("field_name", field_name);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(deleteSignatureUrl, HttpMethod.DELETE, httpEntity, String.class);
+            // Get the response body as a String
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return deleteSignatue(documentId, field_name);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+}

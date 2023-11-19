@@ -6,6 +6,7 @@ export let theme = createTheme({
   GoPaperless: {
     headerHeight: "55px",
     footerBarHeight: "66px",
+    appBarHeight: "48px",
   },
   typography: {
     fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
@@ -24,9 +25,13 @@ export let theme = createTheme({
       light: "#EDF7FA",
       main: "#00A8CC",
     },
-    signing: {
+    signingBackground: {
       light: "#E8EBF0",
       main: "#E8EBF0",
+    },
+    signingSubBackground: {
+      light: "#FFF",
+      main: "#FFF",
     },
     signingtext1: {
       light: "#1C1C1C",

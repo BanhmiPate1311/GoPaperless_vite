@@ -13,5 +13,15 @@
     "viewed": "Просмотрено",
     "waiting": "Ожидание подписи",
     "waitingmysignature": "Жду свою подпись"
+  },
+  "context-menu": {
+    "signature": "Подпись",
+    "initials": "Инициалы",
+    "name": "Имя",
+    "email": "Электронная почта",
+    "jobtitle": "Должность",
+    "company": "Компания",
+    "qrcode": "QR Код",
+    "addtext": "Добавить текст"
   }
 }

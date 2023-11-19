@@ -13,5 +13,15 @@
     "viewed": "Gesehen",
     "waiting": "Warten auf Unterschrift",
     "waitingmysignature": "Warte auf meine Unterschrift"
+  },
+  "context-menu": {
+    "signature": "Signatur",
+    "initials": "Initialen",
+    "name": "Name",
+    "email": "Email",
+    "jobtitle": "Berufsbezeichnung",
+    "company": "Unternehmen",
+    "qrcode": "QR Code",
+    "addtext": "Text Hinzufügen"
   }
 }
