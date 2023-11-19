@@ -36,9 +36,36 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         field
       );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
+    onSuccess: (data, variable) => {
+      variable.body.type = signatureData.type;
+      // queryClient.invalidateQueries({ queryKey: ["getField"] });
       // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
+      queryClient.setQueryData(["getField"], (prev) => {
+        console.log("prev: ", prev);
+        const index = prev.data.signature.findIndex(
+          (item) => item.field_name === variable.body.field_name
+        );
+        console.log("index: ", index);
+        if (index !== -1) {
+          return {
+            ...prev,
+            data: {
+              ...prev.data,
+              signature: prev.data.signature.map((item, i) => {
+                return i === index ? variable.body : item;
+              }),
+            },
+          };
+        } else {
+          return {
+            ...prev,
+            data: {
+              ...prev.data,
+              signature: [...prev.data.signature, variable.body],
+            },
+          };
+        }
+      });
     },
   });
 

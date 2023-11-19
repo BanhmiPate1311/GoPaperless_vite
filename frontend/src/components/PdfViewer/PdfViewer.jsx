@@ -68,7 +68,8 @@ export const PdfViewer = ({ workFlow }) => {
       return newresult;
     },
   });
-  // console.log("signatures: ", signatures);
+  console.log("signatures: ", signatures);
+  queryClient.setQueryData(["hoyhoy"], signatures);
   const addSignature = useMutation({
     mutationFn: ({ body, field }) => {
       return fpsService.addSignature(

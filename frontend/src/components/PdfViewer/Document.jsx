@@ -12,6 +12,8 @@ export const Document = ({ props, signatures, workFlow }) => {
 
   const queryClient = useQueryClient();
 
+  const dataTet = queryClient.getQueryData(["hoyhoy"]);
+  console.log("dataTet: ", dataTet);
   const pdfPage = {
     currentPage: props.pageIndex + 1,
     height: props.height,
@@ -199,6 +201,7 @@ export const Document = ({ props, signatures, workFlow }) => {
   });
 
   const handleDragSignature = (value) => {
+    console.log("value: ", value);
     const { field_name } = value;
     // setSignatures((prev) => {
     //   const index = prev.findIndex((item) => item.field_name === field_name);
