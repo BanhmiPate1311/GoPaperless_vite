@@ -9,11 +9,13 @@ import { ResizableBox } from "react-resizable";
 import "../../assets/style/react-resizable.css";
 
 /* eslint-disable react/prop-types */
-export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+export const Signature = ({ index, pdfPage, signatureData }) => {
   // console.log("signatureData: ", signatureData);
   // console.log("pdfPage: ", pdfPage);
   const queryClient = useQueryClient();
   const dragRef = useRef();
+
+  const workFlow = queryClient.getQueryData(["workflow"]);
 
   const signer = workFlow?.participants?.find(
     (item) => item.signerToken === workFlow.signerToken
@@ -70,9 +72,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   });
 
   useEffect(() => {
-    const metaInf1 = signer.metaInformation;
-    setIsSetPos(checkIsPosition(metaInf1));
-  }, [signer]);
+    // const metaInf1 = signer.metaInformation;
+    setIsSetPos(checkIsPosition(workFlow));
+  }, [workFlow]);
 
   const removeSignature = useMutation({
     mutationFn: () => {

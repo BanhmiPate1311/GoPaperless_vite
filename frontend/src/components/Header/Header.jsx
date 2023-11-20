@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
-import logo1 from "../../assets/Logo/gopaperless_white.png";
+import logo1 from "@/assets/images/Logo/gopaperless_white.png";
 
 export const Header = ({ headerFooter }) => {
   // console.log("headerFooter: ", headerFooter);

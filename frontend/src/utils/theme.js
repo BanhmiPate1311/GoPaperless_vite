@@ -7,6 +7,7 @@ export let theme = createTheme({
     headerHeight: "55px",
     footerBarHeight: "66px",
     appBarHeight: "48px",
+    containerMaxWidth: "1920px",
   },
   typography: {
     fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",

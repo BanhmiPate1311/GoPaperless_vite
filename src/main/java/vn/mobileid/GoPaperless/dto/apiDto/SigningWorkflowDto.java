@@ -14,7 +14,7 @@ public class SigningWorkflowDto {
     private int workFlowId;
     private String documentName;
     private String signingToken;
-    private List<Participants> participantsList;
+    private List<Participants> participants;
     private String pdfBase64;
 
     public int getDocumentId() {
@@ -89,12 +89,12 @@ public class SigningWorkflowDto {
         this.signingToken = signingToken;
     }
 
-    public List<Participants> getParticipantsList() {
-        return participantsList;
+    public List<Participants> getParticipants() {
+        return participants;
     }
 
-    public void setParticipantsList(List<Participants> participantsList) {
-        this.participantsList = participantsList;
+    public void setParticipants(List<Participants> participants) {
+        this.participants = participants;
     }
 
     public String getPdfBase64() {

@@ -6,14 +6,16 @@ import { useRef } from "react";
 import { useDrop } from "react-dnd";
 import Signature from "./Signature";
 // import Signature from "./Signature";
-export const Document = ({ props, signatures, workFlow }) => {
+export const Document = ({ props }) => {
   // console.log("signatures: ", signatures);
   // console.log("props: ", props);
 
   const queryClient = useQueryClient();
 
-  const dataTet = queryClient.getQueryData(["hoyhoy"]);
-  console.log("dataTet: ", dataTet);
+  const workFlow = queryClient.getQueryData(["workflow"]);
+
+  const signatures = queryClient.getQueryData(["signatures"]);
+
   const pdfPage = {
     currentPage: props.pageIndex + 1,
     height: props.height,
@@ -246,14 +248,13 @@ export const Document = ({ props, signatures, workFlow }) => {
     >
       {props.canvasLayer.children}
 
-      {signatures.map((signatureData, index) => {
+      {signatures?.map((signatureData, index) => {
         return (
           <Signature
             key={index}
             index={index}
             pdfPage={pdfPage}
             handleValidateSignature={handleValidateSignature}
-            workFlow={workFlow}
             signatureData={signatureData}
           />
         );

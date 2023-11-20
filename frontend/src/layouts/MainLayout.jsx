@@ -24,9 +24,9 @@ export const MainLayout = () => {
     //     return result;
     //   }, {});
     // },
-    initialData: {
-      headerVisible: 1,
-    },
+    // initialData: {
+    //   headerVisible: 1,
+    // },
 
     // queryFn: ({signal}) => apiService.checkHeaderFooter(signing_token, signal),  dùng khi muốn cancel request
     // refetchOnWindowFocus: false, // không refetch lại khi chuyển tab, đã set default

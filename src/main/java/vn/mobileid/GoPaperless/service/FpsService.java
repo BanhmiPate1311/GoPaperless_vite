@@ -122,7 +122,8 @@ public class FpsService {
                 getAccessToken();
                 return getVerification(documentId);
             } else {
-                throw new Exception(e.getMessage());
+                return Collections.emptyList();
+//                throw new Exception(e.getMessage());
             }
         }
     }

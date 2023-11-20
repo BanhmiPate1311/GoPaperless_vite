@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router-dom";
 import { NotFound } from "../NotFound";
 
@@ -17,6 +17,7 @@ export const Signing = () => {
   const { signing_token: signingToken } = useParams();
   const [search] = useSearchParams();
   const signerToken = search.get("access_token");
+  const queryClient = useQueryClient();
 
   const { data: workFlowValid } = useQuery({
     queryKey: ["checkWorkFlowValid"],
@@ -28,14 +29,13 @@ export const Signing = () => {
       return apiService.checkWorkFlow(data);
     },
   });
-
   const { data: workFlow } = useQuery({
     queryKey: ["getWorkFlow"],
     queryFn: () => apiService.getSigningWorkFlow(signingToken),
     enabled: workFlowValid && workFlowValid.data === 1,
     select: (data) => {
       const newData = { ...data.data };
-      const transformedParticipantsList = newData.participantsList.map(
+      const transformedParticipantsList = newData.participants.map(
         (participant) => {
           // Parse metaInformation and signingOptions
           const parsedAnnotation = JSON.parse(participant.annotation); // Parse annotation
@@ -61,6 +61,8 @@ export const Signing = () => {
     },
     staleTime: 10 * 1000,
   });
+
+  queryClient.setQueryData(["workflow"], workFlow);
 
   if (workFlowValid && workFlowValid.data === 0) {
     return <NotFound />;
@@ -99,16 +101,18 @@ export const Signing = () => {
           </AppBar>
         </Box>
         <Container
-          maxWidth="lg"
+          // maxWidth={(theme) => theme.GoPaperless.containerMaxWidth}
+          maxWidth={false}
           // mt={(theme) => theme.GoPaperless.headerHeight}
           // height={(theme) =>
           //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
           // }
           sx={{
+            maxWidth: (theme) => theme.GoPaperless.containerMaxWidth,
             height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
           }}
         >
-          {workFlow && <SigningContent workFlow={workFlow} />}
+          {workFlow && <SigningContent />}
         </Container>
       </Stack>
     );

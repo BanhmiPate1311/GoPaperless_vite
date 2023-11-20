@@ -146,7 +146,7 @@ public class ApiController {
                 }
             }
             List<Participants> participantsList = new ArrayList<>(participants);
-            signingWorkflowDto.setParticipantsList(participantsList);
+            signingWorkflowDto.setParticipants(participantsList);
         }
 
         return new ResponseEntity<>(signingWorkflowDto, HttpStatus.OK);

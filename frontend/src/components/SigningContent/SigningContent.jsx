@@ -3,12 +3,19 @@ import { apiService } from "@/services/api_service";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // import Stack from "@mui/material/Stack";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { PdfViewer } from "../PdfViewer";
+import { Participants } from "../Partcipants";
 
-export const SigningContent = ({ workFlow }) => {
+export const SigningContent = () => {
   // console.log("workFlow: ", workFlow);
+  // eslint-disable-next-line no-unused-vars
+
+  const queryClient = useQueryClient();
+
+  const workFlow = queryClient.getQueryData(["workflow"]);
+
   // eslint-disable-next-line no-unused-vars
   const { data: signedInfo } = useQuery({
     queryKey: ["getSignedInfo"],
@@ -29,20 +36,29 @@ export const SigningContent = ({ workFlow }) => {
   return (
     <Container
       disableGutters
-      maxWidth="lg"
+      maxWidth="100%"
       sx={{
         display: "flex",
         flexDirection: { xs: "column", lg: "row" },
-        height: "100%",
+        height: { lg: "100%" }, // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha
         pt: 2,
         gap: 4,
       }}
     >
       {/* width={{ xs: "100%", lg: "70%" }} */}
-      <Box width={{ xs: "100%", lg: "70%" }} overflow="auto">
-        <PdfViewer workFlow={workFlow} />
+      <Box
+        width={{ xs: "100%", lg: "60%" }}
+        overflow="auto"
+        height={{ xs: "500px", lg: "100%" }} // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha, ở màn hình sx sẽ cao 500px
+      >
+        <PdfViewer />
       </Box>
-      <Box width={{ xs: "100%", lg: "30%" }}>SigningContent2</Box>
+      <Box
+        width={{ xs: "100%", lg: "40%" }}
+        // height={{ xs: "100%", lg: "100%" }}
+      >
+        <Participants />
+      </Box>
     </Container>
   );
 };

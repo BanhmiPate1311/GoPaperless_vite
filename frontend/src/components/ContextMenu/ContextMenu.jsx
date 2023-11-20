@@ -3,14 +3,14 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { ReactComponent as Company } from "../../assets/contextmenu/checkbox.svg";
-import { ReactComponent as Email } from "../../assets/contextmenu/email.svg";
-import { ReactComponent as Initial } from "../../assets/contextmenu/initial.svg";
-import { ReactComponent as JobTitle } from "../../assets/contextmenu/jobtitle.svg";
-import { ReactComponent as Name } from "../../assets/contextmenu/name.svg";
-import { ReactComponent as QRCode } from "../../assets/contextmenu/qrcode.svg";
-import { ReactComponent as Signature } from "../../assets/contextmenu/signature.svg";
-import { ReactComponent as AddText } from "/view/src/assets/contextmenu/addtext.svg";
+import { ReactComponent as Company } from "@/assets/images/contextmenu/checkbox.svg";
+import { ReactComponent as Email } from "@/assets/images/contextmenu/email.svg";
+import { ReactComponent as Initial } from "@/assets/images/contextmenu/initial.svg";
+import { ReactComponent as JobTitle } from "@/assets/images/contextmenu/jobtitle.svg";
+import { ReactComponent as Name } from "@/assets/images/contextmenu/name.svg";
+import { ReactComponent as QRCode } from "@/assets/images/contextmenu/qrcode.svg";
+import { ReactComponent as Signature } from "@/assets/images/contextmenu/signature.svg";
+import { ReactComponent as AddText } from "@/assets/images/contextmenu/addtext.svg";
 
 export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
   const { t } = useTranslation();
