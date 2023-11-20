@@ -2,21 +2,19 @@
 import { fpsService } from "@/services/fps_service";
 import { checkIsPosition, getSignerId } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
-import Tooltip from "@mui/material/Tooltip";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Document } from ".";
-import { ContextMenu } from "../ContextMenu";
-import { AdsClick } from "@mui/icons-material";
 import "../../assets/style/cursor.css";
+import { ContextMenu } from "../ContextMenu";
 
-export const PdfViewer = ({ index = 0 }) => {
+export const PdfViewer = () => {
   const queryClient = useQueryClient();
 
   const workFlow = queryClient.getQueryData(["workflow"]);
@@ -243,19 +241,9 @@ export const PdfViewer = ({ index = 0 }) => {
             handleClose={handleClose}
             handleClickMenu={handleClickMenu}
           />
-          {/* <div
-            className={`cursor cursor-${props.pageIndex}`}
-            style={{
-              top: mousePosition.y,
-              left: mousePosition.x,
-              pointerEvents: "none",
-              translate: "-10px -10px",
-            }}
-          >
-            <AdsClick id="mouse-icon" />
-            <div style={{ marginLeft: "20px" }}>Right Click</div>
-          </div> */}
-          <Tooltip
+
+          <Document props={props} />
+          {/* <Tooltip
             // open={!isSetPos}
             PopperProps={{
               modifiers: [
@@ -273,7 +261,7 @@ export const PdfViewer = ({ index = 0 }) => {
             <div style={{ width: "100%", height: "100%" }}>
               <Document props={props} />
             </div>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       </DndProvider>
     );

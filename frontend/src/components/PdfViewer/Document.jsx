@@ -2,19 +2,22 @@
 /* eslint-disable react/prop-types */
 import { fpsService } from "@/services/fps_service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import Signature from "./Signature";
+import { AdsClick } from "@mui/icons-material";
+import { checkIsPosition } from "@/utils/commonFunction";
 // import Signature from "./Signature";
 export const Document = ({ props }) => {
   // console.log("signatures: ", signatures);
-  // console.log("props: ", props);
 
   const queryClient = useQueryClient();
 
   const workFlow = queryClient.getQueryData(["workflow"]);
 
   const signatures = queryClient.getQueryData(["signatures"]);
+
+  let isSetPos = checkIsPosition(workFlow);
 
   const pdfPage = {
     currentPage: props.pageIndex + 1,
@@ -239,13 +242,86 @@ export const Document = ({ props }) => {
       }
     });
   };
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const pdfRange = [];
+  const cursor = [];
+  useEffect(() => {
+    // nghe sự kiện bên trong file pdf
+    pdfRange[props.pageIndex] = document.getElementById(
+      `pdf-view-${props.pageIndex}`
+    );
+    cursor[props.pageIndex] = document.querySelector(
+      `.cursor-${props.pageIndex}`
+    );
+
+    const mouseMove = (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left; // Xác định vị trí x dựa trên vị trí của chuột
+
+      const y = e.clientY - rect.top;
+      if (
+        e.target instanceof SVGElement ||
+        e.target.className.includes("MuiListItemText-primary") ||
+        e.target.className.includes("MuiListItemButton-root")
+      ) {
+        cursor[props.pageIndex].style.display = "none";
+      } else {
+        pdfRange[props.pageIndex].style.cursor = "none";
+        setMousePosition({
+          x: x,
+          y: y,
+        });
+        cursor[props.pageIndex].style.display = "block";
+      }
+    };
+
+    const mouseOut = () => {
+      cursor[props.pageIndex].style.display = "none";
+    };
+
+    pdfRange[props.pageIndex].addEventListener("mousemove", mouseMove);
+
+    pdfRange[props.pageIndex].addEventListener("mouseleave", mouseOut);
+
+    // // Trình nghe sự kiện click và mousedown toàn bộ trang
+    // const handleGlobalClickAndMouseDown = (e) => {
+    //   // console.log("e: ", e);
+    //   // if (
+    //   //   (menuRef.current.contains(e.target) &&
+    //   //     e.target.className?.includes("pdf-page")) ||
+    //   //   !menuRef.current.contains(e.target)
+    //   // ) {
+    //   //   handleCloseContextMenu();
+    //   // }
+    //   handleCloseContextMenu();
+    // };
+
+    return () => {
+      // window.removeEventListener("mousedown", handleGlobalClickAndMouseDown);
+      pdfRange[props.pageIndex].removeEventListener("mousemove", mouseMove);
+      pdfRange[props.pageIndex].removeEventListener("mouseleave", mouseOut);
+    };
+  }, [props.scale, cursor, pdfRange]);
 
   return (
     <div
       ref={dropSig(dropSigRef)}
       className="kakaka"
       style={{ width: "100%", height: "100%" }}
+      id={`pdf-view-${props.pageIndex}`}
     >
+      <div
+        className={`cursor cursor-${props.pageIndex}`}
+        style={{
+          top: mousePosition.y,
+          left: mousePosition.x,
+          pointerEvents: "none",
+          translate: "-10px -10px",
+        }}
+      >
+        <AdsClick id="mouse-icon" />
+        {!isSetPos && <div style={{ marginLeft: "20px" }}>Right Click</div>}
+      </div>
       {props.canvasLayer.children}
 
       {signatures?.map((signatureData, index) => {

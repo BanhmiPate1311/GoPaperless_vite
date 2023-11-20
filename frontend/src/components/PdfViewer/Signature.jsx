@@ -189,8 +189,8 @@ export const Signature = ({ index, pdfPage, signatureData }) => {
             isSetPos || signerId !== signatureData.field_name
               ? signatureData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
-              ? (pdfPage.width * 5) / 100
-              : 50,
+              ? (pdfPage.width * 20) / 100
+              : 200,
             isSetPos || signerId !== signatureData.field_name
               ? signatureData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
