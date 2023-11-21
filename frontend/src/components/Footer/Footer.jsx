@@ -34,10 +34,10 @@ export const Footer = ({ headerFooter }) => {
     >
       <Stack direction="row" spacing={1}>
         <Typography variant="h6">
-          {t("signing.version")} {check ? metaData.version : "1.20231116"}
+          {t("0-common.version")} {check ? metaData.version : "1.20231116"}
         </Typography>
         <Typography variant="h6">
-          {t("signing.copyright")} {new Date().getFullYear()} ©
+          {t("0-common.copyright")} {new Date().getFullYear()} ©
         </Typography>
         <Typography variant="h6">
           {check

@@ -1,9 +1,16 @@
-import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
+import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
+import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
 import Box from "@mui/material/Box";
+import SvgIcon from "@mui/material/SvgIcon";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import PropTypes from "prop-types";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { OverView } from "./OverView";
+import { Participant } from "./Participant";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -18,8 +25,8 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box>
+          <Box>{children}</Box>
         </Box>
       )}
     </div>
@@ -39,7 +46,8 @@ function a11yProps(index) {
   };
 }
 
-export const Participants = () => {
+export const TabBar = () => {
+  const { t } = useTranslation();
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -65,11 +73,16 @@ export const Participants = () => {
         sx={{
           borderLeft: 1,
           borderColor: "divider",
-          width: "100px",
+          width: "130px",
           ".Mui-selected": {
             backgroundColor: "signingBackground.main",
           },
+          ".MuiTab-root ": {
+            textTransform: "none",
+            // wordWrap: "break-word",
+          },
           p: 1,
+          textTransform: "capitalize",
         }}
         // TabIndicatorProps={{
         //   sx: {
@@ -80,19 +93,48 @@ export const Participants = () => {
           style: { display: "none" },
         }}
       >
-        <Tab label="Overview" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        <Tab
+          label={t("0-common.overview")}
+          icon={
+            <SvgIcon color="inherit">
+              <OverviewIcon />
+            </SvgIcon>
+          }
+          {...a11yProps(0)}
+        />
+        <Tab
+          label={t("0-common.participants")}
+          icon={
+            <SvgIcon color="inherit">
+              <ParticipantIcon />
+            </SvgIcon>
+          }
+          {...a11yProps(1)}
+        />
+        <Tab
+          label={t("0-common.signatures")}
+          icon={
+            <SvgIcon color="inherit">
+              <SignatureIcon />
+            </SvgIcon>
+          }
+          {...a11yProps(2)}
+        />
+        <Tab
+          label={t("0-common.seals")}
+          icon={
+            <SvgIcon color="inherit">
+              <SealIcon />
+            </SvgIcon>
+          }
+          {...a11yProps(3)}
+        />
       </Tabs>
       <TabPanel value={value} index={0}>
-        Item One
+        <OverView />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <Participant />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
@@ -100,17 +142,8 @@ export const Participants = () => {
       <TabPanel value={value} index={3}>
         Item Four
       </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
     </Box>
   );
 };
 
-export default Participants;
+export default TabBar;

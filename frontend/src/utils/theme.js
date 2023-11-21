@@ -17,6 +17,9 @@ export let theme = createTheme({
     h5: {
       fontSize: 13, // Adjust the font size as needed
     },
+    h4: {
+      fontSize: 12, // Adjust the font size as needed
+    },
   },
   palette: {
     primary: {
@@ -26,21 +29,34 @@ export let theme = createTheme({
       light: "#EDF7FA",
       main: "#00A8CC",
     },
+    // grey
     signingBackground: {
       light: "#E8EBF0",
       main: "#E8EBF0",
     },
+    //white
     signingSubBackground: {
       light: "#FFF",
       main: "#FFF",
     },
+    // light grey
+    borderColor: {
+      light: "#DFDBD6",
+      main: "#DFDBD6",
+    },
+    // gray
     signingtext1: {
       light: "#1C1C1C",
       main: "#1C1C1C",
     },
+    //lighter
     signingtext2: {
       light: "#6B7280",
       main: "#6B7280",
+    },
+    signingtextBlue: {
+      light: "#3B82F6",
+      main: "#3B82F6",
     },
     error: {
       main: red.A400,

@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { PdfViewer } from "../PdfViewer";
-import { Participants } from "../Partcipants";
+import { TabBar } from "../TabBar";
 
 export const SigningContent = () => {
   // console.log("workFlow: ", workFlow);
@@ -57,7 +57,7 @@ export const SigningContent = () => {
         width={{ xs: "100%", lg: "40%" }}
         // height={{ xs: "100%", lg: "100%" }}
       >
-        <Participants />
+        <TabBar />
       </Box>
     </Container>
   );

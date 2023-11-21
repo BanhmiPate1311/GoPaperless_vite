@@ -1,7 +1,23 @@
 {
-  "signing": {
+  "0-common": {
+    "addtext": "Text Hinzufügen",
+    "company": "Unternehmen",
     "copyright": "Urheberrecht",
-    "version": "Ausführung"
+    "custom": "Brauch",
+    "deadline": "Frist",
+    "email": "Email",
+    "initials": "Initialen",
+    "jobtitle": "Berufsbezeichnung",
+    "name": "Name",
+    "overview": "Überblick",
+    "participants": "Teilnehmer",
+    "qrcode": "QR Code",
+    "seals": "Robben",
+    "shared_by": "Geteilt von",
+    "signature": "Signatur",
+    "signatures": "Unterschriften",
+    "version": "Ausführung",
+    "workflow": "Arbeitsablauf"
   },
   "batch": {
     "collapse": "Alles kollabieren",
@@ -13,15 +29,5 @@
     "viewed": "Gesehen",
     "waiting": "Warten auf Unterschrift",
     "waitingmysignature": "Warte auf meine Unterschrift"
-  },
-  "context-menu": {
-    "signature": "Signatur",
-    "initials": "Initialen",
-    "name": "Name",
-    "email": "Email",
-    "jobtitle": "Berufsbezeichnung",
-    "company": "Unternehmen",
-    "qrcode": "QR Code",
-    "addtext": "Text Hinzufügen"
   }
 }

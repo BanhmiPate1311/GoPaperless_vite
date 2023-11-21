@@ -1,7 +1,23 @@
 {
-  "signing": {
+  "0-common": {
+    "addtext": "添加文字",
+    "company": "公司",
     "copyright": "版 权",
-    "version": "版 本"
+    "custom": "风俗",
+    "deadline": "最后期限",
+    "email": "电子邮件",
+    "initials": "缩写",
+    "jobtitle": "职称",
+    "name": "姓名",
+    "overview": "概述",
+    "participants": "参加者",
+    "qrcode": "二维码",
+    "seals": "密封件",
+    "shared_by": "通过共享",
+    "signature": "签名",
+    "signatures": "签名",
+    "version": "版 本",
+    "workflow": "工作流程"
   },
   "batch": {
     "collapse": "全 部 收 縮",
@@ -13,15 +29,5 @@
     "viewed": "看 過",
     "waiting": "等 待 簽 名",
     "waitingmysignature": "等待我的签名"
-  },
-  "context-menu": {
-    "signature": "签名",
-    "initials": "缩写",
-    "name": "姓名",
-    "email": "电子邮件",
-    "jobtitle": "职称",
-    "company": "公司",
-    "qrcode": "二维码",
-    "addtext": "添加文字"
   }
 }

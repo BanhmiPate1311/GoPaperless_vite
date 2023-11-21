@@ -1,7 +1,23 @@
 {
-  "signing": {
+  "0-common": {
+    "addtext": "Добавить текст",
+    "company": "Компания",
     "copyright": "Авторские права",
-    "version": "Версия"
+    "custom": "Обычай",
+    "deadline": "Крайний срок",
+    "email": "Электронная почта",
+    "initials": "Инициалы",
+    "jobtitle": "Должность",
+    "name": "Имя",
+    "overview": "Обзор",
+    "participants": "Участники",
+    "qrcode": "QR Код",
+    "seals": "Морские котики",
+    "shared_by": "Поделился",
+    "signature": "Подпись",
+    "signatures": "Подписи",
+    "version": "Версия",
+    "workflow": "Рабочий процесс"
   },
   "batch": {
     "collapse": "Свернуть все",
@@ -13,15 +29,5 @@
     "viewed": "Просмотрено",
     "waiting": "Ожидание подписи",
     "waitingmysignature": "Жду свою подпись"
-  },
-  "context-menu": {
-    "signature": "Подпись",
-    "initials": "Инициалы",
-    "name": "Имя",
-    "email": "Электронная почта",
-    "jobtitle": "Должность",
-    "company": "Компания",
-    "qrcode": "QR Код",
-    "addtext": "Добавить текст"
   }
 }

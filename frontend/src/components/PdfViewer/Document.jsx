@@ -307,7 +307,7 @@ export const Document = ({ props }) => {
     <div
       ref={dropSig(dropSigRef)}
       className="kakaka"
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%", height: "100%", position: "relative" }}
       id={`pdf-view-${props.pageIndex}`}
     >
       <div
@@ -317,6 +317,7 @@ export const Document = ({ props }) => {
           left: mousePosition.x,
           pointerEvents: "none",
           translate: "-10px -10px",
+          position: "absolute",
         }}
       >
         <AdsClick id="mouse-icon" />

@@ -17,24 +17,24 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
   const data = [
     {
       icon: <Signature />,
-      label: t("context-menu.signature"),
+      label: t("0-common.signature"),
       value: "Signature",
     },
     {
       icon: <Initial />,
-      label: t("context-menu.initials"),
+      label: t("0-common.initials"),
       value: "Initial",
     },
-    { icon: <Name />, label: t("context-menu.name"), value: "Name" },
-    { icon: <Email />, label: t("context-menu.email"), value: "Email" },
+    { icon: <Name />, label: t("0-common.name"), value: "Name" },
+    { icon: <Email />, label: t("0-common.email"), value: "Email" },
     {
       icon: <JobTitle />,
-      label: t("context-menu.jobtitle"),
+      label: t("0-common.jobtitle"),
       value: "JobTitle",
     },
     {
       icon: <Company />,
-      label: t("context-menu.company"),
+      label: t("0-common.company"),
       value: "Company",
     },
     // { icon: <Date />, label: "Date" },
@@ -42,10 +42,10 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
     // { icon: <TextArea />, label: "Text Area" },
     // { icon: <RadioButton />, label: "Radio Button" },
     // { icon: <CheckBox />, label: "Check Box" },
-    { icon: <QRCode />, label: t("context-menu.qrcode"), value: "QRCode" },
+    { icon: <QRCode />, label: t("0-common.qrcode"), value: "QRCode" },
     {
       icon: <AddText />,
-      label: t("context-menu.addtext"),
+      label: t("0-common.addtext"),
       value: "AddText",
     },
   ];

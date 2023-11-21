@@ -1,7 +1,23 @@
 {
-  "signing": {
+  "0-common": {
+    "addtext": "Thêm Văn Bản",
+    "company": "Công Ty",
     "copyright": "Bản quyền",
-    "version": "Phiên bản"
+    "custom": "Điều chỉnh",
+    "deadline": "Thời hạn",
+    "email": "E-mail",
+    "initials": "Tên Viết Tắt",
+    "jobtitle": "Chức Danh",
+    "name": "Tên",
+    "overview": "Tổng quan",
+    "participants": "Người tham gia",
+    "qrcode": "Mã QR",
+    "seals": "Con dấu",
+    "shared_by": "Chia sẻ bởi",
+    "signature": "Chữ Ký",
+    "signatures": "Chữ ký",
+    "version": "Phiên bản",
+    "workflow": "Luồng công việc"
   },
   "batch": {
     "collapse": "Thu gọn tất cả",
