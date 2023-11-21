@@ -46,7 +46,8 @@ function a11yProps(index) {
   };
 }
 
-export const TabBar = () => {
+// eslint-disable-next-line react/prop-types
+export const TabBar = ({ workFlow }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState(0);
 
@@ -134,7 +135,7 @@ export const TabBar = () => {
         <OverView />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Participant />
+        <Participant workFlow={workFlow} />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three

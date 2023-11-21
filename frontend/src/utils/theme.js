@@ -1,8 +1,11 @@
-import { createTheme, responsiveFontSizes } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
+import { cyan, orange, red } from "@mui/material/colors";
+import {
+  experimental_extendTheme as extendTheme,
+  responsiveFontSizes,
+} from "@mui/material/styles";
 
 // Create a theme instance.
-export let theme = createTheme({
+export let theme = extendTheme({
   GoPaperless: {
     headerHeight: "55px",
     footerBarHeight: "66px",
@@ -21,50 +24,111 @@ export let theme = createTheme({
       fontSize: 12, // Adjust the font size as needed
     },
   },
-  palette: {
-    primary: {
-      main: "#26293F",
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: "#26293F",
+        },
+        secondary: {
+          light: "#EDF7FA",
+          main: "#00A8CC",
+        },
+        // grey 200
+        signingBackground: {
+          main: "#eeeeee",
+        },
+        //white
+        signingWFBackground: {
+          main: "#FFF",
+        },
+        //lightBlue 50
+        dialogBackground: {
+          main: "#e1f5fe",
+        },
+        // grey 300
+        borderColor: {
+          light: "#DFDBD6",
+          main: "#e0e0e0",
+        },
+        // gray
+        signingtext1: {
+          light: "#1C1C1C",
+          main: "#1C1C1C",
+        },
+        //lighter
+        signingtext2: {
+          light: "#6B7280",
+          main: "#6B7280",
+        },
+        signingtextBlue: {
+          light: "#3B82F6",
+          main: "#3B82F6",
+        },
+        error: {
+          main: red.A400,
+        },
+        text: {
+          primary: "#21243D",
+        },
+      },
     },
-    secondary: {
-      light: "#EDF7FA",
-      main: "#00A8CC",
-    },
-    // grey
-    signingBackground: {
-      light: "#E8EBF0",
-      main: "#E8EBF0",
-    },
-    //white
-    signingSubBackground: {
-      light: "#FFF",
-      main: "#FFF",
-    },
-    // light grey
-    borderColor: {
-      light: "#DFDBD6",
-      main: "#DFDBD6",
-    },
-    // gray
-    signingtext1: {
-      light: "#1C1C1C",
-      main: "#1C1C1C",
-    },
-    //lighter
-    signingtext2: {
-      light: "#6B7280",
-      main: "#6B7280",
-    },
-    signingtextBlue: {
-      light: "#3B82F6",
-      main: "#3B82F6",
-    },
-    error: {
-      main: red.A400,
-    },
-    text: {
-      primary: "#21243D",
+    dark: {
+      palette: {
+        primary: cyan,
+        secondary: orange,
+      },
     },
   },
+  // palette: {
+  //   mode: "light",
+  //   primary: {
+  //     main: "#26293F",
+  //   },
+  //   secondary: {
+  //     light: "#EDF7FA",
+  //     main: "#00A8CC",
+  //   },
+  //   // grey
+  //   signingBackground: {
+  //     light: "#E8EBF0",
+  //     main: "#E8EBF0",
+  //   },
+  //   //white
+  //   signingSubBackground: {
+  //     light: "#FFF",
+  //     main: "#FFF",
+  //   },
+  //   dialogBackground: {
+  //     light: "#F3FBFF",
+  //     main: "#F3FBFF",
+  //   },
+  //   // light grey
+  //   borderColor: {
+  //     light: "#DFDBD6",
+  //     main: "#DFDBD6",
+  //   },
+  //   // gray
+  //   signingtext1: {
+  //     light: "#1C1C1C",
+  //     main: "#1C1C1C",
+  //   },
+  //   //lighter
+  //   signingtext2: {
+  //     light: "#6B7280",
+  //     main: "#6B7280",
+  //   },
+  //   signingtextBlue: {
+  //     light: "#3B82F6",
+  //     main: "#3B82F6",
+  //   },
+  //   error: {
+  //     main: red.A400,
+  //   },
+  //   text: {
+  //     primary: "#21243D",
+  //   },
+  // },
   components: {
     MuiContainer: {
       defaultProps: {

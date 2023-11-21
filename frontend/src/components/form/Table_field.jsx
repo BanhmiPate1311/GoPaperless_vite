@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
 
 export const TableField = ({ data }) => {
   console.log("data: ", data);
@@ -50,12 +51,37 @@ export const TableField = ({ data }) => {
     return count;
   }, 0); // Initial count is 0
   return (
-    <Paper sx={{ width: "100%" }}>
+    <Paper elevation={0} sx={{ width: "100%" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table
+          stickyHeader
+          aria-label="sticky table"
+          sx={{
+            elevation: 0,
+            borderCollapse: "separate",
+            borderSpacing: "0px 8px",
+            backgroundColor: "dialogBackground.main",
+          }}
+        >
           <TableHead>
-            <TableRow>
-              <TableCell align="left" colSpan={5}>
+            <TableRow
+              sx={
+                {
+                  // "&:last-child td": {
+                  //   borderTopLeftRadius: "10px",
+                  //   borderBottomLeftRadius: "10px",
+                  // },
+                }
+              }
+            >
+              <TableCell
+                align="left"
+                colSpan={5}
+                sx={{
+                  // borderRadius: "10px",
+                  backgroundColor: "dialogBackground.main",
+                }}
+              >
                 {t("0-common.custom")} [{Signed}/{data.length}]
               </TableCell>
             </TableRow>
@@ -64,7 +90,17 @@ export const TableField = ({ data }) => {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth }}
+                  sx={{
+                    top: 57,
+                    minWidth: column.minWidth,
+                    // borderTopLeftRadius: i === 0 ? "10px" : "",
+                    // borderBottomLeftRadius: i === 0 ? "10px" : "",
+                    // borderTopRightRadius:
+                    //   i === columns.length - 1 ? "10px" : "",
+                    // borderBottomRightRadius:
+                    //   i === columns.length - 1 ? "10px" : "",
+                    backgroundColor: "dialogBackground.main",
+                  }}
                 >
                   {column.label}
                 </TableCell>
@@ -72,24 +108,41 @@ export const TableField = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                1
-              </TableCell>
-              <TableCell align="left">Phạm Xuân Khánh Khánh</TableCell>
-              <TableCell align="left">Xuân Khánh</TableCell>
-              <TableCell align="left">khanhpx@mobile-id.vn</TableCell>
-              <TableCell align="left">!</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                1
-              </TableCell>
-              <TableCell align="left">Phạm Xuân Khánh</TableCell>
-              <TableCell align="left">Xuân Khánh</TableCell>
-              <TableCell align="left">khanhpx@mobile-id.vn</TableCell>
-              <TableCell align="left">!</TableCell>
-            </TableRow>
+            {data.map((item, index) => (
+              <TableRow
+                key={index}
+                sx={{
+                  "& *": {
+                    backgroundColor: "white",
+                  },
+                }}
+              >
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{
+                    borderTopLeftRadius: "10px",
+                    borderBottomLeftRadius: "10px",
+                  }}
+                >
+                  {index + 1}
+                </TableCell>
+                <TableCell align="left">
+                  {item.firstName} {item.lastName}
+                </TableCell>
+                <TableCell align="left">{item.lastName}</TableCell>
+                <TableCell align="left">{item.email}</TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    borderTopRightRadius: "10px",
+                    borderBottomRightRadius: "10px",
+                  }}
+                >
+                  <WarningIcon />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

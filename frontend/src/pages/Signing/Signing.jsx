@@ -2,14 +2,14 @@ import { SigningContent } from "@/components/SigningContent";
 import { apiService } from "@/services/api_service";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router-dom";
 import { NotFound } from "../NotFound";
 
@@ -17,7 +17,7 @@ export const Signing = () => {
   const { signing_token: signingToken } = useParams();
   const [search] = useSearchParams();
   const signerToken = search.get("access_token");
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const { data: workFlowValid } = useQuery({
     queryKey: ["checkWorkFlowValid"],
@@ -59,10 +59,9 @@ export const Signing = () => {
         signerToken: signerToken,
       };
     },
-    staleTime: 10 * 1000,
   });
 
-  queryClient.setQueryData(["workflow"], workFlow);
+  // queryClient.setQueryData(["workflow"], workFlow);
 
   if (workFlowValid && workFlowValid.data === 0) {
     return <NotFound />;
@@ -78,7 +77,7 @@ export const Signing = () => {
           >
             <Toolbar
               variant="dense"
-              sx={{ backgroundColor: "signingSubBackground.main", gap: 1 }}
+              sx={{ backgroundColor: "signingWFBackground.main", gap: 1 }}
             >
               <Chip label="PDF" size="small" color="primary" />
               <Typography
@@ -100,6 +99,9 @@ export const Signing = () => {
             </Toolbar>
           </AppBar>
         </Box>
+        <Button onClick={() => console.log("workFlow: ", workFlow)}>
+          click me
+        </Button>
         <Container
           // maxWidth={(theme) => theme.GoPaperless.containerMaxWidth}
           maxWidth={false}
@@ -112,7 +114,7 @@ export const Signing = () => {
             height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
           }}
         >
-          {workFlow && <SigningContent />}
+          {workFlow && <SigningContent workFlow={workFlow} />}
         </Container>
       </Stack>
     );

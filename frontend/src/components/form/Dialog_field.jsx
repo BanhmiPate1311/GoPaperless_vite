@@ -1,14 +1,13 @@
 import CloseIcon from "@mui/icons-material/Close";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { t } from "i18next";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 
@@ -40,7 +39,11 @@ const DialogField = ({ open, data, title, handleClose }) => {
         },
       }}
     >
-      <DialogTitle component="div" id="scroll-dialog-title">
+      <DialogTitle
+        component="div"
+        id="scroll-dialog-title"
+        sx={{ backgroundColor: "dialogBackground.main", paddingBottom: "0px" }}
+      >
         <Typography
           variant="h6"
           sx={{
@@ -69,10 +72,10 @@ const DialogField = ({ open, data, title, handleClose }) => {
       >
         <CloseIcon />
       </IconButton>
-      <Box sx={{ px: "24px" }}>
+      {/* <Box sx={{ px: "24px" }}>
         <Divider />
-      </Box>
-      <DialogContent>
+      </Box> */}
+      <DialogContent sx={{ backgroundColor: "dialogBackground.main" }}>
         <DialogContentText
           component="div"
           id="scroll-dialog-description"
@@ -82,9 +85,14 @@ const DialogField = ({ open, data, title, handleClose }) => {
           {data}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Subscribe</Button>
+      <DialogActions sx={{ px: "24px" }}>
+        <Button
+          variant="outlined"
+          sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
+          onClick={handleClose}
+        >
+          {t("0-common.cancel")}
+        </Button>
       </DialogActions>
     </Dialog>
   );

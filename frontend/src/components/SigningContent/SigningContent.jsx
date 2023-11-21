@@ -3,18 +3,18 @@ import { apiService } from "@/services/api_service";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // import Stack from "@mui/material/Stack";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { PdfViewer } from "../PdfViewer";
 import { TabBar } from "../TabBar";
 
-export const SigningContent = () => {
+export const SigningContent = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
   // eslint-disable-next-line no-unused-vars
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
-  const workFlow = queryClient.getQueryData(["workflow"]);
+  // const workFlow = queryClient.getQueryData(["workflow"]);
 
   // eslint-disable-next-line no-unused-vars
   const { data: signedInfo } = useQuery({
@@ -57,7 +57,7 @@ export const SigningContent = () => {
         width={{ xs: "100%", lg: "40%" }}
         // height={{ xs: "100%", lg: "100%" }}
       >
-        <TabBar />
+        <TabBar workFlow={workFlow} />
       </Box>
     </Container>
   );

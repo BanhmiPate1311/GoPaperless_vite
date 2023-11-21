@@ -5,16 +5,18 @@ import DialogField from "@/components/form/Dialog_field";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
-import { useQueryClient } from "@tanstack/react-query";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const Participant = () => {
+// eslint-disable-next-line react/prop-types
+export const Participant = ({ workFlow }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const queryClient = useQueryClient();
-  const workFlow = queryClient.getQueryData(["workflow"]);
+  // const queryClient = useQueryClient();
+  // const workFlow = queryClient.getQueryData(["workflow"]);
+
   console.log("workFlow: ", workFlow);
 
   const handleClickOpen = () => {
@@ -66,5 +68,13 @@ export const Participant = () => {
     </Box>
   );
 };
-
+Participant.propTypes = {
+  workFlow: PropTypes.shape({
+    // Define the structure of the object if needed
+    // For example:
+    // key1: PropTypes.string,
+    // key2: PropTypes.number,
+    participants: PropTypes.array,
+  }),
+};
 export default Participant;
