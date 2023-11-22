@@ -2,13 +2,15 @@ import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participa
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { TableField } from "@/components/form";
 import DialogField from "@/components/form/Dialog_field";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ParticipantInfo } from "../ParticipantInfo";
+import { ParticipantInfo } from "./ParticipantInfo";
+import { Typography } from "@mui/material";
 
 // eslint-disable-next-line react/prop-types
 export const Participant = ({ workFlow }) => {
@@ -18,7 +20,7 @@ export const Participant = ({ workFlow }) => {
   // const queryClient = useQueryClient();
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
-  console.log("workFlow: ", workFlow);
+  // console.log("workFlow: ", workFlow);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,27 +32,22 @@ export const Participant = ({ workFlow }) => {
   return (
     <Box>
       <Stack sx={{ p: 2 }} direction="row" justifyContent="space-between">
-        <Stack
-          sx={{ fontWeight: "550" }}
-          direction="row"
-          spacing={1}
-          alignItems="center"
-        >
-          <ParticipantIcon /> {t("0-common.participants")}
-          <Stack
-            justifyContent="center"
-            alignItems="center"
+        <Stack direction="row" spacing={1} alignItems="center">
+          <ParticipantIcon />
+          <Typography sx={{ fontWeight: "550" }} variant="h6">
+            {t("0-common.participants")}
+          </Typography>
+
+          <Avatar
             sx={{
-              height: "16px",
-              width: "16px",
-              borderRadius: "50%",
-              backgroundColor: "signingtextBlue.main",
-              color: "white",
+              bgcolor: "signingtextBlue.main",
+              width: 16,
+              height: 16,
               fontSize: "10px",
             }}
           >
             {workFlow.participants.length}
-          </Stack>
+          </Avatar>
         </Stack>
         <Box>
           <IconButton onClick={handleClickOpen}>

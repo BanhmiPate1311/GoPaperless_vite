@@ -31,8 +31,9 @@ const DialogField = ({ open, data, title, handleClose }) => {
       sx={{
         "& .MuiDialog-container": {
           "& .MuiPaper-root": {
-            width: "100%",
+            // width: "100%",
             maxWidth: "900px", // Set your width here
+            borderRadius: "10px",
           },
         },
       }}

@@ -4,21 +4,27 @@ import { ReactComponent as WaitingMySig } from "@/assets/images/svg/waiting_mysi
 import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
 import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
 import { checkSignerStatus } from "@/utils/commonFunction";
-import { Stack, Typography } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
+import { SignerInfor } from ".";
+import DialogField from "./Dialog_field";
 
 export const TableField = ({ data }) => {
-  console.log("data: ", data);
   const { t } = useTranslation();
+
+  const [open, setOpen] = useState([false]);
 
   const [search] = useSearchParams();
   const signerToken = search.get("access_token");
@@ -61,19 +67,20 @@ export const TableField = ({ data }) => {
     return count;
   }, 0); // Initial count is 0
 
-  // const tableCheckStatus = (item, signerToken) => {
-  //   if (item.status === 2) {
-  //     return <SignedIcon />;
-  //   }
+  const handleClickOpen = (index) => {
+    const newIsOpen = [...open];
+    newIsOpen[index] = true;
 
-  //   const iconComponent =
-  //     item.signerToken === signerToken ? <WaitingMySig /> : <WaitingSig />;
+    setOpen(newIsOpen);
+  };
+  const handleClose = (index) => {
+    const newIsOpen = [...open];
+    newIsOpen[index] = false;
 
-  //   return iconComponent;
-  // };
-
+    setOpen(newIsOpen);
+  };
   return (
-    <Paper elevation={0} sx={{ width: "100%" }}>
+    <Paper elevation={0}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table
           stickyHeader
@@ -136,9 +143,7 @@ export const TableField = ({ data }) => {
                 <TableRow
                   key={index}
                   sx={{
-                    "& *": {
-                      backgroundColor: "white",
-                    },
+                    backgroundColor: "white",
                   }}
                 >
                   <TableCell
@@ -176,14 +181,32 @@ export const TableField = ({ data }) => {
                       borderBottomRightRadius: "10px",
                     }}
                   >
-                    <WarningIcon />
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleClickOpen(index)}
+                    >
+                      <WarningIcon />
+                    </IconButton>
                   </TableCell>
+                  <DialogField
+                    open={open[index]}
+                    title={"signer information"}
+                    data={<SignerInfor data={item} />}
+                    handleClose={() => handleClose(index)}
+                  />
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* <DialogField
+        open={open}
+        title={"signer information"}
+        data={<SignerInfor data={data} />}
+        handleClose={handleClose}
+      /> */}
     </Paper>
   );
 };
