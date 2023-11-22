@@ -14,10 +14,9 @@ import { Document } from ".";
 import "../../assets/style/cursor.css";
 import { ContextMenu } from "../ContextMenu";
 
-export const PdfViewer = () => {
+export const PdfViewer = ({ workFlow }) => {
   const queryClient = useQueryClient();
 
-  const workFlow = queryClient.getQueryData(["workflow"]);
   const [contextMenu, setContextMenu] = useState(null);
 
   const signerId = getSignerId(workFlow);
@@ -77,7 +76,7 @@ export const PdfViewer = () => {
   });
   // console.log("signatures: ", signatures);
 
-  queryClient.setQueryData(["signatures"], signatures);
+  // queryClient.setQueryData(["signatures"], signatures);
 
   const addSignature = useMutation({
     mutationFn: ({ body, field }) => {
@@ -242,7 +241,7 @@ export const PdfViewer = () => {
             handleClickMenu={handleClickMenu}
           />
 
-          <Document props={props} />
+          <Document props={props} workFlow={workFlow} signatures={signatures} />
           {/* <Tooltip
             // open={!isSetPos}
             PopperProps={{

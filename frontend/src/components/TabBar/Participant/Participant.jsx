@@ -8,6 +8,7 @@ import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ParticipantInfo } from "../ParticipantInfo";
 
 // eslint-disable-next-line react/prop-types
 export const Participant = ({ workFlow }) => {
@@ -35,7 +36,7 @@ export const Participant = ({ workFlow }) => {
           spacing={1}
           alignItems="center"
         >
-          <ParticipantIcon /> Participant
+          <ParticipantIcon /> {t("0-common.participants")}
           <Stack
             justifyContent="center"
             alignItems="center"
@@ -57,7 +58,7 @@ export const Participant = ({ workFlow }) => {
           </IconButton>
         </Box>
       </Stack>
-
+      <ParticipantInfo workFlow={workFlow} />
       {/* Modal */}
       <DialogField
         open={open}

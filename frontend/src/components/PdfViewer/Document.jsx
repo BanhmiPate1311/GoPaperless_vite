@@ -8,14 +8,14 @@ import Signature from "./Signature";
 import { AdsClick } from "@mui/icons-material";
 import { checkIsPosition } from "@/utils/commonFunction";
 // import Signature from "./Signature";
-export const Document = ({ props }) => {
+export const Document = ({ props, workFlow, signatures }) => {
   // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
 
-  const workFlow = queryClient.getQueryData(["workflow"]);
+  // const workFlow = queryClient.getQueryData(["workflow"]);
 
-  const signatures = queryClient.getQueryData(["signatures"]);
+  // const signatures = queryClient.getQueryData(["signatures"]);
 
   let isSetPos = checkIsPosition(workFlow);
 
@@ -333,6 +333,7 @@ export const Document = ({ props }) => {
             pdfPage={pdfPage}
             handleValidateSignature={handleValidateSignature}
             signatureData={signatureData}
+            workFlow={workFlow}
           />
         );
       })}

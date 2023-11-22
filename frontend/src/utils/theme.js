@@ -46,6 +46,12 @@ export let theme = extendTheme({
         dialogBackground: {
           main: "#e1f5fe",
         },
+        accordingBackGround: {
+          main: "#e8ebf0",
+        },
+        signerBackGround: {
+          main: "#A6D1FF",
+        },
         // grey 300
         borderColor: {
           light: "#DFDBD6",

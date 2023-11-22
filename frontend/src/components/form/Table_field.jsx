@@ -1,3 +1,10 @@
+import { ReactComponent as PerSonIcon } from "@/assets/images/svg/person_icon.svg";
+import { ReactComponent as SignedIcon } from "@/assets/images/svg/signed_icon.svg";
+import { ReactComponent as WaitingMySig } from "@/assets/images/svg/waiting_mysig.svg";
+import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
+import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
+import { checkSignerStatus } from "@/utils/commonFunction";
+import { Stack, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,11 +14,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
+import { useSearchParams } from "react-router-dom";
 
 export const TableField = ({ data }) => {
   console.log("data: ", data);
   const { t } = useTranslation();
+
+  const [search] = useSearchParams();
+  const signerToken = search.get("access_token");
 
   const columns = [
     { id: "stt", label: "#", minWidth: 40 },
@@ -50,6 +60,18 @@ export const TableField = ({ data }) => {
     }
     return count;
   }, 0); // Initial count is 0
+
+  // const tableCheckStatus = (item, signerToken) => {
+  //   if (item.status === 2) {
+  //     return <SignedIcon />;
+  //   }
+
+  //   const iconComponent =
+  //     item.signerToken === signerToken ? <WaitingMySig /> : <WaitingSig />;
+
+  //   return iconComponent;
+  // };
+
   return (
     <Paper elevation={0} sx={{ width: "100%" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -108,41 +130,57 @@ export const TableField = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((item, index) => (
-              <TableRow
-                key={index}
-                sx={{
-                  "& *": {
-                    backgroundColor: "white",
-                  },
-                }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
+            {data.map((item, index) => {
+              const status = checkSignerStatus(item, signerToken);
+              return (
+                <TableRow
+                  key={index}
                   sx={{
-                    borderTopLeftRadius: "10px",
-                    borderBottomLeftRadius: "10px",
+                    "& *": {
+                      backgroundColor: "white",
+                    },
                   }}
                 >
-                  {index + 1}
-                </TableCell>
-                <TableCell align="left">
-                  {item.firstName} {item.lastName}
-                </TableCell>
-                <TableCell align="left">{item.lastName}</TableCell>
-                <TableCell align="left">{item.email}</TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    borderTopRightRadius: "10px",
-                    borderBottomRightRadius: "10px",
-                  }}
-                >
-                  <WarningIcon />
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{
+                      borderTopLeftRadius: "10px",
+                      borderBottomLeftRadius: "10px",
+                    }}
+                  >
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="left">
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <PerSonIcon />
+                      {/* {tableCheckStatus(item, signerToken)} */}
+                      {status === 2 ? (
+                        <SignedIcon />
+                      ) : status === 1 ? (
+                        <WaitingMySig />
+                      ) : (
+                        <WaitingSig />
+                      )}
+                      <Typography variant="h6">
+                        {item.firstName} {item.lastName}
+                      </Typography>
+                    </Stack>
+                  </TableCell>
+                  <TableCell align="left">{item.lastName}</TableCell>
+                  <TableCell align="left">{item.email}</TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      borderTopRightRadius: "10px",
+                      borderBottomRightRadius: "10px",
+                    }}
+                  >
+                    <WarningIcon />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

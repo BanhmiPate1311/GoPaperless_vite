@@ -2,11 +2,11 @@ import { SigningContent } from "@/components/SigningContent";
 import { apiService } from "@/services/api_service";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Button, Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
@@ -99,9 +99,7 @@ export const Signing = () => {
             </Toolbar>
           </AppBar>
         </Box>
-        <Button onClick={() => console.log("workFlow: ", workFlow)}>
-          click me
-        </Button>
+
         <Container
           // maxWidth={(theme) => theme.GoPaperless.containerMaxWidth}
           maxWidth={false}

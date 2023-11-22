@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { fpsService } from "@/services/fps_service";
 import { checkIsPosition } from "@/utils/commonFunction";
-import Close from "@mui/icons-material/Close";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/Edit";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
@@ -9,13 +10,14 @@ import { ResizableBox } from "react-resizable";
 import "../../assets/style/react-resizable.css";
 
 /* eslint-disable react/prop-types */
-export const Signature = ({ index, pdfPage, signatureData }) => {
+export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("signatureData: ", signatureData);
+  const [isShowModalSignImage, setShowModalSignImage] = useState(false);
   // console.log("pdfPage: ", pdfPage);
   const queryClient = useQueryClient();
   const dragRef = useRef();
 
-  const workFlow = queryClient.getQueryData(["workflow"]);
+  // const workFlow = queryClient.getQueryData(["workflow"]);
 
   const signer = workFlow?.participants?.find(
     (item) => item.signerToken === workFlow.signerToken
@@ -113,43 +115,37 @@ export const Signature = ({ index, pdfPage, signatureData }) => {
     }),
   });
 
-  const [showTopBar, setShowTopBar] = useState(false);
-
   const TopBar = ({ signatureData }) => {
-    if (!showTopBar) return null;
     return (
-      <div className={`z-10 flex`}>
-        {signatureData.signed && (
-          //   <CheckCircleFilled
-          //     className="p-0.5 text-[16px] z-10 text-green-500 hover:cursor-pointer hover:opacity-80 rounded-full bg-white"
-          //     onMouseDown={() => setShowModalVefication(true)}
-          //   />
-          <Close />
-        )}
-        {/* <CloseCircleFilled
-          onMouseDown={handleRemoveSignature}
-          className="p-0.5 text-[16px] z-10 text-red-500 hover:cursor-pointer hover:opacity-80 rounded-full bg-white"
-        /> */}
-        <div
-          onClick={handleRemoveSignature}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 10,
+          display: "flex",
+        }}
+      >
+        <EditIcon
           style={{
-            background: "red",
-            color: "white",
-            borderRadius: "50%",
-            width: "20px",
-            height: "20px",
-            textAlign: "center",
+            fontSize: "14px",
+            zIndex: 10,
+            color: "#6B7280",
+            cursor: "pointer",
+            opacity: 1,
           }}
-        >
-          {/* <Close
-            style={{
-              background: "red",
-              color: "white",
-              borderRadius: "50%",
-            }}
-          /> */}
-          X
-        </div>
+          onMouseDown={() => setShowModalSignImage(true)}
+        />
+        <DeleteOutlineIcon
+          onMouseDown={handleRemoveSignature}
+          style={{
+            fontSize: "14px",
+            zIndex: 10,
+            color: "#EF4444",
+            cursor: "pointer",
+            opacity: 1,
+          }}
+        />
       </div>
     );
   };
@@ -257,8 +253,6 @@ export const Signature = ({ index, pdfPage, signatureData }) => {
             // onDoubleClick={() => setShowModalSetting(true)}
             ref={drag(dragRef)}
             id="drag"
-            onMouseEnter={() => setShowTopBar(true)}
-            onMouseLeave={() => setShowTopBar(false)}
             // className={`flex shadow-2xl border text-white hover:cursor-move mx-auto z-10 relative bg-opacity-80 hover:bg-opacity-50`}
             style={{
               background:
@@ -266,25 +260,12 @@ export const Signature = ({ index, pdfPage, signatureData }) => {
                   ? "#4574da"
                   : "#51d35a",
               height: "100%",
+              position: "relative",
               // zIndex: 100,
             }}
           >
             <div>
-              <div
-                style={{
-                  position: "absolute",
-                  top: signatureData.dimension?.y >= 5 && "0",
-                  bottom: signatureData.dimension?.y < 5 && "0",
-                  transform:
-                    signatureData.dimension?.y < 5
-                      ? "translateY(50%)"
-                      : "translateY(-50%)",
-                  left: signatureData.dimension?.x > 95 && "0",
-                  right: signatureData.dimension?.x <= 95 && "0",
-                }}
-              >
-                <TopBar signatureData={signatureData} />
-              </div>
+              <TopBar signatureData={signatureData} />
               <p
                 className="text-center"
                 style={{
@@ -299,6 +280,10 @@ export const Signature = ({ index, pdfPage, signatureData }) => {
           </div>
         </ResizableBox>
       )}
+      {/* <ModalSingingImage
+        isShowModalSignImage={isShowModalSignImage}
+        setShowModalSignImage={setShowModalSignImage}
+      /> */}
     </>
   );
 };

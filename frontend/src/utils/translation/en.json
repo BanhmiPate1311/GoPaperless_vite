@@ -18,7 +18,8 @@
     "signature": "Signature",
     "signatures": "Signatures",
     "version": "Version",
-    "workflow": "Work Flow"
+    "workflow": "Work Flow",
+    "workflowName": "Work Flow Name"
   },
   "batch": {
     "collapse": "Collapse all",

@@ -51,7 +51,7 @@ export const SigningContent = ({ workFlow }) => {
         overflow="auto"
         height={{ xs: "500px", lg: "100%" }} // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha, ở màn hình sx sẽ cao 500px
       >
-        <PdfViewer />
+        <PdfViewer workFlow={workFlow} />
       </Box>
       <Box
         width={{ xs: "100%", lg: "40%" }}

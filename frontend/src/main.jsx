@@ -9,8 +9,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
-      cacheTime: 1000,
+      refetchOnWindowFocus: true,
+      // cacheTime: 1000,
     },
   },
 });

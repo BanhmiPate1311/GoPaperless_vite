@@ -77,6 +77,7 @@ export const TabBar = ({ workFlow }) => {
           width: "130px",
           ".Mui-selected": {
             backgroundColor: "signingBackground.main",
+            borderRadius: "10px",
           },
           ".MuiTab-root ": {
             textTransform: "none",
@@ -138,7 +139,7 @@ export const TabBar = ({ workFlow }) => {
         <Participant workFlow={workFlow} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        {/* <Participant workFlow={workFlow} /> */}
       </TabPanel>
       <TabPanel value={value} index={3}>
         Item Four

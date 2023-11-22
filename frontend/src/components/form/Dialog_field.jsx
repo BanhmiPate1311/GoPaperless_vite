@@ -12,8 +12,6 @@ import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 
 const DialogField = ({ open, data, title, handleClose }) => {
-  console.log("participant: ", data);
-
   const descriptionElementRef = useRef(null);
   useEffect(() => {
     if (open) {
