@@ -15,9 +15,7 @@ import { useForm } from "react-hook-form";
 import { SelectField } from "../form";
 
 export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
-  // console.log("workFlow: ", workFlow);
   const signer = getSigner(workFlow);
-  //   console.log("signer: ", signer);
   const signingOptions = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.keys(item)[0])
     : ["mobile", "smartid", "usbtoken", "electronic_id"];
@@ -39,6 +37,10 @@ export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
       connector: "",
     },
   });
+
+  const filterConnector = signer.signingOptions
+    ? signer.signingOptions.map((item) => Object.values(item)[0].join(","))
+    : "";
 
   const mapProvider = providerName.reduce((acc, option, i) => {
     switch (option) {
@@ -76,7 +78,6 @@ export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
     }
     return acc;
   }, []);
-  console.log("connectorList: ", connectorList?.data);
   const data1 = mapProvider.map((item, i) => {
     return (
       <MenuItem key={i} value={item.value}>
@@ -89,7 +90,7 @@ export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
   const [data2, setData2] = useState(null);
 
   const handleChange1 = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     reset({ provider: e.target.value, connector: "" });
     const filterValue = e.target.value;
 
@@ -97,14 +98,21 @@ export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
     const filteredData = connectorList?.data?.[filterValue];
 
     if (filteredData) {
-      const updatedData2 = filteredData.map((item, i) => (
-        <MenuItem key={i} value={item.remark}>
-          {item.remark}
-          <ListItemSecondaryAction>
-            <img src={item.logo} height="25" alt="logo" />
-          </ListItemSecondaryAction>
-        </MenuItem>
-      ));
+      const updatedData2 = filteredData.map((item, i) => {
+        if (
+          filterConnector === "" ||
+          filterConnector.includes(item.connectorName)
+        ) {
+          return (
+            <MenuItem key={i} value={item.remark}>
+              {item.remark}
+              <ListItemSecondaryAction>
+                <img src={item.logo} height="25" alt="logo" />
+              </ListItemSecondaryAction>
+            </MenuItem>
+          );
+        }
+      });
 
       setData2(updatedData2);
     } else {

@@ -188,6 +188,7 @@ public class ApiController {
                             map.put("connectorName", connectorNameItem.getConnectorName());
                             map.put("logo", connectorNameItem.getLogo());
                             map.put("remark", connectorNameItem.getRemark());
+                            map.put("provider", provider);
                             connectorList.add(map);
                         }
                     }
@@ -206,6 +207,7 @@ public class ApiController {
                         map.put("connectorName", "MOBILE_ID_IDENTITY");
                         map.put("logo", countryNameItem.getMetadata());
                         map.put("remark", countryNameItem.getRemarkEn());
+                        map.put("provider", "ELECTRONIC_ID");
                         connectorList.add(map);
                     }
 
