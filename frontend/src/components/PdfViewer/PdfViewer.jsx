@@ -19,7 +19,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const [contextMenu, setContextMenu] = useState(null);
 
-  const signerId = getSigner(workFlow);
+  const signerId = getSigner(workFlow).signerId;
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
@@ -80,6 +80,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const addSignature = useMutation({
     mutationFn: ({ body, field }) => {
+      console.log("body: ", body);
       return fpsService.addSignature(
         { documentId: workFlow.documentId },
         body,

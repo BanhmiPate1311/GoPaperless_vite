@@ -1,14 +1,15 @@
+import { MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
+import { forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { SelectField } from "../form";
-import { forwardRef } from "react";
 
 // eslint-disable-next-line react/prop-types
 export const Step1 = forwardRef(({ onStep1Submit }, ref) => {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      method: "aes",
+      method: "",
     },
   });
 
@@ -23,6 +24,12 @@ export const Step1 = forwardRef(({ onStep1Submit }, ref) => {
     },
   ];
 
+  const data = value.map((item, index) => (
+    <MenuItem key={index} value={item.value}>
+      {item.label}
+    </MenuItem>
+  ));
+
   return (
     <Box
       component="form"
@@ -34,7 +41,7 @@ export const Step1 = forwardRef(({ onStep1Submit }, ref) => {
         name="method"
         control={control}
         label="Select Level of Assurance"
-        data={value}
+        data={data}
       />
     </Box>
   );

@@ -23,7 +23,10 @@ export const apiService = {
     return api.post("/uiApi/getSignedInfo", { fileId: firstFileId });
   },
 
-  // getConnecterProvider({ signingOptions }) {
-  //   return api.post("/uiApi/getConnecterProvider", { signingToken });
-  // },
+  getConnecterProvider(providerName) {
+    console.log("providerName: ", providerName);
+    return api.post("/uiApi/getConnecterProvider", {
+      signingOptions: providerName,
+    });
+  },
 };

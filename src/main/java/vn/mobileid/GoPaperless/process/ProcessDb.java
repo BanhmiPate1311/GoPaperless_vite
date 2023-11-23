@@ -91,37 +91,7 @@ public class ProcessDb {
         }
     }
 
-    public void USP_GW_ENTERPRISE_LIST(List<Enterprise> enterpriseList) throws Exception {
-        CallableStatement proc_stmt = null;
-        Connection conns = null;
-        ResultSet rs = null;
-        String convrtr = "0";
 
-        try {
-            conns = OpenDatabase();
-            proc_stmt = conns.prepareCall("{ call USP_GW_ENTERPRISE_LIST() }");
-
-            rs = proc_stmt.executeQuery();
-            while (rs.next()) {
-                Enterprise enterprise = new Enterprise();
-                enterprise.setId(rs.getInt("ID"));
-                enterprise.setMetadataGatewayView(rs.getString("METADATA_GATEWAY_VIEW"));
-                enterprise.setLogo(rs.getString("LOGO"));
-                enterpriseList.add(enterprise);
-            }
-        } catch (Exception e) {
-            System.out.println("USP_GW_PPL_WORKFLOW_GET: " + e.getMessage());
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (proc_stmt != null) {
-                proc_stmt.close();
-            }
-            Connection[] temp_connection = new Connection[]{conns};
-            CloseDatabase(temp_connection);
-        }
-    }
 
     public void USP_GW_PPL_WORKFLOW_GET_FIRST_FILE(FirstFile response, String pSIGNING_TOKEN) throws Exception {
         CallableStatement proc_stmt = null;
@@ -327,6 +297,110 @@ public class ProcessDb {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_ENTERPRISE_LIST(List<Enterprise> enterpriseList) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        String convrtr = "0";
+
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_ENTERPRISE_LIST() }");
+
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                Enterprise enterprise = new Enterprise();
+                enterprise.setId(rs.getInt("ID"));
+                enterprise.setMetadataGatewayView(rs.getString("METADATA_GATEWAY_VIEW"));
+                enterprise.setLogo(rs.getString("LOGO"));
+                enterpriseList.add(enterprise);
+            }
+        } catch (Exception e) {
+            System.out.println("USP_GW_PPL_WORKFLOW_GET: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_CONNECTOR_LIST(List<ConnectorName> connectorNameList) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        String convrtr = "0";
+
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_CONNECTOR_LIST() }");
+
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                ConnectorName connectorName = new ConnectorName();
+                connectorName.setId(rs.getInt("ID"));
+                connectorName.setIdentifier(rs.getString("IDENTIFIER"));
+                connectorName.setLogo(rs.getString("LOGO"));
+                connectorName.setConnectorName(rs.getString("CONNECTOR_NAME"));
+                connectorName.setRemark(rs.getString("REMARK"));
+                connectorName.setPrefixCode(rs.getString("PREFIX_CODE"));
+                connectorName.setProvider(rs.getString("PROVIDER"));
+                connectorNameList.add(connectorName);
+            }
+        } catch (Exception e) {
+            System.out.println("USP_GW_CONNECTOR_LIST: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_COUNTRY_WITH_ELECTRONIC_LIST(List<CountryName> countryNameList) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        String convrtr = "0";
+
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_COUNTRY_WITH_ELECTRONIC_LIST() }");
+
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                CountryName countryName = new CountryName();
+                countryName.setId(rs.getInt("ID"));
+                countryName.setMetadata(rs.getString("META_DATA"));
+                countryName.setRemarkEn(rs.getString("REMARK_EN"));
+                countryName.setRemark(rs.getString("REMARK"));
+
+                countryNameList.add(countryName);
+            }
+
+//            System.out.println(tempList);
+        } catch (Exception e) {
+            System.out.println("USP_GW_COUNTRY_WITH_ELECTRONIC_LIST: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
             if (proc_stmt != null) {
                 proc_stmt.close();
             }

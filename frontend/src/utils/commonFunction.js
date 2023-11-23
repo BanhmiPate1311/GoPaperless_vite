@@ -58,3 +58,19 @@ export const checkSignerWorkFlow = (item, signerToken) => {
     return false;
   }
 };
+
+export const convertSignOptionsToProvider = (signingOptions) => {
+  // convert list ["mobile", "smartid"] to ["MOBILE_ID_SIGNING","SMART_ID_SIGNING"]
+  return signingOptions.map((item) => {
+    switch (item) {
+      case "mobile":
+        return "MOBILE_ID_SIGNING";
+      case "smartid":
+        return "SMART_ID_SIGNING";
+      case "usbtoken":
+        return "USB_TOKEN_SIGNING";
+      case "electronic_id":
+        return "ELECTRONIC_ID";
+    }
+  });
+};

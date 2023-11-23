@@ -11,12 +11,12 @@ import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { Step1, Step2 } from "../Signing";
 
-const SigningForm = ({ open, onClose, index, workFlow }) => {
-  console.log("index: ", index);
-  console.log("open: ", open);
+const SigningForm = ({ open, onClose, workFlow }) => {
+  // console.log("index: ", index);
+  // console.log("open: ", open);
   const descriptionElementRef = useRef(null);
   const [activeStep, setActiveStep] = useState(1);
-  console.log("activeStep: ", activeStep);
+  // console.log("activeStep: ", activeStep);
 
   //   const [method, setMethod] = useState("");
   //   console.log("method: ", method);
@@ -42,6 +42,7 @@ const SigningForm = ({ open, onClose, index, workFlow }) => {
   //   }, []);
 
   const elementRef = useRef();
+  const elementRef2 = useRef();
 
   const handleStep1Submit = (data) => {
     console.log("data: ", data);
@@ -50,6 +51,16 @@ const SigningForm = ({ open, onClose, index, workFlow }) => {
     } else {
       handleNext(1);
     }
+    // setMethod(data.method);
+  };
+
+  const handleStep2Submit = (data) => {
+    console.log("data: ", data);
+    // if (data.method === "eseal") {
+    //   onClose();
+    // } else {
+    //   handleNext(1);
+    // }
     // setMethod(data.method);
   };
 
@@ -68,6 +79,9 @@ const SigningForm = ({ open, onClose, index, workFlow }) => {
         //   onClose();
         // }
         break;
+      case 2:
+        elementRef2.current.requestSubmit();
+        break;
       default:
         // perFormProcess(); // chỉ để test
         handleNext();
@@ -76,7 +90,12 @@ const SigningForm = ({ open, onClose, index, workFlow }) => {
 
   const steps = [
     <Step1 key="step1" ref={elementRef} onStep1Submit={handleStep1Submit} />,
-    <Step2 key="step2" workFlow={workFlow} />,
+    <Step2
+      key="step2"
+      ref={elementRef2}
+      workFlow={workFlow}
+      onStepSubmit={handleStep2Submit}
+    />,
   ];
 
   return (

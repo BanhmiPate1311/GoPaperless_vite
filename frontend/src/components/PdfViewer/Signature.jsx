@@ -25,7 +25,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
   const signer = getSigner(workFlow);
-  console.log("signer: ", signer);
+  // console.log("signer: ", signer);
   const signerId = signer.signerId;
   const [isSetPos, setIsSetPos] = useState(false);
   // console.log("isSetPos: ", isSetPos);
@@ -132,7 +132,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   });
 
   const TopBar = ({ signatureData }) => {
-    console.log("signatureData: ", signatureData);
+    // console.log("signatureData: ", signatureData);
     return (
       <div
         style={{
@@ -293,7 +293,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <SigningForm
           open={isOpenSigningForm[signatureData.page - 1]}
           onClose={() => handleCloseSigningForm(signatureData.page - 1)}
-          index={signatureData.page - 1}
+          // index={signatureData.page - 1}
           workFlow={workFlow}
         />
       )}

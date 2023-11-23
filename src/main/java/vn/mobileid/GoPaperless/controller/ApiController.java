@@ -44,7 +44,7 @@ public class ApiController {
         map.put("documenId", participants.getDocumentId());
         map.put("headerVisible", participants.getVisibleHeaderFooter());
         if (participants.getVisibleHeaderFooter() == 1) {
-            List<Enterprise> enterprises = LoadParamSystem.getParamEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
+            List<Enterprise> enterprises = LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
 
             if (enterprises.size() > 0) {
                 for (Enterprise enterprise : enterprises) {
@@ -65,7 +65,7 @@ public class ApiController {
         int enterpriseId = request.getEnterpriseId();
 
         System.out.println("enterpriseId: " + enterpriseId);
-        List<Enterprise> enterprises = LoadParamSystem.getParamEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
+        List<Enterprise> enterprises = LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
 
         if (enterprises.size() > 0) {
             for (Enterprise enterprise : enterprises) {
@@ -168,5 +168,56 @@ public class ApiController {
         connect.USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(request.getFileId(), listPplFileDetail);
 
         return new ResponseEntity<>(listPplFileDetail, HttpStatus.OK);
+    }
+
+    @PostMapping("/getConnecterProvider")
+    public ResponseEntity<?> getConnecterProvider(@RequestBody ApiDtoRequest request) throws Exception {
+        System.out.println("getConnecterProvider");
+        System.out.println("request: " + request.getSigningOptions());
+        try {
+            Map<String, List<Map<String, String>>> responseList = new HashMap<>();
+            List<ConnectorName> connectorNameList = LoadParamSystem.getConnectorStart(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME);
+
+            if (connectorNameList != null && !connectorNameList.isEmpty()) {
+                for (String provider : request.getSigningOptions()) {
+                    List<Map<String, String>> connectorList = new ArrayList<>();
+
+                    for (ConnectorName connectorNameItem : connectorNameList) {
+                        if (connectorNameItem.getProvider().equals(provider)) {
+                            Map<String, String> map = new HashMap<>();
+                            map.put("connectorName", connectorNameItem.getConnectorName());
+                            map.put("logo", connectorNameItem.getLogo());
+                            map.put("remark", connectorNameItem.getRemark());
+                            connectorList.add(map);
+                        }
+                    }
+
+                    responseList.put(provider,connectorList);
+                }
+            }
+
+            if(request.getSigningOptions().contains("ELECTRONIC_ID")){
+                List<CountryName> countryNameList = LoadParamSystem.getCountryNameList(Difinitions.CONFIG_LOAD_PARAM_COUNTRY);
+                if (countryNameList != null && !countryNameList.isEmpty()) {
+                    List<Map<String, String>> connectorList = new ArrayList<>();
+
+                    for (CountryName countryNameItem : countryNameList) {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("connectorName", "MOBILE_ID_IDENTITY");
+                        map.put("logo", countryNameItem.getMetadata());
+                        map.put("remark", countryNameItem.getRemarkEn());
+                        connectorList.add(map);
+                    }
+
+                    responseList.put("ELECTRONIC_ID",connectorList);
+                }
+            }
+
+
+            return new ResponseEntity<>(responseList, HttpStatus.OK);
+        } catch (Exception e) {
+//            LOGGER.error("Error in getConnecterProvider", e112);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

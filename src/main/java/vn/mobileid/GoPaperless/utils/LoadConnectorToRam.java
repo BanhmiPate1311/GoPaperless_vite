@@ -2,6 +2,8 @@ package vn.mobileid.GoPaperless.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
+import vn.mobileid.GoPaperless.model.apiModel.CountryName;
 import vn.mobileid.GoPaperless.model.apiModel.Enterprise;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 
@@ -31,9 +33,24 @@ public class LoadConnectorToRam implements ServletContextListener {
             List<Enterprise> enterpriseList = new ArrayList<>();
             connect.USP_GW_ENTERPRISE_LIST(enterpriseList);
             if(enterpriseList.size() > 0 && enterpriseList != null){
-                LoadParamSystem.updateParamEnterpriseSystem(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE, enterpriseList);
+                LoadParamSystem.updateEnterpriseSystem(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE, enterpriseList);
             }
             System.out.println("*********load enterprise ram done started*********");
+
+            List<ConnectorName> connectorNameList = new ArrayList<>();
+            connect.USP_GW_CONNECTOR_LIST(connectorNameList);
+            if(connectorNameList.size() > 0 && connectorNameList != null){
+                LoadParamSystem.updateConnectorSystem(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME, connectorNameList);
+            }
+            System.out.println("*********load connector ram done started*********");
+
+            List<CountryName> countryNameList = new ArrayList<>();
+            connect.USP_GW_COUNTRY_WITH_ELECTRONIC_LIST(countryNameList);
+            if(countryNameList.size() > 0 && countryNameList != null){
+                LoadParamSystem.updateCountryList(Difinitions.CONFIG_LOAD_PARAM_COUNTRY, countryNameList);
+            }
+            System.out.println("*********load country ram done started*********");
+
         } catch (Exception e) {
             e.printStackTrace();
         }

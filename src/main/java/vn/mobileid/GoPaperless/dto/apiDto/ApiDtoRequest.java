@@ -1,8 +1,11 @@
 package vn.mobileid.GoPaperless.dto.apiDto;
 
+import java.util.List;
+
 public class ApiDtoRequest {
     private String signingToken;
     private String signerToken;
+    private List<String> signingOptions;
     private int enterpriseId;
     private int fileId;
 
@@ -20,6 +23,14 @@ public class ApiDtoRequest {
 
     public void setSignerToken(String signerToken) {
         this.signerToken = signerToken;
+    }
+
+    public List<String> getSigningOptions() {
+        return signingOptions;
+    }
+
+    public void setSigningOptions(List<String> signingOptions) {
+        this.signingOptions = signingOptions;
     }
 
     public int getEnterpriseId() {
