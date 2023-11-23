@@ -1,27 +1,31 @@
 /* eslint-disable no-unused-vars */
 import { fpsService } from "@/services/fps_service";
-import { checkIsPosition } from "@/utils/commonFunction";
+import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
 import "../../assets/style/react-resizable.css";
+import SigningForm from "./SigningForm";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+  // console.log("index: ", index);
   // console.log("signatureData: ", signatureData);
-  const [isShowModalSignImage, setShowModalSignImage] = useState(false);
+  const [isOpenSigningForm, setIsOpenSigningForm] = useState([false]);
+
   // console.log("pdfPage: ", pdfPage);
   const queryClient = useQueryClient();
   const dragRef = useRef();
 
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
-  const signer = workFlow?.participants?.find(
-    (item) => item.signerToken === workFlow.signerToken
-  );
+  const signer = getSigner(workFlow);
+  console.log("signer: ", signer);
   const signerId = signer.signerId;
   const [isSetPos, setIsSetPos] = useState(false);
   // console.log("isSetPos: ", isSetPos);
@@ -91,6 +95,18 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     },
   });
 
+  const handleOpenSigningForm = (index) => {
+    const newValue = [...isOpenSigningForm];
+    newValue[index] = true;
+    setIsOpenSigningForm(newValue);
+  };
+
+  const handleCloseSigningForm = (index) => {
+    const newValue = [...isOpenSigningForm];
+    newValue[index] = false;
+    setIsOpenSigningForm(newValue);
+  };
+
   const handleRemoveSignature = async () => {
     if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
@@ -116,6 +132,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   });
 
   const TopBar = ({ signatureData }) => {
+    console.log("signatureData: ", signatureData);
     return (
       <div
         style={{
@@ -134,7 +151,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             cursor: "pointer",
             opacity: 1,
           }}
-          onMouseDown={() => setShowModalSignImage(true)}
+          onMouseDown={() => handleOpenSigningForm(signatureData.page - 1)}
         />
         <DeleteOutlineIcon
           onMouseDown={handleRemoveSignature}
@@ -249,36 +266,36 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           }}
           className="mx-auto choioi"
         >
-          <div
+          <Box
             // onDoubleClick={() => setShowModalSetting(true)}
             ref={drag(dragRef)}
             id="drag"
-            // className={`flex shadow-2xl border text-white hover:cursor-move mx-auto z-10 relative bg-opacity-80 hover:bg-opacity-50`}
-            style={{
-              background:
+            sx={{
+              backgroundColor:
                 signatureData.signed || signerId !== signatureData.field_name
-                  ? "#4574da"
-                  : "#51d35a",
+                  ? "accordingBackGround.main"
+                  : "signerBackGround.main",
               height: "100%",
               position: "relative",
+              padding: "10px",
+              textAlign: "center",
               // zIndex: 100,
             }}
           >
-            <div>
+            <Box>
               <TopBar signatureData={signatureData} />
-              <p
-                className="text-center"
-                style={{
-                  overflowWrap: "break-word",
-                  fontSize: "10px",
-                  marginTop: 0,
-                }}
-              >
-                {signatureData.field_name}
-              </p>
-            </div>
-          </div>
+              <Typography variant="h5">Signature</Typography>
+            </Box>
+          </Box>
         </ResizableBox>
+      )}
+      {isOpenSigningForm[signatureData.page - 1] && (
+        <SigningForm
+          open={isOpenSigningForm[signatureData.page - 1]}
+          onClose={() => handleCloseSigningForm(signatureData.page - 1)}
+          index={signatureData.page - 1}
+          workFlow={workFlow}
+        />
       )}
       {/* <ModalSingingImage
         isShowModalSignImage={isShowModalSignImage}

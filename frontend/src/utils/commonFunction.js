@@ -12,12 +12,19 @@ export const getSignature = (value, signerId, workflowId) => {
 //   }
 // };
 
-export const getSignerId = (workFlow) => {
+export const getSigner = (workFlow) => {
   const signer = workFlow?.participants?.find(
     (item) => item.signerToken === workFlow.signerToken
   );
-  return signer?.signerId;
+  return signer;
 };
+
+// export const getSignerId = (workFlow) => {
+//   const signer = workFlow?.participants?.find(
+//     (item) => item.signerToken === workFlow.signerToken
+//   );
+//   return signer?.signerId;
+// };
 
 export const checkIsPosition = (workFlow) => {
   if (!workFlow) return false;

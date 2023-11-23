@@ -22,4 +22,8 @@ export const apiService = {
   getSignedInfo: ({ firstFileId }) => {
     return api.post("/uiApi/getSignedInfo", { fileId: firstFileId });
   },
+
+  // getConnecterProvider({ signingOptions }) {
+  //   return api.post("/uiApi/getConnecterProvider", { signingToken });
+  // },
 };

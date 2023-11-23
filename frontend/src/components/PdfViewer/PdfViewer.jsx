@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { fpsService } from "@/services/fps_service";
-import { checkIsPosition, getSignerId } from "@/utils/commonFunction";
+import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -19,7 +19,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const [contextMenu, setContextMenu] = useState(null);
 
-  const signerId = getSignerId(workFlow);
+  const signerId = getSigner(workFlow);
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);

@@ -66,6 +66,7 @@ export const ParticipantInfo = ({ workFlow }) => {
                 direction={"row"}
                 spacing={1}
                 backgroundColor={check ? "signerBackGround.main" : ""}
+                color={check ? "signingtextBlue.main" : ""}
                 sx={{
                   px: 2,
                 }}
