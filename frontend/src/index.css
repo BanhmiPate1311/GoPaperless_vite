@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Moon+Dance&display=swap");
+
+.font-moon-dance {
+  font-family: "Moon Dance", cursive !important;
+}
+
+.react-tel-input .special-label {
+  background-color: #e1f5fe;
+  font-family: "Montserrat,Nucleo,Helvetica,sans-serif";
+  top: -9;
+  left: 10px;
+}
+
+.react-tel-input .invalid-number-message {
+  position: absolute;
+  z-index: 1;
+  font-size: 13px;
+  left: 15px;
+  top: 60px;
+  background: #e1f5fe;
+  padding: 0 5px;
+  /* color: #de0000; */
+}

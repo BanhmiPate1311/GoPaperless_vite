@@ -1,3 +1,4 @@
+import { apiService } from "@/services/api_service";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -7,9 +8,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { Step1, Step2 } from "../Signing";
+import Step3_smartid from "../Signing/Step3_smartid";
 
 const SigningForm = ({ open, onClose, workFlow }) => {
   // console.log("index: ", index);
@@ -43,6 +46,32 @@ const SigningForm = ({ open, onClose, workFlow }) => {
 
   const elementRef = useRef();
   const elementRef2 = useRef();
+  const elementRef3 = useRef();
+
+  const { data: prefixList } = useQuery({
+    queryKey: ["prefixList"],
+    queryFn: () => {
+      return apiService.getPrefixList();
+    },
+  });
+  //   console.log("prefixList: ", prefixList?.data);
+
+  const filterPrefix = prefixList?.data?.filter(
+    (item) => item.type === "PHONE-ID" || item.type === "PERSONAL-ID"
+  );
+
+  //   console.log("filterPrefix: ", filterPrefix);
+
+  //   const critical = [
+  //     {
+  //       label: "Phone Number",
+  //       value: "PHONE",
+  //     },
+  //     {
+  //       label: "Personal Code",
+  //       value: "CITIZEN-IDENTITY-CARD",
+  //     },
+  //   ];
 
   const handleStep1Submit = (data) => {
     console.log("data: ", data);
@@ -56,10 +85,20 @@ const SigningForm = ({ open, onClose, workFlow }) => {
 
   const handleStep2Submit = (data) => {
     console.log("data: ", data);
-    // if (data.method === "eseal") {
-    //   onClose();
-    // } else {
+    if (data.connector === "SMART_ID_MOBILE_ID") {
+      handleNext(1);
+    } else {
+      onClose();
+    }
+    // setMethod(data.method);
+  };
+
+  const handleStep3Submit = (data) => {
+    console.log("data: ", data);
+    // if (data.connector === "SMART_ID_MOBILE_ID") {
     //   handleNext(1);
+    // } else {
+    //   onClose();
     // }
     // setMethod(data.method);
   };
@@ -82,6 +121,9 @@ const SigningForm = ({ open, onClose, workFlow }) => {
       case 2:
         elementRef2.current.requestSubmit();
         break;
+      case 3:
+        elementRef3.current.requestSubmit();
+        break;
       default:
         // perFormProcess(); // chỉ để test
         handleNext();
@@ -95,6 +137,12 @@ const SigningForm = ({ open, onClose, workFlow }) => {
       ref={elementRef2}
       workFlow={workFlow}
       onStepSubmit={handleStep2Submit}
+    />,
+    <Step3_smartid
+      key="step3"
+      ref={elementRef3}
+      onStepSubmit={handleStep3Submit}
+      data={filterPrefix}
     />,
   ];
 

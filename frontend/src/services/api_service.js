@@ -24,9 +24,14 @@ export const apiService = {
   },
 
   getConnecterProvider(providerName) {
-    console.log("providerName: ", providerName);
     return api.post("/uiApi/getConnecterProvider", {
       signingOptions: providerName,
+    });
+  },
+
+  getPrefixList() {
+    return api.post("/uiApi/getPrefixList", {
+      language: "en",
     });
   },
 };

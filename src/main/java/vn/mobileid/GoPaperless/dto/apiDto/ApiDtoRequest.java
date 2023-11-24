@@ -5,6 +5,7 @@ import java.util.List;
 public class ApiDtoRequest {
     private String signingToken;
     private String signerToken;
+    private String language;
     private List<String> signingOptions;
     private int enterpriseId;
     private int fileId;
@@ -23,6 +24,14 @@ public class ApiDtoRequest {
 
     public void setSignerToken(String signerToken) {
         this.signerToken = signerToken;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public List<String> getSigningOptions() {

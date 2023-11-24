@@ -7,14 +7,34 @@ import {
   convertSignOptionsToProvider,
   getSigner,
 } from "@/utils/commonFunction";
-import { Box, ListItemSecondaryAction, MenuItem } from "@mui/material";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Box from "@mui/material/Box";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import MenuItem from "@mui/material/MenuItem";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import { SelectField } from "../form";
 
 export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
+  const schema = yup.object().shape({
+    provider: yup.string().required("Please Select Signing Method"),
+    connector: yup
+      .string()
+      .required("Please Select Remote Signing Service Provider"),
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  const { control, handleSubmit, reset } = useForm({
+    defaultValues: {
+      provider: "",
+      connector: "",
+    },
+    resolver: yupResolver(schema),
+  });
+
   const signer = getSigner(workFlow);
   const signingOptions = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.keys(item)[0])
@@ -27,14 +47,6 @@ export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
     queryKey: ["getConnectorList"],
     queryFn: () => {
       return apiService.getConnecterProvider(providerName);
-    },
-  });
-
-  // eslint-disable-next-line no-unused-vars
-  const { control, handleSubmit, reset } = useForm({
-    defaultValues: {
-      provider: "",
-      connector: "",
     },
   });
 
@@ -104,7 +116,7 @@ export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
           filterConnector.includes(item.connectorName)
         ) {
           return (
-            <MenuItem key={i} value={item.remark}>
+            <MenuItem key={i} value={item.connectorName}>
               {item.remark}
               <ListItemSecondaryAction>
                 <img src={item.logo} height="25" alt="logo" />
@@ -147,6 +159,7 @@ export const Step2 = forwardRef(({ workFlow, onStepSubmit }, ref) => {
           name="connector"
           control={control}
           label="Select Remote Signing Service Provider"
+          disabled={!data2}
           data={data2}
           MenuProps={{ PaperProps: { sx: { maxHeight: 300 } } }}
           sx={{

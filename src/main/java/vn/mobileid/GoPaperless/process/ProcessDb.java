@@ -408,4 +408,55 @@ public class ProcessDb {
             CloseDatabase(temp_connection);
         }
     }
+
+    public void USP_GW_PREFIX_PERSONAL_CODE_LIST(List<Prefix> prefixList, String pTYPE, String pLANGUAGE_NAME) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        String convrtr = "0";
+
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PREFIX_PERSONAL_CODE_LIST(?,?,?) }");
+            if (!"".equals(pTYPE)) {
+                proc_stmt.setString("pTYPE", pTYPE);
+            } else {
+                proc_stmt.setString("pTYPE", null);
+            }
+            if (!"".equals(pLANGUAGE_NAME)) {
+                proc_stmt.setString("pLANGUAGE_NAME", pLANGUAGE_NAME);
+            } else {
+                proc_stmt.setString("pLANGUAGE_NAME", "en");
+            }
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+//            System.out.println("USP_PREFIX_PERSONAL_CODE_LIST: " + proc_stmt.toString());
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                Prefix prefix = new Prefix();
+                prefix.setId(rs.getInt("ID"));
+                prefix.setName(rs.getString("NAME"));
+                prefix.setRemark(rs.getString("REMARK"));
+                prefix.setType(rs.getString("TYPE"));
+
+                prefixList.add(prefix);
+            }
+
+//            System.out.println(tempList);
+        } catch (Exception e) {
+            System.out.println("USP_GW_PREFIX_PERSONAL_CODE_LIST: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
 }

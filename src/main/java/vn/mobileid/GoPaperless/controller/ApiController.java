@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.mobileid.GoPaperless.dto.apiDto.ApiDtoRequest;
 import vn.mobileid.GoPaperless.dto.apiDto.SigningWorkflowDto;
 import vn.mobileid.GoPaperless.model.apiModel.*;
@@ -221,5 +218,17 @@ public class ApiController {
 //            LOGGER.error("Error in getConnecterProvider", e112);
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(value = {"/getPrefixList"}, method = RequestMethod.POST)
+    public ResponseEntity<?> getPrefixList(@RequestBody ApiDtoRequest request) throws Exception {
+        System.out.println("getPrefixList");
+        String lang = request.getLanguage();
+
+        List<Prefix> prefixList = new ArrayList<>();
+        connect.USP_GW_PREFIX_PERSONAL_CODE_LIST(prefixList, null, lang);
+
+        return new ResponseEntity<>(prefixList, HttpStatus.OK);
+
     }
 }

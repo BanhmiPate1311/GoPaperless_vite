@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -18,6 +19,7 @@ export const SelectField = ({
 }) => {
   const {
     field: { onChange, value },
+    fieldState: { error },
   } = useController({ name, control });
   return (
     <FormControl sx={{ width: "100%" }} size="small">
@@ -31,10 +33,17 @@ export const SelectField = ({
           onChange(e.target.value);
           externalOnChange?.(e);
         }}
+        // error={!!error}
+        // renderValue={(value) => `⚠️  - ${value}`}
         {...rest}
       >
         {data}
       </Select>
+      <FormHelperText
+        sx={{ color: "error.main", position: "absolute", top: "100%" }}
+      >
+        {error?.message}
+      </FormHelperText>
     </FormControl>
   );
 };
