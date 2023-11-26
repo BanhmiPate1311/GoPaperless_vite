@@ -44,12 +44,16 @@ export const PhoneInputField = ({
         // onFocus={(phone, country) => {
         //   if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
         // }}
-        inputStyle={{ height: "40px", opacity: disabled ? "0.5" : "1" }}
+        inputStyle={{
+          height: "40px",
+          opacity: disabled ? "0.5" : "1",
+          width: "100%",
+        }}
         disabled={disabled}
         copyNumbersOnly={false}
         isValid={() => {
           if (error) {
-            return "Invalid value: " + value;
+            return "Invalid value: " + error?.message;
           } else {
             return true;
           }

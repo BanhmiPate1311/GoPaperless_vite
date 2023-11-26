@@ -140,7 +140,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           top: 0,
           left: 0,
           zIndex: 10,
-          display: "flex",
+          display: signerId === signatureData.field_name ? "flex" : "none",
         }}
       >
         <EditIcon
@@ -161,6 +161,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             color: "#EF4444",
             cursor: "pointer",
             opacity: 1,
+            display: isSetPos ? "none" : "block",
           }}
         />
       </div>
@@ -278,8 +279,10 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               height: "100%",
               position: "relative",
               padding: "10px",
-              textAlign: "center",
               // zIndex: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <Box>

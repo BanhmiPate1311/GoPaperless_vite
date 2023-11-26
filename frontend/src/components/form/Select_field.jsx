@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import PropTypes from "prop-types";
@@ -10,11 +10,11 @@ export const SelectField = ({
   name,
   label,
   control,
-  data,
+  content,
   onChange: externalOnChange, // không cho user overide lại các thuộc tính này
-  onBlur: externalOnBlur,
-  ref: externalRef,
-  value: externalValue,
+  // onBlur: externalOnBlur,
+  // ref: externalRef,
+  // value: externalValue,
   ...rest
 }) => {
   const {
@@ -23,7 +23,12 @@ export const SelectField = ({
   } = useController({ name, control });
   return (
     <FormControl sx={{ width: "100%" }} size="small">
-      <InputLabel id="demo-select-small-label">{label}</InputLabel>
+      <InputLabel
+        id="demo-select-small-label"
+        sx={{ backgroundColor: "signingWFBackground.main" }}
+      >
+        {label}
+      </InputLabel>
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
@@ -37,7 +42,7 @@ export const SelectField = ({
         // renderValue={(value) => `⚠️  - ${value}`}
         {...rest}
       >
-        {data}
+        {content}
       </Select>
       <FormHelperText
         sx={{ color: "error.main", position: "absolute", top: "100%" }}
@@ -51,6 +56,6 @@ SelectField.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   control: PropTypes.object,
-  data: PropTypes.array,
+  content: PropTypes.array,
 };
 export default SelectField;

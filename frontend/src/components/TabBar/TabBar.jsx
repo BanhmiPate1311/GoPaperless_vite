@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { OverView } from "./OverView";
 import { Participant } from "./Participant";
+import { Signatures } from "./Signatures";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,7 +48,7 @@ function a11yProps(index) {
 }
 
 // eslint-disable-next-line react/prop-types
-export const TabBar = ({ workFlow }) => {
+export const TabBar = ({ workFlow, signedInfo }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState(0);
 
@@ -139,7 +140,7 @@ export const TabBar = ({ workFlow }) => {
         <Participant workFlow={workFlow} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {/* <Participant workFlow={workFlow} /> */}
+        <Signatures signedInfo={signedInfo} />
       </TabPanel>
       <TabPanel value={value} index={3}>
         Item Four

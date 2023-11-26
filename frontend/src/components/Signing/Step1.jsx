@@ -1,11 +1,11 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import { useForm } from "react-hook-form";
-import { SelectField } from "../form";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { SelectField } from "../form";
 
 // eslint-disable-next-line react/prop-types
 export const Step1 = forwardRef(({ onStep1Submit }, ref) => {
@@ -37,18 +37,23 @@ export const Step1 = forwardRef(({ onStep1Submit }, ref) => {
     </MenuItem>
   ));
 
+  const handleFormSubmit = (data) => {
+    onStep1Submit(data);
+  };
+
   return (
     <Box
       component="form"
       ref={ref}
-      onSubmit={handleSubmit(onStep1Submit)}
+      onSubmit={handleSubmit(handleFormSubmit)}
       sx={{ minWidth: 400 }}
     >
       <SelectField
         name="method"
         control={control}
         label="Select Level of Assurance"
-        data={data}
+        content={data}
+        sx={{ backgroundColor: "signingWFBackground.main" }}
       />
     </Box>
   );

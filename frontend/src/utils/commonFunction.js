@@ -74,3 +74,16 @@ export const convertSignOptionsToProvider = (signingOptions) => {
     }
   });
 };
+
+export const getLang = () => {
+  let lang = localStorage.getItem("language");
+  switch (lang) {
+    case "Vietnamese":
+      lang = "VN";
+      break;
+    default:
+      lang = "EN";
+      break;
+  }
+  return lang;
+};

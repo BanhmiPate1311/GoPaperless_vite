@@ -20,7 +20,7 @@ export const ParticipantInfo = ({ workFlow }) => {
   const [search] = useSearchParams();
   const signerToken = search.get("access_token");
   const [isOpen, setIsOpen] = useState([false]);
-  console.log("isOpen: ", isOpen);
+  // console.log("isOpen: ", isOpen);
 
   const toggleDrawer = (index) => {
     const newIsOpen = [...isOpen];
@@ -29,7 +29,7 @@ export const ParticipantInfo = ({ workFlow }) => {
   };
 
   return (
-    <Accordion disableGutters elevation={0}>
+    <Accordion disableGutters elevation={0} expanded={true}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1bh-content"
@@ -41,6 +41,7 @@ export const ParticipantInfo = ({ workFlow }) => {
             justifyContent: "space-between",
             alignItems: "center",
           },
+          height: "36px",
         }}
       >
         <Typography variant="h6">WorkFlow Name</Typography>

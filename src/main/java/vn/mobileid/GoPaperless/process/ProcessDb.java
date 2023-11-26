@@ -3,6 +3,8 @@ package vn.mobileid.GoPaperless.process;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.mobileid.GoPaperless.model.apiModel.*;
+import vn.mobileid.GoPaperless.utils.Difinitions;
+import vn.mobileid.GoPaperless.utils.LoadParamSystem;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -371,6 +373,22 @@ public class ProcessDb {
             Connection[] temp_connection = new Connection[]{conns};
             CloseDatabase(temp_connection);
         }
+    }
+
+    public ConnectorName getIdentierConnector(String sConnectorName ) throws Exception {
+
+        ConnectorName connectorName = new ConnectorName();
+        List<ConnectorName> connectorNameList = LoadParamSystem.getConnectorStart(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME);
+        if (connectorNameList.size() > 0) {
+            for (ConnectorName connectorNameItem : connectorNameList) {
+                if (connectorNameItem.getConnectorName().equals(sConnectorName)) {
+                    connectorName.setIdentifier(connectorNameItem.getIdentifier());
+                    connectorName.setPrefixCode(connectorNameItem.getPrefixCode());
+                }
+            }
+
+        }
+        return connectorName;
     }
 
     public void USP_GW_COUNTRY_WITH_ELECTRONIC_LIST(List<CountryName> countryNameList) throws Exception {

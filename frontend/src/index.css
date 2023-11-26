@@ -5,10 +5,12 @@
 }
 
 .react-tel-input .special-label {
-  background-color: #e1f5fe;
+  background-color: #ffffff;
   font-family: "Montserrat,Nucleo,Helvetica,sans-serif";
-  top: -9;
+  top: -8px;
   left: 10px;
+  font-size: 12px;
+  padding: 0 3px;
 }
 
 .react-tel-input .invalid-number-message {
@@ -16,7 +18,7 @@
   z-index: 1;
   font-size: 13px;
   left: 15px;
-  top: 60px;
+  top: 40px;
   background: #e1f5fe;
   padding: 0 5px;
   /* color: #de0000; */

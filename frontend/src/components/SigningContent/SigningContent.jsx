@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { PdfViewer } from "../PdfViewer";
 import { TabBar } from "../TabBar";
+import { Typography } from "@mui/material";
 
 export const SigningContent = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
@@ -31,6 +32,7 @@ export const SigningContent = ({ workFlow }) => {
       });
       return transformer;
     },
+    enabled: Object.keys(workFlow).length > 0,
   });
   // console.log("getSignedInfo: ", signedInfo);
   return (
@@ -48,16 +50,26 @@ export const SigningContent = ({ workFlow }) => {
       {/* width={{ xs: "100%", lg: "70%" }} */}
       <Box
         width={{ xs: "100%", lg: "60%" }}
-        overflow="auto"
         height={{ xs: "500px", lg: "100%" }} // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha, ở màn hình sx sẽ cao 500px
       >
-        <PdfViewer workFlow={workFlow} />
+        <Typography
+          variant="h6"
+          fontWeight={600}
+          height={"25px"}
+          bgcolor="signingWFBackground.main"
+          pl={2}
+        >
+          {workFlow.fileName}
+        </Typography>
+        <Box overflow="auto" height={{ xs: "500px", lg: "calc(100% - 25px)" }}>
+          <PdfViewer workFlow={workFlow} />
+        </Box>
       </Box>
       <Box
         width={{ xs: "100%", lg: "40%" }}
         // height={{ xs: "100%", lg: "100%" }}
       >
-        <TabBar workFlow={workFlow} />
+        <TabBar workFlow={workFlow} signedInfo={signedInfo} />
       </Box>
     </Container>
   );
@@ -70,6 +82,7 @@ SigningContent.propTypes = {
     // key1: PropTypes.string,
     // key2: PropTypes.number,
     fileId: PropTypes.string,
+    fileName: PropTypes.string,
   }),
 };
 
