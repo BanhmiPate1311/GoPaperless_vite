@@ -2,6 +2,7 @@ import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participa
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { TableField } from "@/components/form";
 import DialogField from "@/components/form/Dialog_field";
+import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -10,8 +11,6 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ParticipantInfo } from "./ParticipantInfo";
-import { Typography } from "@mui/material";
-import NestModal from "./NestModal";
 
 // eslint-disable-next-line react/prop-types
 export const Participant = ({ workFlow }) => {

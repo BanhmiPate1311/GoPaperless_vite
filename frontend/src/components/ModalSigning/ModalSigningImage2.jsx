@@ -15,7 +15,7 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
-import TextSign from "./TextSign";
+import TextSignForm from "./TextSignForm";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,6 +56,8 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
   // set value for tabs
   const [value, setValue] = useState(0);
 
+  const textElement = useRef();
+
   // const sigTextRef = useRef(null);
 
   const handleChange = (event, newValue) => {
@@ -72,6 +74,15 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
       }
     }
   }, [open]);
+
+  const handleTextSubmit = (data) => {
+    console.log("data: ", data);
+  };
+
+  const handleSubmitClick = () => {
+    textElement.current.requestSubmit();
+  };
+
   return (
     <Dialog
       keepMounted={false}
@@ -159,23 +170,33 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
               icon={<KeyboardIcon fontSize="small" />}
               iconPosition="start"
               label="Text"
+              sx={{
+                textTransform: "capitalize",
+              }}
               {...a11yProps(0)}
             />
             <Tab
               icon={<DrawIcon fontSize="small" />}
               iconPosition="start"
               label="Draw"
+              sx={{
+                textTransform: "capitalize",
+              }}
               {...a11yProps(1)}
             />
             <Tab
               icon={<UploadIcon fontSize="small" />}
               iconPosition="start"
               label="Upload"
+              sx={{
+                textTransform: "capitalize",
+              }}
               {...a11yProps(2)}
             />
           </Tabs>
           <TabPanel value={value} index={0}>
-            <TextSign />
+            {/* <TextSign /> */}
+            <TextSignForm ref={textElement} onTextSubmit={handleTextSubmit} />
           </TabPanel>
           <TabPanel value={value} index={1}>
             chu
@@ -200,7 +221,7 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
           //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
           //   }
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
-          //   onClick={handleSubmitClick}
+          onClick={handleSubmitClick}
           type="button"
         >
           Sign

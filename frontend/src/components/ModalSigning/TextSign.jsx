@@ -1,17 +1,23 @@
-import { Typography } from "@mui/material";
+import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
+import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Typography from "@mui/material/Typography";
 import { useState } from "react";
 
 const TextSign = () => {
   const [text, setText] = useState("");
+  const [email, setEmail] = useState("");
 
   const [state, setState] = useState({
     name: true,
@@ -22,17 +28,62 @@ const TextSign = () => {
     itver: false,
     location: false,
     label: false,
+    alignment: "auto",
+    age: 10,
   });
-  console.log("state: ", state);
+  // console.log("state: ", state);
 
-  const handleChange = (event) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.checked,
-    });
+  // const [alignment, setAlignment] = useState("auto");
+
+  // const [age, setAge] = useState(10);
+
+  const handleChangeSelect = (event) => {
+    // setAge(event.target.value);
+    setState((prevState) => ({
+      ...prevState,
+      ["age"]: event.target.value,
+    }));
   };
 
-  const { name, date, logo, reason, dn, itver, location, label } = state;
+  const handleChangeToggle = (event, newAlignment) => {
+    // setAlignment(newAlignment);
+    setState((prevState) => ({
+      ...prevState,
+      ["alignment"]: newAlignment,
+    }));
+  };
+
+  // const handleChange = (event) => {
+
+  //     setState({
+  //       ...state,
+  //       [event.target.name]: event.target.checked,
+  //     });
+
+  // };
+  const handleChange = (event, newValue) => {
+    console.log("newValue: ", newValue);
+    console.log("event: ", event);
+    const name = event.target.name;
+
+    setState((prevState) => ({
+      ...prevState,
+      [name]: newValue !== undefined ? newValue : event.target.checked,
+    }));
+  };
+
+  const {
+    name,
+    date,
+    logo,
+    reason,
+    dn,
+    itver,
+    location,
+    label,
+    alignment,
+    age,
+  } = state;
 
   return (
     <>
@@ -109,16 +160,17 @@ const TextSign = () => {
           //   }}
           size="small"
           onChange={(e) => {
-            console.log("e: ", e.target.value);
-            setText(e.target.value);
+            // console.log("e: ", e.target.value);
+            setEmail(e.target.value);
           }}
-          value={text}
+          value={email}
         />
       </Box>
       <FormControl
         component="fieldset"
-        variant="standard"
+        // variant="standard"
         sx={{ width: "100%" }}
+        size="small"
       >
         <FormLabel component="legend">Include Text</FormLabel>
         <FormGroup sx={{ flexDirection: "row" }}>
@@ -175,6 +227,26 @@ const TextSign = () => {
               }
               label="Reason"
             />
+            <FormLabel component="legend">Text Direction</FormLabel>
+            <ToggleButtonGroup
+              size="small"
+              color="primary"
+              value={alignment}
+              name="alignment"
+              exclusive
+              onChange={handleChangeToggle}
+              aria-label="Platform"
+            >
+              <ToggleButton value="auto">Auto</ToggleButton>
+              <ToggleButton value="left">
+                <FormatAlignLeftIcon />
+              </ToggleButton>
+              ,
+              <ToggleButton value="right">
+                <FormatAlignRightIcon />
+              </ToggleButton>
+              ,
+            </ToggleButtonGroup>
           </Box>
           <Box width={"50%"}>
             <FormControlLabel
@@ -237,6 +309,19 @@ const TextSign = () => {
               }
               label="Labels"
             />
+            <FormLabel component="legend">Digits Format</FormLabel>
+            {/* <InputLabel id="demo-select-small-label">Age</InputLabel> */}
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={age}
+              name="age"
+              // label="Age"
+              onChange={handleChangeSelect}
+            >
+              <MenuItem value={10}>0123456789</MenuItem>
+              <MenuItem value={20}>0123456789</MenuItem>
+            </Select>
           </Box>
         </FormGroup>
       </FormControl>

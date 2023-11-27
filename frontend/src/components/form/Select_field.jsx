@@ -56,6 +56,9 @@ SelectField.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   control: PropTypes.object,
-  content: PropTypes.array,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  ref: PropTypes.object,
+  value: PropTypes.any,
 };
 export default SelectField;

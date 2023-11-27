@@ -356,6 +356,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           onClose={() => handleCloseSigningForm(index)}
           // index={signatureData.page - 1}
           workFlow={workFlow}
+          handleShowModalSignImage={() => handleShowModalSignImage(index)}
         />
       )}
       {/* {isShowModalSignImage && (

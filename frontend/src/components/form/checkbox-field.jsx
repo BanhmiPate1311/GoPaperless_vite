@@ -1,9 +1,11 @@
-import TextField from "@mui/material/TextField";
+import React from "react";
 import PropTypes from "prop-types";
 import { useController } from "react-hook-form";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
-export const InputField = ({
+const CheckBoxField = ({
   name,
+  label,
   control,
   onChange: externalOnChange, // không cho user overide lại các thuộc tính này
   onBlur: externalOnBlur,
@@ -16,34 +18,31 @@ export const InputField = ({
     fieldState: { error },
   } = useController({ name, control });
   return (
-    <TextField
-      fullWidth
-      size="small"
-      margin="normal"
-      name={name}
-      value={value}
-      onChange={(event) => {
-        onChange(event);
-        externalOnChange?.(event);
-      }}
-      onBlur={onBlur}
-      inputRef={ref}
-      error={!!error}
-      helperText={error?.message}
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={value}
+          name={name}
+          onChange={(event) => {
+            console.log("event: ", event);
+            onChange(event);
+          }}
+        />
+      }
+      label={label}
       {...rest}
     />
   );
 };
 
-InputField.propTypes = {
+CheckBoxField.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   control: PropTypes.object,
-  data: PropTypes.array,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
   ref: PropTypes.object,
   value: PropTypes.any,
 };
 
-export default InputField;
+export default CheckBoxField;

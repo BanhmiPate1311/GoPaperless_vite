@@ -72,6 +72,10 @@ ToggleButtonField.propTypes = {
   label: PropTypes.string,
   control: PropTypes.object,
   content: PropTypes.node,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  ref: PropTypes.object,
+  value: PropTypes.any,
 };
 
 export default ToggleButtonField;
