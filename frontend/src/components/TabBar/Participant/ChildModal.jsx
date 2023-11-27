@@ -1,10 +1,9 @@
-import { ReactComponent as PerSonIcon } from "@/assets/images/svg/person_icon.svg";
-import { ReactComponent as SignedIcon } from "@/assets/images/svg/signed_icon.svg";
-import { ReactComponent as WaitingMySig } from "@/assets/images/svg/waiting_mysig.svg";
-import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
-import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
-import { checkSignerStatus } from "@/utils/commonFunction";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
@@ -13,17 +12,32 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
-import { SignerInfor } from ".";
-import DialogField from "./Dialog_field";
+import { checkSignerStatus } from "@/utils/commonFunction";
+import { ReactComponent as PerSonIcon } from "@/assets/images/svg/person_icon.svg";
+import { ReactComponent as SignedIcon } from "@/assets/images/svg/signed_icon.svg";
+import { ReactComponent as WaitingMySig } from "@/assets/images/svg/waiting_mysig.svg";
+import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
+import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 
-export const TableField = ({ data }) => {
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
+
+const ChildModal = ({ data }) => {
   const { t } = useTranslation();
-
   const [open, setOpen] = useState([false]);
 
   const [search] = useSearchParams();
@@ -59,7 +73,7 @@ export const TableField = ({ data }) => {
     },
   ];
 
-  const Signed = data.reduce((count, item) => {
+  const Signed = data?.reduce((count, item) => {
     // If the status is 1, increment the count
     if (item.signerStatus === 2) {
       count++;
@@ -111,7 +125,7 @@ export const TableField = ({ data }) => {
                   backgroundColor: "dialogBackground.main",
                 }}
               >
-                {t("0-common.custom")} [{Signed}/{data.length}]
+                {t("0-common.custom")} [{Signed}/{data?.length}]
               </TableCell>
             </TableRow>
             <TableRow>
@@ -137,7 +151,7 @@ export const TableField = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((item, index) => {
+            {data?.map((item, index) => {
               const status = checkSignerStatus(item, signerToken);
               return (
                 <TableRow
@@ -188,13 +202,25 @@ export const TableField = ({ data }) => {
                       <WarningIcon />
                     </IconButton>
                   </TableCell>
+
                   {open[index] && (
-                    <DialogField
+                    <Modal
                       open={open[index]}
-                      title={"signer information"}
-                      data={<SignerInfor data={item} />}
-                      handleClose={() => handleClose(index)}
-                    />
+                      onClose={() => handleClose(index)}
+                      aria-labelledby="child-modal-title"
+                      aria-describedby="child-modal-description"
+                    >
+                      <Box sx={{ ...style, width: 200 }}>
+                        <h2 id="child-modal-title">Text in a child modal</h2>
+                        <p id="child-modal-description">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit.
+                        </p>
+                        <Button onClick={() => handleClose(index)}>
+                          Close Child Modal
+                        </Button>
+                      </Box>
+                    </Modal>
                   )}
                 </TableRow>
               );
@@ -212,10 +238,9 @@ export const TableField = ({ data }) => {
     </Paper>
   );
 };
-TableField.propTypes = {
-  open: PropTypes.bool,
-  title: PropTypes.string,
+
+ChildModal.propTypes = {
   data: PropTypes.array,
-  handleClose: PropTypes.func,
 };
-export default TableField;
+
+export default ChildModal;

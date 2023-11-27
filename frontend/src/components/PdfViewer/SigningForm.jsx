@@ -25,7 +25,7 @@ import {
 import { rsspService } from "@/services/rssp_service";
 import { CircularProgress } from "@mui/material";
 
-const SigningForm = ({ open, onClose, workFlow }) => {
+const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
   // console.log("workFlow: ", workFlow);
   // console.log("index: ", index);
   // console.log("open: ", open);
@@ -166,6 +166,7 @@ const SigningForm = ({ open, onClose, workFlow }) => {
     };
     // handleNext(1);
     onClose();
+    handleShowModalSignImage();
   };
 
   const handleCancelClick = () => {
@@ -340,7 +341,7 @@ const SigningForm = ({ open, onClose, workFlow }) => {
 SigningForm.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  index: PropTypes.number,
+  handleShowModalSignImage: PropTypes.func,
   workFlow: PropTypes.object,
 };
 export default SigningForm;

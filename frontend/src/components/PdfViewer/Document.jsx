@@ -326,10 +326,14 @@ export const Document = ({ props, workFlow, signatures }) => {
       {props.canvasLayer.children}
 
       {signatures?.map((signatureData, index) => {
+        // console.log("signatureData: ", signatureData.page);
+        // console.log("pageIndex: ", props.pageIndex + 1);
+        if (signatureData.page !== props.pageIndex + 1) return null;
         return (
           <Signature
             key={index}
             index={index}
+            page={signatureData.page}
             pdfPage={pdfPage}
             handleValidateSignature={handleValidateSignature}
             signatureData={signatureData}

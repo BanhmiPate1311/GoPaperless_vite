@@ -11,18 +11,14 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ParticipantInfo } from "./ParticipantInfo";
 import { Typography } from "@mui/material";
+import NestModal from "./NestModal";
 
 // eslint-disable-next-line react/prop-types
 export const Participant = ({ workFlow }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  // const queryClient = useQueryClient();
-  // const workFlow = queryClient.getQueryData(["workflow"]);
-
-  // console.log("workFlow: ", workFlow);
-
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
@@ -50,12 +46,18 @@ export const Participant = ({ workFlow }) => {
           </Avatar>
         </Stack>
         <Box>
-          <IconButton onClick={handleClickOpen}>
+          <IconButton onClick={handleOpen}>
             <SettingIcon />
           </IconButton>
         </Box>
       </Stack>
       <ParticipantInfo workFlow={workFlow} />
+      {/* <NestModal
+        open={open}
+        handleClose={handleClose}
+        title={t("0-common.workflow")}
+        data={workFlow.participants}
+      /> */}
       {/* Modal */}
       <DialogField
         open={open}

@@ -28,7 +28,7 @@ export let theme = extendTheme({
     light: {
       palette: {
         primary: {
-          main: "#26293F",
+          main: "#3B82F6",
         },
         secondary: {
           light: "#EDF7FA",
@@ -44,7 +44,7 @@ export let theme = extendTheme({
         },
         //lightBlue 50
         dialogBackground: {
-          main: "#e1f5fe",
+          main: "#F3FBFF",
         },
         accordingBackGround: {
           main: "#e8ebf0",

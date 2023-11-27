@@ -7,6 +7,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import PropTypes from "prop-types";
 import {
   Button,
   ButtonGroup,
@@ -28,9 +29,9 @@ import Cropper from "react-cropper";
 import { useForm } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
 
-export default function ModalSingingImage({
+export function ModalSingingImage({
   isShowModalSignImage,
-  setShowModalSignImage,
+  handleCloseModalSignImage,
 }) {
   const sigTextRef = useRef(null);
   const sigCanvasRef = useRef(null);
@@ -251,7 +252,7 @@ export default function ModalSingingImage({
     <Modal
       className="custom-modal-no-padding"
       open={isShowModalSignImage}
-      onClose={() => setShowModalSignImage(false)}
+      onClose={handleCloseModalSignImage}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       closeAfterTransition
@@ -293,7 +294,7 @@ export default function ModalSingingImage({
                     <Tab value={0} label={<b>SIGN DOCUMENT</b>}></Tab>
                   </TabList>
                 </div>
-                <CloseIcon onClick={() => setShowModalSignImage(false)} />
+                <CloseIcon onClick={handleCloseModalSignImage} />
               </div>
               <TabPanel value={0} sx={{ padding: "0px" }}>
                 <TabContext value={currentTabSignImage}>
@@ -613,7 +614,7 @@ export default function ModalSingingImage({
                 fontWeight: "500",
                 color: "black",
               }}
-              onClick={() => setShowModalSignImage(false)}
+              onClick={handleCloseModalSignImage}
             >
               Close
             </Button>
@@ -635,3 +636,10 @@ export default function ModalSingingImage({
     </Modal>
   );
 }
+
+ModalSingingImage.propTypes = {
+  isShowModalSignImage: PropTypes.bool,
+  handleCloseModalSignImage: PropTypes.func,
+};
+
+export default ModalSingingImage;

@@ -8,10 +8,10 @@ export const ToggleButtonField = ({
   name,
   control,
   content,
-  onChange: externalOnChange, // không cho user overide lại các thuộc tính này
-  onBlur: externalOnBlur,
-  ref: externalRef,
-  value: externalValue,
+  // onChange: externalOnChange, // không cho user overide lại các thuộc tính này
+  // onBlur: externalOnBlur,
+  // ref: externalRef,
+  // value: externalValue,
   ...rest
 }) => {
   const {
@@ -36,6 +36,7 @@ export const ToggleButtonField = ({
         exclusive
         onChange={handleChange}
         sx={{ width: "100%" }}
+        {...rest}
       >
         {content}
         {/* <FormHelperText

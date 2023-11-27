@@ -10,13 +10,22 @@ import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
 import "../../assets/style/react-resizable.css";
+import ModalSingingImage from "./ModalSingingImage";
 import SigningForm from "./SigningForm";
+import { ModalSigningImage2 } from "../ModalSigning";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+  // console.log("page: ", page);
   // console.log("index: ", index);
   // console.log("signatureData: ", signatureData);
-  const [isOpenSigningForm, setIsOpenSigningForm] = useState([false]);
+  const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
+  const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
+
+  // const [isOpenSigningForm, setOpenSigningForm] = useState(false);
+  // const [isShowModalSignImage, setShowModalSignImage] = useState(false);
+
+  // console.log("isShowModalSignImage: ", isShowModalSignImage);
 
   // console.log("pdfPage: ", pdfPage);
   const queryClient = useQueryClient();
@@ -98,14 +107,42 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const handleOpenSigningForm = (index) => {
     const newValue = [...isOpenSigningForm];
     newValue[index] = true;
-    setIsOpenSigningForm(newValue);
+    setOpenSigningForm(newValue);
   };
 
   const handleCloseSigningForm = (index) => {
     const newValue = [...isOpenSigningForm];
     newValue[index] = false;
-    setIsOpenSigningForm(newValue);
+    setOpenSigningForm(newValue);
   };
+
+  const handleShowModalSignImage = (index) => {
+    const newValue = [...isShowModalSignImage];
+    newValue[index] = true;
+    setShowModalSignImage(newValue);
+  };
+
+  const handleCloseModalSignImage = (index) => {
+    const newValue = [...isShowModalSignImage];
+    newValue[index] = false;
+    setShowModalSignImage(newValue);
+  };
+
+  // const handleOpenSigningForm = () => {
+  //   setOpenSigningForm(true);
+  // };
+
+  // const handleCloseSigningForm = () => {
+  //   setOpenSigningForm(false);
+  // };
+
+  // const handleShowModalSignImage = () => {
+  //   setShowModalSignImage(true);
+  // };
+
+  // const handleCloseModalSignImage = () => {
+  //   setShowModalSignImage(false);
+  // };
 
   const handleRemoveSignature = async () => {
     if (isSetPos || signerId !== signatureData.field_name) return;
@@ -151,10 +188,10 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             cursor: "pointer",
             opacity: 1,
           }}
-          onMouseDown={() => handleOpenSigningForm(signatureData.page - 1)}
+          onMouseDown={() => handleShowModalSignImage(index)}
         />
         <DeleteOutlineIcon
-          onMouseDown={handleRemoveSignature}
+          onMouseDown={() => handleRemoveSignature(index)}
           style={{
             fontSize: "14px",
             zIndex: 10,
@@ -292,18 +329,47 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           </Box>
         </ResizableBox>
       )}
-      {isOpenSigningForm[signatureData.page - 1] && (
+      {/* {isOpenSigningForm[signatureData.page - 1] && (
         <SigningForm
           open={isOpenSigningForm[signatureData.page - 1]}
           onClose={() => handleCloseSigningForm(signatureData.page - 1)}
           // index={signatureData.page - 1}
           workFlow={workFlow}
+          handleShowModalSignImage={() =>
+            handleShowModalSignImage(signatureData.page - 1)
+          }
         />
       )}
-      {/* <ModalSingingImage
-        isShowModalSignImage={isShowModalSignImage}
-        setShowModalSignImage={setShowModalSignImage}
-      /> */}
+      {isShowModalSignImage[signatureData.page - 1] && (
+        <ModalSingingImage
+          isShowModalSignImage={isShowModalSignImage[signatureData.page - 1]}
+          handleCloseModalSignImage={() =>
+            handleCloseModalSignImage(signatureData.page - 1)
+          }
+          index={signatureData.page - 1}
+        />
+      )} */}
+
+      {isOpenSigningForm[index] && (
+        <SigningForm
+          open={isOpenSigningForm[index]}
+          onClose={() => handleCloseSigningForm(index)}
+          // index={signatureData.page - 1}
+          workFlow={workFlow}
+        />
+      )}
+      {/* {isShowModalSignImage && (
+        <ModalSingingImage
+          isShowModalSignImage={isShowModalSignImage}
+          handleCloseModalSignImage={handleCloseModalSignImage}
+        />
+      )} */}
+      {isShowModalSignImage[index] && (
+        <ModalSigningImage2
+          open={isShowModalSignImage[index]}
+          onClose={() => handleCloseModalSignImage(index)}
+        />
+      )}
     </>
   );
 };
