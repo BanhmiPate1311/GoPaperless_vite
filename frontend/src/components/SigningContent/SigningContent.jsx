@@ -34,7 +34,7 @@ export const SigningContent = ({ workFlow }) => {
     },
     enabled: Object.keys(workFlow).length > 0,
   });
-  // console.log("getSignedInfo: ", signedInfo);
+  console.log("getSignedInfo: ", signedInfo);
   return (
     <Container
       disableGutters

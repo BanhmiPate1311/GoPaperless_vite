@@ -24,7 +24,7 @@ const CheckBoxField = ({
           checked={value}
           name={name}
           onChange={(event) => {
-            console.log("event: ", event);
+            // console.log("event: ", event);
             onChange(event);
           }}
         />
