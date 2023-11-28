@@ -79,6 +79,7 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
   const sigTextRef = useRef(null);
 
   const handleFormSubmit = (data) => {
+    console.log("data: ", data);
     html2canvas(sigTextRef.current).then((canvas) => {
       const data64 = canvas.toDataURL();
       //   console.log(data64);
