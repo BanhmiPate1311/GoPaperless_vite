@@ -7,3 +7,4 @@ export * from "./input-field";
 export * from "./ToggleButton-field";
 export * from "./checkbox-field";
 export * from "./toggle-alignment";
+export * from "./upload-field";

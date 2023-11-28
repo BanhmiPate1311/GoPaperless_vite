@@ -16,6 +16,8 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import TextSignForm from "./TextSignForm";
+import UploadSignForm from "../PdfViewer/UploadSignForm";
+import { DrawSignForm } from "../PdfViewer";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,11 +54,14 @@ function a11yProps(index) {
 }
 
 export const ModalSigningImage2 = ({ open, onClose }) => {
+  // console.log("signer: ", signer);
   // console.log("open: ", open);
   // set value for tabs
   const [value, setValue] = useState(0);
 
   const textElement = useRef();
+  const drawElement = useRef();
+  const fileElement = useRef();
 
   // const sigTextRef = useRef(null);
 
@@ -79,8 +84,25 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
     console.log("data: ", data);
   };
 
+  const handleDrawSubmit = (data) => {
+    console.log("data: ", data);
+  };
+
+  const handleFileSubmit = (data) => {
+    console.log("data: ", data);
+  };
+
   const handleSubmitClick = () => {
-    textElement.current.requestSubmit();
+    switch (value) {
+      case 0:
+        textElement.current.requestSubmit();
+        break;
+      case 1:
+        drawElement.current.requestSubmit();
+        break;
+      case 2:
+        fileElement.current.requestSubmit();
+    }
   };
 
   return (
@@ -164,6 +186,8 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
               },
               minHeight: 0,
               mb: 2,
+              borderBottom: 1,
+              borderColor: "divider",
             }}
           >
             <Tab
@@ -199,10 +223,10 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
             <TextSignForm ref={textElement} onTextSubmit={handleTextSubmit} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            chu
+            <DrawSignForm ref={drawElement} onDrawSubmit={handleDrawSubmit} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            chi
+            <UploadSignForm ref={fileElement} onFileSubmit={handleFileSubmit} />
           </TabPanel>
         </DialogContentText>
       </DialogContent>

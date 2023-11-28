@@ -23,8 +23,8 @@ const ToggleAlignment = ({
       value={value}
       name={name}
       onChange={(event, newAlignment) => {
-        console.log("newAlignment: ", newAlignment);
-        console.log("event: ", event);
+        // console.log("newAlignment: ", newAlignment);
+        // console.log("event: ", event);
         onChange(newAlignment);
       }}
       aria-label="Platform"

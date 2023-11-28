@@ -361,14 +361,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       )}
       {/* {isShowModalSignImage && (
         <ModalSingingImage
-          isShowModalSignImage={isShowModalSignImage}
-          handleCloseModalSignImage={handleCloseModalSignImage}
+          isShowModalSignImage={isShowModalSignImage[index]}
+          handleCloseModalSignImage={() => handleCloseModalSignImage(index)}
         />
       )} */}
       {isShowModalSignImage[index] && (
         <ModalSigningImage2
           open={isShowModalSignImage[index]}
           onClose={() => handleCloseModalSignImage(index)}
+          signer={signer}
         />
       )}
     </>

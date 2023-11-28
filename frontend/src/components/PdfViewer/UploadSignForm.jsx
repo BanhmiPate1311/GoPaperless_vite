@@ -1,19 +1,20 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Box from "@mui/material/Box";
+import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { InputField } from "../form";
-import AddSubtitle from "./AddSubtitle";
-import logo1 from "@/assets/images/Logo/gopaperless_white.png";
+import { DialogFile } from "../ModalSigning";
+import AddSubtitle from "../ModalSigning/AddSubtitle";
+import { InputField, UploadField } from "../form";
 
-export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
+const UploadSignForm = forwardRef(({ onFileSubmit }, ref) => {
   const schema = yup.object().shape({
-    text: yup.string().required("Please enter your name"),
+    fileUrl: yup.string().required("Please choose your file"),
+    imageScrop: yup.string(),
     email: yup
       .string()
       .email("Please enter your email")
@@ -32,7 +33,8 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
-      text: "",
+      fileUrl: "",
+      imageScrop: "",
       name: false,
       email: "",
       date: false,
@@ -48,25 +50,28 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
     resolver: yupResolver(schema),
   });
 
-  const sigTextRef = useRef(null);
+  const [errorFile, setErrorFile] = useState(false);
+
+  const [openCrop, setOpenCrop] = useState(false);
+
+  const sigFileRef = useRef(null);
+
+  const handleOpenCrop = () => {
+    setOpenCrop(true);
+  };
+
+  const handleCloseCrop = () => {
+    setOpenCrop(false);
+  };
 
   const subtitle = {
     labelText: false,
-    nameText: watch("text"),
+    nameText: "name name",
     dnText: "your Distinguished Name",
     reasonText: "your reason",
     locationText: "your location",
     dateText: "your date",
     itverText: "your itver",
-  };
-
-  const handleFormSubmit = () => {
-    // console.log("data: ", data);
-    html2canvas(sigTextRef.current).then((canvas) => {
-      const data64 = canvas.toDataURL();
-      //   console.log(data64);
-      onTextSubmit(data64);
-    });
   };
 
   const direction =
@@ -76,7 +81,15 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
     watch("dn") ||
     watch("itver") ||
     watch("location");
-  // console.log("alignment: ", watch("alignment"));
+
+  const handleFormSubmit = (data) => {
+    // console.log("data: ", data);
+    onFileSubmit(data);
+  };
+
+  const handleUploadFile = () => {
+    handleOpenCrop();
+  };
 
   return (
     <Box
@@ -86,20 +99,18 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
       sx={{ minWidth: 400 }}
     >
       <Box mb={2}>
-        <InputField
-          label="Name"
-          name="text"
+        <UploadField
+          variant="contained"
+          name="fileUrl"
+          label="Upload file"
           control={control}
-          InputLabelProps={{
-            sx: {
-              backgroundColor: "signingWFBackground.main",
-            },
+          sx={{
+            marginBottom: "0.5rem",
+            marginTop: "1rem",
+            fontWeight: "medium",
           }}
-          inputProps={{
-            sx: {
-              backgroundColor: "signingWFBackground.main",
-            },
-          }}
+          setErrorFile={setErrorFile}
+          onChange={handleUploadFile}
         />
       </Box>
       <Stack
@@ -107,10 +118,7 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
           overflow: "hidden",
           borderRadius: "6px",
           border: "1px solid #357EEB",
-          // backgroundColor: "white",
-          // set background image
-          backgroundImage: `url(${logo1})`,
-          backgroundSize: "cover",
+          backgroundColor: "white",
         }}
       >
         <Stack
@@ -128,7 +136,7 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
             minHeight: "100px",
             // padding: "2rem 0",
           }}
-          ref={sigTextRef}
+          ref={sigFileRef}
         >
           <Box
             sx={{
@@ -141,7 +149,18 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
             }}
             className="font-moon-dance"
           >
-            {watch("text") || ""}
+            {/* {watch("text") || ""} */}
+            {watch("imageScrop") ? (
+              <Box
+                component="img"
+                sx={{
+                  height: 53,
+                  maxWidth: "100%",
+                }}
+                alt="The house from the offer."
+                src={watch("imageScrop")}
+              />
+            ) : null}
           </Box>
           <Box
             sx={{
@@ -196,6 +215,9 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
           }}
         ></Box>
       </Stack>
+      <FormHelperText sx={{ color: "error.main", mx: "14px" }}>
+        {errorFile && errorFile}
+      </FormHelperText>
       <Typography mt={1}>Contact Information</Typography>
       <Box mb={1}>
         <InputField
@@ -220,12 +242,20 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
       <Box>
         <AddSubtitle control={control} />
       </Box>
+
+      <DialogFile
+        name="imageScrop"
+        control={control}
+        open={openCrop}
+        handleClose={handleCloseCrop}
+        data={watch("fileUrl")}
+      />
     </Box>
   );
 });
 
-TextSignForm.propTypes = {
-  onTextSubmit: PropTypes.func,
+UploadSignForm.propTypes = {
+  onFileSubmit: PropTypes.func,
 };
-TextSignForm.displayName = "TextSignForm";
-export default TextSignForm;
+UploadSignForm.displayName = "TextSignForm";
+export default UploadSignForm;

@@ -1,19 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { AddSubtitle, DialogDraw } from "../ModalSigning";
 import { InputField } from "../form";
-import AddSubtitle from "./AddSubtitle";
-import logo1 from "@/assets/images/Logo/gopaperless_white.png";
 
-export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
+export const DrawSignForm = forwardRef(({ onDrawSubmit }, ref) => {
   const schema = yup.object().shape({
-    text: yup.string().required("Please enter your name"),
+    drawUrl: yup.string().required("Please set your draw"),
     email: yup
       .string()
       .email("Please enter your email")
@@ -32,7 +32,7 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
-      text: "",
+      drawUrl: "",
       name: false,
       email: "",
       date: false,
@@ -48,11 +48,15 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
     resolver: yupResolver(schema),
   });
 
-  const sigTextRef = useRef(null);
+  const [openDraw, setOpenDraw] = useState(false);
+
+  const [errorDraw, setErrorDraw] = useState(false);
+
+  //   const sigCanvasRef = useRef(null);
 
   const subtitle = {
     labelText: false,
-    nameText: watch("text"),
+    nameText: "name name",
     dnText: "your Distinguished Name",
     reasonText: "your reason",
     locationText: "your location",
@@ -60,13 +64,18 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
     itverText: "your itver",
   };
 
-  const handleFormSubmit = () => {
+  const handleOpenDraw = () => {
+    setOpenDraw(true);
+  };
+
+  const handleCloseDraw = () => {
+    setOpenDraw(false);
+  };
+
+  const handleFormSubmit = (data) => {
     // console.log("data: ", data);
-    html2canvas(sigTextRef.current).then((canvas) => {
-      const data64 = canvas.toDataURL();
-      //   console.log(data64);
-      onTextSubmit(data64);
-    });
+    // const data64 = sigCanvasRef.current.getTrimmedCanvas().toDataURL();
+    onDrawSubmit(data);
   };
 
   const direction =
@@ -76,7 +85,6 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
     watch("dn") ||
     watch("itver") ||
     watch("location");
-  // console.log("alignment: ", watch("alignment"));
 
   return (
     <Box
@@ -86,51 +94,45 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
       sx={{ minWidth: 400 }}
     >
       <Box mb={2}>
-        <InputField
-          label="Name"
-          name="text"
-          control={control}
-          InputLabelProps={{
-            sx: {
-              backgroundColor: "signingWFBackground.main",
-            },
+        <Button
+          variant="contained"
+          style={{
+            marginBottom: "0.5rem",
+            marginTop: "1rem",
+            fontWeight: "medium",
           }}
-          inputProps={{
-            sx: {
-              backgroundColor: "signingWFBackground.main",
-            },
-          }}
-        />
+          onClick={handleOpenDraw}
+        >
+          Draw
+        </Button>
       </Box>
       <Stack
         sx={{
           overflow: "hidden",
           borderRadius: "6px",
           border: "1px solid #357EEB",
-          // backgroundColor: "white",
-          // set background image
-          backgroundImage: `url(${logo1})`,
-          backgroundSize: "cover",
+          backgroundColor: "white",
         }}
       >
         <Stack
-          // direction="row-reverse"
           direction={
             watch("alignment") === "auto" || watch("alignment") === "left"
               ? "row"
               : "row-reverse"
           }
           sx={{
-            // flexDirection: "row-reversed",
             display: "flex",
             width: "100%",
-            alignItems: "center",
+            // alignItems: "center",
             minHeight: "100px",
             // padding: "2rem 0",
           }}
-          ref={sigTextRef}
+          //   ref={sigCanvasRef}
         >
-          <Box
+          <Stack
+            direction="row"
+            justifyContent={"center"}
+            alignItems="center"
             sx={{
               marginLeft: "auto",
               marginRight: "auto",
@@ -139,10 +141,20 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
               textAlign: "center",
               textTransform: "capitalize",
             }}
-            className="font-moon-dance"
           >
-            {watch("text") || ""}
-          </Box>
+            {/* {watch("drawUrl") || ""} */}
+            {watch("drawUrl") ? (
+              <Box
+                component="img"
+                sx={{
+                  height: 53,
+                }}
+                alt="The house from the offer."
+                src={watch("drawUrl")}
+              />
+            ) : null}
+          </Stack>
+
           <Box
             sx={{
               marginLeft: "auto",
@@ -196,6 +208,9 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
           }}
         ></Box>
       </Stack>
+      <FormHelperText sx={{ color: "error.main", mx: "14px" }}>
+        {errorDraw && errorDraw}
+      </FormHelperText>
       <Typography mt={1}>Contact Information</Typography>
       <Box mb={1}>
         <InputField
@@ -220,12 +235,20 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
       <Box>
         <AddSubtitle control={control} />
       </Box>
+
+      <DialogDraw
+        name="drawUrl"
+        control={control}
+        open={openDraw}
+        handleClose={handleCloseDraw}
+        setErrorDraw={setErrorDraw}
+      />
     </Box>
   );
 });
 
-TextSignForm.propTypes = {
-  onTextSubmit: PropTypes.func,
+DrawSignForm.propTypes = {
+  onDrawSubmit: PropTypes.func,
 };
-TextSignForm.displayName = "TextSignForm";
-export default TextSignForm;
+DrawSignForm.displayName = "TextSignForm";
+export default DrawSignForm;
