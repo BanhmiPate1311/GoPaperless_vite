@@ -45,7 +45,8 @@ export const SelectField = ({
         {content}
       </Select>
       <FormHelperText
-        sx={{ color: "error.main", position: "absolute", top: "100%" }}
+        // sx={{ color: "error.main", position: "absolute", top: "100%" }}
+        sx={{ color: "error.main" }}
       >
         {error?.message}
       </FormHelperText>

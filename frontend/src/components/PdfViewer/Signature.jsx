@@ -188,7 +188,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             cursor: "pointer",
             opacity: 1,
           }}
-          onMouseDown={() => handleShowModalSignImage(index)}
+          onMouseDown={() => handleOpenSigningForm(index)}
         />
         <DeleteOutlineIcon
           onMouseDown={() => handleRemoveSignature(index)}

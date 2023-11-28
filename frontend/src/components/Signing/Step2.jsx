@@ -11,6 +11,7 @@ import { forwardRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { SelectField } from "../form";
+import CheckIdSoft from "./CheckIdSoft";
 
 export const Step2 = forwardRef(
   ({ onStepSubmit, providerName, connectorList, filterConnector }, ref) => {
@@ -19,13 +20,26 @@ export const Step2 = forwardRef(
       connector: yup
         .string()
         .required("Please Select Remote Signing Service Provider"),
+      messageError: yup.boolean().when("provider", (provider, schema) => {
+        if (
+          provider.includes("USB_TOKEN_SIGNING") ||
+          provider.includes("ELECTRONIC_ID")
+        ) {
+          return schema.required(
+            "Required software is missing or not available. Download here."
+          );
+        } else {
+          return schema.nullable();
+        }
+      }),
     });
 
     // eslint-disable-next-line no-unused-vars
-    const { control, handleSubmit, reset } = useForm({
+    const { control, handleSubmit, reset, watch } = useForm({
       defaultValues: {
         provider: "",
         connector: "",
+        messageError: null,
       },
       resolver: yupResolver(schema),
     });
@@ -81,6 +95,7 @@ export const Step2 = forwardRef(
       // console.log(e.target.value);
       reset({ provider: e.target.value, connector: "" });
       const filterValue = e.target.value;
+      // setProviderSelected(filterValue);
 
       // Assuming connectorList is a state variable
       const filteredData = connectorList?.data?.[filterValue];
@@ -152,6 +167,7 @@ export const Step2 = forwardRef(
             }}
           />
         </Box>
+        <CheckIdSoft name="messageError" control={control} />
       </Box>
     );
   }
@@ -162,6 +178,8 @@ Step2.propTypes = {
   onStepSubmit: PropTypes.func,
   connectorList: PropTypes.object,
   filterConnector: PropTypes.array,
+  errorPG: PropTypes.string,
+  setProviderSelected: PropTypes.func,
 };
 
 Step2.displayName = "Step2";

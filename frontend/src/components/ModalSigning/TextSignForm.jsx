@@ -110,7 +110,8 @@ export const TextSignForm = forwardRef(({ onTextSubmit }, ref) => {
           // backgroundColor: "white",
           // set background image
           backgroundImage: `url(${logo1})`,
-          backgroundSize: "cover",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Stack

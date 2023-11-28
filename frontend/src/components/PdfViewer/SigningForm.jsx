@@ -24,6 +24,7 @@ import {
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Step1, Step2, Step3_smartid, Step4 } from "../Signing";
+import { toast } from "react-toastify";
 
 const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
   // console.log("workFlow: ", workFlow);
@@ -55,10 +56,7 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
   const [activeStep, setActiveStep] = useState(1);
 
   const signer = getSigner(workFlow);
-  // setDataApi({
-  //   ...dataApi,
-  //   signerId: signer.signerId,
-  // });
+
   const signingOptions = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.keys(item)[0])
     : ["mobile", "smartid", "usbtoken", "electronic_id"];
@@ -119,7 +117,8 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
   const handleStep1Submit = (data) => {
     // console.log("data: ", data);
     if (data.method === "eseal") {
-      onClose();
+      // onClose();
+      toast.warn("Functionality is under development!");
     } else {
       handleNext(1);
     }
@@ -138,7 +137,8 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
     if (data.connector === "SMART_ID_MOBILE_ID") {
       handleNext(1);
     } else {
-      onClose();
+      // onClose();
+      toast.warn("Functionality is under development!");
     }
     // setMethod(data.method);
   };

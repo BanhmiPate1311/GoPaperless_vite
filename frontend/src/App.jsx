@@ -3,6 +3,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import Routers from "./routers/Routers";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const isFetching = useIsFetching();
@@ -15,7 +17,7 @@ function App() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-
+      <ToastContainer />
       <BrowserRouter>
         <Routers />
       </BrowserRouter>
