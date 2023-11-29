@@ -38,7 +38,7 @@ export const Header = ({ headerFooter }) => {
           height: 53,
         }}
         alt="The house from the offer."
-        src={check ? headerFooter.loGo : logo1}
+        src={headerFooter && headerFooter.loGo ? headerFooter.loGo : logo1}
       />
       <ModeSelect />
     </Box>

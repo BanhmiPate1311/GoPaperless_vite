@@ -75,6 +75,20 @@ export const convertSignOptionsToProvider = (signingOptions) => {
   });
 };
 
+export const convertProviderToSignOption = (Provider) => {
+  // convert list ["mobile", "smartid"] to ["MOBILE_ID_SIGNING","SMART_ID_SIGNING"]
+  switch (Provider) {
+    case "MOBILE_ID_SIGNING":
+      return "mobile";
+    case "SMART_ID_SIGNING":
+      return "smartid";
+    case "USB_TOKEN_SIGNING":
+      return "usbtoken";
+    case "ELECTRONIC_ID":
+      return "electronic_id";
+  }
+};
+
 export const getLang = () => {
   let lang = localStorage.getItem("language");
   switch (lang) {

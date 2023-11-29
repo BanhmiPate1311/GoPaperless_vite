@@ -78,7 +78,7 @@ export const Step3_smartid = forwardRef(
     };
 
     const handleFormSubmit = (data) => {
-      console.log("data: ", data);
+      // console.log("data: ", data);
       onStepSubmit(data);
     };
 

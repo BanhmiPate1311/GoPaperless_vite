@@ -20,7 +20,7 @@ export const Step2 = forwardRef(
       connector: yup
         .string()
         .required("Please Select Remote Signing Service Provider"),
-      messageError: yup.boolean().when("provider", (provider, schema) => {
+      messageError: yup.string().when("provider", (provider, schema) => {
         if (
           provider.includes("USB_TOKEN_SIGNING") ||
           provider.includes("ELECTRONIC_ID")
@@ -28,18 +28,16 @@ export const Step2 = forwardRef(
           return schema.required(
             "Required software is missing or not available. Download here."
           );
-        } else {
-          return schema.nullable();
         }
       }),
     });
 
     // eslint-disable-next-line no-unused-vars
-    const { control, handleSubmit, reset, watch } = useForm({
+    const { control, handleSubmit, setValue, watch } = useForm({
       defaultValues: {
         provider: "",
         connector: "",
-        messageError: null,
+        messageError: "",
       },
       resolver: yupResolver(schema),
     });
@@ -80,6 +78,7 @@ export const Step2 = forwardRef(
       }
       return acc;
     }, []);
+
     const data1 = mapProvider.map((item, i) => {
       return (
         <MenuItem key={i} value={item.value}>
@@ -93,7 +92,8 @@ export const Step2 = forwardRef(
 
     const handleChange1 = (e) => {
       // console.log(e.target.value);
-      reset({ provider: e.target.value, connector: "" });
+      setValue("provider", e.target.value);
+      setValue("connector", "");
       const filterValue = e.target.value;
       // setProviderSelected(filterValue);
 

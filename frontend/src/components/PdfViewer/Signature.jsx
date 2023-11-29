@@ -10,9 +10,9 @@ import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
 import "../../assets/style/react-resizable.css";
-import ModalSingingImage from "./ModalSingingImage";
-import SigningForm from "./SigningForm";
 import { ModalSigningImage2 } from "../ModalSigning";
+import { ModalSmartid } from "../ModalSigning/ModalSmartid";
+import SigningForm from "./SigningForm";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -21,6 +21,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("signatureData: ", signatureData);
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
+  const [isShowModalSmartid, setShowModalSmartid] = useState([false]);
 
   // const [isOpenSigningForm, setOpenSigningForm] = useState(false);
   // const [isShowModalSignImage, setShowModalSignImage] = useState(false);
@@ -30,6 +31,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("pdfPage: ", pdfPage);
   const queryClient = useQueryClient();
   const dragRef = useRef();
+  const [dataSigning, setDataSigning] = useState({});
 
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
@@ -39,7 +41,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isSetPos, setIsSetPos] = useState(false);
   // console.log("isSetPos: ", isSetPos);
 
-  // console.log("signer: ", signer);
   const maxPosibleResizeWidth =
     (pdfPage.width * (100 - signatureData.dimension?.x)) / 100;
   const maxPosibleResizeHeight =
@@ -126,6 +127,18 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     const newValue = [...isShowModalSignImage];
     newValue[index] = false;
     setShowModalSignImage(newValue);
+  };
+
+  const handleShowModalSmartid = (index) => {
+    const newValue = [...isShowModalSmartid];
+    newValue[index] = true;
+    setShowModalSmartid(newValue);
+  };
+
+  const handleCloseModalSmartid = (index) => {
+    const newValue = [...isShowModalSmartid];
+    newValue[index] = false;
+    setShowModalSmartid(newValue);
   };
 
   // const handleOpenSigningForm = () => {
@@ -357,19 +370,25 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           // index={signatureData.page - 1}
           workFlow={workFlow}
           handleShowModalSignImage={() => handleShowModalSignImage(index)}
+          setDataSigning={setDataSigning}
         />
       )}
-      {/* {isShowModalSignImage && (
-        <ModalSingingImage
-          isShowModalSignImage={isShowModalSignImage[index]}
-          handleCloseModalSignImage={() => handleCloseModalSignImage(index)}
-        />
-      )} */}
+
       {isShowModalSignImage[index] && (
         <ModalSigningImage2
           open={isShowModalSignImage[index]}
           onClose={() => handleCloseModalSignImage(index)}
           signer={signer}
+          dataSigning={dataSigning}
+          setDataSigning={setDataSigning}
+          handleShowModalSmartid={() => handleShowModalSmartid(index)}
+        />
+      )}
+      {isShowModalSmartid[index] && (
+        <ModalSmartid
+          open={isShowModalSmartid[index]}
+          onClose={() => handleCloseModalSmartid(index)}
+          dataSigning={dataSigning}
         />
       )}
     </>

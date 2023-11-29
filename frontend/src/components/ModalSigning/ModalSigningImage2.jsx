@@ -1,3 +1,4 @@
+import { apiService } from "@/services/api_service";
 import CloseIcon from "@mui/icons-material/Close";
 import DrawIcon from "@mui/icons-material/Draw";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
@@ -13,11 +14,13 @@ import IconButton from "@mui/material/IconButton";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
-import TextSignForm from "./TextSignForm";
-import UploadSignForm from "../PdfViewer/UploadSignForm";
+import { useParams } from "react-router-dom";
 import { DrawSignForm } from "../PdfViewer";
+import UploadSignForm from "../PdfViewer/UploadSignForm";
+import TextSignForm from "./TextSignForm";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,17 +56,32 @@ function a11yProps(index) {
   };
 }
 
-export const ModalSigningImage2 = ({ open, onClose }) => {
+export const ModalSigningImage2 = ({
+  open,
+  onClose,
+  signer,
+  dataSigning,
+  setDataSigning,
+  handleShowModalSmartid,
+}) => {
+  // console.log("dataSigning: ", dataSigning);
   // console.log("signer: ", signer);
   // console.log("open: ", open);
   // set value for tabs
+
+  const { signing_token: signingToken } = useParams();
   const [value, setValue] = useState(0);
 
   const textElement = useRef();
   const drawElement = useRef();
   const fileElement = useRef();
 
-  // const sigTextRef = useRef(null);
+  const { data: headerFooter } = useQuery({
+    queryKey: ["checkHeader"],
+    queryFn: () => apiService.checkHeaderFooter(signingToken),
+  });
+
+  // console.log("headerFooter: ", headerFooter?.data);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,16 +98,46 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
     }
   }, [open]);
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      // Geolocation is supported
+      navigator.geolocation.getCurrentPosition(function (position) {
+        console.log("Latitude is :", position.coords.latitude);
+        console.log("Longitude is :", position.coords.longitude);
+      });
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, []);
+
   const handleTextSubmit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
+    setDataSigning({
+      ...dataSigning,
+      imageBase64: data,
+    });
+    onClose();
+    handleShowModalSmartid();
   };
 
   const handleDrawSubmit = (data) => {
     console.log("data: ", data);
+    setDataSigning({
+      ...dataSigning,
+      imageBase64: data,
+    });
+    onClose();
+    handleShowModalSmartid();
   };
 
   const handleFileSubmit = (data) => {
     console.log("data: ", data);
+    setDataSigning({
+      ...dataSigning,
+      imageBase64: data,
+    });
+    onClose();
+    handleShowModalSmartid();
   };
 
   const handleSubmitClick = () => {
@@ -220,13 +268,31 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
           </Tabs>
           <TabPanel value={value} index={0}>
             {/* <TextSign /> */}
-            <TextSignForm ref={textElement} onTextSubmit={handleTextSubmit} />
+            <TextSignForm
+              ref={textElement}
+              onTextSubmit={handleTextSubmit}
+              signer={signer}
+              dataSigning={dataSigning}
+              headerFooter={headerFooter?.data}
+            />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <DrawSignForm ref={drawElement} onDrawSubmit={handleDrawSubmit} />
+            <DrawSignForm
+              ref={drawElement}
+              onDrawSubmit={handleDrawSubmit}
+              signer={signer}
+              dataSigning={dataSigning}
+              headerFooter={headerFooter?.data}
+            />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <UploadSignForm ref={fileElement} onFileSubmit={handleFileSubmit} />
+            <UploadSignForm
+              ref={fileElement}
+              onFileSubmit={handleFileSubmit}
+              signer={signer}
+              dataSigning={dataSigning}
+              headerFooter={headerFooter?.data}
+            />
           </TabPanel>
         </DialogContentText>
       </DialogContent>
@@ -258,6 +324,10 @@ export const ModalSigningImage2 = ({ open, onClose }) => {
 ModalSigningImage2.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
+  signer: PropTypes.object,
+  dataSigning: PropTypes.object,
+  setDataSigning: PropTypes.func,
+  handleShowModalSmartid: PropTypes.func,
 };
 
 export default ModalSigningImage2;

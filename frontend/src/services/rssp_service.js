@@ -8,4 +8,7 @@ export const rsspService = {
       connectorName: data.connectorName,
     });
   },
+  signFile: (data) => {
+    return api.post("rssp/signFile", data);
+  },
 };

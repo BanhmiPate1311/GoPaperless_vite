@@ -104,6 +104,7 @@ public class ApiController {
             signingWorkflowDto.setDocumentName(lastFile.getWorkflowDocumentName());
             signingWorkflowDto.setSigningToken(signingToken);
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
+            signingWorkflowDto.setLastFileUuid(lastFile.getLastPplFileUuid());
 
             String base64 = fpsService.getBase64ImagePdf(lastFile.getDocumentId());
             signingWorkflowDto.setPdfBase64(base64);

@@ -17,7 +17,7 @@ function App() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <BrowserRouter>
         <Routers />
       </BrowserRouter>

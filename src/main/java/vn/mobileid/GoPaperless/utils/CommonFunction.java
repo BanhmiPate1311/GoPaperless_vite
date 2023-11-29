@@ -8,6 +8,7 @@ package vn.mobileid.GoPaperless.utils;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
+import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
@@ -20,8 +21,10 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Enumeration;
+import java.util.List;
 
 
 /**
@@ -105,6 +108,7 @@ public class CommonFunction {
             X509Certificate cert = (X509Certificate) certFactory1.generateCertificate(in);
             info[0] = cert.getSubjectDN();
             info[0] = info[0].toString().replace("\\", "");
+            System.out.println("info[0]: " + info[0]);
             info[1] = cert.getIssuerDN();
             info[2] = cert.getSerialNumber().toString(16);
             time[0] = formatter.format(cert.getNotBefore());
@@ -126,5 +130,25 @@ public class CommonFunction {
             }
         }
         return "";
+    }
+
+    public static String getPropertiesFMS() throws Exception {
+
+        String sPropertiesFMS = "";
+
+        List<ConnectorName> connector = LoadParamSystem.getConnectorStart(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME);
+        if (connector.size() > 0) {
+            for(ConnectorName connectorName : connector){
+                if(connectorName.getConnectorName().equals(Difinitions.CONFIG_CONNECTOR_DMS_MOBILE_ID)){
+                    sPropertiesFMS = connectorName.getIdentifier();
+                }
+            }
+//            for (int m = 0; m < connector.size(); m++) {
+//                if (connector.get(m).CONNECTOR_NAME.equals(Difinitions.CONFIG_CONNECTOR_DMS_MOBILE_ID)) {
+//                    sPropertiesFMS = connector.get(m).IDENTIFIER;
+//                }
+//            }
+        }
+        return sPropertiesFMS;
     }
 }

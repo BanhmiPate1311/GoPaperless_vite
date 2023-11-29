@@ -9,6 +9,7 @@ public class SigningWorkflowDto {
     private int firstFileId;
     private int lastFileId;
     private String fileName;
+    private String lastFileUuid;
     private int fileSize;
     private int enterpriseId;
     private int workFlowId;
@@ -47,6 +48,14 @@ public class SigningWorkflowDto {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getLastFileUuid() {
+        return lastFileUuid;
+    }
+
+    public void setLastFileUuid(String lastFileUuid) {
+        this.lastFileUuid = lastFileUuid;
     }
 
     public int getFileSize() {

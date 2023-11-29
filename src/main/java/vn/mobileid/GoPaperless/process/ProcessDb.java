@@ -38,8 +38,7 @@ public class ProcessDb {
         String DBConnect_Timeout = connect_timeout;
         Class.forName(Driver_Sql);
         DriverManager.setLoginTimeout(Integer.parseInt(DBConnect_Timeout));
-        Connection connInner = DriverManager.getConnection(Url_Sql, Username_SQL, Password_SQL);
-        return connInner;
+        return DriverManager.getConnection(Url_Sql, Username_SQL, Password_SQL);
     }
 
     public void CloseDatabase(Connection[] temp) throws Exception {
@@ -52,7 +51,7 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         Connection conns = null;
         ResultSet rs = null;
-        String convrtr = "0";
+//        String convrtr = "0";
 
         try {
             conns = OpenDatabase();
@@ -64,7 +63,8 @@ public class ProcessDb {
             }
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
             proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            proc_stmt.getString("pRESPONSE_CODE");
 
 //            System.out.println("USP_PPL_WORKFLOW_GET: " + proc_stmt.toString());
             rs = proc_stmt.executeQuery();
@@ -100,7 +100,7 @@ public class ProcessDb {
         Connection conns = null;
         ResultSet rs = null;
         ArrayList<FirstFile> tempList = new ArrayList<>();
-        String convrtr = "0";
+//        String convrtr = "0";
         try {
             conns = OpenDatabase();
             proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_GET_FIRST_FILE(?,?) }");
@@ -108,7 +108,8 @@ public class ProcessDb {
 
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
             proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            proc_stmt.getString("pRESPONSE_CODE");
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
 
 //            System.out.println("USP_PPL_WORKFLOW_GET_FIRST_FILE: " + proc_stmt.toString());
             rs = proc_stmt.executeQuery();
@@ -143,7 +144,7 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         Connection conns = null;
         ResultSet rs = null;
-        String convrtr = "0";
+//        String convrtr = "0";
         try {
             conns = OpenDatabase();
             proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_LIST(?,?) }");
@@ -151,7 +152,8 @@ public class ProcessDb {
 
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
             proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            proc_stmt.getString("pRESPONSE_CODE");
 
 //            System.out.println("USP_PPL_WORKFLOW_GET_FIRST_FILE: " + proc_stmt.toString());
             rs = proc_stmt.executeQuery();
@@ -196,7 +198,7 @@ public class ProcessDb {
         Connection conns = null;
         ResultSet rs = null;
         ArrayList<FirstFile> tempList = new ArrayList<>();
-        String convrtr = "0";
+//        String convrtr = "0";
         try {
             conns = OpenDatabase();
             proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_GET_LAST_FILE(?,?) }");
@@ -204,7 +206,8 @@ public class ProcessDb {
 
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
             proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            proc_stmt.getString("pRESPONSE_CODE");
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
 
 //            System.out.println("USP_PPL_WORKFLOW_GET_FIRST_FILE: " + proc_stmt.toString());
             rs = proc_stmt.executeQuery();
@@ -265,8 +268,8 @@ public class ProcessDb {
         return convrtr;
     }
 
-    public String USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(int pPPL_FILE_ID, List<PplFileDetail> listPplFileDetail) throws Exception {
-        String convrtr = "1";
+    public void USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(int pPPL_FILE_ID, List<PplFileDetail> listPplFileDetail) throws Exception {
+//        String convrtr = "1";
         Connection conns = null;
         CallableStatement proc_stmt = null;
         ResultSet rs = null;
@@ -279,7 +282,8 @@ public class ProcessDb {
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
 
             proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            proc_stmt.getString("pRESPONSE_CODE");
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
 
             rs = proc_stmt.executeQuery();
             while (rs.next()) {
@@ -295,7 +299,7 @@ public class ProcessDb {
                 pplFileDetail.setLast_modified_at(rs.getDate("LAST_MODIFIED_AT"));
                 listPplFileDetail.add(pplFileDetail);
             }
-            return convrtr;
+//            return convrtr;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         } finally {
@@ -311,7 +315,7 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         Connection conns = null;
         ResultSet rs = null;
-        String convrtr = "0";
+//        String convrtr = "0";
 
         try {
             conns = OpenDatabase();
@@ -343,7 +347,7 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         Connection conns = null;
         ResultSet rs = null;
-        String convrtr = "0";
+//        String convrtr = "0";
 
         try {
             conns = OpenDatabase();
@@ -395,7 +399,7 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         Connection conns = null;
         ResultSet rs = null;
-        String convrtr = "0";
+//        String convrtr = "0";
 
         try {
             conns = OpenDatabase();
@@ -431,7 +435,7 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         Connection conns = null;
         ResultSet rs = null;
-        String convrtr = "0";
+//        String convrtr = "0";
 
         try {
             conns = OpenDatabase();
@@ -449,7 +453,8 @@ public class ProcessDb {
 
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
             proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            proc_stmt.getString("pRESPONSE_CODE");
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
 
 //            System.out.println("USP_PREFIX_PERSONAL_CODE_LIST: " + proc_stmt.toString());
             rs = proc_stmt.executeQuery();
@@ -464,6 +469,52 @@ public class ProcessDb {
             }
 
 //            System.out.println(tempList);
+        } catch (Exception e) {
+            System.out.println("USP_GW_PREFIX_PERSONAL_CODE_LIST: " + e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(Participants response, String pSIGNER_TOKEN) throws Exception {
+        CallableStatement proc_stmt = null;
+        Connection conns = null;
+        ResultSet rs = null;
+        ArrayList<Participants> tempList = new ArrayList<>();
+//        String convrtr = "1";
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(?,?) }");
+            proc_stmt.setString(1, pSIGNER_TOKEN);
+
+            proc_stmt.registerOutParameter(2, java.sql.Types.NVARCHAR);
+            proc_stmt.execute();
+            proc_stmt.getString(2);
+
+//            System.out.println("USP_PPL_WORKFLOW_PARTICIPANTS_GET: " + proc_stmt.toString());
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                response.setId(rs.getInt("ID"));
+                response.setPplWorkflowId(rs.getInt("PPL_WORKFLOW_ID"));
+                response.setFirstName(rs.getString("FIRST_NAME"));
+                response.setLastName(rs.getString("LAST_NAME"));
+                response.setSignerStatus(rs.getInt("SIGNER_STATUS"));
+                response.setCertificate(rs.getString("CERTIFICATE"));
+                response.setSigningOptions(rs.getString("SIGNING_OPTIONS"));
+                response.setSignerId(rs.getString("SIGNER_ID"));
+                response.setCustomReason(rs.getString("CUSTOM_REASON"));
+                response.setSigningPurpose(rs.getString("SIGNING_PURPOSE"));
+                response.setMetaInformation(rs.getString("META_INFORMATION"));
+                response.setAnnotation(rs.getString("ANNOTATION"));
+            }
+
         } catch (Exception e) {
             System.out.println("USP_GW_PREFIX_PERSONAL_CODE_LIST: " + e.getMessage());
         } finally {

@@ -1,6 +1,7 @@
 import { apiService } from "@/services/api_service";
 import { rsspService } from "@/services/rssp_service";
 import {
+  convertProviderToSignOption,
   convertSignOptionsToProvider,
   getLang,
   getSigner,
@@ -23,10 +24,17 @@ import {
 } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Step1, Step2, Step3_smartid, Step4 } from "../Signing";
 import { toast } from "react-toastify";
+import { Step1, Step2, Step3_smartid, Step4 } from "../Signing";
+import { v4 as uuidv4 } from "uuid";
 
-const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
+const SigningForm = ({
+  open,
+  onClose,
+  workFlow,
+  handleShowModalSignImage,
+  setDataSigning,
+}) => {
   // console.log("workFlow: ", workFlow);
   // console.log("index: ", index);
   // console.log("open: ", open);
@@ -36,14 +44,6 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
   let lang = getLang();
 
   // console.log("lang: ", lang);
-
-  const dataApi = useRef({
-    documentId: workFlow.documentId,
-    workFlowId: workFlow.workFlowId,
-    signingToken: workFlow.signingToken,
-    signerToken: workFlow.signerToken,
-    language: lang,
-  });
 
   const isFetching = useIsFetching();
 
@@ -66,6 +66,18 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
   const filterConnector = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.values(item)[0].join(","))
     : [];
+
+  const dataApi = useRef({
+    fileName: workFlow.fileName,
+    documentId: workFlow.documentId,
+    workFlowId: workFlow.workFlowId,
+    signingToken: workFlow.signingToken,
+    signerToken: workFlow.signerToken,
+    enterpriseId: workFlow.enterpriseId,
+    signerId: signer.signerId,
+    language: lang,
+    fieldName: signer.signerId,
+  });
 
   const handleNext = (step = 1) => {
     setActiveStep((prevActiveStep) => prevActiveStep + step);
@@ -95,6 +107,8 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
       handleNext(1);
     },
   });
+
+  // console.log("getCertificates: ", getCertificates?.data);
 
   useEffect(() => {
     if (open) {
@@ -133,6 +147,8 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
       signerId: signer.signerId,
       connectorName: data.connector,
       provider: data.provider,
+      signingOption: convertProviderToSignOption(data.provider),
+      lastFileId: workFlow.lastFileId,
     };
     if (data.connector === "SMART_ID_MOBILE_ID") {
       handleNext(1);
@@ -160,10 +176,14 @@ const SigningForm = ({ open, onClose, workFlow, handleShowModalSignImage }) => {
   };
 
   const handleStep4Submit = (data) => {
+    // console.log("data: ", data);
+    const requestID = uuidv4();
     dataApi.current = {
       ...dataApi.current,
-      certChain: getCertificates?.data?.data?.listCertificate[data],
+      requestID: requestID,
+      certChain: getCertificates?.data?.data?.listCertificate[data.certificate],
     };
+    setDataSigning(dataApi.current);
     // handleNext(1);
     onClose();
     handleShowModalSignImage();
@@ -343,5 +363,7 @@ SigningForm.propTypes = {
   onClose: PropTypes.func,
   handleShowModalSignImage: PropTypes.func,
   workFlow: PropTypes.object,
+  dataSigning: PropTypes.object,
+  setDataSigning: PropTypes.func,
 };
 export default SigningForm;

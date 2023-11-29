@@ -10,10 +10,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
+import vn.mobileid.GoPaperless.model.apiModel.Participants;
+import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
 import vn.mobileid.GoPaperless.model.rsspModel.*;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.utils.CommonFunction;
+import vn.mobileid.GoPaperless.utils.Difinitions;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -305,4 +309,181 @@ public class RsspService {
         }
         return response;
     }
+
+//    public String signFile(
+//            RsspRequest signRequest,
+//            HttpServletRequest request) throws Throwable {
+//        String field_name = signRequest.getFieldName();
+//        System.out.println("field_name: " + field_name);
+//        String connectorName = signRequest.getConnectorName();
+//        int enterpriseId = signRequest.getEnterpriseId();
+//        int workFlowId = signRequest.getWorkFlowId();
+//        String signingToken = signRequest.getSigningToken();
+//        String signerToken = signRequest.getSignerToken();
+//        String lang = signRequest.getLanguage();
+//        String codeNumber = signRequest.getCodeNumber();
+//        String relyingParty = signRequest.getCertChain().getRelyingParty();
+//        String prefixCode = signRequest.getCertChain().getPrefixCode();
+//        boolean codeEnable = signRequest.getCertChain().isCodeEnable();
+//        String credentialID = signRequest.getCertChain().getCredentialID();
+//        String signingOption = signRequest.getSigningOption();
+//        String signerId = signRequest.getSignerId();
+//        String certChain = signRequest.getCertChain().getCert();
+//        String fileName = signRequest.getFileName();
+//        String requestID = signRequest.getRequestID();
+//        int lastFileId = signRequest.getLastFileId();
+//        int documentId = signRequest.getDocumentId();
+//
+//        try {
+//            System.out.println("connectorName: " + connectorName);
+//            boolean error = false;
+//
+//            WorkFlowList rsWFList = new WorkFlowList();
+//            connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
+//            String sResult = "0";
+//
+//            // check workflow status
+////            if (rsWFList[0] == null || rsWFList[0].length == 0 || rsWFList[0][0].WORKFLOW_STATUS != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
+////                error = true;
+////                sResult = "Signer Status invalid";// trạng thái không hợp lệ
+////                throw new Exception(sResult);
+////            }
+//            if(rsWFList == null || rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING){
+////                error = true;
+//                sResult = "Signer Status invalid";// trạng thái không hợp lệ
+//                throw new Exception(sResult);
+//            }
+//
+//            // check workflow participant
+//            Participants rsParticipant = new Participants();
+//            connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(rsParticipant, signerToken);
+//            if (rsParticipant == null  || rsParticipant.getSignerStatus() != Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_PENDING) {
+//                return sResult = "The document has already been signed";
+//            }
+//
+//            String meta = rsParticipant.getMetaInformation();
+//
+////            int isSetPosition = CommonFunction.checkIsSetPosition(field_name, meta);
+////
+////            System.out.println("isSetPosition: " + isSetPosition);
+//
+//            String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
+//
+//            long millis = System.currentTimeMillis();
+//            String sSignatureHash = signerToken + millis;
+//            String sSignature_id = prefixCode + "-" + CommonHash.toHexString(CommonHash.hashPass(sSignatureHash)).toUpperCase();
+//
+//            String documentDetails = fpsService.getDocumentDetails(documentId);
+//
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode jsonNode = objectMapper.readTree(documentDetails);
+//            JsonNode documentNode = jsonNode.get(0);
+//
+////            System.out.println("documentDetails: " + jsonNode.get(0).get("document_height").asInt());
+//            int pageHeight = 0;
+//            int pageWidth = 0;
+//            if (documentNode != null) {
+//                pageHeight = documentNode.get("document_height").asInt();
+//                pageWidth = documentNode.get("document_width").asInt();
+//            }
+//
+//            // get user-agent
+//            String userAgent = request.getHeader("User-Agent");
+//            Parser parser = new Parser();
+//            Client c = parser.parse(userAgent);
+//            // set app interface
+//            String rpName = "{\"OPERATING SYSTEM\":\"" + c.os.family + " " + c.os.major + "\",\"BROWSER\":\"" + c.userAgent.family + " " + c.userAgent.major + "\",\"RP NAME\":\"" + relyingParty + "\"}";
+//
+//            String fileType2 = fileName.substring(fileName.lastIndexOf(".") + 1);
+//            String message = " {\"FILE NAME\":\"" + fileName + "\", \"FILE TYPE\":\"" + fileType2 + "\"}";
+//
+//            MobileDisplayTemplate template = new MobileDisplayTemplate();
+//            template.setScaIdentity("PAPERLESS GATEWAY");
+//            template.setMessageCaption("DOCUMENT SIGNING");
+//            template.setNotificationMessage("PAPERLESS GATEWAY ACTIVITES");
+//            template.setMessage(message);
+//            template.setRpName(rpName);
+//            template.setVcEnabled(codeEnable);
+//            template.setAcEnabled(true);
+//
+//            List<String> listCertChain = new ArrayList<>();
+//            listCertChain.add(certChain);
+//
+//            HashFileRequest hashFileRequest = commonRepository.getMetaData(signerToken, meta);
+//            hashFileRequest.setCertificateChain(listCertChain);
+//
+//            if (field_name == null || field_name.isEmpty()) {
+//                System.out.println("kiem tra:");
+//                commonRepository.addSign(pageHeight, pageWidth, signingToken, signerId, meta, documentId);
+////                hashFileRequest.setFieldName(signerToken);
+//            }
+////            else {
+////                hashFileRequest.setFieldName(signRequest.getFieldName());
+////            }
+//            System.out.println("kiem tra1:");
+//            hashFileRequest.setFieldName(!field_name.isEmpty() ? field_name : signerId);
+//            String hashList = fpsService.hashSignatureField(documentId, hashFileRequest);
+//
+//            HashAlgorithmOID hashAlgo = HashAlgorithmOID.SHA_256;
+//            DocumentDigests doc = new DocumentDigests();
+//            doc.hashAlgorithmOID = hashAlgo;
+//            doc.hashes = new ArrayList<>();
+//            doc.hashes.add(Utils.base64Decode(hashList));
+//
+//            if (codeEnable) {
+//                List<byte[]> list = new ArrayList<>();
+//                list.add(Base64.getMimeDecoder().decode(hashList));
+//                String codeVC = CommonFunction.computeVC(list);
+//                vcStoringService.store(requestID, codeVC);
+//            }
+//
+//            String sad = crt.authorize(connectorLogRequest, lang, credentialID, 1, doc, null, template);
+//
+////            commonRepository.connectorLog(connectorLogRequest);
+//            SignAlgo signAlgo = SignAlgo.RSA;
+//            List<byte[]> signatures = crt.signHash(connectorLogRequest, lang, credentialID, doc, signAlgo, sad);
+//            String signature = Base64.getEncoder().encodeToString(signatures.get(0));
+//            System.out.println("kiem tra signature: " + signature);
+//
+//
+//            FpsSignRequest fpsSignRequest = new FpsSignRequest();
+//            fpsSignRequest.setFieldName(!field_name.isEmpty() ? field_name : signerId);
+//            fpsSignRequest.setHashValue(hashList);
+//            fpsSignRequest.setSignatureValue(signature);
+//
+//
+//            fpsSignRequest.setCertificateChain(listCertChain);
+//
+//            System.out.println("kiem tra progress: ");
+//
+//            String responseSign = fpsService.signDocument(documentId, fpsSignRequest);
+//
+//
+//            JsonNode signNode = objectMapper.readTree(responseSign);
+//            String uuid = signNode.get("uuid").asText();
+//            int fileSize = signNode.get("file_size").asInt();
+//            String digest = signNode.get("digest").asText();
+//            String signedHash = signNode.get("signed_hash").asText();
+//            String signedTime = signNode.get("signed_time").asText();
+//
+//            CallBackLogRequest callBackLogRequest = new CallBackLogRequest();
+//            callBackLogRequest.setpENTERPRISE_ID(enterpriseId);
+//            callBackLogRequest.setpWORKFLOW_ID(workFlowId);
+//
+//
+//            commonRepository.postBack2(callBackLogRequest, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+//            return responseSign;
+//
+//        } catch (Exception e) {
+//            commonRepository.connectorLog(connectorLogRequest);
+//            if(field_name == null || field_name.isEmpty()){
+//                fpsService.deleteSignatue(documentId, signerId);
+//            }
+//
+//            throw new Exception(e.getMessage());
+//        } finally {
+//            vcStoringService.remove(requestID);
+//        }
+//
+//    }
 }

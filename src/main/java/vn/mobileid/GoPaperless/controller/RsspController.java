@@ -25,4 +25,11 @@ public class RsspController {
         Map<String, Object> response = rsspService.getCertificates(data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/signFile")
+    public ResponseEntity<?> signFile(@RequestBody RsspRequest data) throws Exception {
+        System.out.println("signFile");
+//        Map<String, Object> response = rsspService.getCertificates(data);
+        return new ResponseEntity<>("response", HttpStatus.OK);
+    }
 }

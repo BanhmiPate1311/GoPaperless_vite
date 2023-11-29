@@ -6,10 +6,9 @@ import { useController } from "react-hook-form";
 
 export const CheckIdSoft = ({ name, control }) => {
   const {
-    field: { onChange, onBlur, value },
+    field: { onChange, value },
     fieldState: { error },
   } = useController({ name, control });
-  console.log("error: ", error);
   useEffect(() => {
     const ipWS = "127.0.0.1";
     const portWS = "9505";
@@ -21,10 +20,10 @@ export const CheckIdSoft = ({ name, control }) => {
 
     // Xử lý sự kiện khi kết nối mở thành công
     socket.addEventListener("open", () => {
-      // console.log("Kết nối WebSocket đã thành công");
-      // socket.close();
-      onChange(true);
-      onBlur(true);
+      console.log("Kết nối WebSocket đã thành công");
+      socket.close();
+      onChange("open1");
+      // onBlur(true);
     });
 
     // Xử lý sự kiện khi xảy ra lỗi trong quá trình kết nối
