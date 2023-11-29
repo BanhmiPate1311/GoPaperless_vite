@@ -1,5 +1,6 @@
 package vn.mobileid.GoPaperless.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -8,6 +9,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import vn.mobileid.GoPaperless.dto.fpsDto.AccessTokenDto;
 import vn.mobileid.GoPaperless.model.fpsModel.BasicFieldAttribute;
+import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
+import vn.mobileid.GoPaperless.model.fpsModel.HashFileRequest;
 import vn.mobileid.GoPaperless.model.fpsModel.Signature;
 
 import java.util.*;
@@ -246,6 +249,93 @@ public class FpsService {
             if (statusCode.value() == 401) {
                 getAccessToken();
                 return deleteSignatue(documentId, field_name);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String hashSignatureField(int documentId, HashFileRequest data) throws Exception {
+        String hashSignatureFieldUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/hash";
+
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("field_name", data.getFieldName());
+        requestData.put("hand_signature_image", data.getHandSignatureImage());
+        requestData.put("signing_reason", data.getSigningReason());
+        requestData.put("signing_location", data.getSigningLocation());
+        requestData.put("skip_verification", true);
+        requestData.put("signature_algorithm", "RSA");
+        requestData.put("signed_hash", "SHA256");
+        requestData.put("certificate_chain", data.getCertificateChain());
+
+//        Gson gson = new Gson();
+//        System.out.println("Request Data: " + gson.toJson(requestData));
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(hashSignatureFieldUrl, HttpMethod.POST, httpEntity, String.class);
+            // Get the response body as a String
+            String responseBody = response.getBody();
+
+//            JsonObject jsonObject1 = gson.fromJson(responseBody, JsonObject.class);
+//            return jsonObject1.get("hash_value").getAsString();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            return jsonNode.get("hash_value").asText();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return hashSignatureField(documentId, data);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String signDocument(int documentId, FpsSignRequest data) throws Exception {
+        String signDocumentUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/sign";
+
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("field_name", data.getFieldName());
+        requestData.put("hash_value", data.getHashValue());
+        requestData.put("signature_value", data.getSignatureValue());
+        requestData.put("certificate_chain", data.getCertificateChain());
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(signDocumentUrl, HttpMethod.POST, httpEntity, String.class);
+            // Get the response body as a String
+            System.out.println("check: " + response.getBody());
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return signDocument(documentId, data);
             } else {
                 throw new Exception(e.getMessage());
             }

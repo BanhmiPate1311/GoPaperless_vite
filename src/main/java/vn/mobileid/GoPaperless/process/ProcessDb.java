@@ -528,4 +528,307 @@ public class ProcessDb {
             CloseDatabase(temp_connection);
         }
     }
+
+    public String USP_GW_PPL_FILE_ADD(int pENTERPRISE_ID, String pFILE_NAME, Integer pFILE_SIZE, int pFILE_STATUS, String pURL, String pFILE_TYPE,
+                                      String pMIME_TYPE,
+                                      String pDIGEST, String pCONTENT, String pFILE_UUID, String pDMS_PROPERTY, String pUPLOAD_TOKEN,
+                                      String pHMAC,
+                                      String pCREATED_BY, int[] pFILE_ID) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_PPL_FILE_ADD(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
+
+            proc_stmt.setInt("pENTERPRISE_ID", pENTERPRISE_ID); // pENTERPRISE_ID
+            proc_stmt.setString("pFILE_NAME", pFILE_NAME); // file name
+            // file size
+            proc_stmt.setInt("pFILE_SIZE", pFILE_SIZE);
+
+            // file status
+            proc_stmt.setInt("pFILE_STATUS", pFILE_STATUS);
+
+            // file URL
+            if (!"".equals(pURL)) {
+                proc_stmt.setString("pURL", pURL);
+            } else {
+                proc_stmt.setString("pURL", null);
+            }
+
+            // file type
+            proc_stmt.setString("pFILE_TYPE", pFILE_TYPE);
+
+            // file mime type
+            proc_stmt.setString("pMIME_TYPE", pMIME_TYPE);
+
+            proc_stmt.setString("pDIGEST", pDIGEST); // file digest
+
+            // file content
+            if (!"".equals(pCONTENT)) {
+                proc_stmt.setString("pCONTENT", pCONTENT);
+            } else {
+                proc_stmt.setString("pCONTENT", null);
+            }
+
+            // uuid file
+            proc_stmt.setString("pFILE_UUID", pFILE_UUID);
+
+            // file DMS property
+            proc_stmt.setString("pDMS_PROPERTY", pDMS_PROPERTY);
+
+            // upload token
+            proc_stmt.setString("pUPLOAD_TOKEN", pUPLOAD_TOKEN);
+
+            // hmac
+            if (!"".equals(pHMAC)) {
+                proc_stmt.setString("pHMAC", pHMAC);
+            } else {
+                proc_stmt.setString("pHMAC", null);
+            }
+            // create by
+            if (!"".equals(pCREATED_BY)) {
+                proc_stmt.setString("pCREATED_BY", pCREATED_BY);
+            } else {
+                proc_stmt.setString("pCREATED_BY", null);
+            }
+
+            proc_stmt.registerOutParameter("pFILE_ID", java.sql.Types.BIGINT); // giá trị out file_id
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR); // giá trị out response code
+
+//            System.out.println("USP_PPL_FILE_ADD: " + proc_stmt); // kiem tra
+            proc_stmt.execute();
+            pFILE_ID[0] = proc_stmt.getInt("pFILE_ID");
+            convrtr = String.valueOf(proc_stmt.getInt("pRESPONSE_CODE"));
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
+
+    public String USP_GW_PPL_FILE_UPDATE(int pFILE_ID, int pFILE_STATUS, String pFILE_NAME,
+                                         String pFILE_SIZE, String pURL, String pFILE_TYPE, String pMIME_TYPE, String pDIGEST,
+                                         String pCONTENT, String pFILE_UUID, String pDMS_PROPERTY, String pHMAC,
+                                         String pLAST_MOTIFIED_BY) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_PPL_FILE_UPDATE(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }");
+
+            proc_stmt.setInt("pFILE_ID", pFILE_ID);
+            proc_stmt.setInt("pFILE_STATUS", pFILE_STATUS);
+
+            if (!"".equals(pFILE_NAME)) {
+                proc_stmt.setString("pFILE_NAME", pFILE_NAME);
+            } else {
+                proc_stmt.setString("pFILE_NAME", null);
+            }
+
+            if (!"".equals(pFILE_SIZE)) {
+                proc_stmt.setInt("pFILE_SIZE", Integer.parseInt(pFILE_SIZE));
+            } else {
+                proc_stmt.setString("pFILE_SIZE", null);
+            }
+            if (!"".equals(pURL)) {
+                proc_stmt.setString("pURL", pURL);
+            } else {
+                proc_stmt.setString("pURL", null);
+            }
+            if (!"".equals(pFILE_TYPE)) {
+                proc_stmt.setString("pFILE_TYPE", pFILE_TYPE);
+            } else {
+                proc_stmt.setString("pFILE_TYPE", null);
+            }
+            if (!"".equals(pMIME_TYPE)) {
+                proc_stmt.setString("pMIME_TYPE", pMIME_TYPE);
+            } else {
+                proc_stmt.setString("pMIME_TYPE", null);
+            }
+            if (!"".equals(pDIGEST)) {
+                proc_stmt.setString("pDIGEST", pDIGEST);
+            } else {
+                proc_stmt.setString("pDIGEST", null);
+            }
+            if (!"".equals(pCONTENT)) {
+                proc_stmt.setString("pCONTENT", pCONTENT);
+            } else {
+                proc_stmt.setString("pCONTENT", null);
+            }
+
+            proc_stmt.setString("pFILE_UUID", pFILE_UUID);
+            proc_stmt.setString("pDMS_PROPERTY", pDMS_PROPERTY);
+
+            // if(!"".equals(pUPLOAD_TOKEN)){
+            // proc_stmt.setString("pUPLOAD_TOKEN", pUPLOAD_TOKEN);
+            // } else {
+            // proc_stmt.setString("pUPLOAD_TOKEN", null);
+            // }
+            if (!"".equals(pHMAC)) {
+                proc_stmt.setString("pHMAC", pHMAC);
+            } else {
+                proc_stmt.setString("pHMAC", null);
+            }
+            if (!"".equals(pLAST_MOTIFIED_BY)) {
+                proc_stmt.setString("pLAST_MODIFIED_BY", pLAST_MOTIFIED_BY);
+            } else {
+                proc_stmt.setString("pLAST_MODIFIED_BY", null);
+            }
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+//            System.out.println("USP_PPL_FILE_UPDATE: " + proc_stmt);
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
+
+    public String USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(String pSIGNER_TOKEN, int pSIGNER_STATUS,
+                                                                 String pLAST_MODIFIED_BY, int intIS_SET_POSITION)
+            throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(?,?,?,?,?) }");
+
+            proc_stmt.setString("pSIGNER_TOKEN", pSIGNER_TOKEN);
+            proc_stmt.setInt("pSIGNER_STATUS", pSIGNER_STATUS);
+            if (!"".equals(pLAST_MODIFIED_BY)) {
+                proc_stmt.setString("pLAST_MODIFIED_BY", pLAST_MODIFIED_BY);
+            } else {
+                proc_stmt.setString("pLAST_MODIFIED_BY", null);
+            }
+            proc_stmt.setInt("IS_SET_POSITION", intIS_SET_POSITION);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+//            System.out.println("USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS: " + proc_stmt.toString());
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
+
+    public String USP_GW_PPL_WORKFLOW_FILE_ADD(int pPPL_WORKFLOW_ID, int pPPL_FILE_ID, String pTYPE,
+                                               String pFILE_INFO, int pFROM_FILE_ID, String pHMAC, String pCREATED_BY) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_PPL_WORKFLOW_FILE_ADD(?,?,?,?,?,?,?,?) }");
+
+            proc_stmt.setInt("pPPL_WORKFLOW_ID", pPPL_WORKFLOW_ID);
+            proc_stmt.setInt("pPPL_FILE_ID", pPPL_FILE_ID);
+            proc_stmt.setString("pTYPE", pTYPE);
+            proc_stmt.setString("pFILE_INFO", pFILE_INFO);
+            if (pFROM_FILE_ID != 0) {
+                proc_stmt.setInt("pFROM_FILE_ID", pFROM_FILE_ID);
+            } else {
+                proc_stmt.setString("pFROM_FILE_ID", null);
+            }
+            proc_stmt.setString("pHMAC", pHMAC);
+            proc_stmt.setString("pCREATED_BY", pCREATED_BY);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+//            System.out.println("USP_PPL_WORKFLOW_FILE_ADD: " + proc_stmt);
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
+
+    public String USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(String pSIGNER_TOKEN, String pSIGNED_TYPE,
+                                                          String pSIGNED_TIME,
+                                                          String pSIGNATURE_ID, String pSIGNED_ALGORITHM, String pCERTIFICATE, String pSIGNATURE_TYPE,
+                                                          String pSIGNING_OPTION, String pGRACE_PERIOD_END_TIME, String pSIGNATURE_VALUE,
+                                                          int pPPL_FILE_SIGNED_ID, String pLAST_MODIFIED_BY) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            System.out.println("pGRACE_PERIOD_END_TIME" + pGRACE_PERIOD_END_TIME);
+            System.out.println("pPPL_FILE_SIGNED_ID" + pPPL_FILE_SIGNED_ID);
+            System.out.println("pLAST_MODIFIED_BY" + pLAST_MODIFIED_BY);
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(?,?,?,?,?,?,?,?,?,?,?,?,?) }");
+
+            proc_stmt.setString("pSIGNER_TOKEN", pSIGNER_TOKEN);
+            proc_stmt.setString("pSIGNED_TYPE", pSIGNED_TYPE);
+            if (pSIGNED_TIME != null) {
+                proc_stmt.setObject("pSIGNED_TIME", pSIGNED_TIME);
+            } else {
+                proc_stmt.setString("pSIGNED_TIME", null);
+            }
+            proc_stmt.setString("pSIGNATURE_ID", pSIGNATURE_ID);
+            proc_stmt.setString("pSIGNED_ALGORITHM", pSIGNED_ALGORITHM);
+            proc_stmt.setString("pCERTIFICATE", pCERTIFICATE);
+            proc_stmt.setString("pSIGNATURE_TYPE", pSIGNATURE_TYPE);
+            proc_stmt.setString("pSIGNING_OPTION", pSIGNING_OPTION);
+            proc_stmt.setString("pGRACE_PERIOD_END_TIME", pGRACE_PERIOD_END_TIME);
+            proc_stmt.setString("pSIGNATURE_VALUE", pSIGNATURE_VALUE);
+            proc_stmt.setInt("pPPL_FILE_SIGNED_ID", pPPL_FILE_SIGNED_ID);
+            proc_stmt.setString("pLAST_MODIFIED_BY", pLAST_MODIFIED_BY);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+//            System.out.println("USP_PPL_WORKFLOW_PARTICIPANTS_UPDATE: " + proc_stmt.toString());
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
+
+    public String USP_GW_PPL_WORKFLOW_UPDATE_STATUS(String pSIGNING_TOKEN, int pWORKFLOW_STATUS, String pLAST_MODIFIED_BY) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_PPL_WORKFLOW_UPDATE_STATUS(?,?,?,?) }");
+
+            proc_stmt.setString("pSIGNING_TOKEN", pSIGNING_TOKEN);
+            proc_stmt.setInt("pWORKFLOW_STATUS", pWORKFLOW_STATUS);
+            proc_stmt.setString("pLAST_MODIFIED_BY", pLAST_MODIFIED_BY);
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+//            System.out.println("USP_PPL_WORKFLOW_UPDATE_STATUS: " + proc_stmt.toString());
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
 }

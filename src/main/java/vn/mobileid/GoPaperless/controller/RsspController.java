@@ -8,6 +8,7 @@ import vn.mobileid.GoPaperless.model.rsspModel.CredentialInfo;
 import vn.mobileid.GoPaperless.model.rsspModel.CredentialList;
 import vn.mobileid.GoPaperless.service.RsspService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -27,9 +28,16 @@ public class RsspController {
     }
 
     @PostMapping("/signFile")
-    public ResponseEntity<?> signFile(@RequestBody RsspRequest data) throws Exception {
+    public ResponseEntity<?> signFile(@RequestBody RsspRequest data, HttpServletRequest request) throws Throwable {
         System.out.println("signFile");
-//        Map<String, Object> response = rsspService.getCertificates(data);
-        return new ResponseEntity<>("response", HttpStatus.OK);
+        String response = rsspService.signFile(data,request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/getVc")
+    public ResponseEntity<?> getVc(@RequestBody RsspRequest data) throws Exception {
+        System.out.println("getVc");
+        String response = rsspService.getVc(data.getRequestID());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

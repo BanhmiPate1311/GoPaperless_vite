@@ -8,14 +8,19 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import ua_parser.Client;
+import ua_parser.Parser;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
+import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
+import vn.mobileid.GoPaperless.model.fpsModel.HashFileRequest;
 import vn.mobileid.GoPaperless.model.rsspModel.*;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.utils.CommonFunction;
 import vn.mobileid.GoPaperless.utils.Difinitions;
+import vn.mobileid.GoPaperless.utils.VCStoringService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -29,17 +34,28 @@ public class RsspService {
     private String refreshToken;
     private String bearer;
     private String lang;
-    private final String profile="rssp-119.432-v2.0";
+    private final String profile = "rssp-119.432-v2.0";
 
     private int retryLogin = 0;
 
     private final ProcessDb connect;
 
+    private final PostBack postBack;
+
     private final Property property;
 
-    public RsspService(ProcessDb connect, Property property) {
+    private final GatewayService gatewayService;
+    private final FpsService fpsService;
+
+    private final VCStoringService vcStoringService;
+
+    public RsspService(ProcessDb connect, PostBack postBack, Property property, GatewayService gatewayService, FpsService fpsService, VCStoringService vcStoringService) {
         this.connect = connect;
+        this.postBack = postBack;
         this.property = property;
+        this.gatewayService = gatewayService;
+        this.fpsService = fpsService;
+        this.vcStoringService = vcStoringService;
     }
 
     @Value("${dev.mode}")
@@ -79,7 +95,7 @@ public class RsspService {
 
             ResponseEntity<LoginResponse> response = restTemplate.exchange(loginUrl, HttpMethod.POST, httpEntity, LoginResponse.class);
 
-            if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006){
+            if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
                 refreshToken = null;
                 if (retryLogin >= 5) {
                     retryLogin = 0;
@@ -90,7 +106,7 @@ public class RsspService {
                     throw new Exception(response.getBody().getErrorDescription());
                 }
                 login();
-            }else if (response.getBody().getError() != 0) {
+            } else if (response.getBody().getError() != 0) {
                 System.out.println("Err code khac 0: " + response.getBody().getError());
                 System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
                 System.out.println("Response ID: " + response.getBody().getResponseID());
@@ -121,12 +137,11 @@ public class RsspService {
 //        return "response";
     }
 
-    public CredentialList credentialsList(RsspRequest request) throws Exception {
+    public CredentialList credentialsList(String lang, String codeNumber) throws Exception {
         System.out.println("____________credentialsLists/list____________");
 
         String credentialsListUrl = property.getBaseUrl() + "credentials/list";
         String authHeader = bearer;
-        System.out.println("authHeader: " + authHeader);
 
         // Tạo HttpHeaders để đặt các headers
         HttpHeaders headers = new HttpHeaders();
@@ -134,8 +149,8 @@ public class RsspService {
         headers.set("Authorization", authHeader);
 
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("userID", request.getCodeNumber());
-        requestData.put("lang", request.getLanguage());
+        requestData.put("userID", codeNumber);
+        requestData.put("lang", lang);
         requestData.put("profile", profile);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
@@ -150,7 +165,7 @@ public class RsspService {
 
             if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
                 login();
-                return credentialsList(request);
+                return credentialsList(lang, codeNumber);
             } else if (response.getBody().getError() != 0) {
                 System.out.println("Err Code: " + response.getBody().getError());
                 System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
@@ -166,12 +181,11 @@ public class RsspService {
         }
     }
 
-    public CredentialInfo getCredentialinFo(RsspRequest request, String credentialID) throws Exception {
+    public CredentialInfo getCredentialinFo(String lang, String credentialID) throws Exception {
         System.out.println("____________credentialsLists/info____________");
 
         String credentialInfoUrl = property.getBaseUrl() + "credentials/info";
         String authHeader = bearer;
-        System.out.println("authHeader: " + authHeader);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -179,7 +193,7 @@ public class RsspService {
 
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("credentialID", credentialID);
-        requestData.put("lang", request.getLanguage());
+        requestData.put("lang", lang);
         requestData.put("profile", profile);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
@@ -193,7 +207,7 @@ public class RsspService {
 
             if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
                 login();
-                return getCredentialinFo(request,credentialID);
+                return getCredentialinFo(lang, credentialID);
             } else if (response.getBody().getError() != 0) {
                 System.out.println("Err Code: " + response.getBody().getError());
                 System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
@@ -203,11 +217,110 @@ public class RsspService {
 
             return response.getBody();
         } catch (HttpClientErrorException e) {
-            System.out.println("____________auth/login____________ error: ");
+            System.out.println("credentialsLists/info error: ");
             HttpStatus statusCode = e.getStatusCode();
             System.out.println("HTTP Status Code: " + statusCode.value());
             throw new Exception(e.getMessage());
         }
+    }
+
+    public String authorizeVc(String lang, String credentialID, DocumentDigests doc, MobileDisplayTemplate template, int numSignatures) throws Exception {
+        System.out.println("____________credentialsLists/authorizeVc____________");
+
+        String authorizeVcUrl = property.getBaseUrl() + "credentials/authorize";
+        String authHeader = bearer;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", authHeader);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("credentialID", credentialID);
+        requestData.put("numSignatures", numSignatures);
+        requestData.put("documentDigests", doc);
+        requestData.put("notificationMessage", template.getNotificationMessage());
+        requestData.put("messageCaption", template.getMessageCaption());
+        requestData.put("message", template.getMessage());
+        requestData.put("logoURI", template.getLogoURI());
+        requestData.put("rpIconURI", template.getRpIconURI());
+        requestData.put("bgImageURI", template.getBgImageURI());
+        requestData.put("rpName", template.getRpName());
+        requestData.put("scaIdentity", template.getScaIdentity());
+        requestData.put("vcEnabled", template.isVcEnabled());
+        requestData.put("acEnabled", template.isAcEnabled());
+
+        requestData.put("lang", lang);
+        requestData.put("profile", profile);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+
+            ResponseEntity<AuthorizeResponse> response = restTemplate.exchange(authorizeVcUrl, HttpMethod.POST, httpEntity, AuthorizeResponse.class);
+            System.out.println("error: " + response.getBody().getError());
+            System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
+            System.out.println("response: " + response.getStatusCode());
+
+            if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
+                login();
+                return authorizeVc(lang, credentialID, doc, template, numSignatures);
+            } else if (response.getBody().getError() != 0) {
+                System.out.println("Err Code: " + response.getBody().getError());
+                System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
+//                throw new Exception(response.getBody().getErrorDescription());
+                return null;
+            }
+
+            return response.getBody().getSAD();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public List<byte[]> signHash(String lang, String credentialID, DocumentDigests doc, SignAlgo signAlgo, String sad) throws Exception {
+        System.out.println("____________signatures/signHash____________");
+        String signHashUrl = property.getBaseUrl() + "signatures/signHash";
+
+        String authHeader = bearer;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", authHeader);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("credentialID", credentialID);
+        requestData.put("documentDigests", doc);
+        requestData.put("signAlgo", signAlgo);
+        requestData.put("SAD", sad);
+        requestData.put("lang", lang);
+        requestData.put("profile", profile);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+
+            ResponseEntity<SignHashResponse> response = restTemplate.exchange(signHashUrl, HttpMethod.POST, httpEntity, SignHashResponse.class);
+            System.out.println("error: " + response.getBody().getError());
+            System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
+            System.out.println("response: " + response.getStatusCode());
+
+            if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
+                login();
+                return signHash(lang, credentialID, doc, signAlgo, sad);
+            } else if (response.getBody().getError() != 0) {
+                System.out.println("Err Code: " + response.getBody().getError());
+                System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
+//                throw new Exception(response.getBody().getErrorDescription());
+                return null;
+            }
+
+            return response.getBody().getSignatures();
+        } catch (HttpClientErrorException e) {
+            System.out.println("credentialsLists/info error: ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            throw new Exception(e.getMessage());
+        }
+
     }
 
     public Map<String, Object> getCertificates(RsspRequest request) throws Exception {
@@ -261,7 +374,7 @@ public class RsspService {
         }
 
         login();
-        CredentialList credentialList = credentialsList(request);
+        CredentialList credentialList = credentialsList(request.getLanguage(), request.getCodeNumber());
         CredentialInfo credentialinFo = null;
 
         Map<String, Object> response = new HashMap<>();
@@ -270,10 +383,10 @@ public class RsspService {
         response.put("codeEnable", codeEnable);
 
         List<CertResponse> listCertificate = new ArrayList<>();
-        if (credentialList.getCerts().size() >0){
+        if (credentialList.getCerts().size() > 0) {
             for (CredentialItem credential : credentialList.getCerts()) {
                 String credentialID = credential.getCredentialID();
-                credentialinFo = getCredentialinFo(request, credentialID);
+                credentialinFo = getCredentialinFo(request.getLanguage(), credentialID);
                 if (credentialinFo != null) {
                     String authMode = credentialinFo.getAuthMode();
                     String status = credentialinFo.getCert().getStatus();
@@ -310,180 +423,193 @@ public class RsspService {
         return response;
     }
 
-//    public String signFile(
-//            RsspRequest signRequest,
-//            HttpServletRequest request) throws Throwable {
-//        String field_name = signRequest.getFieldName();
-//        System.out.println("field_name: " + field_name);
-//        String connectorName = signRequest.getConnectorName();
-//        int enterpriseId = signRequest.getEnterpriseId();
-//        int workFlowId = signRequest.getWorkFlowId();
-//        String signingToken = signRequest.getSigningToken();
-//        String signerToken = signRequest.getSignerToken();
-//        String lang = signRequest.getLanguage();
-//        String codeNumber = signRequest.getCodeNumber();
-//        String relyingParty = signRequest.getCertChain().getRelyingParty();
-//        String prefixCode = signRequest.getCertChain().getPrefixCode();
-//        boolean codeEnable = signRequest.getCertChain().isCodeEnable();
-//        String credentialID = signRequest.getCertChain().getCredentialID();
-//        String signingOption = signRequest.getSigningOption();
-//        String signerId = signRequest.getSignerId();
-//        String certChain = signRequest.getCertChain().getCert();
-//        String fileName = signRequest.getFileName();
-//        String requestID = signRequest.getRequestID();
-//        int lastFileId = signRequest.getLastFileId();
-//        int documentId = signRequest.getDocumentId();
-//
-//        try {
-//            System.out.println("connectorName: " + connectorName);
-//            boolean error = false;
-//
-//            WorkFlowList rsWFList = new WorkFlowList();
-//            connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
-//            String sResult = "0";
-//
-//            // check workflow status
-////            if (rsWFList[0] == null || rsWFList[0].length == 0 || rsWFList[0][0].WORKFLOW_STATUS != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
-////                error = true;
-////                sResult = "Signer Status invalid";// trạng thái không hợp lệ
-////                throw new Exception(sResult);
-////            }
-//            if(rsWFList == null || rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING){
-////                error = true;
+    public String signFile(
+            RsspRequest signRequest,
+            HttpServletRequest request) throws Throwable {
+        String field_name = signRequest.getFieldName();
+        System.out.println("field_name: " + field_name);
+        String codeNumber = signRequest.getCodeNumber();
+        String connectorName = signRequest.getConnectorName();
+        String country = !Objects.equals(signRequest.getCountry(), "") ? signRequest.getCountry() : signRequest.getCountryRealtime();
+        System.out.println("country: " + country);
+        int documentId = signRequest.getDocumentId();
+        int enterpriseId = signRequest.getEnterpriseId();
+        String fileName = signRequest.getFileName();
+        String imageBase64 = signRequest.getImageBase64();
+        String lang = signRequest.getLanguage();
+        int lastFileId = signRequest.getLastFileId();
+        String lastUuid = signRequest.getLastFileUuid();
+        String requestID = signRequest.getRequestID();
+        String signerId = signRequest.getSignerId();
+        String signerToken = signRequest.getSignerToken();
+        String signingOption = signRequest.getSigningOption();
+        String signingPurpose = signRequest.getSigningPurpose();
+        System.out.println("signingPurpose: " + signingPurpose);
+        String signingToken = signRequest.getSigningToken();
+        int workFlowId = signRequest.getWorkFlowId();
+        String relyingParty = signRequest.getCertChain().getRelyingParty();
+        String prefixCode = signRequest.getCertChain().getPrefixCode();
+        boolean codeEnable = signRequest.getCertChain().isCodeEnable();
+        String credentialID = signRequest.getCertChain().getCredentialID();
+        String certChain = signRequest.getCertChain().getCert();
+
+        try {
+            System.out.println("connectorName: " + connectorName);
+            boolean error = false;
+
+            WorkFlowList rsWFList = new WorkFlowList();
+            connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
+            String sResult = "0";
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(rsWFList);
+            System.out.println("json: " + json);
+
+            // check workflow status
+//            if (rsWFList[0] == null || rsWFList[0].length == 0 || rsWFList[0][0].WORKFLOW_STATUS != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
+//                error = true;
 //                sResult = "Signer Status invalid";// trạng thái không hợp lệ
 //                throw new Exception(sResult);
 //            }
-//
-//            // check workflow participant
-//            Participants rsParticipant = new Participants();
-//            connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(rsParticipant, signerToken);
-//            if (rsParticipant == null  || rsParticipant.getSignerStatus() != Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_PENDING) {
-//                return sResult = "The document has already been signed";
-//            }
-//
+            if (rsWFList == null || rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
+//                error = true;
+                sResult = "Signer Status invalid";// trạng thái không hợp lệ
+                throw new Exception(sResult);
+            }
+
+            // check workflow participant
+            Participants rsParticipant = new Participants();
+            connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(rsParticipant, signerToken);
+            if (rsParticipant == null || rsParticipant.getSignerStatus() != Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_PENDING) {
+                return sResult = "The document has already been signed";
+            }
+
 //            String meta = rsParticipant.getMetaInformation();
+
+//            int isSetPosition = CommonFunction.checkIsSetPosition(field_name, meta);
 //
-////            int isSetPosition = CommonFunction.checkIsSetPosition(field_name, meta);
-////
-////            System.out.println("isSetPosition: " + isSetPosition);
-//
-//            String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
-//
+//            System.out.println("isSetPosition: " + isSetPosition);
+
+            String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
+
 //            long millis = System.currentTimeMillis();
 //            String sSignatureHash = signerToken + millis;
 //            String sSignature_id = prefixCode + "-" + CommonHash.toHexString(CommonHash.hashPass(sSignatureHash)).toUpperCase();
-//
-//            String documentDetails = fpsService.getDocumentDetails(documentId);
-//
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            JsonNode jsonNode = objectMapper.readTree(documentDetails);
-//            JsonNode documentNode = jsonNode.get(0);
-//
-////            System.out.println("documentDetails: " + jsonNode.get(0).get("document_height").asInt());
-//            int pageHeight = 0;
-//            int pageWidth = 0;
-//            if (documentNode != null) {
-//                pageHeight = documentNode.get("document_height").asInt();
-//                pageWidth = documentNode.get("document_width").asInt();
-//            }
-//
-//            // get user-agent
-//            String userAgent = request.getHeader("User-Agent");
-//            Parser parser = new Parser();
-//            Client c = parser.parse(userAgent);
-//            // set app interface
-//            String rpName = "{\"OPERATING SYSTEM\":\"" + c.os.family + " " + c.os.major + "\",\"BROWSER\":\"" + c.userAgent.family + " " + c.userAgent.major + "\",\"RP NAME\":\"" + relyingParty + "\"}";
-//
-//            String fileType2 = fileName.substring(fileName.lastIndexOf(".") + 1);
-//            String message = " {\"FILE NAME\":\"" + fileName + "\", \"FILE TYPE\":\"" + fileType2 + "\"}";
-//
-//            MobileDisplayTemplate template = new MobileDisplayTemplate();
-//            template.setScaIdentity("PAPERLESS GATEWAY");
-//            template.setMessageCaption("DOCUMENT SIGNING");
-//            template.setNotificationMessage("PAPERLESS GATEWAY ACTIVITES");
-//            template.setMessage(message);
-//            template.setRpName(rpName);
-//            template.setVcEnabled(codeEnable);
-//            template.setAcEnabled(true);
-//
-//            List<String> listCertChain = new ArrayList<>();
-//            listCertChain.add(certChain);
-//
-//            HashFileRequest hashFileRequest = commonRepository.getMetaData(signerToken, meta);
-//            hashFileRequest.setCertificateChain(listCertChain);
-//
-//            if (field_name == null || field_name.isEmpty()) {
-//                System.out.println("kiem tra:");
-//                commonRepository.addSign(pageHeight, pageWidth, signingToken, signerId, meta, documentId);
-////                hashFileRequest.setFieldName(signerToken);
-//            }
-////            else {
-////                hashFileRequest.setFieldName(signRequest.getFieldName());
-////            }
-//            System.out.println("kiem tra1:");
-//            hashFileRequest.setFieldName(!field_name.isEmpty() ? field_name : signerId);
-//            String hashList = fpsService.hashSignatureField(documentId, hashFileRequest);
-//
-//            HashAlgorithmOID hashAlgo = HashAlgorithmOID.SHA_256;
-//            DocumentDigests doc = new DocumentDigests();
-//            doc.hashAlgorithmOID = hashAlgo;
-//            doc.hashes = new ArrayList<>();
-//            doc.hashes.add(Utils.base64Decode(hashList));
-//
-//            if (codeEnable) {
-//                List<byte[]> list = new ArrayList<>();
-//                list.add(Base64.getMimeDecoder().decode(hashList));
-//                String codeVC = CommonFunction.computeVC(list);
-//                vcStoringService.store(requestID, codeVC);
-//            }
-//
+            String sSignature_id = gatewayService.getSignatureId(lastUuid, fileName);
+
+            // get user-agent
+            String userAgent = request.getHeader("User-Agent");
+            Parser parser = new Parser();
+            Client c = parser.parse(userAgent);
+            // set app interface
+            String rpName = "{\"OPERATING SYSTEM\":\"" + c.os.family + " " + c.os.major + "\",\"BROWSER\":\"" + c.userAgent.family + " " + c.userAgent.major + "\",\"RP NAME\":\"" + relyingParty + "\"}";
+
+            String fileType2 = fileName.substring(fileName.lastIndexOf(".") + 1);
+            String message = " {\"FILE NAME\":\"" + fileName + "\", \"FILE TYPE\":\"" + fileType2 + "\"}";
+
+            MobileDisplayTemplate template = new MobileDisplayTemplate();
+            template.setScaIdentity("PAPERLESS GATEWAY");
+            template.setMessageCaption("DOCUMENT SIGNING");
+            template.setNotificationMessage("PAPERLESS GATEWAY ACTIVITES");
+            template.setMessage(message);
+            template.setRpName(rpName);
+            template.setVcEnabled(codeEnable);
+            template.setAcEnabled(true);
+
+            List<String> listCertChain = new ArrayList<>();
+            listCertChain.add(certChain);
+
+            HashFileRequest hashFileRequest = new HashFileRequest();
+
+            hashFileRequest.setCertificateChain(listCertChain);
+            hashFileRequest.setSigningReason(signingPurpose);
+            hashFileRequest.setSignatureAlgorithm("RSA");
+            hashFileRequest.setSignedHash("SHA256");
+            hashFileRequest.setSigningLocation(country);
+            hashFileRequest.setFieldName(field_name);
+            hashFileRequest.setHandSignatureImage(imageBase64);
+
+            String hashList = fpsService.hashSignatureField(documentId, hashFileRequest);
+
+            HashAlgorithmOID hashAlgo = HashAlgorithmOID.SHA_256;
+            DocumentDigests doc = new DocumentDigests();
+            doc.hashAlgorithmOID = hashAlgo;
+            doc.hashes = new ArrayList<>();
+            doc.hashes.add(CommonFunction.base64Decode(hashList));
+
+            if (codeEnable) {
+                List<byte[]> list = new ArrayList<>();
+                list.add(Base64.getMimeDecoder().decode(hashList));
+                String codeVC = CommonFunction.computeVC(list);
+                vcStoringService.store(requestID, codeVC);
+            }
+
 //            String sad = crt.authorize(connectorLogRequest, lang, credentialID, 1, doc, null, template);
-//
-////            commonRepository.connectorLog(connectorLogRequest);
-//            SignAlgo signAlgo = SignAlgo.RSA;
-//            List<byte[]> signatures = crt.signHash(connectorLogRequest, lang, credentialID, doc, signAlgo, sad);
-//            String signature = Base64.getEncoder().encodeToString(signatures.get(0));
-//            System.out.println("kiem tra signature: " + signature);
-//
-//
-//            FpsSignRequest fpsSignRequest = new FpsSignRequest();
-//            fpsSignRequest.setFieldName(!field_name.isEmpty() ? field_name : signerId);
-//            fpsSignRequest.setHashValue(hashList);
-//            fpsSignRequest.setSignatureValue(signature);
-//
-//
-//            fpsSignRequest.setCertificateChain(listCertChain);
-//
-//            System.out.println("kiem tra progress: ");
-//
-//            String responseSign = fpsService.signDocument(documentId, fpsSignRequest);
-//
-//
-//            JsonNode signNode = objectMapper.readTree(responseSign);
-//            String uuid = signNode.get("uuid").asText();
-//            int fileSize = signNode.get("file_size").asInt();
-//            String digest = signNode.get("digest").asText();
-//            String signedHash = signNode.get("signed_hash").asText();
-//            String signedTime = signNode.get("signed_time").asText();
-//
-//            CallBackLogRequest callBackLogRequest = new CallBackLogRequest();
-//            callBackLogRequest.setpENTERPRISE_ID(enterpriseId);
-//            callBackLogRequest.setpWORKFLOW_ID(workFlowId);
-//
-//
-//            commonRepository.postBack2(callBackLogRequest, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
-//            return responseSign;
-//
-//        } catch (Exception e) {
+//            authorizeVc(request, credentialID, doc, template, numSignatures)
+            String sad = authorizeVc(signRequest.getLanguage(), credentialID, doc, template, 1);
+
 //            commonRepository.connectorLog(connectorLogRequest);
-//            if(field_name == null || field_name.isEmpty()){
-//                fpsService.deleteSignatue(documentId, signerId);
-//            }
-//
-//            throw new Exception(e.getMessage());
-//        } finally {
-//            vcStoringService.remove(requestID);
-//        }
-//
-//    }
+            SignAlgo signAlgo = SignAlgo.RSA;
+            List<byte[]> signatures = signHash(lang, credentialID, doc, signAlgo, sad);
+            String signature = Base64.getEncoder().encodeToString(signatures.get(0));
+            System.out.println("kiem tra signature: " + signature);
+
+
+            FpsSignRequest fpsSignRequest = new FpsSignRequest();
+            fpsSignRequest.setFieldName(field_name);
+            fpsSignRequest.setHashValue(hashList);
+            fpsSignRequest.setSignatureValue(signature);
+
+
+            fpsSignRequest.setCertificateChain(listCertChain);
+
+            System.out.println("kiem tra progress: ");
+
+            String responseSign = fpsService.signDocument(documentId, fpsSignRequest);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode signNode = objectMapper.readTree(responseSign);
+            String uuid = signNode.get("uuid").asText();
+            int fileSize = signNode.get("file_size").asInt();
+            String digest = signNode.get("digest").asText();
+            String signedHash = signNode.get("signed_hash").asText();
+            String signedTime = signNode.get("signed_time").asText();
+
+            int isSetPosition = 1;
+            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            return responseSign;
+
+        } catch (Exception e) {
+
+            if (field_name == null || field_name.isEmpty()) {
+                fpsService.deleteSignatue(documentId, signerId);
+            }
+
+            throw new Exception(e.getMessage());
+        } finally {
+            vcStoringService.remove(requestID);
+        }
+
+    }
+
+    public String getVc(String requestID) {
+        Long startTime = System.currentTimeMillis();
+        try {
+            while (true) {
+                String VC = vcStoringService.get(requestID);
+                if (VC != null) {
+                    vcStoringService.remove(requestID);
+                    return VC;
+                } else {
+                    Long endTime = System.currentTimeMillis();
+                    if (endTime - startTime > 60000) {
+                        return VC;
+                    }
+                    Thread.sleep(5000);
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

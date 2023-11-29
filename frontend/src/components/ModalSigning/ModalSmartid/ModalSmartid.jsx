@@ -20,6 +20,13 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
       return rsspService.signFile(dataSigning);
     },
   });
+
+  const { data: getVc } = useQuery({
+    queryKey: ["getVc"],
+    queryFn: () => {
+      return rsspService.getVc(dataSigning);
+    },
+  });
   return (
     <Dialog
       keepMounted={false}

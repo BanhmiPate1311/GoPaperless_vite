@@ -77,6 +77,7 @@ const SigningForm = ({
     signerId: signer.signerId,
     language: lang,
     fieldName: signer.signerId,
+    lastFileUuid: workFlow.lastFileUuid,
   });
 
   const handleNext = (step = 1) => {

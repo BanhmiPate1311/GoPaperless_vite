@@ -4,21 +4,25 @@ public class RsspRequest {
     private CertChain certChain;
     private String codeNumber;
     private String connectorName;
+    private String country;
+    private String countryRealtime;
     private int documentId;
     private int enterpriseId;
     private String fileName;
+    private String fieldName;
     private String imageBase64;
     private String language;
     private int lastFileId;
+    private String lastFileUuid;
     private String provider;
+    private String reason;
     private String requestID;
     private String signerId;
     private String signerToken;
     private String signingOption;
+    private String signingPurpose;
     private String signingToken;
-    private String fieldName;
     private int workFlowId;
-
 
     public CertChain getCertChain() {
         return certChain;
@@ -42,6 +46,22 @@ public class RsspRequest {
 
     public void setConnectorName(String connectorName) {
         this.connectorName = connectorName;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCountryRealtime() {
+        return countryRealtime;
+    }
+
+    public void setCountryRealtime(String countryRealtime) {
+        this.countryRealtime = countryRealtime;
     }
 
     public int getDocumentId() {
@@ -68,6 +88,14 @@ public class RsspRequest {
         this.fileName = fileName;
     }
 
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
     public String getImageBase64() {
         return imageBase64;
     }
@@ -92,12 +120,28 @@ public class RsspRequest {
         this.lastFileId = lastFileId;
     }
 
+    public String getLastFileUuid() {
+        return lastFileUuid;
+    }
+
+    public void setLastFileUuid(String lastFileUuid) {
+        this.lastFileUuid = lastFileUuid;
+    }
+
     public String getProvider() {
         return provider;
     }
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public String getRequestID() {
@@ -132,20 +176,20 @@ public class RsspRequest {
         this.signingOption = signingOption;
     }
 
+    public String getSigningPurpose() {
+        return signingPurpose;
+    }
+
+    public void setSigningPurpose(String signingPurpose) {
+        this.signingPurpose = signingPurpose;
+    }
+
     public String getSigningToken() {
         return signingToken;
     }
 
     public void setSigningToken(String signingToken) {
         this.signingToken = signingToken;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
     }
 
     public int getWorkFlowId() {

@@ -53,8 +53,9 @@ export const TextSignForm = forwardRef(
 
     const nameValue = dataSigning.certChain.subject;
     const dnValue = "your Distinguished Name";
-    const reasonValue = signer.metaInformation.pdf?.reason;
+    const reasonValue = dataSigning.reason;
     const logoValue = headerFooter.loGo ? headerFooter.loGo : logo1;
+    const location = dataSigning.countryRealtime;
 
     const currentDatetime = new Date();
     const options = {
@@ -76,7 +77,7 @@ export const TextSignForm = forwardRef(
       nameText: nameValue,
       dnText: dnValue,
       reasonText: reasonValue || "signature",
-      locationText: "your location",
+      locationText: location,
       dateText: formattedDatetime,
       itverText: "Itext core 8.0.2",
     };
@@ -269,6 +270,8 @@ export const TextSignForm = forwardRef(
 TextSignForm.propTypes = {
   onTextSubmit: PropTypes.func,
   signer: PropTypes.object,
+  dataSigning: PropTypes.object,
+  headerFooter: PropTypes.object,
 };
 TextSignForm.displayName = "TextSignForm";
 export default TextSignForm;

@@ -21,6 +21,7 @@ import { useParams } from "react-router-dom";
 import { DrawSignForm } from "../PdfViewer";
 import UploadSignForm from "../PdfViewer/UploadSignForm";
 import TextSignForm from "./TextSignForm";
+import { api } from "@/utils/api";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,7 +65,7 @@ export const ModalSigningImage2 = ({
   setDataSigning,
   handleShowModalSmartid,
 }) => {
-  // console.log("dataSigning: ", dataSigning);
+  console.log("dataSigning: ", dataSigning);
   // console.log("signer: ", signer);
   // console.log("open: ", open);
   // set value for tabs
@@ -98,12 +99,38 @@ export const ModalSigningImage2 = ({
     }
   }, [open]);
 
+  async function getWeather(latitude, longitude) {
+    let res = await api.get(
+      `http://api.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=trunkey2003`
+    );
+    console.log(res.data);
+    // console.log(res.data.location.name);
+
+    setDataSigning({
+      ...dataSigning,
+      country: signer.metaInformation?.country,
+      countryRealtime: res.data.countryCode,
+      signingPurpose: signer.signingPurpose
+        ? signer.signingPurpose
+        : "signature",
+      reason: signer.customReason ? signer.customReason : "Purpose: signature",
+    });
+  }
+
   useEffect(() => {
     if (navigator.geolocation) {
       // Geolocation is supported
+      let latitude = "";
+      let longitude = "";
       navigator.geolocation.getCurrentPosition(function (position) {
-        console.log("Latitude is :", position.coords.latitude);
-        console.log("Longitude is :", position.coords.longitude);
+        // console.log("Latitude is :", position.coords.latitude);
+        // console.log("Longitude is :", position.coords.longitude);
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        console.log("longitude: ", longitude);
+
+        // Call getWeather function inside the callback
+        getWeather(latitude, longitude);
       });
     } else {
       console.error("Geolocation is not supported by this browser.");
