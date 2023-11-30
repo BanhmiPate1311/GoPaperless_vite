@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DocumentDigests {
     public List<byte[]> hashes;
-    public HashAlgorithmOID hashAlgorithmOID;
+    public String hashAlgorithmOID;
 
     public List<byte[]> getHashes() {
         return hashes;
@@ -14,11 +14,19 @@ public class DocumentDigests {
         this.hashes = hashes;
     }
 
-    public HashAlgorithmOID getHashAlgorithmOID() {
+//    public HashAlgorithmOID getHashAlgorithmOID() {
+//        return hashAlgorithmOID;
+//    }
+//
+//    public void setHashAlgorithmOID(HashAlgorithmOID hashAlgorithmOID) {
+//        this.hashAlgorithmOID = hashAlgorithmOID;
+//    }
+
+    public String getHashAlgorithmOID() {
         return hashAlgorithmOID;
     }
 
-    public void setHashAlgorithmOID(HashAlgorithmOID hashAlgorithmOID) {
+    public void setHashAlgorithmOID(String hashAlgorithmOID) {
         this.hashAlgorithmOID = hashAlgorithmOID;
     }
 }

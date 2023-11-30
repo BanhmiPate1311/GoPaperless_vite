@@ -29,7 +29,6 @@ public class GatewayService {
         requestData.put("uuid", uuid);
         requestData.put("name", fileName);
 
-
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData);
 
         try {

@@ -22,6 +22,7 @@ import { DrawSignForm } from "../PdfViewer";
 import UploadSignForm from "../PdfViewer/UploadSignForm";
 import TextSignForm from "./TextSignForm";
 import { api } from "@/utils/api";
+import { removeBase64Prefix } from "@/utils/commonFunction";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -108,7 +109,9 @@ export const ModalSigningImage2 = ({
 
     setDataSigning({
       ...dataSigning,
-      country: signer.metaInformation?.country,
+      country: signer.metaInformation?.country
+        ? signer.metaInformation?.country
+        : res.data.countryCode,
       countryRealtime: res.data.countryCode,
       signingPurpose: signer.signingPurpose
         ? signer.signingPurpose
@@ -141,7 +144,7 @@ export const ModalSigningImage2 = ({
     // console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
-      imageBase64: data,
+      imageBase64: removeBase64Prefix(data),
     });
     onClose();
     handleShowModalSmartid();

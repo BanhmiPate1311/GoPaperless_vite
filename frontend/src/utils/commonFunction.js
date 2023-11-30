@@ -101,3 +101,14 @@ export const getLang = () => {
   }
   return lang;
 };
+
+export function removeBase64Prefix(base64String) {
+  // Check if the string starts with the specified prefix
+  if (base64String.startsWith("data:image/png;base64,")) {
+    // Remove the prefix
+    return base64String.substring("data:image/png;base64,".length);
+  } else {
+    // Return the original string if the prefix is not found
+    return base64String;
+  }
+}

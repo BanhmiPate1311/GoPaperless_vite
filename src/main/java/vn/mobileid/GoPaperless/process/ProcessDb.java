@@ -3,6 +3,7 @@ package vn.mobileid.GoPaperless.process;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.mobileid.GoPaperless.model.apiModel.*;
+import vn.mobileid.GoPaperless.utils.CommonFunction;
 import vn.mobileid.GoPaperless.utils.Difinitions;
 import vn.mobileid.GoPaperless.utils.LoadParamSystem;
 
@@ -69,9 +70,9 @@ public class ProcessDb {
 //            System.out.println("USP_PPL_WORKFLOW_GET: " + proc_stmt.toString());
             rs = proc_stmt.executeQuery();
             while (rs.next()) {
-//                response.setId(rs.getInt("ID"));
-//                response.setPostBackUrl(CommonFunction.CheckTextNull(rs.getString("POSTBACK_URL")));
-//                response.setWorkFlowStatus(rs.getInt("WORKFLOW_STATUS"));
+                response.setId(rs.getInt("ID"));
+                response.setPostBackUrl(CommonFunction.CheckTextNull(rs.getString("POSTBACK_URL")));
+                response.setWorkFlowStatus(rs.getInt("WORKFLOW_STATUS"));
                 response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
                 response.setDocumentId(rs.getInt("DOCUMENT_ID"));
                 response.setWorkFlowDocumentName(rs.getString("WORKFLOW_DOCUMENT_NAME"));

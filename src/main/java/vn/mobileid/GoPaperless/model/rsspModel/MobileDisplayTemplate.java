@@ -1,16 +1,20 @@
 package vn.mobileid.GoPaperless.model.rsspModel;
 
 public class MobileDisplayTemplate {
-    private String notificationMessage;
-    private String messageCaption;
-    private String message;
-    private String logoURI;
-    private String bgImageURI;
-    private String rpIconURI;
-    private String rpName;
-    private boolean vcEnabled;
-    private boolean acEnabled;
-    private String scaIdentity;
+
+    public String notificationMessage ;
+    public String messageCaption ;
+    public String message ;
+
+    public String logoURI ;
+    public String bgImageURI ;
+    public String rpIconURI ;
+    public String rpName ;
+    //public string confirmationPolicy { get; set; }
+    public boolean vcEnabled ;
+    public boolean acEnabled ;
+
+    public String scaIdentity ;
 
     public String getNotificationMessage() {
         return notificationMessage;

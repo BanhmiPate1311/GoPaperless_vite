@@ -182,7 +182,7 @@ public class RsspService {
     }
 
     public CredentialInfo getCredentialinFo(String lang, String credentialID) throws Exception {
-        System.out.println("____________credentialsLists/info____________");
+//        System.out.println("____________credentialsLists/info____________");
 
         String credentialInfoUrl = property.getBaseUrl() + "credentials/info";
         String authHeader = bearer;
@@ -201,16 +201,16 @@ public class RsspService {
         try {
 
             ResponseEntity<CredentialInfo> response = restTemplate.exchange(credentialInfoUrl, HttpMethod.POST, httpEntity, CredentialInfo.class);
-            System.out.println("error: " + response.getBody().getError());
-            System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
-            System.out.println("response: " + response.getStatusCode());
+//            System.out.println("error: " + response.getBody().getError());
+//            System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
+//            System.out.println("response: " + response.getStatusCode());
 
             if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
                 login();
                 return getCredentialinFo(lang, credentialID);
             } else if (response.getBody().getError() != 0) {
-                System.out.println("Err Code: " + response.getBody().getError());
-                System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
+//                System.out.println("Err Code: " + response.getBody().getError());
+//                System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
 //                throw new Exception(response.getBody().getErrorDescription());
                 return null;
             }
@@ -224,35 +224,60 @@ public class RsspService {
         }
     }
 
-    public String authorizeVc(String lang, String credentialID, DocumentDigests doc, MobileDisplayTemplate template, int numSignatures) throws Exception {
+    public String authorizeVc(String lang, String credentialID, DocumentDigests doc, MobileDisplayTemplate displayTemplate, int numSignatures) throws Exception {
         System.out.println("____________credentialsLists/authorizeVc____________");
 
         String authorizeVcUrl = property.getBaseUrl() + "credentials/authorize";
+        System.out.println("authorizeVcUrl: " + authorizeVcUrl);
         String authHeader = bearer;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", authHeader);
 
-        Map<String, Object> requestData = new HashMap<>();
-        requestData.put("credentialID", credentialID);
-        requestData.put("numSignatures", numSignatures);
-        requestData.put("documentDigests", doc);
-        requestData.put("notificationMessage", template.getNotificationMessage());
-        requestData.put("messageCaption", template.getMessageCaption());
-        requestData.put("message", template.getMessage());
-        requestData.put("logoURI", template.getLogoURI());
-        requestData.put("rpIconURI", template.getRpIconURI());
-        requestData.put("bgImageURI", template.getBgImageURI());
-        requestData.put("rpName", template.getRpName());
-        requestData.put("scaIdentity", template.getScaIdentity());
-        requestData.put("vcEnabled", template.isVcEnabled());
-        requestData.put("acEnabled", template.isAcEnabled());
+        AuthorizeRequest request = new AuthorizeRequest();
+//        request.agreementUUID = agreementUUID;
+        request.credentialID = credentialID;
+        request.numSignatures = numSignatures;
+        request.documentDigests = doc;
+        request.signAlgo ="1.2.840.113549.1.1.1";
+        request.notificationMessage = displayTemplate.notificationMessage;
+        request.messageCaption = displayTemplate.messageCaption;
+        request.message = displayTemplate.message;
+        request.logoURI = displayTemplate.logoURI;
+        request.rpIconURI = displayTemplate.rpIconURI;
+        request.bgImageURI = displayTemplate.bgImageURI;
+        request.rpName = displayTemplate.rpName;
+        request.scaIdentity = displayTemplate.scaIdentity;
+        request.vcEnabled = displayTemplate.vcEnabled;
+        request.acEnabled = displayTemplate.acEnabled;
+        request.lang = lang;
 
-        requestData.put("lang", lang);
-        requestData.put("profile", profile);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(request);
+        System.out.println("json: " + json);
 
-        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+//        Map<String, Object> requestData = new HashMap<>();
+//        requestData.put("credentialID", credentialID);
+//        requestData.put("numSignatures", numSignatures);
+//        requestData.put("documentDigests", doc);
+//        requestData.put("notificationMessage", template.getNotificationMessage());
+//        requestData.put("messageCaption", template.getMessageCaption());
+//        requestData.put("message", template.getMessage());
+//        requestData.put("logoURI", template.getLogoURI());
+//        requestData.put("rpIconURI", template.getRpIconURI());
+//        requestData.put("bgImageURI", template.getBgImageURI());
+//        requestData.put("rpName", template.getRpName());
+//        requestData.put("scaIdentity", template.getScaIdentity());
+//        requestData.put("vcEnabled", template.isVcEnabled());
+//        requestData.put("acEnabled", template.isAcEnabled());
+//        requestData.put("validityPeriod", 300);
+//        requestData.put("operationMode", "S");
+
+//        requestData.put("lang", lang);
+//        requestData.put("profile", profile);
+
+        HttpEntity<AuthorizeRequest> httpEntity = new HttpEntity<>(request, headers);
 
         try {
 
@@ -263,7 +288,7 @@ public class RsspService {
 
             if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
                 login();
-                return authorizeVc(lang, credentialID, doc, template, numSignatures);
+                return authorizeVc(lang, credentialID, doc, displayTemplate, numSignatures);
             } else if (response.getBody().getError() != 0) {
                 System.out.println("Err Code: " + response.getBody().getError());
                 System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
@@ -390,8 +415,8 @@ public class RsspService {
                 if (credentialinFo != null) {
                     String authMode = credentialinFo.getAuthMode();
                     String status = credentialinFo.getCert().getStatus();
-                    System.out.println("authMode ne: " + authMode);
-                    System.out.println("status ne: " + status);
+//                    System.out.println("authMode ne: " + authMode);
+//                    System.out.println("status ne: " + status);
                     if ("IMPLICIT/TSE".equals(authMode) && "OPERATED".equals(status)) {
                         int lastIndex = credentialinFo.getCert().getCertificates().size() - 1;
                         String certChain = credentialinFo.getCert().getCertificates().get(lastIndex);
@@ -460,9 +485,9 @@ public class RsspService {
             WorkFlowList rsWFList = new WorkFlowList();
             connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
             String sResult = "0";
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(rsWFList);
-            System.out.println("json: " + json);
+//            ObjectMapper mapper = new ObjectMapper();
+//            String json = mapper.writeValueAsString(rsWFList);
+//            System.out.println("json: " + json);
 
             // check workflow status
 //            if (rsWFList[0] == null || rsWFList[0].length == 0 || rsWFList[0][0].WORKFLOW_STATUS != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
@@ -494,7 +519,7 @@ public class RsspService {
 //            long millis = System.currentTimeMillis();
 //            String sSignatureHash = signerToken + millis;
 //            String sSignature_id = prefixCode + "-" + CommonHash.toHexString(CommonHash.hashPass(sSignatureHash)).toUpperCase();
-            String sSignature_id = gatewayService.getSignatureId(lastUuid, fileName);
+
 
             // get user-agent
             String userAgent = request.getHeader("User-Agent");
@@ -532,7 +557,7 @@ public class RsspService {
 
             HashAlgorithmOID hashAlgo = HashAlgorithmOID.SHA_256;
             DocumentDigests doc = new DocumentDigests();
-            doc.hashAlgorithmOID = hashAlgo;
+            doc.hashAlgorithmOID = "2.16.840.1.101.3.4.2.1";
             doc.hashes = new ArrayList<>();
             doc.hashes.add(CommonFunction.base64Decode(hashList));
 
@@ -573,6 +598,8 @@ public class RsspService {
             String digest = signNode.get("digest").asText();
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
+
+            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 
             int isSetPosition = 1;
             postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
