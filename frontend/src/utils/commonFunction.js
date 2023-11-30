@@ -41,9 +41,10 @@ export const checkIsPosition = (workFlow) => {
 };
 
 export const checkSignerStatus = (item, signerToken) => {
+  console.log("item: ", item);
   let status = null;
-  if (item.status === 2) {
-    status = 2;
+  if (item.signerStatus === 2) {
+    return (status = 2);
   }
 
   status = item.signerToken === signerToken ? 1 : 0;

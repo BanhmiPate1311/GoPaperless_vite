@@ -1,7 +1,12 @@
 import { rsspService } from "@/services/rssp_service";
 import CloseIcon from "@mui/icons-material/Close";
+import Stack from "@mui/material/Stack";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress, {
+  circularProgressClasses,
+} from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,29 +14,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress";
-import { styled } from "@mui/material/styles";
-import CircularProgress, {
-  circularProgressClasses,
-} from "@mui/material/CircularProgress";
-import { useEffect, useState } from "react";
-
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor:
-      theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 5,
-    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
-  },
-}));
+import { useEffect, useRef, useState } from "react";
 
 const mathRound = (number) => {
   const totalTime = 300;
@@ -115,13 +100,40 @@ function CircularProgressWithLabel(props) {
 export const ModalSmartid = ({ open, onClose, dataSigning }) => {
   //   console.log("dataSigning: ", dataSigning);
 
-  const { data: sign } = useQuery({
+  const queryClient = useQueryClient();
+  const timer = useRef(null);
+
+  const sign = useQuery({
     queryKey: ["signFile"],
-    queryFn: () => {
-      return rsspService.signFile(dataSigning);
+    queryFn: async ({ signal }) => {
+      try {
+        const response = await rsspService.signFile(dataSigning, { signal });
+        window.parent.postMessage(
+          { data: response.data, status: "Success" },
+          "*"
+        );
+        queryClient.invalidateQueries({ queryKey: ["getField"] });
+        queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
+        queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+        onClose();
+        return true;
+      } catch (error) {
+        console.log("error1: ", error);
+        clearInterval(timer.current);
+        throw new Error(error.response?.data?.message || "An error occurred");
+      }
     },
     retry: 0,
   });
+
+  const handelCancel = (e) => {
+    e.preventDefault();
+    queryClient.cancelQueries({ queryKey: ["signFile"] });
+    clearInterval(timer.current);
+    onClose();
+  };
+
+  console.log("error: ", sign?.error?.message);
 
   const { data: getVc } = useQuery({
     queryKey: ["getVc"],
@@ -137,12 +149,12 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
 
   useEffect(() => {
     if (progress > 0.5) {
-      const timer = setInterval(() => {
+      timer.current = setInterval(() => {
         setProgress((prevProgress) => prevProgress - 1 / 3);
       }, 1000);
 
       return () => {
-        clearInterval(timer);
+        clearInterval(timer.current);
       };
     }
     if (progress <= 0.5) {
@@ -220,7 +232,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           sx={{
             color: "signingtext1.main",
             fontWeight: "bold",
-            mb: 5,
+            // mb: 5,
           }}
         >
           <Typography variant="body2">Your verification code is:</Typography>
@@ -234,9 +246,9 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
               <span style={{ fontWeight: "bold" }}>{mathRound(progress)}s</span>
             </Typography>
           </Box>
-          <Box sx={{ flexGrow: 1, mb: 2 }}>
+          {/* <Box sx={{ flexGrow: 1, mb: 2 }}>
             <BorderLinearProgress variant="determinate" value={progress} />
-          </Box>
+          </Box> */}
           <Typography variant="body2">
             If the code above matches the one you see on your device screen,
             please enter your Smart-ID PIN2.
@@ -244,17 +256,22 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           <Box textAlign="center" marginTop="50px">
             <CircularProgressWithLabel size={100} value={progress} />
           </Box>
-          <Typography fontSize="14px" textAlign="center" marginTop="30px">
+          <Typography fontSize="14px" textAlign="center" my="30px">
             {/* Verification process might take up to 5 minitues. */}
             Verification process might take up to 5 minitues.
           </Typography>
+          <Stack width={"100%"} mb={2}>
+            {sign?.error && (
+              <Alert severity="error">{sign?.error?.message}</Alert>
+            )}
+          </Stack>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: "24px" }}>
         <Button
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
-          onClick={onClose}
+          onClick={handelCancel}
         >
           Cancel
         </Button>

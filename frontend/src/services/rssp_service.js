@@ -9,8 +9,8 @@ export const rsspService = {
     });
   },
 
-  signFile: (data) => {
-    return api.post("rssp/signFile", data);
+  signFile: (data, { signal }) => {
+    return api.post("rssp/signFile", data, { signal });
   },
 
   getVc: ({ requestID }) => {

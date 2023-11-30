@@ -21,6 +21,7 @@ export const SigningContent = ({ workFlow }) => {
   const { data: signedInfo } = useQuery({
     queryKey: ["getSignedInfo"],
     queryFn: () => apiService.getSignedInfo(workFlow),
+
     select: (data) => {
       const newData = [...data.data];
       const transformer = newData.map((item) => {
@@ -32,6 +33,7 @@ export const SigningContent = ({ workFlow }) => {
       });
       return transformer;
     },
+
     enabled: Object.keys(workFlow).length > 0,
   });
   // console.log("getSignedInfo: ", signedInfo);

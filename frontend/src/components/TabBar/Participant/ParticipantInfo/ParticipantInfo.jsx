@@ -1,6 +1,7 @@
 import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
 import { ReactComponent as SignerSelected } from "@/assets/images/svg/signer_select.svg";
 import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
+import { ReactComponent as Signed_Icon } from "@/assets/images/svg/signed_icon2.svg";
 import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -59,6 +60,7 @@ export const ParticipantInfo = ({ workFlow }) => {
       <AccordionDetails sx={{ p: 0 }}>
         {workFlow.participants.map((participant, index) => {
           const status = checkSignerStatus(participant, signerToken);
+          console.log("status: ", status);
           const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
@@ -78,7 +80,14 @@ export const ParticipantInfo = ({ workFlow }) => {
                 }
                 borderColor="borderColor.main"
               >
-                {check ? (
+                {/* {check ? (
+                  <SignerSelected />
+                ) : (
+                  <WaitingSig width={24} height={24} />
+                )} */}
+                {status === 2 ? (
+                  <Signed_Icon />
+                ) : check ? (
                   <SignerSelected />
                 ) : (
                   <WaitingSig width={24} height={24} />

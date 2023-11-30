@@ -136,6 +136,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   };
 
   const handleCloseModalSmartid = (index) => {
+    console.log("yeye");
     const newValue = [...isShowModalSmartid];
     newValue[index] = false;
     setShowModalSmartid(newValue);

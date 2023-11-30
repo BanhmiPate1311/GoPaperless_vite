@@ -3,8 +3,8 @@ package vn.mobileid.GoPaperless.model.rsspModel;
 public class AuthorizeResponse extends RsspResponse{
     private String SAD;
     private int expiresIn;
-    private int remainingCounter;
-    private int tempLockoutDuration;
+//    private int remainingCounter;
+//    private int tempLockoutDuration;
 
     public String getSAD() {
         return SAD;
@@ -22,19 +22,19 @@ public class AuthorizeResponse extends RsspResponse{
         this.expiresIn = expiresIn;
     }
 
-    public int getRemainingCounter() {
-        return remainingCounter;
-    }
-
-    public void setRemainingCounter(int remainingCounter) {
-        this.remainingCounter = remainingCounter;
-    }
-
-    public int getTempLockoutDuration() {
-        return tempLockoutDuration;
-    }
-
-    public void setTempLockoutDuration(int tempLockoutDuration) {
-        this.tempLockoutDuration = tempLockoutDuration;
-    }
+//    public int getRemainingCounter() {
+//        return remainingCounter;
+//    }
+//
+//    public void setRemainingCounter(int remainingCounter) {
+//        this.remainingCounter = remainingCounter;
+//    }
+//
+//    public int getTempLockoutDuration() {
+//        return tempLockoutDuration;
+//    }
+//
+//    public void setTempLockoutDuration(int tempLockoutDuration) {
+//        this.tempLockoutDuration = tempLockoutDuration;
+//    }
 }

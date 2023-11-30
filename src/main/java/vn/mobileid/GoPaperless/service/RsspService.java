@@ -203,7 +203,7 @@ public class RsspService {
             ResponseEntity<CredentialInfo> response = restTemplate.exchange(credentialInfoUrl, HttpMethod.POST, httpEntity, CredentialInfo.class);
 //            System.out.println("error: " + response.getBody().getError());
 //            System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
-//            System.out.println("response: " + response.getStatusCode());
+            System.out.println("response: " + response.getStatusCode());
 
             if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
                 login();
@@ -235,74 +235,53 @@ public class RsspService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", authHeader);
 
-        AuthorizeRequest request = new AuthorizeRequest();
-//        request.agreementUUID = agreementUUID;
-        request.credentialID = credentialID;
-        request.numSignatures = numSignatures;
-        request.documentDigests = doc;
-        request.signAlgo ="1.2.840.113549.1.1.1";
-        request.notificationMessage = displayTemplate.notificationMessage;
-        request.messageCaption = displayTemplate.messageCaption;
-        request.message = displayTemplate.message;
-        request.logoURI = displayTemplate.logoURI;
-        request.rpIconURI = displayTemplate.rpIconURI;
-        request.bgImageURI = displayTemplate.bgImageURI;
-        request.rpName = displayTemplate.rpName;
-        request.scaIdentity = displayTemplate.scaIdentity;
-        request.vcEnabled = displayTemplate.vcEnabled;
-        request.acEnabled = displayTemplate.acEnabled;
-        request.lang = lang;
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("credentialID", credentialID);
+        requestData.put("numSignatures", numSignatures);
+        requestData.put("documentDigests", doc);
+        requestData.put("notificationMessage", displayTemplate.getNotificationMessage());
+        requestData.put("messageCaption", displayTemplate.getMessageCaption());
+        requestData.put("message", displayTemplate.getMessage());
+        requestData.put("rpName", displayTemplate.getRpName());
+        requestData.put("scaIdentity", displayTemplate.getScaIdentity());
+        requestData.put("vcEnabled", displayTemplate.isVcEnabled());
+        requestData.put("acEnabled", displayTemplate.isAcEnabled());
+//        requestData.put("signAlgo", "1.2.840.113549.1.1.11");
+        requestData.put("validityPeriod", 300);
+        requestData.put("operationMode", "S");
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(request);
-        System.out.println("json: " + json);
+        requestData.put("lang", lang);
+        requestData.put("profile", profile);
 
-//        Map<String, Object> requestData = new HashMap<>();
-//        requestData.put("credentialID", credentialID);
-//        requestData.put("numSignatures", numSignatures);
-//        requestData.put("documentDigests", doc);
-//        requestData.put("notificationMessage", template.getNotificationMessage());
-//        requestData.put("messageCaption", template.getMessageCaption());
-//        requestData.put("message", template.getMessage());
-//        requestData.put("logoURI", template.getLogoURI());
-//        requestData.put("rpIconURI", template.getRpIconURI());
-//        requestData.put("bgImageURI", template.getBgImageURI());
-//        requestData.put("rpName", template.getRpName());
-//        requestData.put("scaIdentity", template.getScaIdentity());
-//        requestData.put("vcEnabled", template.isVcEnabled());
-//        requestData.put("acEnabled", template.isAcEnabled());
-//        requestData.put("validityPeriod", 300);
-//        requestData.put("operationMode", "S");
-
-//        requestData.put("lang", lang);
-//        requestData.put("profile", profile);
-
-        HttpEntity<AuthorizeRequest> httpEntity = new HttpEntity<>(request, headers);
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 
         try {
 
-            ResponseEntity<AuthorizeResponse> response = restTemplate.exchange(authorizeVcUrl, HttpMethod.POST, httpEntity, AuthorizeResponse.class);
-            System.out.println("error: " + response.getBody().getError());
-            System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
+            ResponseEntity<String> response = restTemplate.exchange(authorizeVcUrl, HttpMethod.POST, httpEntity, String.class);
+            String responseBody = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            System.out.println("error: " + jsonNode.get("error").asInt());
+            System.out.println("getErrorDescription: " + jsonNode.get("errorDescription").asText());
             System.out.println("response: " + response.getStatusCode());
 
-            if (response.getBody().getError() == 3005 || response.getBody().getError() == 3006) {
+            if (jsonNode.get("error").asInt() == 3005 || jsonNode.get("error").asInt() == 3006) {
                 login();
                 return authorizeVc(lang, credentialID, doc, displayTemplate, numSignatures);
-            } else if (response.getBody().getError() != 0) {
-                System.out.println("Err Code: " + response.getBody().getError());
-                System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
-//                throw new Exception(response.getBody().getErrorDescription());
-                return null;
+            } else if (jsonNode.get("error").asInt() != 0) {
+                System.out.println("Err Code: " + jsonNode.get("error").asInt());
+                System.out.println("Err Desscription: " + jsonNode.get("errorDescription").asText());
+                throw new Exception(jsonNode.get("errorDescription").asText());
             }
-
-            return response.getBody().getSAD();
+            return jsonNode.get("SAD").asText();
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
 
-    public List<byte[]> signHash(String lang, String credentialID, DocumentDigests doc, SignAlgo signAlgo, String sad) throws Exception {
+    public List<byte[]> signHash(String lang, String credentialID, DocumentDigests doc, String signAlgo, String sad) throws Exception {
         System.out.println("____________signatures/signHash____________");
         String signHashUrl = property.getBaseUrl() + "signatures/signHash";
 
@@ -314,10 +293,16 @@ public class RsspService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("credentialID", credentialID);
         requestData.put("documentDigests", doc);
+        requestData.put("operationMode", "S");
         requestData.put("signAlgo", signAlgo);
+        requestData.put("validityPeriod", 300);
         requestData.put("SAD", sad);
         requestData.put("lang", lang);
         requestData.put("profile", profile);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(requestData);
+        System.out.println("jsonSignHash: " + json);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 
@@ -516,9 +501,9 @@ public class RsspService {
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
-//            long millis = System.currentTimeMillis();
-//            String sSignatureHash = signerToken + millis;
-//            String sSignature_id = prefixCode + "-" + CommonHash.toHexString(CommonHash.hashPass(sSignatureHash)).toUpperCase();
+            long millis = System.currentTimeMillis();
+            String sSignatureHash = signerToken + millis;
+            String sSignature_id = prefixCode + "-" + CommonFunction.toHexString(CommonFunction.hashPass(sSignatureHash)).toUpperCase();
 
 
             // get user-agent
@@ -571,9 +556,11 @@ public class RsspService {
 //            String sad = crt.authorize(connectorLogRequest, lang, credentialID, 1, doc, null, template);
 //            authorizeVc(request, credentialID, doc, template, numSignatures)
             String sad = authorizeVc(signRequest.getLanguage(), credentialID, doc, template, 1);
+            System.out.println("kiem tra sad: " + sad);
 
 //            commonRepository.connectorLog(connectorLogRequest);
-            SignAlgo signAlgo = SignAlgo.RSA;
+//            SignAlgo signAlgo = SignAlgo.RSA;
+            String signAlgo = "1.2.840.113549.1.1.1";
             List<byte[]> signatures = signHash(lang, credentialID, doc, signAlgo, sad);
             String signature = Base64.getEncoder().encodeToString(signatures.get(0));
             System.out.println("kiem tra signature: " + signature);
@@ -599,7 +586,8 @@ public class RsspService {
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
 
-            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
+//            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
+//            String sSignature_id = requestID; // temporary
 
             int isSetPosition = 1;
             postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
