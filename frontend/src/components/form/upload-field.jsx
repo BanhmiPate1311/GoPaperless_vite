@@ -29,7 +29,7 @@ export const UploadField = ({
   ...rest
 }) => {
   const {
-    field: { onChange, onBlur, value, ref },
+    field: { onChange },
     fieldState: { error },
   } = useController({ name, control });
 

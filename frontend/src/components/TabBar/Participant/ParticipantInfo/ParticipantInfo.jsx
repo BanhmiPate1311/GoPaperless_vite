@@ -23,6 +23,8 @@ export const ParticipantInfo = ({ workFlow }) => {
   const [isOpen, setIsOpen] = useState([false]);
   // console.log("isOpen: ", isOpen);
 
+  const [expand, setExpand] = useState(true);
+
   const toggleDrawer = (index) => {
     const newIsOpen = [...isOpen];
     newIsOpen[index] = !newIsOpen[index];
@@ -30,9 +32,9 @@ export const ParticipantInfo = ({ workFlow }) => {
   };
 
   return (
-    <Accordion disableGutters elevation={0} expanded={true}>
+    <Accordion disableGutters elevation={0} expanded={expand}>
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={<ExpandMoreIcon onClick={() => setExpand(!expand)} />}
         aria-controls="panel1bh-content"
         id="panel1bh-header"
         sx={{
@@ -45,7 +47,7 @@ export const ParticipantInfo = ({ workFlow }) => {
           height: "36px",
         }}
       >
-        <Typography variant="h6">WorkFlow Name</Typography>
+        <Typography variant="h6">Participants</Typography>
         <Avatar
           sx={{
             bgcolor: "signingtextBlue.main",
@@ -60,7 +62,7 @@ export const ParticipantInfo = ({ workFlow }) => {
       <AccordionDetails sx={{ p: 0 }}>
         {workFlow.participants.map((participant, index) => {
           const status = checkSignerStatus(participant, signerToken);
-          console.log("status: ", status);
+          // console.log("status: ", status);
           const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
@@ -112,111 +114,6 @@ export const ParticipantInfo = ({ workFlow }) => {
                   participant={participant}
                   handleClose={() => toggleDrawer(index)}
                 />
-                {/* <Drawer
-                  anchor={"right"}
-                  open={isOpen[index]}
-                  onClose={() => toggleDrawer(index)}
-                  className="choioioi"
-                >
-                  <Box width="350px">
-                    <Stack
-                      direction="row"
-                      alignItems={"center"}
-                      sx={{
-                        position: "sticky",
-                        top: 0,
-                        zIndex: 1,
-                        p: 2,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        gap={1}
-                        flexGrow={1}
-                      >
-                        <PersonIcon />
-                        <Box>
-                          <Typography
-                            fontWeight="550"
-                            textTransform="uppercase"
-                            variant="h6"
-                          >
-                            {participant.firstName} {participant.lastName}
-                          </Typography>
-                          <Typography variant="h5" color={"signingtext2.main"}>
-                            {participant.email}
-                          </Typography>
-                        </Box>
-                      </Stack>
-                      <IconButton onClick={() => toggleDrawer(index)}>
-                        <CloseIcon />
-                      </IconButton>
-                    </Stack>
-
-                    <Accordion disableGutters elevation={0}>
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                        sx={{
-                          backgroundColor: "accordingBackGround.main",
-                          minHeight: "unset !important",
-                          "& .MuiAccordionSummary-content": {
-                            alignItems: "center",
-                            gap: 1,
-                          },
-                        }}
-                      >
-                        {status === 2 ? (
-                          <>
-                            <PencilSigningIcon />
-                            <Typography
-                              variant="h5"
-                              sx={{
-                                color: check
-                                  ? "signingtextBlue.main"
-                                  : "signingtext1.main",
-                              }}
-                            >
-                              Qualified Advance Signature
-                            </Typography>
-                          </>
-                        ) : status === 1 ? (
-                          <>
-                            <PencilSigningIcon />
-                            <Typography
-                              variant="h5"
-                              sx={{
-                                color: check
-                                  ? "signingtextBlue.main"
-                                  : "signingtext1.main",
-                              }}
-                            >
-                              Waiting for my signature
-                            </Typography>
-                          </>
-                        ) : (
-                          <>
-                            <PencilIcon />
-                            <Typography
-                              variant="h5"
-                              sx={{
-                                color: check
-                                  ? "signingtextBlue.main"
-                                  : "signingtext1.main",
-                              }}
-                            >
-                              Waiting for signature
-                            </Typography>
-                          </>
-                        )}
-                      </AccordionSummary>
-                      <AccordionDetails sx={{ p: 0 }}>abc</AccordionDetails>
-                    </Accordion>
-                  </Box>
-                </Drawer> */}
               </Stack>
             </Box>
           );

@@ -13,6 +13,8 @@ import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
 import vn.mobileid.GoPaperless.model.fpsModel.HashFileRequest;
 import vn.mobileid.GoPaperless.model.fpsModel.Signature;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.*;
 
 @Service
@@ -273,6 +275,7 @@ public class FpsService {
         requestData.put("signature_algorithm", "RSA");
         requestData.put("signed_hash", "SHA256");
         requestData.put("certificate_chain", data.getCertificateChain());
+        System.out.println("Request Data: " + requestData);
 
 //        Gson gson = new Gson();
 //        System.out.println("Request Data: " + gson.toJson(requestData));
@@ -336,6 +339,38 @@ public class FpsService {
             if (statusCode.value() == 401) {
                 getAccessToken();
                 return signDocument(documentId, data);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public InputStream getImagePdf(int documentId) throws Exception {
+
+        String getImageBasse64Url = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<byte[]> response = restTemplate.exchange(getImageBasse64Url, HttpMethod.GET, httpEntity, byte[].class);
+            InputStream inputStreamFile = null;
+
+
+            if (response.getBody() != null) {
+                inputStreamFile = new ByteArrayInputStream(response.getBody());
+            }
+
+            return inputStreamFile;
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return getImagePdf(documentId);
             } else {
                 throw new Exception(e.getMessage());
             }

@@ -12,6 +12,8 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router-dom";
 import { NotFound } from "../NotFound";
+import { checkWorkflowStatus } from "@/utils/commonFunction";
+import { useEffect, useRef } from "react";
 
 export const Signing = () => {
   const { signing_token: signingToken } = useParams();
@@ -29,7 +31,7 @@ export const Signing = () => {
       return apiService.checkWorkFlow(data);
     },
   });
-  const { data: workFlow } = useQuery({
+  const workFlow = useQuery({
     queryKey: ["getWorkFlow"],
     queryFn: () => apiService.getSigningWorkFlow(signingToken),
     enabled: workFlowValid && workFlowValid.data === 1,
@@ -62,6 +64,10 @@ export const Signing = () => {
   });
 
   // queryClient.setQueryData(["workflow"], workFlow);
+  console.log("workFlow: ", workFlow?.data);
+
+  let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
+  console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
   if (workFlowValid && workFlowValid.data === 0) {
     return <NotFound />;
@@ -92,7 +98,9 @@ export const Signing = () => {
               <Chip
                 label="Download completed"
                 component="a"
-                href="#basic-chip"
+                disabled={!checkWorkFlowStatus}
+                // href="#basic-chip"
+                href={`${window.location.origin}/view/fps/download/${workFlow?.data?.documentId}`}
                 icon={<SaveAltIcon fontSize="small" />}
                 clickable
               />
@@ -112,7 +120,7 @@ export const Signing = () => {
             height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
           }}
         >
-          {workFlow && <SigningContent workFlow={workFlow} />}
+          {workFlow.data && <SigningContent workFlow={workFlow.data} />}
         </Container>
       </Stack>
     );

@@ -275,7 +275,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
         >
           Cancel
         </Button>
-        <Button
+        {/* <Button
           variant="outlined"
           //   disabled={isPending}
           //   startIcon={
@@ -286,7 +286,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           type="button"
         >
           Sign
-        </Button>
+        </Button> */}
       </DialogActions>
     </Dialog>
   );

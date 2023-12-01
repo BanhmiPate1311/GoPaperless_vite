@@ -13,6 +13,7 @@ import "../../assets/style/react-resizable.css";
 import { ModalSigningImage2 } from "../ModalSigning";
 import { ModalSmartid } from "../ModalSigning/ModalSmartid";
 import SigningForm from "./SigningForm";
+import ModalSingingImage from "./ModalSingingImage";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -384,6 +385,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           setDataSigning={setDataSigning}
           handleShowModalSmartid={() => handleShowModalSmartid(index)}
         />
+        // <ModalSingingImage
+        //   isShowModalSignImage={isShowModalSignImage[index]}
+        //   handleCloseModalSignImage={() => handleCloseModalSignImage(index)}
+        //   index={signatureData.page - 1}
+        // />
       )}
       {isShowModalSmartid[index] && (
         <ModalSmartid

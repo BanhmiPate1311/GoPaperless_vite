@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -9,11 +8,17 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { SignatureDetail } from "../SignatureDetail";
 
-export const SignaturesInfo = ({ signedInfo }) => {
+export const SignaturesInfo = ({ sign, signType }) => {
+  console.log("sign: ", sign);
   const [isOpen, setIsOpen] = useState([false]);
   // console.log("isOpen: ", isOpen);
+  let name = sign.name + " " + signType;
+
+  const [expand, setExpand] = useState(true);
 
   const toggleDrawer = (index) => {
     const newIsOpen = [...isOpen];
@@ -21,9 +26,9 @@ export const SignaturesInfo = ({ signedInfo }) => {
     setIsOpen(newIsOpen);
   };
   return (
-    <Accordion disableGutters elevation={0}>
+    <Accordion disableGutters elevation={0} expanded={expand}>
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={<ExpandMoreIcon onClick={() => setExpand(!expand)} />}
         aria-controls="panel1bh-content"
         id="panel1bh-header"
         sx={{
@@ -36,7 +41,7 @@ export const SignaturesInfo = ({ signedInfo }) => {
           height: "36px",
         }}
       >
-        <Typography variant="h6">WorkFlow Name</Typography>
+        <Typography variant="h6">{name}</Typography>
         <Avatar
           sx={{
             bgcolor: "signingtextBlue.main",
@@ -45,66 +50,71 @@ export const SignaturesInfo = ({ signedInfo }) => {
             fontSize: "10px",
           }}
         >
-          {signedInfo.length}
+          {sign.value.length}
         </Avatar>
       </AccordionSummary>
-      {/* <AccordionDetails sx={{ p: 0 }}>
-        {workFlow.participants.map((participant, index) => {
-          const status = checkSignerStatus(participant, signerToken);
-          const check = checkSignerWorkFlow(participant, signerToken);
+      <AccordionDetails sx={{ p: 0 }}>
+        {sign.value.map((signvalue, index) => {
+          console.log("signvalue: ", signvalue);
+          // const status = checkSignerStatus(participant, signerToken);
+          // const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
             <Box key={index}>
               <Stack
                 direction={"row"}
                 spacing={1}
-                backgroundColor={check ? "signerBackGround.main" : ""}
-                color={check ? "signingtextBlue.main" : ""}
+                backgroundColor="signingWFBackground.main"
+                // color={check ? "signingtextBlue.main" : ""}
                 sx={{
                   px: 2,
                 }}
                 alignItems={"center"}
                 borderTop="1px solid"
                 borderBottom={
-                  index === workFlow.participants.length - 1 ? "1px solid" : ""
+                  index === sign.value.length - 1 ? "1px solid" : ""
                 }
                 borderColor="borderColor.main"
               >
-                {check ? (
-                  <SignerSelected />
-                ) : (
-                  <WaitingSig width={24} height={24} />
-                )}
+                {sign.icon}
                 <Box flexGrow={1}>
                   <Typography variant="h6">
-                    {participant.firstName} {participant.lastName}
+                    {signvalue.value.signature.certificate.subject.common_name}
                   </Typography>
                   <Typography variant="h5">
-                    {status === 2
+                    {/* {status === 2
                       ? "Qualified Advance Signature"
                       : status === 1
                       ? "Waiting for my signature"
-                      : "Waiting for signature"}
+                      : "Waiting for signature"} */}
+                    Insufficient information to ascertain validity
                   </Typography>
                 </Box>
                 <IconButton onClick={() => toggleDrawer(index)}>
                   <ShowDetailIcon />
                 </IconButton>
-                <SigningDetail
-                  open={isOpen[index]}
-                  participant={participant}
-                  handleClose={() => toggleDrawer(index)}
-                />
-                
+                {isOpen[index] && (
+                  <SignatureDetail
+                    open={isOpen[index]}
+                    signDetail={signvalue}
+                    sign={sign}
+                    signType={signType}
+                    handleClose={() => toggleDrawer(index)}
+                  />
+                )}
               </Stack>
             </Box>
           );
         })}
-      </AccordionDetails> */}
+      </AccordionDetails>
     </Accordion>
   );
 };
 
-SignaturesInfo.propTypes = { signedInfo: PropTypes.array };
+SignaturesInfo.propTypes = {
+  signedInfo: PropTypes.array,
+  signType: PropTypes.string,
+  sign: PropTypes.object,
+};
 
 export default SignaturesInfo;

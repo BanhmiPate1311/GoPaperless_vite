@@ -18,9 +18,8 @@ import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { DrawSignForm } from "../PdfViewer";
+import { DrawSignForm, TextSignForm } from "../PdfViewer";
 import UploadSignForm from "../PdfViewer/UploadSignForm";
-import TextSignForm from "./TextSignForm";
 import { api } from "@/utils/api";
 import { removeBase64Prefix } from "@/utils/commonFunction";
 
@@ -66,7 +65,7 @@ export const ModalSigningImage2 = ({
   setDataSigning,
   handleShowModalSmartid,
 }) => {
-  console.log("dataSigning: ", dataSigning);
+  // console.log("dataSigning: ", dataSigning);
   // console.log("signer: ", signer);
   // console.log("open: ", open);
   // set value for tabs
@@ -120,17 +119,31 @@ export const ModalSigningImage2 = ({
     });
   }
 
+  const currentDatetime = new Date();
+  const options = {
+    timeZone: "Asia/Bangkok", // 'UTC+7' is equivalent to 'Asia/Bangkok'
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+
+  const formattedDatetime = new Intl.DateTimeFormat("en-GB", options).format(
+    currentDatetime
+  );
+
   useEffect(() => {
     if (navigator.geolocation) {
       // Geolocation is supported
       let latitude = "";
       let longitude = "";
       navigator.geolocation.getCurrentPosition(function (position) {
-        // console.log("Latitude is :", position.coords.latitude);
-        // console.log("Longitude is :", position.coords.longitude);
+        console.log("Latitude is :", position.coords.latitude);
+        console.log("Longitude is :", position.coords.longitude);
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
-        console.log("longitude: ", longitude);
 
         // Call getWeather function inside the callback
         getWeather(latitude, longitude);
@@ -141,7 +154,7 @@ export const ModalSigningImage2 = ({
   }, []);
 
   const handleTextSubmit = (data) => {
-    // console.log("data: ", data);
+    console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
       imageBase64: removeBase64Prefix(data),
@@ -154,7 +167,7 @@ export const ModalSigningImage2 = ({
     console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
-      imageBase64: data,
+      imageBase64: removeBase64Prefix(data),
     });
     onClose();
     handleShowModalSmartid();
@@ -164,7 +177,7 @@ export const ModalSigningImage2 = ({
     console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
-      imageBase64: data,
+      imageBase64: removeBase64Prefix(data),
     });
     onClose();
     handleShowModalSmartid();
@@ -304,7 +317,9 @@ export const ModalSigningImage2 = ({
               signer={signer}
               dataSigning={dataSigning}
               headerFooter={headerFooter?.data}
+              formattedDatetime={formattedDatetime}
             />
+            {/* text */}
           </TabPanel>
           <TabPanel value={value} index={1}>
             <DrawSignForm
@@ -313,7 +328,9 @@ export const ModalSigningImage2 = ({
               signer={signer}
               dataSigning={dataSigning}
               headerFooter={headerFooter?.data}
+              formattedDatetime={formattedDatetime}
             />
+            {/* draw */}
           </TabPanel>
           <TabPanel value={value} index={2}>
             <UploadSignForm
@@ -322,6 +339,7 @@ export const ModalSigningImage2 = ({
               signer={signer}
               dataSigning={dataSigning}
               headerFooter={headerFooter?.data}
+              formattedDatetime={formattedDatetime}
             />
           </TabPanel>
         </DialogContentText>

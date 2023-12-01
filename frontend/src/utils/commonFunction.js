@@ -41,7 +41,7 @@ export const checkIsPosition = (workFlow) => {
 };
 
 export const checkSignerStatus = (item, signerToken) => {
-  console.log("item: ", item);
+  // console.log("item: ", item);
   let status = null;
   if (item.signerStatus === 2) {
     return (status = 2);
@@ -113,3 +113,26 @@ export function removeBase64Prefix(base64String) {
     return base64String;
   }
 }
+
+export const checkWorkflowStatus = (workflow) => {
+  return workflow?.participants?.every((item) => item?.signerStatus === 2);
+};
+
+export const convertTime = (time) => {
+  const date = new Date(time);
+  const options = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  };
+
+  const formattedDate = date
+    .toLocaleString("en-US", options)
+    .replace(/(\d+)\/(\d+)\/(\d+), (\d+:\d+:\d+)/, "$2/$1/$3 $4");
+
+  return formattedDate;
+}; // Output: 01/12/2023, 14:22:37

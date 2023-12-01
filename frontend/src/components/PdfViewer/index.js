@@ -4,3 +4,4 @@ export * from "./SigningForm";
 export * from "./Signature";
 export * from "./DrawSignForm";
 export * from "./UploadSignForm";
+export * from "./TextSignForm";

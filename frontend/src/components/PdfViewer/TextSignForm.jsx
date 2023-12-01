@@ -8,11 +8,14 @@ import PropTypes from "prop-types";
 import { forwardRef, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import AddSubtitle from "../ModalSigning/AddSubtitle";
 import { InputField } from "../form";
-import AddSubtitle from "./AddSubtitle";
 
 export const TextSignForm = forwardRef(
-  ({ onTextSubmit, signer, dataSigning, headerFooter }, ref) => {
+  (
+    { onTextSubmit, signer, dataSigning, headerFooter, formattedDatetime },
+    ref
+  ) => {
     const schema = yup.object().shape({
       text: yup.string().required("Please enter your name"),
       email: yup
@@ -56,21 +59,6 @@ export const TextSignForm = forwardRef(
     const reasonValue = dataSigning.reason;
     const logoValue = headerFooter.loGo ? headerFooter.loGo : logo1;
     const location = dataSigning.countryRealtime;
-
-    const currentDatetime = new Date();
-    const options = {
-      timeZone: "Asia/Bangkok", // 'UTC+7' is equivalent to 'Asia/Bangkok'
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    };
-
-    const formattedDatetime = new Intl.DateTimeFormat("en-GB", options).format(
-      currentDatetime
-    );
 
     const subtitle = {
       labelText: false,
@@ -272,6 +260,7 @@ TextSignForm.propTypes = {
   signer: PropTypes.object,
   dataSigning: PropTypes.object,
   headerFooter: PropTypes.object,
+  formattedDatetime: PropTypes.string,
 };
 TextSignForm.displayName = "TextSignForm";
 export default TextSignForm;

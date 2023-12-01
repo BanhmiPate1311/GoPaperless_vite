@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import PropTypes from "prop-types";
 import { useRef } from "react";
-import { Cropper } from "react-cropper";
+import Cropper from "react-cropper";
 import { useController } from "react-hook-form";
 
 export const DialogFile = ({ open, handleClose, name, control, data }) => {
