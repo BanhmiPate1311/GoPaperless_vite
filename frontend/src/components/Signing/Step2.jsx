@@ -2,16 +2,20 @@ import { ReactComponent as EidIcon } from "@/assets/images/svg/e-id.svg";
 import { ReactComponent as MobileIdIcon } from "@/assets/images/svg/mobile-id.svg";
 import { ReactComponent as SmartIdIcon } from "@/assets/images/svg/smart-id.svg";
 import { ReactComponent as UsbIcon } from "@/assets/images/svg/usb-token.svg";
+import ISPluginClient from "@/assets/js/checkid";
+import { getLang } from "@/utils/commonFunction";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import MenuItem from "@mui/material/MenuItem";
 import PropTypes from "prop-types";
-import { forwardRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { SelectField } from "../form";
 import CheckIdSoft from "./CheckIdSoft";
+import { useMutation } from "@tanstack/react-query";
 
 export const Step2 = forwardRef(
   ({ onStepSubmit, providerName, connectorList, filterConnector }, ref) => {
@@ -92,13 +96,14 @@ export const Step2 = forwardRef(
 
     const handleChange1 = (e) => {
       // console.log(e.target.value);
+      // setCert({});
       setValue("provider", e.target.value);
       setValue("connector", "");
       const filterValue = e.target.value;
       // setProviderSelected(filterValue);
 
       // Assuming connectorList is a state variable
-      const filteredData = connectorList?.data?.[filterValue];
+      const filteredData = connectorList?.[filterValue];
 
       if (filteredData) {
         const updatedData2 = filteredData.map((item, i) => {
@@ -123,8 +128,122 @@ export const Step2 = forwardRef(
       }
     };
 
-    const handleFormSubmit = (data) => {
-      onStepSubmit(data);
+    const handleChange2 = () => {
+      // setCert({});
+    };
+
+    const sdk = useRef(null);
+    let lang = getLang();
+
+    function disconnectWSHTML() {
+      sdk.current.shutdown();
+    }
+
+    // const urlWithoutProtocol = getUrlWithoutProtocol();
+    const urlWithoutProtocol = "localhost:3000";
+
+    const certificateInfor = useMutation({
+      mutationFn: async (data) => {
+        try {
+          const response = await connectWS(data);
+          // console.log("response: ", response);
+          return response;
+        } catch (error) {
+          // console.log("error: ", error);
+          throw new Error(error);
+        }
+      },
+      // onSuccess: (data) => {
+      //   console.log("data: ", data);
+      // },
+    });
+
+    // console.log("cuong: ", certificateInfor);
+
+    const connectWS = (dllUsb) => {
+      return new Promise(function (resolve, reject) {
+        const ipWS = "127.0.0.1";
+        const portWS = "9505";
+        const typeOfWS = "wss";
+        sdk.current = new ISPluginClient(
+          ipWS,
+          portWS,
+          typeOfWS,
+          function () {
+            console.log("connected");
+            //            socket onopen => connected
+            getCertificate(dllUsb, resolve, reject);
+            // flagFailedConnectHTML = 1;
+          },
+          function () {
+            //            socket disconnected
+            console.log("Connect error");
+          },
+          function () {
+            //            socket stopped
+          },
+          function () {
+            console.log("connected denied");
+            // console.log("statusCallBack: ", statusCallBack);
+            disconnectWSHTML();
+          },
+          function (cmd, id, error, data) {
+            console.log("id: ", id);
+            //RECEIVE
+            // console.log("cmd: ", cmd);
+            // console.log("error: ", error);
+            // console.log("data: ", data);
+          }
+        );
+      });
+    };
+
+    const getCertificate = (dllUsb, resolve, reject) => {
+      console.log("sdk.current: ", sdk.current);
+      sdk.current.getTokenCertificate(
+        60,
+        JSON.parse(dllUsb),
+        urlWithoutProtocol,
+        lang,
+        function (response) {
+          // console.log("response: ", response);
+          resolve(response);
+          disconnectWSHTML();
+        },
+        function (error, mess) {
+          console.log("error: ", error);
+          console.log("mess: ", mess);
+          reject(mess);
+          // setErrorGetCert(mess);
+          disconnectWSHTML();
+        },
+        function () {
+          console.log("timeout");
+          sdk.current = null;
+        }
+      );
+    };
+
+    const handleFormSubmit = (data1) => {
+      // console.log("data: ", data);
+      // setErrorGetCert(null);
+      if (data1.provider === "USB_TOKEN_SIGNING") {
+        const dllUsb = connectorList.USB_TOKEN_SIGNING.filter(
+          (item) => item.connectorName === data1.connector
+        )[0].identifier;
+        // connectWS(dllUsb);
+        certificateInfor.mutate(dllUsb, {
+          onSuccess: (data) => {
+            // console.log("data: ", data);
+            onStepSubmit({ ...data1, ...data });
+          },
+        });
+        // if (certificateInfor.data) {
+        //   onStepSubmit({ ...data, ...certificateInfor?.data });
+        // }
+      } else {
+        onStepSubmit(data1);
+      }
     };
 
     return (
@@ -157,6 +276,7 @@ export const Step2 = forwardRef(
             label="Select Remote Signing Service Provider"
             disabled={!data2}
             content={data2}
+            onChange={handleChange2}
             MenuProps={{ PaperProps: { sx: { maxHeight: 300 } } }}
             sx={{
               "& .MuiListItemSecondaryAction-root": {
@@ -168,6 +288,11 @@ export const Step2 = forwardRef(
           />
         </Box>
         <CheckIdSoft name="messageError" control={control} />
+        {certificateInfor?.error && (
+          <Box width={"100%"} mt={2}>
+            <Alert severity="error">{certificateInfor?.error?.message}</Alert>
+          </Box>
+        )}
       </Box>
     );
   }
@@ -178,8 +303,6 @@ Step2.propTypes = {
   onStepSubmit: PropTypes.func,
   connectorList: PropTypes.object,
   filterConnector: PropTypes.array,
-  errorPG: PropTypes.string,
-  setProviderSelected: PropTypes.func,
 };
 
 Step2.displayName = "Step2";

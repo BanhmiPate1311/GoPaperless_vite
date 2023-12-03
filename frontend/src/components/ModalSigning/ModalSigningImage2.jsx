@@ -1,4 +1,6 @@
 import { apiService } from "@/services/api_service";
+import { api } from "@/utils/api";
+import { removeBase64Prefix } from "@/utils/commonFunction";
 import CloseIcon from "@mui/icons-material/Close";
 import DrawIcon from "@mui/icons-material/Draw";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
@@ -20,8 +22,6 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DrawSignForm, TextSignForm } from "../PdfViewer";
 import UploadSignForm from "../PdfViewer/UploadSignForm";
-import { api } from "@/utils/api";
-import { removeBase64Prefix } from "@/utils/commonFunction";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -63,7 +63,7 @@ export const ModalSigningImage2 = ({
   signer,
   dataSigning,
   setDataSigning,
-  handleShowModalSmartid,
+  handleShowmodal,
 }) => {
   // console.log("dataSigning: ", dataSigning);
   // console.log("signer: ", signer);
@@ -153,34 +153,44 @@ export const ModalSigningImage2 = ({
     }
   }, []);
 
+  // const handleShowmodal = () => {
+  //   switch (dataSigning.provider) {
+  //     case "SMART_ID_SIGNING":
+  //       handleShowModalSmartid();
+  //       break;
+  //     case "USB_TOKEN_SIGNING":
+  //       break;
+  //   }
+  // };
+
   const handleTextSubmit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
       imageBase64: removeBase64Prefix(data),
     });
     onClose();
-    handleShowModalSmartid();
+    handleShowmodal();
   };
 
   const handleDrawSubmit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
       imageBase64: removeBase64Prefix(data),
     });
     onClose();
-    handleShowModalSmartid();
+    handleShowmodal();
   };
 
   const handleFileSubmit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
       imageBase64: removeBase64Prefix(data),
     });
     onClose();
-    handleShowModalSmartid();
+    handleShowmodal();
   };
 
   const handleSubmitClick = () => {
@@ -375,7 +385,7 @@ ModalSigningImage2.propTypes = {
   signer: PropTypes.object,
   dataSigning: PropTypes.object,
   setDataSigning: PropTypes.func,
-  handleShowModalSmartid: PropTypes.func,
+  handleShowmodal: PropTypes.func,
 };
 
 export default ModalSigningImage2;

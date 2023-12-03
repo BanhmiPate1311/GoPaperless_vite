@@ -34,6 +34,9 @@ export let theme = extendTheme({
           light: "#EDF7FA",
           main: "#00A8CC",
         },
+        success: {
+          main: "#55CF31",
+        },
         // grey 200
         signingBackground: {
           main: "#eeeeee",
@@ -47,7 +50,7 @@ export let theme = extendTheme({
           main: "#F3FBFF",
         },
         accordingBackGround: {
-          main: "#e8ebf0",
+          main: "#eee",
         },
         signerBackGround: {
           main: "#A6D1FF",
@@ -56,6 +59,11 @@ export let theme = extendTheme({
         borderColor: {
           light: "#DFDBD6",
           main: "#e0e0e0",
+        },
+        // grey 300
+        borderColorBlue: {
+          light: "#3B82F6",
+          main: "#3B82F6",
         },
         // gray
         signingtext1: {
@@ -76,6 +84,9 @@ export let theme = extendTheme({
         },
         text: {
           primary: "#21243D",
+        },
+        textSuccess: {
+          main: "#55CF31",
         },
       },
     },

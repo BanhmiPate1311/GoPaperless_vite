@@ -14,6 +14,7 @@ import { ModalSigningImage2 } from "../ModalSigning";
 import { ModalSmartid } from "../ModalSigning/ModalSmartid";
 import SigningForm from "./SigningForm";
 import ModalSingingImage from "./ModalSingingImage";
+import { ModalUsb } from "../ModalSigning/ModalUsb";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -23,6 +24,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
   const [isShowModalSmartid, setShowModalSmartid] = useState([false]);
+  const [isShowModalUsb, setShowModalUsb] = useState([false]);
 
   // const [isOpenSigningForm, setOpenSigningForm] = useState(false);
   // const [isShowModalSignImage, setShowModalSignImage] = useState(false);
@@ -33,6 +35,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const queryClient = useQueryClient();
   const dragRef = useRef();
   const [dataSigning, setDataSigning] = useState({});
+  // console.log("dataSigning: ", dataSigning);
 
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
@@ -141,6 +144,29 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     const newValue = [...isShowModalSmartid];
     newValue[index] = false;
     setShowModalSmartid(newValue);
+  };
+
+  const handleShowModalUsb = (index) => {
+    const newValue = [...isShowModalUsb];
+    newValue[index] = true;
+    setShowModalUsb(newValue);
+  };
+
+  const handleCloseModalUsb = (index) => {
+    const newValue = [...isShowModalUsb];
+    newValue[index] = false;
+    setShowModalUsb(newValue);
+  };
+
+  const handleShowmodal = (index) => {
+    switch (dataSigning.provider) {
+      case "SMART_ID_SIGNING":
+        handleShowModalSmartid(index);
+        break;
+      case "USB_TOKEN_SIGNING":
+        handleShowModalUsb(index);
+        break;
+    }
   };
 
   // const handleOpenSigningForm = () => {
@@ -383,7 +409,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           signer={signer}
           dataSigning={dataSigning}
           setDataSigning={setDataSigning}
-          handleShowModalSmartid={() => handleShowModalSmartid(index)}
+          handleShowmodal={() => handleShowmodal(index)}
         />
         // <ModalSingingImage
         //   isShowModalSignImage={isShowModalSignImage[index]}
@@ -396,6 +422,14 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           open={isShowModalSmartid[index]}
           onClose={() => handleCloseModalSmartid(index)}
           dataSigning={dataSigning}
+        />
+      )}
+      {isShowModalUsb[index] && (
+        <ModalUsb
+          open={isShowModalUsb[index]}
+          onClose={() => handleCloseModalUsb(index)}
+          dataSigning={dataSigning}
+          setDataSigning={setDataSigning}
         />
       )}
     </>

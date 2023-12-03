@@ -1,5 +1,9 @@
-import { apiService } from "@/services/api_service";
-import { rsspService } from "@/services/rssp_service";
+import {
+  useConnectorList,
+  usePending,
+  usePreFixList,
+  useSmartIdCertificate,
+} from "@/hook";
 import {
   convertProviderToSignOption,
   convertSignOptionsToProvider,
@@ -7,6 +11,7 @@ import {
   getSigner,
 } from "@/utils/commonFunction";
 import CloseIcon from "@mui/icons-material/Close";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
@@ -16,17 +21,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import {
-  useIsFetching,
-  useIsMutating,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { Step1, Step2, Step3_smartid, Step4 } from "../Signing";
 import { v4 as uuidv4 } from "uuid";
+import { Step1, Step2, Step3_smartid, Step4, Step5_usb } from "../Signing";
 
 const SigningForm = ({
   open,
@@ -45,11 +44,9 @@ const SigningForm = ({
 
   // console.log("lang: ", lang);
 
-  const isFetching = useIsFetching();
+  const isPending = usePending();
 
-  const isMutating = useIsMutating();
-
-  const isPending = isFetching + isMutating > 0;
+  // const sdk = useRef(null);
 
   // console.log("dataApi: ", dataApi.current);
 
@@ -67,6 +64,12 @@ const SigningForm = ({
     ? signer.signingOptions.map((item) => Object.values(item)[0].join(","))
     : [];
 
+  const elementRef = useRef();
+  const elementRef2 = useRef();
+  const elementRef3 = useRef();
+  const elementRef4 = useRef();
+  const elementRef5 = useRef();
+
   const dataApi = useRef({
     fileName: workFlow.fileName,
     documentId: workFlow.documentId,
@@ -79,37 +82,22 @@ const SigningForm = ({
     fieldName: signer.signerId,
     lastFileUuid: workFlow.lastFileUuid,
   });
-
+  // console.log("dataApi: ", dataApi.current);
   const handleNext = (step = 1) => {
     setActiveStep((prevActiveStep) => prevActiveStep + step);
   };
 
-  const { data: prefixList } = useQuery({
-    queryKey: ["prefixList"],
-    queryFn: () => {
-      return apiService.getPrefixList();
-    },
-  });
-  //   console.log("prefixList: ", prefixList?.data);
+  const prefixList = usePreFixList(lang);
+  // console.log("prefixList: ", prefixList);
 
-  const { data: connectorList } = useQuery({
-    queryKey: ["getConnectorList"],
-    queryFn: () => {
-      return apiService.getConnecterProvider(providerName);
-    },
-  });
+  const connectorList = useConnectorList(providerName);
+  // console.log("connectorList: ", connectorList.data);
 
-  const getCertificates = useMutation({
-    mutationFn: (data) => {
-      return rsspService.getCertificates(data);
-    },
-    onSuccess: () => {
-      // console.log("data: ", data);
-      handleNext(1);
-    },
-  });
+  const cbSuccessgetSmartCert = () => {
+    handleNext(1);
+  };
 
-  // console.log("getCertificates: ", getCertificates?.data);
+  const smartIdCertificate = useSmartIdCertificate(cbSuccessgetSmartCert);
 
   useEffect(() => {
     if (open) {
@@ -119,11 +107,6 @@ const SigningForm = ({
       }
     }
   }, [open]);
-
-  const elementRef = useRef();
-  const elementRef2 = useRef();
-  const elementRef3 = useRef();
-  const elementRef4 = useRef();
 
   const filterPrefix = prefixList?.data?.filter(
     (item) => item.type === "PHONE-ID" || item.type === "PERSONAL-ID"
@@ -146,23 +129,34 @@ const SigningForm = ({
     dataApi.current = {
       ...dataApi.current,
       signerId: signer.signerId,
-      connectorName: data.connector,
-      provider: data.provider,
+      // connectorName: data.connector,
+      // provider: data.provider,
       signingOption: convertProviderToSignOption(data.provider),
       lastFileId: workFlow.lastFileId,
+      ...data,
     };
-    if (data.connector === "SMART_ID_MOBILE_ID") {
-      handleNext(1);
-    } else {
-      // onClose();
-      toast.warn("Functionality is under development!");
+
+    switch (data.provider) {
+      case "SMART_ID_SIGNING":
+        if (data.connector === "SMART_ID_MOBILE_ID") {
+          handleNext(1);
+        } else {
+          // onClose();
+          toast.warn("Functionality is under development!");
+        }
+        break;
+      case "USB_TOKEN_SIGNING":
+        setActiveStep(5);
+        break;
     }
+
     // setMethod(data.method);
   };
 
   const dialCode = useRef("");
 
   const handleStep3Submit = (data) => {
+    // console.log("data: ", data);
     const codeNumber =
       data.criteria +
       ":" +
@@ -173,7 +167,8 @@ const SigningForm = ({
       ...dataApi.current,
       codeNumber: codeNumber,
     };
-    getCertificates.mutate(dataApi.current);
+    // console.log("dataApi.current: ", dataApi.current);
+    smartIdCertificate.mutate(dataApi.current);
   };
 
   const handleStep4Submit = (data) => {
@@ -182,10 +177,21 @@ const SigningForm = ({
     dataApi.current = {
       ...dataApi.current,
       requestID: requestID,
-      certChain: getCertificates?.data?.data?.listCertificate[data.certificate],
+      certChain: smartIdCertificate?.data?.listCertificate[data.certificate],
     };
     setDataSigning(dataApi.current);
     // handleNext(1);
+    onClose();
+    handleShowModalSignImage();
+  };
+  const handleStep5Submit = (data) => {
+    // console.log("data: ", data);
+    // console.log("dataApi: ", dataApi);
+    dataApi.current = {
+      ...dataApi.current,
+      certChain: dataApi.current.signingCertificates[data.certificate],
+    };
+    setDataSigning(dataApi.current);
     onClose();
     handleShowModalSignImage();
   };
@@ -208,6 +214,9 @@ const SigningForm = ({
       case 4:
         elementRef4.current.requestSubmit();
         break;
+      case 5:
+        elementRef5.current.requestSubmit();
+        break;
       default:
         // perFormProcess(); // chỉ để test
         handleNext();
@@ -221,7 +230,7 @@ const SigningForm = ({
       ref={elementRef2}
       providerName={providerName}
       onStepSubmit={handleStep2Submit}
-      connectorList={connectorList}
+      connectorList={connectorList?.data}
       filterConnector={filterConnector}
     />,
     <Step3_smartid
@@ -230,13 +239,19 @@ const SigningForm = ({
       onStepSubmit={handleStep3Submit}
       data={filterPrefix}
       dialCode={dialCode}
-      errorApi={getCertificates?.error?.response?.data?.message}
+      errorApi={smartIdCertificate?.error?.response?.data?.message}
     />,
     <Step4
       key="step4"
       ref={elementRef4}
-      data={getCertificates?.data?.data?.listCertificate}
+      data={smartIdCertificate?.data?.listCertificate}
       onStepSubmit={handleStep4Submit}
+    />,
+    <Step5_usb
+      key="step5"
+      ref={elementRef5}
+      listCertificate={dataApi.current.signingCertificates}
+      onStepSubmit={handleStep5Submit}
     />,
   ];
 
@@ -249,6 +264,7 @@ const SigningForm = ({
             "Signing with Mobile-ID creates a qualified electronic signature which has equivalent legal effect of a handwritten signature.",
         };
       case 4:
+      case 5:
         return {
           title: "SELECT CERTIFICATE",
           subtitle:
@@ -322,17 +338,26 @@ const SigningForm = ({
       {/* <Box sx={{ px: "24px" }}>
         <Divider />
       </Box> */}
-      <DialogContent sx={{ backgroundColor: "dialogBackground.main" }}>
+      <DialogContent
+        sx={{
+          backgroundColor: "dialogBackground.main",
+          maxHeight: "500px",
+          // py: "10px",
+        }}
+      >
         <DialogContentText
           component="div"
           id="scroll-dialog-description"
           ref={descriptionElementRef}
           tabIndex={-1}
+          // sx={{
+          //   maxHeight: "500px",
+          // }}
         >
-          <Typography component="div" sx={{ mt: 2, mb: 1, height: "80%" }}>
+          <Box sx={{ mt: 0, mb: 1 }} className="choioioioi">
             {/* {steps[activeStep]} */}
             {steps[activeStep - 1]}
-          </Typography>
+          </Box>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: "24px" }}>

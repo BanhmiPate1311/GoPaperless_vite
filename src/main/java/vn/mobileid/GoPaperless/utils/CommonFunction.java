@@ -169,8 +169,8 @@ public class CommonFunction {
 
         List<ConnectorName> connector = LoadParamSystem.getConnectorStart(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME);
         if (connector.size() > 0) {
-            for(ConnectorName connectorName : connector){
-                if(connectorName.getConnectorName().equals(Difinitions.CONFIG_CONNECTOR_DMS_MOBILE_ID)){
+            for (ConnectorName connectorName : connector) {
+                if (connectorName.getConnectorName().equals(Difinitions.CONFIG_CONNECTOR_DMS_MOBILE_ID)) {
                     sPropertiesFMS = connectorName.getIdentifier();
                 }
             }
@@ -255,7 +255,6 @@ public class CommonFunction {
         short last = (short) (vc[vc.length - 2] << 8 | vc[vc.length - 1] & 0x00FF);
         return String.format("%04X-%04X", first, last);
     }
-
 
 
     public static String getCryptoHash(String input) {
@@ -362,7 +361,7 @@ public class CommonFunction {
         return sJson;
     }
 
-    public static String PostBackJsonCertificateObject( String url, String sCertificate, String sCode,
+    public static String PostBackJsonCertificateObject(String url, String sCertificate, String sCode,
                                                        String signingTime, String signingOption,
                                                        String sAction, String sToken, String sSigner, String sStatus, String sFile, String sFileSigest,
                                                        String sSignature_id, String sCountryCode) {
@@ -475,19 +474,25 @@ public class CommonFunction {
         return sResult;
     }
 
-    public static byte[] hashPass(String input) throws NoSuchAlgorithmException
-    {
+    public static byte[] hashPass(String input) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         return md.digest(input.getBytes(StandardCharsets.UTF_8));
     }
-    public static String toHexString(byte[] hash)
-    {
+
+    public static String toHexString(byte[] hash) {
         BigInteger number = new BigInteger(1, hash);
         StringBuilder hexString = new StringBuilder(number.toString(16));
-        while (hexString.length() < 64)
-        {
+        while (hexString.length() < 64) {
             hexString.insert(0, '0');
         }
         return hexString.toString();
+    }
+
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02X", b));
+        }
+        return result.toString();
     }
 }

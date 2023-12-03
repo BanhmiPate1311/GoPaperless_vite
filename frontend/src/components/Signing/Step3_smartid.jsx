@@ -3,9 +3,9 @@ import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import { forwardRef, useState } from "react";
 import { useForm } from "react-hook-form";
-// import { ref, object, string, boolean } from "yup";
-import FormHelperText from "@mui/material/FormHelperText";
+import Alert from "@mui/material/Alert";
 import MenuItem from "@mui/material/MenuItem";
+import Stack from "@mui/material/Stack";
 import * as yup from "yup";
 import { InputField, PhoneInputField, SelectField } from "../form";
 
@@ -83,7 +83,7 @@ export const Step3_smartid = forwardRef(
     };
 
     return (
-      <Box
+      <Stack
         component="form"
         ref={ref}
         onSubmit={handleSubmit(handleFormSubmit)}
@@ -108,8 +108,12 @@ export const Step3_smartid = forwardRef(
           />
         </Box>
 
-        {/* {isPhoneSelect ? ( */}
-        <Box width={"100%"} display={isPhoneSelect ? "block" : "none"} mt={6}>
+        <Box
+          width={"100%"}
+          display={isPhoneSelect ? "block" : "none"}
+          // mt={6}
+          flexGrow={1}
+        >
           <PhoneInputField
             label="Phone Number"
             name="phoneNumber"
@@ -118,7 +122,11 @@ export const Step3_smartid = forwardRef(
           />
         </Box>
         {/* ) : ( */}
-        <Box width={"100%"} display={isPhoneSelect ? "none" : "block"}>
+        <Box
+          width={"100%"}
+          display={isPhoneSelect ? "none" : "block"}
+          flexGrow={1}
+        >
           <InputField
             label="Code"
             name="personalCode"
@@ -135,7 +143,7 @@ export const Step3_smartid = forwardRef(
             }}
           />
         </Box>
-        <FormHelperText
+        {/* <FormHelperText
           error={!!errorApi}
           sx={{
             color: "red",
@@ -146,8 +154,13 @@ export const Step3_smartid = forwardRef(
           }}
         >
           {errorApi}
-        </FormHelperText>
-      </Box>
+        </FormHelperText> */}
+        {errorApi && (
+          <Box width={"100%"}>
+            <Alert severity="error">{errorApi}</Alert>
+          </Box>
+        )}
+      </Stack>
     );
   }
 );

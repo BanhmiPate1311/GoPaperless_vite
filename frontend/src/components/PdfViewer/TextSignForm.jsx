@@ -51,10 +51,13 @@ export const TextSignForm = forwardRef(
       },
       resolver: yupResolver(schema),
     });
-
+    // console.log("dataSigning: ", dataSigning);
     const sigTextRef = useRef(null);
 
-    const nameValue = dataSigning.certChain.subject;
+    const nameValue =
+      typeof dataSigning.certChain.subject === "string"
+        ? dataSigning.certChain.subject
+        : dataSigning.certChain.subject.commonName;
     const dnValue = "your Distinguished Name";
     const reasonValue = dataSigning.reason;
     const logoValue = headerFooter.loGo ? headerFooter.loGo : logo1;

@@ -1,6 +1,10 @@
 package vn.mobileid.GoPaperless.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -115,7 +119,7 @@ public class ApiController {
 
         if (participants.size() > 0) {
             for (Participants participant : participants) {
-                if(CommonFunction.isNotNullOrEmpty(participant.getCertificate())){
+                if (CommonFunction.isNotNullOrEmpty(participant.getCertificate())) {
                     String sIssue = "";
                     String sOwner = "";
                     String sFrom = "";
@@ -187,15 +191,34 @@ public class ApiController {
                             map.put("logo", connectorNameItem.getLogo());
                             map.put("remark", connectorNameItem.getRemark());
                             map.put("provider", provider);
+                            if (connectorNameItem.getProvider().equals("USB_TOKEN_SIGNING")) {
+
+                                String jsonInput = connectorNameItem.getIdentifier(); // Assuming this is your JSON string
+
+                                try {
+                                    ObjectMapper objectMapper = new ObjectMapper();
+                                    JsonNode rootNode = objectMapper.readTree(jsonInput);
+
+                                    JsonNode attributesNode = rootNode.path("attributes");
+                                    if (attributesNode.isArray()) {
+                                        for (JsonNode attributeNode : attributesNode) {
+                                            String identifierValue = attributeNode.path("value").toString();
+                                            map.put("identifier", identifierValue);
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace(); // Handle exception according to your needs
+                                }
+                            }
                             connectorList.add(map);
                         }
                     }
 
-                    responseList.put(provider,connectorList);
+                    responseList.put(provider, connectorList);
                 }
             }
 
-            if(request.getSigningOptions().contains("ELECTRONIC_ID")){
+            if (request.getSigningOptions().contains("ELECTRONIC_ID")) {
                 List<CountryName> countryNameList = LoadParamSystem.getCountryNameList(Difinitions.CONFIG_LOAD_PARAM_COUNTRY);
                 if (countryNameList != null && !countryNameList.isEmpty()) {
                     List<Map<String, String>> connectorList = new ArrayList<>();
@@ -209,7 +232,7 @@ public class ApiController {
                         connectorList.add(map);
                     }
 
-                    responseList.put("ELECTRONIC_ID",connectorList);
+                    responseList.put("ELECTRONIC_ID", connectorList);
                 }
             }
 
@@ -221,7 +244,7 @@ public class ApiController {
         }
     }
 
-    @RequestMapping(value = {"/getPrefixList"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/getPrefixList"})
     public ResponseEntity<?> getPrefixList(@RequestBody ApiDtoRequest request) throws Exception {
         System.out.println("getPrefixList");
         String lang = request.getLanguage();
@@ -232,6 +255,5 @@ public class ApiController {
         return new ResponseEntity<>(prefixList, HttpStatus.OK);
 
     }
-
 
 }

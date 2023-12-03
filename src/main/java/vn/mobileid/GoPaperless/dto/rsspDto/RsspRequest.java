@@ -1,7 +1,11 @@
 package vn.mobileid.GoPaperless.dto.rsspDto;
 
+import java.util.List;
+
 public class RsspRequest {
     private CertChain certChain;
+    private String usbCertChain;
+    private String usbCertId;
     private String codeNumber;
     private String connectorName;
     private String country;
@@ -22,6 +26,8 @@ public class RsspRequest {
     private String signingOption;
     private String signingPurpose;
     private String signingToken;
+    private String hashList;
+    private List<String> signatures;
     private int workFlowId;
 
     public CertChain getCertChain() {
@@ -30,6 +36,22 @@ public class RsspRequest {
 
     public void setCertChain(CertChain certChain) {
         this.certChain = certChain;
+    }
+
+    public String getUsbCertChain() {
+        return usbCertChain;
+    }
+
+    public void setUsbCertChain(String usbCertChain) {
+        this.usbCertChain = usbCertChain;
+    }
+
+    public String getUsbCertId() {
+        return usbCertId;
+    }
+
+    public void setUsbCertId(String usbCertId) {
+        this.usbCertId = usbCertId;
     }
 
     public String getCodeNumber() {
@@ -190,6 +212,22 @@ public class RsspRequest {
 
     public void setSigningToken(String signingToken) {
         this.signingToken = signingToken;
+    }
+
+    public String getHashList() {
+        return hashList;
+    }
+
+    public void setHashList(String hashList) {
+        this.hashList = hashList;
+    }
+
+    public List<String> getSignatures() {
+        return signatures;
+    }
+
+    public void setSignatures(List<String> signatures) {
+        this.signatures = signatures;
     }
 
     public int getWorkFlowId() {

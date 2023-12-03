@@ -6,12 +6,20 @@ import { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import Signature from "./Signature";
 import { AdsClick } from "@mui/icons-material";
-import { checkIsPosition } from "@/utils/commonFunction";
+import {
+  checkIsPosition,
+  checkSignerStatus,
+  getSigner,
+} from "@/utils/commonFunction";
+import { useCommonHook } from "@/hook";
 // import Signature from "./Signature";
 export const Document = ({ props, workFlow, signatures }) => {
   // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
+
+  const signer = getSigner(workFlow);
+  const { signerToken } = useCommonHook();
 
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
@@ -206,7 +214,7 @@ export const Document = ({ props, workFlow, signatures }) => {
   });
 
   const handleDragSignature = (value) => {
-    console.log("value: ", value);
+    // console.log("value: ", value);
     const { field_name } = value;
     // setSignatures((prev) => {
     //   const index = prev.findIndex((item) => item.field_name === field_name);
@@ -321,7 +329,9 @@ export const Document = ({ props, workFlow, signatures }) => {
         }}
       >
         <AdsClick id="mouse-icon" />
-        {!isSetPos && <div style={{ marginLeft: "20px" }}>Right Click</div>}
+        {(!isSetPos || checkSignerStatus(signer, signerToken) === 1) && (
+          <div style={{ marginLeft: "20px" }}>Right Click</div>
+        )}
       </div>
       {props.canvasLayer.children}
 

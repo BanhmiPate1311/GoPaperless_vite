@@ -18,7 +18,7 @@ export const SelectField = ({
   ...rest
 }) => {
   const {
-    field: { onChange, value },
+    field: { onChange, value, ref },
     fieldState: { error },
   } = useController({ name, control });
   return (
@@ -32,6 +32,7 @@ export const SelectField = ({
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
+        ref={ref}
         value={value}
         label={label}
         onChange={(e) => {

@@ -8,3 +8,4 @@ export * from "./ToggleButton-field";
 export * from "./checkbox-field";
 export * from "./toggle-alignment";
 export * from "./upload-field";
+export * from "./password-field";

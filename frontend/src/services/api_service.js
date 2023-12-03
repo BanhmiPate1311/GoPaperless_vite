@@ -29,9 +29,9 @@ export const apiService = {
     });
   },
 
-  getPrefixList() {
+  getPrefixList(lang) {
     return api.post("/uiApi/getPrefixList", {
-      language: "en",
+      language: lang,
     });
   },
 };

@@ -1,5 +1,6 @@
 import { SigningContent } from "@/components/SigningContent";
 import { apiService } from "@/services/api_service";
+import { checkWorkflowStatus } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AppBar from "@mui/material/AppBar";
@@ -12,8 +13,6 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router-dom";
 import { NotFound } from "../NotFound";
-import { checkWorkflowStatus } from "@/utils/commonFunction";
-import { useEffect, useRef } from "react";
 
 export const Signing = () => {
   const { signing_token: signingToken } = useParams();
@@ -64,10 +63,10 @@ export const Signing = () => {
   });
 
   // queryClient.setQueryData(["workflow"], workFlow);
-  console.log("workFlow: ", workFlow?.data);
+  // console.log("workFlow: ", workFlow?.data);
 
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
-  console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
+  // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
   if (workFlowValid && workFlowValid.data === 0) {
     return <NotFound />;

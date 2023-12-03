@@ -20,7 +20,7 @@ export const CheckIdSoft = ({ name, control }) => {
 
     // Xử lý sự kiện khi kết nối mở thành công
     socket.addEventListener("open", () => {
-      console.log("Kết nối WebSocket đã thành công");
+      // console.log("Kết nối WebSocket đã thành công");
       socket.close();
       onChange("open1");
       // onBlur(true);
@@ -33,8 +33,8 @@ export const CheckIdSoft = ({ name, control }) => {
 
     // Xử lý sự kiện khi kết nối bị đóng
     socket.addEventListener("close", (event) => {
-      console.log("Kết nối WebSocket đã bị đóng");
-      console.log("Mã đóng:", event.code);
+      // console.log("Kết nối WebSocket đã bị đóng");
+      // console.log("Mã đóng:", event.code);
       if (event.code === 1006) {
         // setErrorPG(
         //   "Required software is missing or not available. Download here"

@@ -195,7 +195,8 @@ export const DrawSignForm = forwardRef(
                 <Box
                   component="img"
                   sx={{
-                    height: 53,
+                    // height: "100%",
+                    maxWidth: "70%",
                   }}
                   alt="The house from the offer."
                   src={watch("drawUrl")}

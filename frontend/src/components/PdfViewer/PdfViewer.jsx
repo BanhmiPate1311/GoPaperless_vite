@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
 import { fpsService } from "@/services/fps_service";
-import { checkIsPosition, getSigner } from "@/utils/commonFunction";
+import {
+  checkIsPosition,
+  checkSignerStatus,
+  getSigner,
+} from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -13,13 +17,18 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { Document } from ".";
 import "../../assets/style/cursor.css";
 import { ContextMenu } from "../ContextMenu";
+import { useCommonHook } from "@/hook";
 
 export const PdfViewer = ({ workFlow }) => {
+  // console.log("workFlow: ", workFlow);
   const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
 
   const signerId = getSigner(workFlow).signerId;
+
+  const signer = getSigner(workFlow);
+  const { signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
@@ -80,7 +89,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const addSignature = useMutation({
     mutationFn: ({ body, field }) => {
-      console.log("body: ", body);
+      // console.log("body: ", body);
       return fpsService.addSignature(
         { documentId: workFlow.documentId },
         body,
@@ -150,7 +159,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const handleContextMenu = (page) => (event) => {
     // console.log("page: ", page);
-    if (isSetPos) return;
+    if (isSetPos || checkSignerStatus(signer, signerToken) === 2) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - rect.left; // Xác định vị trí x dựa trên vị trí của chuột
 

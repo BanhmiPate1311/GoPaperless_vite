@@ -91,7 +91,13 @@ export const convertProviderToSignOption = (Provider) => {
 };
 
 export const getLang = () => {
-  let lang = localStorage.getItem("language");
+  let lang = "English";
+  if (typeof window.localStorage === "object") {
+    if (typeof window.localStorage?.getItem !== "undefined") {
+      lang = localStorage.getItem("language");
+    }
+  }
+  // let lang = localStorage.getItem("language");
   switch (lang) {
     case "Vietnamese":
       lang = "VN";
@@ -136,3 +142,16 @@ export const convertTime = (time) => {
 
   return formattedDate;
 }; // Output: 01/12/2023, 14:22:37
+
+export const getUrlWithoutProtocol = () => {
+  const currentURL = window.location.href;
+  const url = new URL(currentURL);
+  return url.origin.replace(/^(https?:\/\/)/, "");
+};
+
+//check time is after now
+export const checkTimeIsAfterNow = (time) => {
+  const date = new Date(time);
+  const now = new Date();
+  return date > now;
+};

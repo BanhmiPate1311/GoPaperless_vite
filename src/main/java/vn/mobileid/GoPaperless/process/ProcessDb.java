@@ -171,8 +171,8 @@ public class ProcessDb {
                 response.setSignerToken(rs.getString("SIGNER_TOKEN"));
                 response.setSigningOptions(rs.getString("SIGNING_OPTIONS"));
                 response.setAnnotation(rs.getString("ANNOTATION"));
-//                response.setSignedType(rs.getString("SIGNED_TYPE"));
-//                response.setSignedTime(rs.getString("SIGNED_TIME"));
+                response.setSignedType(rs.getString("SIGNED_TYPE"));
+                response.setSignedTime(rs.getString("SIGNED_TIME"));
                 response.setCustomReason(rs.getString("CUSTOM_REASON"));
                 response.setSigningPurpose(rs.getString("SIGNING_PURPOSE"));
                 response.setCertificate(rs.getString("CERTIFICATE"));

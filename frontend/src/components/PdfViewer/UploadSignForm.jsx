@@ -202,8 +202,8 @@ const UploadSignForm = forwardRef(
                 <Box
                   component="img"
                   sx={{
-                    height: 53,
-                    maxWidth: "100%",
+                    // height: "100%",
+                    maxWidth: "70%",
                   }}
                   alt="The house from the offer."
                   src={watch("imageScrop")}
