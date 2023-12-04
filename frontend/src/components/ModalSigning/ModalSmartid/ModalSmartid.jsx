@@ -16,7 +16,13 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
+
+import Slide from "@mui/material/Slide";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const mathRound = (number) => {
   const totalTime = 300;
@@ -165,7 +171,8 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
   return (
     <Dialog
       keepMounted={false}
-      open={open}
+      TransitionComponent={Transition}
+      open={!!open}
       onClose={onClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"

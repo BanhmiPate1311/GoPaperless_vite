@@ -31,6 +31,10 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -494,5 +498,16 @@ public class CommonFunction {
             result.append(String.format("%02X", b));
         }
         return result.toString();
+    }
+
+    public static String convertToGetTimeZone(String time){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+
+        String zonedDateTimeString = zonedDateTime.toString();
+        String[] zonedDateTimeStringArray = zonedDateTimeString.split("\\[");
+        //        System.out.println(zonedDateTimeStringWithoutTimeZone);
+        return zonedDateTimeStringArray[0];
     }
 }

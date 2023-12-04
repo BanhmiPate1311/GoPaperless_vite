@@ -126,6 +126,8 @@ public class ApiController {
                     String sTo = "";
                     String sCertificate = CommonFunction.CheckTextNull(participant.getCertificate());
 
+                    participant.setSignedTime(CommonFunction.convertToGetTimeZone(participant.getSignedTime()));
+
                     ObjectMapper oMapperParse = new ObjectMapper();
                     CertificateJson itemParse = oMapperParse.readValue(sCertificate, CertificateJson.class);
 

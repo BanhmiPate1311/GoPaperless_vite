@@ -1,5 +1,6 @@
 import {
   useConnectorList,
+  useIdentity,
   usePending,
   usePreFixList,
   useSmartIdCertificate,
@@ -7,6 +8,7 @@ import {
 import {
   convertProviderToSignOption,
   convertSignOptionsToProvider,
+  convertTypeEid,
   getLang,
   getSigner,
 } from "@/utils/commonFunction";
@@ -22,16 +24,29 @@ import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-import { Step1, Step2, Step3_smartid, Step4, Step5_usb } from "../Signing";
+import {
+  Step1,
+  Step2,
+  Step3_smartid,
+  Step4,
+  Step5_usb,
+  Step6_eid,
+} from "../Signing";
+import Slide from "@mui/material/Slide";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const SigningForm = ({
   open,
   onClose,
   workFlow,
   handleShowModalSignImage,
+  handleShowEidModal,
   setDataSigning,
 }) => {
   // console.log("workFlow: ", workFlow);
@@ -69,6 +84,7 @@ const SigningForm = ({
   const elementRef3 = useRef();
   const elementRef4 = useRef();
   const elementRef5 = useRef();
+  const elementRef6 = useRef();
 
   const dataApi = useRef({
     fileName: workFlow.fileName,
@@ -93,6 +109,8 @@ const SigningForm = ({
   const connectorList = useConnectorList(providerName);
   // console.log("connectorList: ", connectorList.data);
 
+  const checkIdentity = useIdentity();
+
   const cbSuccessgetSmartCert = () => {
     handleNext(1);
   };
@@ -110,6 +128,9 @@ const SigningForm = ({
 
   const filterPrefix = prefixList?.data?.filter(
     (item) => item.type === "PHONE-ID" || item.type === "PERSONAL-ID"
+  );
+  const filterPrefixEid = prefixList?.data?.filter(
+    (item) => item.type === "PERSONAL-ID"
   );
 
   const handleStep1Submit = (data) => {
@@ -147,6 +168,14 @@ const SigningForm = ({
         break;
       case "USB_TOKEN_SIGNING":
         setActiveStep(5);
+        break;
+      case "ELECTRONIC_ID":
+        if (data.connector === "Vietnam") {
+          setActiveStep(6);
+        } else {
+          // onClose();
+          toast.warn("Functionality is under development!");
+        }
         break;
     }
 
@@ -196,6 +225,20 @@ const SigningForm = ({
     handleShowModalSignImage();
   };
 
+  const handleStep6Submit = (data) => {
+    console.log("data: ", data);
+    const codeNumber = data.criteria + ":" + data.personalCode;
+    dataApi.current = {
+      ...dataApi.current,
+      codeNumber: codeNumber,
+      criteriaAlias: convertTypeEid(data.criteria),
+    };
+    setDataSigning(dataApi.current);
+
+    // onClose();
+    // handleShowEidModal();
+  };
+
   const handleCancelClick = () => {
     onClose();
   };
@@ -216,6 +259,9 @@ const SigningForm = ({
         break;
       case 5:
         elementRef5.current.requestSubmit();
+        break;
+      case 6:
+        elementRef6.current.requestSubmit();
         break;
       default:
         // perFormProcess(); // chỉ để test
@@ -253,6 +299,12 @@ const SigningForm = ({
       listCertificate={dataApi.current.signingCertificates}
       onStepSubmit={handleStep5Submit}
     />,
+    <Step6_eid
+      key="step6"
+      ref={elementRef6}
+      data={filterPrefixEid}
+      onStepSubmit={handleStep6Submit}
+    />,
   ];
 
   let { title, subtitle } = useMemo(() => {
@@ -270,6 +322,11 @@ const SigningForm = ({
           subtitle:
             "By choosing the certificate, I agree to the transfer of my name and personal identification code to the service provider.",
         };
+      case 6:
+        return {
+          title: "SIGN DOCUMENT",
+          subtitle: "Select document type",
+        };
       default:
         return {
           title: "SIGN DOCUMENT",
@@ -281,7 +338,8 @@ const SigningForm = ({
   return (
     <Dialog
       keepMounted={false}
-      open={open}
+      TransitionComponent={Transition}
+      open={!!open}
       onClose={onClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
@@ -388,6 +446,7 @@ SigningForm.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   handleShowModalSignImage: PropTypes.func,
+  handleShowEidModal: PropTypes.func,
   workFlow: PropTypes.object,
   dataSigning: PropTypes.object,
   setDataSigning: PropTypes.func,

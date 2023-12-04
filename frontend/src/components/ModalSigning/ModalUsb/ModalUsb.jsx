@@ -2,7 +2,11 @@ import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
 import ISPluginClient from "@/assets/js/checkid";
 import { PasswordField } from "@/components/form";
 import { usePending, useUsbHash, useUsbPackFile } from "@/hook";
-import { convertTime, getLang } from "@/utils/commonFunction";
+import {
+  convertTime,
+  getLang,
+  getUrlWithoutProtocol,
+} from "@/utils/commonFunction";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
@@ -17,11 +21,17 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useRef } from "react";
+import { forwardRef, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
+
+import Slide from "@mui/material/Slide";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   console.log("dataSigning: ", dataSigning);
@@ -34,10 +44,10 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       .string()
       .test(
         "pin",
-        `Must be from ${dataSigning.tokenDetails.minPinLength} to ${dataSigning.tokenDetails.maxPinLength} characters `,
+        `Must be from ${dataSigning?.tokenDetails?.minPinLength} to ${dataSigning?.tokenDetails?.maxPinLength} characters `,
         (val) =>
-          val.length > dataSigning.tokenDetails.minPinLength &&
-          val.length < dataSigning.tokenDetails.maxPinLength
+          val.length >= dataSigning?.tokenDetails?.minPinLength &&
+          val.length <= dataSigning?.tokenDetails?.maxPinLength
       )
       .required("Please input your pin"),
   });
@@ -94,7 +104,8 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   const formRef = useRef();
   const sdk = useRef(null);
   let lang = getLang();
-  const urlWithoutProtocol = "localhost:3000";
+  const urlWithoutProtocol = getUrlWithoutProtocol();
+  // const urlWithoutProtocol = "localhost:3000";
 
   function disconnectWSHTML() {
     sdk.current.shutdown();
@@ -140,7 +151,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   };
 
   const getSignature = (data, resolve, reject) => {
-    console.log("dataSigning: ", dataSigning);
+    // console.log("dataSigning: ", dataSigning);
     const certId = dataSigning.certChain.id;
     const pin = data.pin;
     const temp = {
@@ -211,7 +222,8 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   return (
     <Dialog
       keepMounted={false}
-      open={open}
+      TransitionComponent={Transition}
+      open={!!open}
       onClose={onClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
@@ -298,15 +310,15 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
 
             <Box flexGrow={1} textAlign="left">
               <Typography fontWeight="bold" fontSize="14px">
-                {dataSigning.certChain.subject.commonName}
+                {dataSigning?.certChain?.subject?.commonName}
               </Typography>
               <Typography fontSize="14px">
-                Issuer: {dataSigning.certChain.issuer.commonName}
+                Issuer: {dataSigning?.certChain?.issuer?.commonName}
               </Typography>
               <Typography fontSize="14px">
                 Valid:{" "}
-                {convertTime(dataSigning.certChain.validFrom).split(" ")[0]} to{" "}
-                {convertTime(dataSigning.certChain.validTo).split(" ")[0]}
+                {convertTime(dataSigning?.certChain?.validFrom).split(" ")[0]}{" "}
+                to {convertTime(dataSigning?.certChain?.validTo).split(" ")[0]}
               </Typography>
             </Box>
           </Stack>

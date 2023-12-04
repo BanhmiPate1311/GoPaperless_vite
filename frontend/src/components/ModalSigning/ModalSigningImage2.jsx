@@ -18,10 +18,15 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DrawSignForm, TextSignForm } from "../PdfViewer";
 import UploadSignForm from "../PdfViewer/UploadSignForm";
+import Slide from "@mui/material/Slide";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -209,7 +214,8 @@ export const ModalSigningImage2 = ({
   return (
     <Dialog
       keepMounted={false}
-      open={open}
+      TransitionComponent={Transition}
+      open={!!open}
       onClose={onClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"

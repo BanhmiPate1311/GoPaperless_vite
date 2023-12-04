@@ -44,9 +44,9 @@ export const PasswordField = ({
         fullWidth
         error={!!error}
         size="small"
-        id="outlined-password-input1"
+        id="pinNumber"
         // label="Password"
-        type="password"
+        type="search"
         // autoComplete="current-password"
         onChange={(event) => {
           onChange(event);

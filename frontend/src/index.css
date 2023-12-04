@@ -23,3 +23,8 @@
   padding: 0 5px;
   /* color: #de0000; */
 }
+
+#pinNumber {
+  -webkit-text-security: disc;
+  -text-security: disc;
+}

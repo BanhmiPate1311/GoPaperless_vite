@@ -151,9 +151,9 @@ public class FpsService {
         requestData.put("page", data.getPage());
         requestData.put("dimension", data.getDimension());
         requestData.put("visible_enabled", data.getVisibleEnabled());
-        List<String> list = new ArrayList<>();
-        list.add("ESEAL");
-        requestData.put("level_of_assurance", list);
+//        List<String> list = new ArrayList<>();
+//        list.add("ESEAL");
+//        requestData.put("level_of_assurance", list);
 
         // Convert requestData to JSON string
         ObjectMapper objectMapper = new ObjectMapper();

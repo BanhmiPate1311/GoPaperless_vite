@@ -1,7 +1,6 @@
+import logo1 from "@/assets/images/Logo/gopaperless_white.png";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
-import logo1 from "@/assets/images/Logo/gopaperless_white.png";
-import ModeSelect from "../ModeSelect";
 
 export const Header = ({ headerFooter }) => {
   // console.log("headerFooter: ", headerFooter);
@@ -40,7 +39,7 @@ export const Header = ({ headerFooter }) => {
         alt="The house from the offer."
         src={headerFooter && headerFooter.loGo ? headerFooter.loGo : logo1}
       />
-      <ModeSelect />
+      {/* <ModeSelect /> */}
     </Box>
   );
 };

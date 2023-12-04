@@ -155,3 +155,22 @@ export const checkTimeIsAfterNow = (time) => {
   const now = new Date();
   return date > now;
 };
+
+//convert time to local time
+export const convertTimeToLocal = (time) => {
+  const date = new Date(time);
+  return date.toLocaleString();
+};
+
+export const convertTypeEid = (criteria) => {
+  switch (criteria) {
+    case "CITIZEN-IDENTITY-CARD":
+      return "CITIZEN_CARD";
+    case "MOBILE_ID_SIGNING":
+      return "Mobile ID";
+    case "SMART_ID_SIGNING":
+      return "Smart ID";
+    case "USB_TOKEN_SIGNING":
+      return "USB Token";
+  }
+};

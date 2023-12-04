@@ -15,6 +15,7 @@ import { ModalSmartid } from "../ModalSigning/ModalSmartid";
 import SigningForm from "./SigningForm";
 import ModalSingingImage from "./ModalSingingImage";
 import { ModalUsb } from "../ModalSigning/ModalUsb";
+import { EidModal } from "../EidModal";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -25,6 +26,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
   const [isShowModalSmartid, setShowModalSmartid] = useState([false]);
   const [isShowModalUsb, setShowModalUsb] = useState([false]);
+  const [isShowEidModal, setShowEidModal] = useState([false]);
 
   // const [isOpenSigningForm, setOpenSigningForm] = useState(false);
   // const [isShowModalSignImage, setShowModalSignImage] = useState(false);
@@ -156,6 +158,18 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     const newValue = [...isShowModalUsb];
     newValue[index] = false;
     setShowModalUsb(newValue);
+  };
+
+  const handleShowEidModal = (index) => {
+    const newValue = [...isShowEidModal];
+    newValue[index] = true;
+    setShowEidModal(newValue);
+  };
+
+  const handleCloseEidModal = (index) => {
+    const newValue = [...isShowEidModal];
+    newValue[index] = false;
+    setShowEidModal(newValue);
   };
 
   const handleShowmodal = (index) => {
@@ -398,6 +412,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           // index={signatureData.page - 1}
           workFlow={workFlow}
           handleShowModalSignImage={() => handleShowModalSignImage(index)}
+          handleShowEidModal={() => handleShowEidModal(index)}
           setDataSigning={setDataSigning}
         />
       )}
@@ -430,6 +445,12 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           onClose={() => handleCloseModalUsb(index)}
           dataSigning={dataSigning}
           setDataSigning={setDataSigning}
+        />
+      )}
+      {isShowEidModal[index] && (
+        <EidModal
+          open={isShowEidModal[index]}
+          onClose={() => handleCloseEidModal(index)}
         />
       )}
     </>

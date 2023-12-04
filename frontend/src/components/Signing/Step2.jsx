@@ -3,7 +3,7 @@ import { ReactComponent as MobileIdIcon } from "@/assets/images/svg/mobile-id.sv
 import { ReactComponent as SmartIdIcon } from "@/assets/images/svg/smart-id.svg";
 import { ReactComponent as UsbIcon } from "@/assets/images/svg/usb-token.svg";
 import ISPluginClient from "@/assets/js/checkid";
-import { getLang } from "@/utils/commonFunction";
+import { getLang, getUrlWithoutProtocol } from "@/utils/commonFunction";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -112,7 +112,14 @@ export const Step2 = forwardRef(
             filterConnector.includes(item.connectorName)
           ) {
             return (
-              <MenuItem key={i} value={item.connectorName}>
+              <MenuItem
+                key={i}
+                value={
+                  item.connectorName !== "MOBILE_ID_IDENTITY"
+                    ? item.connectorName
+                    : item.remark
+                }
+              >
                 {item.remark}
                 <ListItemSecondaryAction>
                   <img src={item.logo} height="25" alt="logo" />
@@ -139,8 +146,8 @@ export const Step2 = forwardRef(
       sdk.current.shutdown();
     }
 
-    // const urlWithoutProtocol = getUrlWithoutProtocol();
-    const urlWithoutProtocol = "localhost:3000";
+    const urlWithoutProtocol = getUrlWithoutProtocol();
+    // const urlWithoutProtocol = "localhost:3000";
 
     const certificateInfor = useMutation({
       mutationFn: async (data) => {

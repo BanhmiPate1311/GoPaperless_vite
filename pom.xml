@@ -134,6 +134,19 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>vn.mobile-id</groupId>
+            <artifactId>awsv4_lib</artifactId>
+            <version>20220607</version>
+            <!--<systemPath>E:\PPL_V2\paperless-main-sign\lib\MobileID-FMS-Client-2019.08.23-rv116.jar</systemPath>-->
+        </dependency>
+
+        <dependency>
+            <groupId>jmrtd-0.7.18</groupId>
+            <artifactId>jmrtd-0.7.18</artifactId>
+            <version>0.7.18</version>
+        </dependency>
     </dependencies>
 
     <build>
