@@ -1,6 +1,5 @@
 import {
   useConnectorList,
-  useIdentity,
   usePending,
   usePreFixList,
   useSmartIdCertificate,
@@ -108,8 +107,6 @@ const SigningForm = ({
 
   const connectorList = useConnectorList(providerName);
   // console.log("connectorList: ", connectorList.data);
-
-  const checkIdentity = useIdentity();
 
   const cbSuccessgetSmartCert = () => {
     handleNext(1);
@@ -231,12 +228,13 @@ const SigningForm = ({
     dataApi.current = {
       ...dataApi.current,
       codeNumber: codeNumber,
+      code: data.personalCode,
       criteriaAlias: convertTypeEid(data.criteria),
     };
     setDataSigning(dataApi.current);
 
-    // onClose();
-    // handleShowEidModal();
+    onClose();
+    handleShowEidModal();
   };
 
   const handleCancelClick = () => {

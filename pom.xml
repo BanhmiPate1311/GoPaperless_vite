@@ -147,6 +147,11 @@
             <artifactId>jmrtd-0.7.18</artifactId>
             <version>0.7.18</version>
         </dependency>
+        <dependency>
+            <groupId>scuba-smartcards-0.0.19</groupId>
+            <artifactId>scuba-smartcards-0.0.19</artifactId>
+            <version>0.0.19</version>
+        </dependency>
     </dependencies>
 
     <build>

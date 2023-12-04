@@ -2,7 +2,6 @@ import { SigningContent } from "@/components/SigningContent";
 import { apiService } from "@/services/api_service";
 import { checkWorkflowStatus } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
@@ -93,7 +92,7 @@ export const Signing = () => {
               >
                 DOCUMENTS INFORMATION
               </Typography>
-              <VisibilityIcon sx={{ color: "signingtext1.main" }} />
+              {/* <VisibilityIcon sx={{ color: "signingtext1.main" }} /> */}
               <Chip
                 label="Download completed"
                 component="a"

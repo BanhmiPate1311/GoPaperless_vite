@@ -451,6 +451,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <EidModal
           open={isShowEidModal[index]}
           onClose={() => handleCloseEidModal(index)}
+          workFlow={dataSigning}
+          signatureData={signatureData}
         />
       )}
     </>

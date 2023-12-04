@@ -19,6 +19,8 @@ import { useMutation } from "@tanstack/react-query";
 
 export const Step2 = forwardRef(
   ({ onStepSubmit, providerName, connectorList, filterConnector }, ref) => {
+    console.log("filterConnector: ", filterConnector);
+    console.log("connectorList: ", connectorList);
     const schema = yup.object().shape({
       provider: yup.string().required("Please Select Signing Method"),
       connector: yup
@@ -95,41 +97,35 @@ export const Step2 = forwardRef(
     const [data2, setData2] = useState(null);
 
     const handleChange1 = (e) => {
-      // console.log(e.target.value);
-      // setCert({});
       setValue("provider", e.target.value);
       setValue("connector", "");
       const filterValue = e.target.value;
-      // setProviderSelected(filterValue);
+      const filterProvider = connectorList?.[filterValue];
+      console.log("filteredData: ", filterProvider);
 
-      // Assuming connectorList is a state variable
-      const filteredData = connectorList?.[filterValue];
-
-      if (filteredData) {
-        const updatedData2 = filteredData.map((item, i) => {
-          if (
-            filterConnector.length === 0 ||
-            filterConnector.includes(item.connectorName)
-          ) {
-            return (
-              <MenuItem
-                key={i}
-                value={
-                  item.connectorName !== "MOBILE_ID_IDENTITY"
-                    ? item.connectorName
-                    : item.remark
-                }
-              >
-                {item.remark}
-                <ListItemSecondaryAction>
-                  <img src={item.logo} height="25" alt="logo" />
-                </ListItemSecondaryAction>
-              </MenuItem>
-            );
-          }
+      if (filterProvider) {
+        const filterData = filterProvider.filter((item) =>
+          filterConnector.includes(item.connectorName)
+        );
+        const content = filterData.length > 0 ? filterData : filterProvider;
+        const content2 = content.map((item, i) => {
+          return (
+            <MenuItem
+              key={i}
+              value={
+                item.connectorName !== "MOBILE_ID_IDENTITY"
+                  ? item.connectorName
+                  : item.remark
+              }
+            >
+              {item.remark}
+              <ListItemSecondaryAction>
+                <img src={item.logo} height="25" alt="logo" />
+              </ListItemSecondaryAction>
+            </MenuItem>
+          );
         });
-
-        setData2(updatedData2);
+        setData2(content2);
       } else {
         setData2(null); // Handle the case where filteredData is undefined or null
       }
