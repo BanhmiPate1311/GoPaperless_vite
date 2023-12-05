@@ -78,6 +78,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
         throw new Error(error);
       }
     },
+
     onSuccess: (data) => {
       console.log("data: ", data);
       // setDataSigning({
@@ -100,7 +101,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       return data;
     },
   });
-
+  console.log("getCertificate: ", getCertificate);
   const formRef = useRef();
   const sdk = useRef(null);
   let lang = getLang();
@@ -218,6 +219,8 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       },
     });
   };
+
+  const error = getCertificate?.error?.message || packFile?.error?.message;
 
   return (
     <Dialog
@@ -356,9 +359,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
             />
           </Box>
           <Stack width={"100%"} mb={2}>
-            {packFile?.error && (
-              <Alert severity="error">{packFile?.error?.message}</Alert>
-            )}
+            {error && <Alert severity="error">{error}</Alert>}
           </Stack>
         </DialogContentText>
       </DialogContent>

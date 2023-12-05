@@ -15,7 +15,8 @@ export let theme = extendTheme({
   typography: {
     fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
     h6: {
-      fontSize: 14, // Adjust the font size as needed
+      fontSize: 14,
+      color: "#000", // Adjust the font size as needed
     },
     h5: {
       fontSize: 13, // Adjust the font size as needed
@@ -83,7 +84,10 @@ export let theme = extendTheme({
           main: red.A400,
         },
         text: {
-          primary: "#21243D",
+          main: "#000",
+        },
+        textBold: {
+          main: "#475569",
         },
         textSuccess: {
           main: "#55CF31",

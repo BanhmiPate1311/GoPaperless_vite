@@ -406,6 +406,21 @@ public class CommonFunction {
             System.err.println("UrlPostBack: " + url);
             System.err.println("Requet: " + sJson);
 
+            RestTemplate restTemplate = new RestTemplate();
+            Map<String, Object> requestData = new HashMap<>();
+            requestData.put("action", sAction);
+            requestData.put("token", sToken);
+            requestData.put("signer", sSigner);
+            requestData.put("signer_info", signerJson);
+            requestData.put("status", sStatus);
+            requestData.put("file", sFile);
+            requestData.put("file_digest", sFileSigest);
+            requestData.put("valid_to", time[1]);
+            requestData.put("signature_id", sSignature_id);
+            HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData);
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+            System.out.println("response: " + response.getBody());
+
 
             // HttpPost request = new HttpPost(url);
             // StringEntity params = new StringEntity(sJson);
@@ -464,6 +479,8 @@ public class CommonFunction {
             requestData.put("valid_to", CommonFunction.CheckTextNull(time[1]));
             HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData);
             ResponseEntity<String> response = restTemplate.exchange(UrlPostBack, HttpMethod.POST, httpEntity, String.class);
+            System.out.println("response: " + response.getBody());
+
             // HttpPost request = new HttpPost(url);
             // StringEntity params = new StringEntity(sJson);
             // request.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);

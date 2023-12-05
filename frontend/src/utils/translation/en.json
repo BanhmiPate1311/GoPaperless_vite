@@ -1,6 +1,7 @@
 {
   "0-common": {
     "addtext": "Add Text",
+    "back": "Back",
     "cancel": "Cancel",
     "company": "Company",
     "copyright": "Copyright",
@@ -13,6 +14,9 @@
     "overview": "Overview",
     "participants": "Participants",
     "qrcode": "QR Code",
+    "retry": "Retry",
+    "submit": "Submit",
+    "continue": "Continue",
     "seals": "Seals",
     "shared_by": "Shared by",
     "signature": "Signature",
@@ -31,5 +35,100 @@
     "viewed": "Viewed",
     "waiting": "Waiting for signature",
     "waitingmysignature": "Waiting for my signature"
+  },
+  "electronic": {
+    "title": "Electronic video base Identification",
+    "step11": "Get a Qualified Electronic Signature in minutes",
+    "step12": "Make sure you have the following before starting:",
+    "step13": "A well-lit place",
+    "step14": "A valid document in its original form to verify your identity",
+    "step15": "A good internet connection",
+    "step16": "A device with a camera",
+    "step17": "A device with a card reader is plugged",
+
+    "step21": "Please accept provider’s terms of service.",
+    "step22": "I have read the",
+    "step23": "Privacy Policy",
+    "step24": "and consent to the processing of biometric data.",
+    "step25": "I agree to the",
+    "step26": "Terms and Conditions",
+    "step27": "on the Video Identification Process.",
+
+    "step31": "Read the document chip.",
+    "step32": "Insert/place the document on the card reader. Do not move while reading in progress",
+
+    "step41": "Personal Information",
+    "step42": "FullName",
+    "step43": "Sex",
+    "step44": "Date of birth",
+    "step45": "Document number",
+    "step46": "Nationality",
+    "step47": "Place of origin",
+
+    "step51": "Please smile and follow the prompts below.",
+    "step52": "Scan Face",
+    "step53": "Please, look to the camera to scan your face",
+
+    "step61": "Identity verification process in progress.",
+    "step62": "Please do not close this page. After your identity is verified, next step will open automatically.",
+    "step63": "Verification process might take up to 5 minitues.",
+
+    "step71": "Enter your phone number to receive a verification code.",
+    "step72": "Phone Verification",
+    "step73": "Enter Your Phone Number",
+
+    "step81": "Enter the code that was sent to your phone.",
+    "step82": "Phone Verification",
+    "step83": "Enter The Code That Was Sent To Your Phone",
+    "step84": "Verification process might take up to 5 minitues.",
+    "step85": "Resend OTP",
+
+    "step91": "Enter your email address to receive a verification code.",
+    "step92": "Email Verification",
+    "step93": "Enter Your Email Address",
+    "step94": "Email",
+
+    "step101": "Enter the code that was sent to your email.",
+    "step102": "Email Verification",
+    "step103": "Enter The Code That Was Sent To Your Email",
+    "step104": "Verification process might take up to 5 minitues.",
+    "step105": "Resend OTP",
+
+    "step111": "Your identity has been verified.",
+    "step112": "Please accept our certification terms to sign the document.",
+    "step113": "I have read the",
+    "step114": "Certification Practices Statement.",
+    "step115": "Terms and Conditions",
+    "step116": "on the Video Identification Process.",
+    "step117": "Select Remote Signing Service Provider",
+
+    "step11a1": "The certificate exists",
+    "step11a2": "Add new certificate",
+
+    "step121": "You are ready to sign the document.",
+    "step122": "Confirm your phone number in order to sign the document with a Qualified Electronic Signature.",
+
+    "step131": "Enter the code that was sent to your phone.",
+    "step132": "A verification code has been sent to your phone:",
+    "step133": "Enter The Code That Was Sent To Your Phone",
+    "step134": "Verification process might take up to 5 minitues.",
+    "step135": "Resend OTP",
+    "step136": "OTP invalid",
+
+    "eid not found": "EID Reader Notfound",
+    "camera not found": "Error accessing camera",
+    "can wrong": "Citizen identification number is wrong",
+    "timeout": "Timeout",
+    "phone error": "Phone number is already existed",
+    "email error": "Email is already existed",
+    "email invalid": "Email is invalid",
+    "cam closer": "MOVE CLOSER TO THE CAMERA.",
+    "cam oneface": "JUST ONLY FACE ON THE CAMERA.",
+    "cam left": "TURN SLIGHTLY TO YOUR LEFT.",
+    "cam right": "TURN SLIGHTLY TO YOUR RIGHT.",
+    "cam holdsteady": "HOLD STEADY.",
+    "cam lookstraight": "PLEASE LOOK DIRECTLY AT THE CAMERA.",
+    "camSuccess": "UPLOADING ENCRYPTED 3D FACESCAN.",
+    "faceSuccess": "SUCCESS"
   }
 }

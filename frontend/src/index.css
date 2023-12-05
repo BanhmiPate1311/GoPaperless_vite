@@ -28,3 +28,30 @@
   -webkit-text-security: disc;
   -text-security: disc;
 }
+
+canvas {
+  position: absolute;
+  top: 46.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+video {
+  position: absolute;
+  top: 46.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.video-direction {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  width: 469px;
+  padding: 10px 0;
+  transform: translate(-50%, -50%);
+}

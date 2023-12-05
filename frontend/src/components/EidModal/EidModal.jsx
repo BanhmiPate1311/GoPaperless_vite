@@ -1,4 +1,3 @@
-import { ReactComponent as ReactLogo } from "@/assets/images/eid/finger.svg";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
@@ -7,23 +6,26 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
 import { EidStepper } from ".";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  height: 700,
-  maxHeight: 760,
-  bgcolor: "background.paper",
+  width: "100%",
+  // height: 700,
+  maxHeight: 648,
+  bgcolor: "dialogBackground.main",
   border: "2px solid #000",
+  borderRadius: "10px",
   boxShadow: 24,
-  p: 4,
+  padding: "10px 15px 23px",
   overflowY: "auto",
   fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
 };
 export const EidModal = ({ open, onClose, workFlow, signatureData }) => {
+  const { t } = useTranslation();
   return (
     <Box>
       <Modal
@@ -42,12 +44,12 @@ export const EidModal = ({ open, onClose, workFlow, signatureData }) => {
         <Grow
           in={open}
           style={{
-            width: "500px",
+            width: "499px",
             transform: "translate(-50%, -50%)",
             transformOrigin: "0 0 0",
             // padding: "16px 0px 59px 16px",
-            paddingTop: "16px",
-            paddingLeft: "30px",
+            // paddingTop: "16px",
+            // paddingLeft: "30px",
             border: "none",
             outline: "none",
           }}
@@ -56,21 +58,28 @@ export const EidModal = ({ open, onClose, workFlow, signatureData }) => {
           <Box sx={style}>
             <Stack
               direction="row"
-              justifyContent="flex-end"
+              // justifyContent="flex-end"
               alignItems="center"
+              height={"31px"}
+              marginBottom={"10px"}
             >
               <Typography
+                variant="h6"
                 sx={{
-                  color: "rgb(79, 78, 78)",
-                  marginRight: "8px",
-                  fontWeight: 500,
-                  fontSize: "12px",
-                  lineHeight: "14px",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  display: "inline-block",
+                  color: "signingtextBlue.main",
+                  borderBottom: "4px solid",
+                  borderColor: "signingtextBlue.main",
+                  borderRadius: "5px",
+                  // paddingBottom: "5px",
+                  // marginBottom: "10px",
+                  p: 0,
                 }}
               >
-                Powered by
+                {t("electronic.title")}
               </Typography>
-              <ReactLogo />
             </Stack>
             <EidStepper
               onClose={onClose}

@@ -98,7 +98,7 @@ export const Signing = () => {
                 component="a"
                 disabled={!checkWorkFlowStatus}
                 // href="#basic-chip"
-                href={`${window.location.origin}/view/fps/download/${workFlow?.data?.documentId}`}
+                href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}
                 icon={<SaveAltIcon fontSize="small" />}
                 clickable
               />

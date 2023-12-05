@@ -6,11 +6,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.mobileid.GoPaperless.dto.apiDto.ApiDtoRequest;
 import vn.mobileid.GoPaperless.dto.apiDto.SigningWorkflowDto;
+import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.model.apiModel.*;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.service.FpsService;
@@ -18,6 +22,7 @@ import vn.mobileid.GoPaperless.utils.CommonFunction;
 import vn.mobileid.GoPaperless.utils.Difinitions;
 import vn.mobileid.GoPaperless.utils.LoadParamSystem;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -256,6 +261,36 @@ public class ApiController {
 
         return new ResponseEntity<>(prefixList, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/signing/{signingToken}/download")
+    public ResponseEntity<?> download(@PathVariable String signingToken) throws Exception {
+
+        LastFile lastFile = new LastFile();
+        connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, signingToken);
+
+        if(lastFile.getLastPplFileName() == null || lastFile.getLastPplFileName().isEmpty()){
+            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
+        }
+        String fileName = lastFile.getLastPplFileName().replace(".pdf", "");
+
+        InputStream response = fpsService.getImagePdf(lastFile.getDocumentId());
+        if (response != null) {
+            // trả về stream input file để download kèm header content type và content
+            // length để browser hiểu
+            HttpHeaders headers = new HttpHeaders();
+//                headers.add("Content-Disposition", "attachment; filename=" + "file.pdf");
+            headers.add("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
+            // jrbFile.getFileName());
+            InputStreamResource inputStreamResource = new InputStreamResource(response);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .headers(headers)
+                    .body(inputStreamResource);
+        } else {
+            // trả về lỗi không tìm thấy file để download
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
+        }
     }
 
 }

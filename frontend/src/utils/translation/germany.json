@@ -1,6 +1,7 @@
 {
   "0-common": {
     "addtext": "Text Hinzufügen",
+    "back": "Zurück",
     "cancel": "Abbrechen",
     "company": "Unternehmen",
     "copyright": "Urheberrecht",
@@ -13,6 +14,9 @@
     "overview": "Überblick",
     "participants": "Teilnehmer",
     "qrcode": "QR Code",
+    "retry": "Wiederholen",
+    "submit": "Senden",
+    "continue": "Weiter",
     "seals": "Robben",
     "shared_by": "Geteilt von",
     "signature": "Signatur",
@@ -30,5 +34,100 @@
     "viewed": "Gesehen",
     "waiting": "Warten auf Unterschrift",
     "waitingmysignature": "Warte auf meine Unterschrift"
+  },
+  "electronic": {
+    "title": "Elektronische Videobasis-Identifizierung",
+    "step11": "Erhalten Sie in wenigen Minuten eine qualifizierte elektronische Signatur.",
+    "step12": "Stellen Sie sicher, dass Sie Folgendes haben, bevor Sie beginnen:",
+    "step13": "Ein gut beleuchteter Ort",
+    "step14": "Ein gültiges Dokument in Originalform zur Überprüfung Ihrer Identität",
+    "step15": "Eine gute Internetverbindung",
+    "step16": "Ein Gerät mit einer Kamera",
+    "step17": "Ein Gerät mit Kartenleser ist angeschlosse",
+
+    "step21": "Bitte akzeptieren Sie die Nutzungsbedingungen des Anbieters.",
+    "step22": "Ich habe das gelesen",
+    "step23": "Datenschutzerklärung",
+    "step24": "und Einwilligung zur Verarbeitung biometrischer Daten.",
+    "step25": "Ich stimme zu",
+    "step26": "Allgemeine Geschäftsbedingungen",
+    "step27": "zum Video-Identifizierungsprozess.",
+
+    "step31": "Den Dokumentenchip lesen.",
+    "step32": "Legen Sie das Dokument in den Kartenleser ein. Bewegen Sie sich nicht, während Sie lesen",
+
+    "step41": "Persönliche Daten",
+    "step42": "vollständiger Name",
+    "step43": "Sex",
+    "step44": "Geburtsdatum",
+    "step45": "Dokumentnummer",
+    "step46": "Nationalität",
+    "step47": "Herkunftsort",
+
+    "step51": "Bitte lächeln Sie und folgen Sie den Anweisungen unten.",
+    "step52": "Gesicht scannen",
+    "step53": "Bitte schauen Sie in die Kamera, um Ihr Gesicht zu scannen",
+
+    "step61": "Identitätsüberprüfungsprozess läuft.",
+    "step62": "Bitte schließen Sie diese Seite nicht. Nachdem Ihre Identität überprüft wurde, wird der nächste Schritt automatisch geöffnet.",
+    "step63": "Der Verifizierungsprozess kann bis zu 5 Minuten dauern.",
+
+    "step71": "Geben Sie Ihre Telefonnummer ein, um einen Bestätigungscode zu erhalten.",
+    "step72": "Telefonbestätigung",
+    "step73": "Geben Sie Ihre Telefonnummer ein",
+
+    "step81": "Geben Sie Ihre Telefonnummer ein, um einen Bestätigungscode zu erhalten.",
+    "step82": "Telefonbestätigung",
+    "step83": "Geben Sie den Code ein, der an Ihr Telefon gesendet wurde",
+    "step84": "Der Verifizierungsprozess kann bis zu 5 Minuten dauern.",
+    "step85": "OTP erneut senden",
+
+    "step91": "Geben Sie Ihre E-Mail-Adresse ein, um einen Bestätigungscode zu erhalten.",
+    "step92": "E-Mail-Verifizierung",
+    "step93": "Geben sie ihre E-Mailadresse ein",
+    "step94": "Email",
+
+    "step101": "Geben Sie den Code ein, der an Ihre E-Mail gesendet wurde.",
+    "step102": "E-Mail-Verifizierung",
+    "step103": "Geben Sie den Code ein, der an Ihre E-Mail gesendet wurde",
+    "step104": "Der Verifizierungsprozess kann bis zu 5 Minuten dauern.",
+    "step105": "OTP erneut senden",
+
+    "step111": "Ihre Identität wurde überprüft.",
+    "step112": "Bitte akzeptieren Sie unsere Zertifizierungsbedingungen, um das Dokument zu unterzeichnen.",
+    "step113": "Ich habe das gelesen",
+    "step114": "Erklärung zu den Zertifizierungspraktiken.",
+    "step115": "Allgemeine Geschäftsbedingungen",
+    "step116": "zum Video-Identifizierungsprozess.",
+    "step117": "Wählen Sie Remote Signing Service Provider aus",
+
+    "step11a1": "Das Zertifikat existiert",
+    "step11a2": "Neues Zertifikat hinzufügen",
+
+    "step121": "Sie sind bereit, das Dokument zu signieren.",
+    "step122": "Bestätigen Sie Ihre Telefonnummer, um das Dokument mit einer qualifizierten elektronischen Signatur zu signieren.",
+
+    "step131": "Geben Sie den Code ein, der an Ihr Telefon gesendet wurde",
+    "step132": "Ein Bestätigungscode wurde an Ihr Telefon gesendet:",
+    "step133": "Geben Sie den Code ein, der an Ihr Telefon gesendet wurde",
+    "step134": "Der Verifizierungsprozess kann bis zu 5 Minuten dauern.",
+    "step135": "OTP erneut senden",
+    "step136": "OTP ungültig",
+
+    "eid not found": "EID-Leser nicht gefunden",
+    "camera not found": "Fehler beim Zugriff auf die Kamera",
+    "can wrong": "Die Bürgeridentifikationsnummer ist falsch",
+    "timeout": "Auszeit",
+    "phone error": "Telefonnummer ist bereits vorhanden",
+    "email error": "E-Mail ist bereits vorhanden",
+    "email invalid": "E-Mail ist ungültig",
+    "cam closer": "Gehen Sie näher an die Kamera heran.",
+    "cam oneface": "NUR DAS GESICHT AUF DER KAMERA.",
+    "cam left": "DREHEN SIE LEICHT NACH LINKS AB.",
+    "cam right": "Biegen Sie leicht nach rechts ab.",
+    "cam holdsteady": "HALTEN SIE STABIL.",
+    "cam lookstraight": "BITTE SCHAUEN SIE DIREKT IN DIE KAMERA.",
+    "camSuccess": "VERSCHLÜSSELTER 3D-FACESCAN HOCHLADEN.",
+    "faceSuccess": "ERFOLG"
   }
 }

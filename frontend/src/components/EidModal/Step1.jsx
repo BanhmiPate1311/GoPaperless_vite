@@ -3,24 +3,25 @@ import { ReactComponent as CCard } from "@/assets/images/eid/ccard.svg";
 import { ReactComponent as Connectdevice } from "@/assets/images/eid/connectdevice.svg";
 import { ReactComponent as Light } from "@/assets/images/eid/light.svg";
 import { ReactComponent as Wifi } from "@/assets/images/eid/wifi.svg";
+import { SvgIcon } from "@mui/material";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 const Step1 = ({ isIdentifyRegistered }) => {
+  const { t } = useTranslation();
   return (
-    <Box color="#26293F">
-      <Typography fontSize="24px" fontWeight={600} lineHeight="36px">
+    <Box>
+      <Typography variant="h6" sx={{ fontWeight: 700, color: "textBold.main" }}>
         {/* Get a Qualified Electronic Signature in minutes. */}
-        {/* {t("electronicid.step11")} */}
-        Get a Qualified Electronic Signature in minutes.
+        {t("electronic.step11")}
       </Typography>
 
-      <Typography fontSize={14} my="16px">
+      <Typography variant="h6" my="16px">
         {/* Make sure you have the following before starting: */}
-        {/* {t("electronicid.step12")} */}
-        Make sure you have the following before starting:
+        {t("electronic.step12")}
       </Typography>
 
       <Stack direction="row" alignItems="center" mb="12px">
@@ -35,10 +36,18 @@ const Step1 = ({ isIdentifyRegistered }) => {
           mr="12px"
           bgcolor="rgb(243, 245, 248)"
         >
-          <Light />
+          <SvgIcon
+            viewport="0 0 16 16"
+            width={16}
+            height={16}
+            component={Light}
+            inheritViewBox
+          />
+          {/* <Light /> */}
         </Stack>
-        <Typography fontSize="14px">
-          {/* {t("electronicid.step13")} */}A well-lit place
+        <Typography variant="h6">
+          {/* A well-lit place */}
+          {t("electronic.step13")}
         </Typography>
       </Stack>
 
@@ -57,9 +66,9 @@ const Step1 = ({ isIdentifyRegistered }) => {
           >
             <CCard />
           </Stack>
-          <Typography>
-            A valid document in its original form to verify your identity
-            {/* {t("electronicid.step14")} */}
+          <Typography variant="h6">
+            {/* A valid document in its original form to verify your identity */}
+            {t("electronic.step14")}
           </Typography>
         </Stack>
       )}
@@ -78,8 +87,9 @@ const Step1 = ({ isIdentifyRegistered }) => {
         >
           <Wifi />
         </Stack>
-        <Typography fontSize="14px">
-          {/* {t("electronicid.step15")} */}A good internet connection
+        <Typography variant="h6">
+          {t("electronic.step15")}
+          {/* A good internet connection */}
         </Typography>
       </Stack>
 
@@ -97,8 +107,9 @@ const Step1 = ({ isIdentifyRegistered }) => {
         >
           <Connectdevice />
         </Stack>
-        <Typography fontSize="14px">
-          {/* {t("electronicid.step16")} */}A device with a camera
+        <Typography variant="h6">
+          {t("electronic.step16")}
+          {/* A device with a camera */}
         </Typography>
       </Stack>
 
@@ -117,9 +128,9 @@ const Step1 = ({ isIdentifyRegistered }) => {
           >
             <CardReader />
           </Stack>
-          <Typography>
-            A device with a card reader is plugged
-            {/* {t("electronicid.step17")} */}
+          <Typography variant="h6">
+            {/* A device with a card reader is plugged */}
+            {t("electronic.step17")}
           </Typography>
         </Stack>
       )}

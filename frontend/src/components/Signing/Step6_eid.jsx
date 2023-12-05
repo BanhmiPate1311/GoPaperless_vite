@@ -24,7 +24,7 @@ export const Step6_eid = forwardRef(({ onStepSubmit, data }, ref) => {
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      criteria: "",
+      criteria: "CITIZEN-IDENTITY-CARD",
       personalCode: "",
     },
     resolver: yupResolver(schema),

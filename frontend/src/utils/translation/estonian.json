@@ -1,6 +1,7 @@
 {
   "0-common": {
     "addtext": "Lisa Tekst",
+    "back": "Tagasi",
     "cancel": "Tühista",
     "company": "Ettevõte",
     "copyright": "Autoriõigus",
@@ -13,6 +14,9 @@
     "overview": "Ülevaade",
     "participants": "Osalejad",
     "qrcode": "QR Kood",
+    "retry": "Öo",
+    "submit": "Esita",
+    "continue": "Järjesta",
     "seals": "Tihendid",
     "shared_by": "Jaganud",
     "signature": "Allkiri",
@@ -30,5 +34,100 @@
     "viewed": "Vaatud",
     "waiting": "Ootan allkirja",
     "waitingmysignature": "Ootan minu allkirja"
+  },
+  "electronic": {
+    "title": "Elektrooniline videobaas Identifitseerimine",
+    "step11": "Hankige kvalifitseeritud elektrooniline allkiri minutitega.",
+    "step12": "Enne alustamist veenduge, et teil on järgmised asjad:",
+    "step13": "Hästi valgustatud koht",
+    "step14": "Kehtiv dokument algsel kujul teie identiteedi kinnitamiseks",
+    "step15": "Hea Interneti-ühendus",
+    "step16": "Kaameraga seade",
+    "step17": "Kaardilugejaga seade on ühendatud",
+
+    "step21": "Palun nõustuge teenusepakkuja teenusetingimustega.",
+    "step22": "Olen lugenud",
+    "step23": "Privaatsuspoliitika",
+    "step24": "ja nõusolek biomeetriliste andmete töötlemiseks.",
+    "step25": "Nõustun",
+    "step26": "Nõuded ja tingimused",
+    "step27": "videotuvastusprotsessi kohta.",
+
+    "step31": "Loe dokumendikiipi.",
+    "step32": "Sisesta/asetage dokument kaardilugejasse. Ärge liigutage poolelioleva lugemise ajal",
+
+    "step41": "Isiklik teave",
+    "step42": "täisnimi",
+    "step43": "seks",
+    "step44": "Sünnikuupäev",
+    "step45": "Dokumendi number",
+    "step46": "kodakondsus",
+    "step47": "Päritolukoht",
+
+    "step51": "Naeratage ja järgige allolevaid juhiseid.",
+    "step52": "Skanni nägu",
+    "step53": "Palun vaadake oma näo skannimiseks kaamerasse",
+
+    "step61": "Identiteedi kinnitamise protsess on pooleli.",
+    "step62": "Palun ärge sulgege seda lehte. Pärast teie identiteedi kinnitamist avaneb järgmine samm automaatselt.",
+    "step63": "Kinnitusprotsess võib võtta kuni 5 minutit.",
+
+    "step71": "Kinnituskoodi saamiseks sisestage oma telefoninumber.",
+    "step72": "Telefoni kinnitamine",
+    "step73": "Sisestage oma telefoninumber",
+
+    "step81": "Kinnituskoodi saamiseks sisestage oma telefoninumber.",
+    "step82": "Telefoni kinnitamine",
+    "step83": "Sisestage kood, mis teie telefoni saadeti",
+    "step84": "Kinnitusprotsess võib võtta kuni 5 minutit.",
+    "step85": "Saada OTP uuesti",
+
+    "step91": "Kinnituskoodi saamiseks sisestage oma e-posti aadress.",
+    "step92": "E-posti kinnitamine",
+    "step93": "Sisesta oma emaili aadress",
+    "step94": "Meil",
+
+    "step101": "Sisestage kood, mis saadeti teie meilile.",
+    "step102": "E-posti kinnitamine",
+    "step103": "Sisestage kood, mis saadeti teie meilile",
+    "step104": "Kinnitusprotsess võib võtta kuni 5 minutit.",
+    "step105": "Saada OTP uuesti",
+
+    "step111": "Teie identiteet on kinnitatud.",
+    "step112": "Dokumendi allkirjastamiseks nõustuge meie sertifitseerimistingimustega.",
+    "step113": "Olen lugenud",
+    "step114": "Sertifitseerimistavade avaldus.",
+    "step115": "Nõuded ja tingimused",
+    "step116": "videotuvastusprotsessi kohta.",
+    "step117": "Valige kaugallkirjastamise teenusepakkuja",
+
+    "step11a1": "Sertifikaat on olemas",
+    "step11a2": "Lisa uus sertifikaat",
+
+    "step121": "Olete valmis dokumendi allkirjastama.",
+    "step122": "Dokumendi kvalifitseeritud elektroonilise allkirjaga allkirjastamiseks kinnitage oma telefoninumber.",
+
+    "step131": "Sisestage kood, mis teie telefoni saadeti",
+    "step132": "Teie telefonile on saadetud kinnituskood:",
+    "step133": "Sisestage kood, mis teie telefoni saadeti",
+    "step134": "Kinnitusprotsess võib võtta kuni 5 minutit.",
+    "step135": "Saada OTP uuesti",
+    "step136": "OTP on kehtetu",
+
+    "eid not found": "EID-lugejat ei leitud",
+    "camera not found": "Viga kaamerale juurdepääsul",
+    "can wrong": "Kodaniku isikukood on vale",
+    "timeout": "Aeg maha",
+    "phone error": "Telefoninumber on juba olemas",
+    "email error": "E-post on juba olemas",
+    "email invalid": "E-post on kehtetu",
+    "cam closer": "LIIKUMINE KAAMERALE LÄHEMALE.",
+    "cam oneface": "AINULT NÄGU KAAMERAS.",
+    "cam left": "Pöörake KERGELT VASAKULE.",
+    "cam right": "Pöörake KERGELT ENDA PAREMALE.",
+    "cam holdsteady": "HOIDKE PINDALT.",
+    "cam lookstraight": "PALUN VAATA OTSE KAAMERA.",
+    "camSuccess": "Krüpteeritud 3D FACESCANI ÜLESLAADIMINE.",
+    "faceSuccess": "EDU"
   }
 }

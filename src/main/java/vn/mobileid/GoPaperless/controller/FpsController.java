@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
+import vn.mobileid.GoPaperless.model.apiModel.FirstFile;
 import vn.mobileid.GoPaperless.model.fpsModel.BasicFieldAttribute;
 import vn.mobileid.GoPaperless.model.fpsModel.Signature;
 import vn.mobileid.GoPaperless.service.FpsService;
@@ -78,4 +80,6 @@ public class FpsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
         }
     }
+
+
 }

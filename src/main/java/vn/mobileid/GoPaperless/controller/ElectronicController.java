@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.mobileid.GoPaperless.dto.elecdto.GetSubjectDto;
 import vn.mobileid.GoPaperless.dto.elecdto.PersonalDto;
 import vn.mobileid.GoPaperless.model.Electronic.request.CheckIdentityRequest;
+import vn.mobileid.GoPaperless.model.Electronic.request.FaceAndCreateRequest;
+import vn.mobileid.GoPaperless.model.Electronic.request.UpdateSubjectRequest;
+import vn.mobileid.GoPaperless.model.Electronic.response.PerformResponse;
 import vn.mobileid.GoPaperless.model.Electronic.response.SubjectResponse;
 import vn.mobileid.GoPaperless.service.ElectronicService;
 
@@ -89,5 +92,24 @@ public class ElectronicController {
         }
 
         return new ResponseEntity<>(getSubjectDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/faceAndCreate")
+    public ResponseEntity<?> faceAndCreate(
+            @RequestBody FaceAndCreateRequest faceAndCreateRequest) throws Exception {
+        PerformResponse performResponse = electronicIdService.faceAndCreate(faceAndCreateRequest);
+//        PerformResponse performResponse = gson.fromJson(response, PerformResponse.class);
+        if (performResponse.getStatus() == 0) {
+            performResponse.setJwt(performResponse.getPerform_result().getFinal_result().getClaim_sources().getJWT());
+        }
+        return new ResponseEntity<>(performResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/updateSubject")
+    public ResponseEntity<?> updateSubject(
+            @RequestBody UpdateSubjectRequest updateSubjectRequest) throws Exception {
+
+        String response = electronicIdService.updateSubject(updateSubjectRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

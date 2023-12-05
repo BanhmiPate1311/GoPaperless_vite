@@ -114,7 +114,7 @@ public class PostBack {
                     Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_SIGNED, "", isSetPosition);
             int pPPL_WORKFLOW_ID = rsWFList.getId();// sStatusWFCheck[0];
             connect.USP_GW_PPL_WORKFLOW_FILE_ADD(pPPL_WORKFLOW_ID, pFILE_ID[0], Difinitions.CONFIG_WORKFLOW_FILE_SIGNED_FILE, "", sFileID_Last, "", "");
-
+            System.out.println("signedTime: " + signedTime);
             SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -131,7 +131,7 @@ public class PostBack {
                     protocol = request.getScheme(); // fallback to default scheme
                 }
 
-                sFileSigner = protocol + "://" + request.getHeader("host") + "/api/signing/"
+                sFileSigner = protocol + "://" + request.getHeader("host") + "/view/uiApi/signing/"
                         + signingToken + "/download/" + sSigner;
                 String sJsonCertResult = CommonFunction.JsonCertificateObject(certEncode, serialNumber, sDateSign, signingOption, sAction, signingToken,
                         sSigner, sStatus, sFileSigner, digest, sSignature_id, sCountryCode);
@@ -153,7 +153,7 @@ public class PostBack {
 //                                                + request.getHeader("host") + "/api/signing/"
 //                                                + signingToken
 //                                                + "/download/");
-                            sFileComplete = protocol + "://" + request.getHeader("host") + "/api/signing/"
+                            sFileComplete = protocol + "://" + request.getHeader("host") + "/view/uiApi/signing/"
                                     + signingToken + "/download/";
                             CommonFunction.PostBackJsonObject(rsWFList.getPostBackUrl(), certEncode,
                                     serialNumber, signingOption, sAction, signingToken, sSigner, sStatus, sFileComplete, sCountryCode, digest);
