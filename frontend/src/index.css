@@ -5,7 +5,7 @@
 }
 
 .react-tel-input .special-label {
-  background-color: #ffffff;
+  background-color: transparent;
   font-family: "Montserrat,Nucleo,Helvetica,sans-serif";
   top: -8px;
   left: 10px;

@@ -25,7 +25,7 @@ export const SelectField = ({
     <FormControl sx={{ width: "100%" }} size="small">
       <InputLabel
         id="demo-select-small-label"
-        sx={{ backgroundColor: "signingWFBackground.main" }}
+        // sx={{ backgroundColor: "signingWFBackground.main" }}
       >
         {label}
       </InputLabel>

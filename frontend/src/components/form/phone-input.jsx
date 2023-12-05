@@ -26,8 +26,8 @@ export const PhoneInputField = ({
       <PhoneInput
         name={name}
         country={"vn"}
-        placeholder={label}
-        enableSearch={true}
+        // placeholder={label}
+        // enableSearch={true}
         specialLabel={label}
         value={value}
         onChange={(phone, country) => {

@@ -31,7 +31,7 @@ public class IsController {
 
     @PostMapping("/packFile")
     public ResponseEntity<?> packFile(@RequestBody RsspRequest data, HttpServletRequest request) throws Exception {
-        System.out.println("getHash");
+        System.out.println("packFile");
         String response = isService.packFile(data, request);
         return new ResponseEntity<>("response", HttpStatus.OK);
     }
