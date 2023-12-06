@@ -1,3 +1,9 @@
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import i18n from "./languages/i18n";
+
 export const getSignature = (value, signerId, workflowId) => {
   return value.find(
     (item) => item?.field_name === signerId && item?.workFlowId === workflowId
@@ -172,5 +178,76 @@ export const convertTypeEid = (criteria) => {
       return "Smart ID";
     case "USB_TOKEN_SIGNING":
       return "USB Token";
+  }
+};
+
+export const createValidName = (value) => {
+  switch (value) {
+    case "valid Signature":
+      return i18n.t("validation.validSig");
+    case "indeterminate Signature":
+      return i18n.t("validation.indeterminateSig");
+    case "invalid Signature":
+      return i18n.t("validation.invalidSig");
+    case "valid Seal":
+      return i18n.t("validation.validSeal");
+    case "indeterminate Seal":
+      return i18n.t("validation.indeterminateSeal");
+    case "invalid Seal":
+      return i18n.t("validation.invalidSeal");
+    default:
+      return null;
+  }
+};
+
+export const createValidIcon = (value) => {
+  switch (value) {
+    case "overview":
+      return "<InsertDriveFileOutlinedIcon />";
+    case "signatures":
+      return "<GroupOutlinedIcon />";
+    case "seals":
+      return "<WorkspacePremiumIcon />";
+    case "details":
+      return "<DescriptionOutlinedIcon />";
+    default:
+      return "Unknown Tab";
+  }
+};
+
+export const createValidLabel = (value) => {
+  switch (value) {
+    case "overview":
+      return i18n.t("validation.tab1");
+    case "signatures":
+      return i18n.t("validation.tab2");
+    case "seals":
+      return i18n.t("validation.tab3");
+    case "details":
+      return i18n.t("validation.tab4");
+    default:
+      return "Unknown Tab";
+  }
+};
+
+export const createValidTitle = (value) => {
+  switch (value) {
+    case "Signature is valid":
+      return i18n.t("validation.sigValidTitle2");
+    case "Seal is valid":
+      return i18n.t("validation.sealValidTitle2");
+    default:
+      return null;
+  }
+};
+
+export const createValidSubTitle = (value) => {
+  switch (value) {
+    case "Electronic Signature":
+      return i18n.t("validation.signSubTitle");
+    case "Electronic Seal":
+      return i18n.t("validation.sealSubTitle");
+    default:
+      return null;
   }
 };

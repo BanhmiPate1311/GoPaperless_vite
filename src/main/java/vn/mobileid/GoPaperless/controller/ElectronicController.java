@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.mobileid.GoPaperless.dto.elecdto.GetSubjectDto;
 import vn.mobileid.GoPaperless.dto.elecdto.PersonalDto;
-import vn.mobileid.GoPaperless.model.Electronic.request.CheckIdentityRequest;
-import vn.mobileid.GoPaperless.model.Electronic.request.FaceAndCreateRequest;
-import vn.mobileid.GoPaperless.model.Electronic.request.UpdateSubjectRequest;
+import vn.mobileid.GoPaperless.model.Electronic.request.*;
 import vn.mobileid.GoPaperless.model.Electronic.response.PerformResponse;
 import vn.mobileid.GoPaperless.model.Electronic.response.SubjectResponse;
+import vn.mobileid.GoPaperless.model.rsspModel.CertResponse;
 import vn.mobileid.GoPaperless.service.ElectronicService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -110,6 +110,61 @@ public class ElectronicController {
             @RequestBody UpdateSubjectRequest updateSubjectRequest) throws Exception {
 
         String response = electronicIdService.updateSubject(updateSubjectRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/processPerForm")
+    public ResponseEntity<?> processPerForm(
+            @RequestBody ProcessPerFormRequest processPerFormRequest) throws Exception {
+        System.out.println("processPerForm");
+
+        PerformResponse performResponse = electronicIdService.processOtp(processPerFormRequest);
+//        PerformResponse performResponse = gson.fromJson(response, PerformResponse.class);
+        if (performResponse.getStatus() == 0) {
+            performResponse.setJwt(performResponse.getPerform_result().getFinal_result().getClaim_sources().getJWT());
+        }
+        return new ResponseEntity<>(performResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/processOTPResend")
+    public ResponseEntity<?> processOTPResend(
+            @RequestBody ProcessPerFormRequest processPerFormRequest) throws Exception {
+        System.out.println("processPerForm");
+        String response = electronicIdService.processOTPResend(processPerFormRequest);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/checkCertificate")
+    public ResponseEntity<?> checkCertificate(
+            @RequestBody CheckCertificateRequest checkCertificateRequest) throws Exception {
+        System.out.println("checkCertificate");
+        List<CertResponse> certResponses = electronicIdService.checkCertificate(checkCertificateRequest);
+        return new ResponseEntity<>(certResponses, HttpStatus.OK);
+    }
+
+    @PostMapping("/createCertificate")
+    public ResponseEntity<?> createCertificate(
+            @RequestBody CheckCertificateRequest checkCertificateRequest) throws Throwable {
+//        String jwt = "eyJraWQiOiI5NTBhNmM2YTgwZjk0NTVmM2Y3NjU3ZDZmMTUyZGQyMjkwYjk2Y2U3IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJiNWNiZjY2ZS1lMmVlLTQwM2EtYmEzZS04MTk3ZjQzYTBjZmEiLCJtYXRjaF90aHJlc2hvbGQiOjcwLCJkb2N1bWVudF9udW1iZXIiOiIwNzkwODMwMTEzMTUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm1hdGNoX2NvbmZpZGVuY2UiOjk2LCJnZW5kZXIiOiJOYW0iLCJpc3MiOiJodHRwczpcL1wvaWQubW9iaWxlLWlkLnZuIiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjp0cnVlLCJwbGFjZV9vZl9yZXNpZGVuY2UiOiI2NDlcLzU4XC81NiDEkGnhu4duIEJpw6puIFBo4bunLCBQaMaw4budbmcgMjUsIELDrG5oIFRo4bqhbmgsIFRQLkjhu5MgQ2jDrSBNaW5oIiwiY2VydGlmaWNhdGVzX3F1ZXJ5X3BhdGgiOiJcL2R0aXNcL3YxXC9lLWlkZW50aXR5XC9jZXJ0aWZpY2F0ZXMiLCJjaXR5X3Byb3ZpbmNlIjoixJBJ4buGTiBCScOKTiIsInBsYWNlX29mX29yaWdpbiI6IlRQLkjhu5MgQ2jDrSBNaW5oIiwibmF0aW9uYWxpdHkiOiJWaeG7h3QgTmFtIiwiaXNzdWluZ19jb3VudHJ5IjoiVmnhu4d0IE5hbSIsIm1hdGNoX3Jlc3VsdCI6dHJ1ZSwibmFtZSI6Ikh14buzbmggUXVhbmcgQ8aw4budbmciLCJwaG9uZV9udW1iZXIiOiI4NDkwMTc5MDc2NyIsImV4cCI6MTY5MTQ3MTI1MiwiaWF0IjoxNjkxNDcwOTUyLCJhc3N1cmFuY2VfbGV2ZWwiOiJFWFRFTkRFRCIsImR0aXNfaWQiOiJJU0FQUC0yMzA4MDgxMjAyMzItNTkyMTE1LTU2OTY2NSIsImp0aSI6IjgwODM5NzAxLWFkN2UtNDljYy1hNzIyLWQ2NWJlMjcxYWUzNCIsImVtYWlsIjoiIiwiZG9jdW1lbnRfdHlwZSI6IkNJVElaRU5DQVJEIn0.cFDH6ndS5rWBUBXC52NcrJ1bmNJcQ4h9tzrLz6ixKHLEmQj_rQdyI5JAoOoURJrgapZjAWmsMja-j4y8xIXz8LRx1YWWFZ3lgaCRZhs_ultrhYk1SjSXSF5Gt-tM9feJrY20BBOwjQ-n90UnUZJH-6J2hG-p4jPn8S1OTcHImkE0P5OX6v1inqplqqwD8z0YBEcj_-OQrInceclui_aJV3WQAQvltNpYOW9e9v60sMGAbIFDB3pCRr92zGZtJz0oNfyfH8KVoHgpr9l2m0J_62eXcuVaQ5BpkiH9RGien5MwgiitfctbKDqxKq904Vi65SkTl68dmvDml0MlSQ2Elg";
+        CertResponse response = electronicIdService.createCertificate(checkCertificateRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/credentialOTP")
+    public ResponseEntity<?> sendOtp(
+            @RequestBody CheckCertificateRequest checkCertificateRequest) throws Throwable {
+        System.out.println("sendOtp");
+        String response = electronicIdService.credentialOTP(checkCertificateRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("authorizeOTP")
+    public ResponseEntity<?> authorizeOTP(
+            @RequestBody AuthorizeOTPRequest authorizeOTPRequest,
+            HttpServletRequest request) throws Throwable {
+        System.out.println("authorizeOTP ");
+        String response = electronicIdService.authorizeOTPFps(authorizeOTPRequest, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

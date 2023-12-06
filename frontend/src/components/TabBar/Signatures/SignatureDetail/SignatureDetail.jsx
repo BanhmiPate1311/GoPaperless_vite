@@ -1,17 +1,17 @@
-import CloseIcon from "@mui/icons-material/Close";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
+import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { convertTime } from "@/utils/commonFunction";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import { useState } from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
-import { convertTime } from "@/utils/commonFunction";
+import Drawer from "@mui/material/Drawer";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const SignatureDetail = ({
   open,
@@ -20,7 +20,9 @@ export const SignatureDetail = ({
   signType,
   handleClose,
 }) => {
+  const { t } = useTranslation();
   console.log("signature: ", signDetail);
+  const name = signDetail.value.signature.certificate.subject.common_name;
   const warnings = signDetail.value.warnings ? signDetail.value.warnings : [];
   const errors = signDetail.value.errors ? signDetail.value.errors : [];
 
@@ -55,8 +57,8 @@ export const SignatureDetail = ({
       },
       {
         title: "Certificate Owner",
-        subtitle: signDetail.value.signature.metadata.contact
-          ? signDetail.value.signature.metadata.contact
+        subtitle: signDetail.value.signature.certificate.subject.common_name
+          ? signDetail.value.signature.certificate.subject.common_name
           : null,
       },
       {
@@ -88,8 +90,29 @@ export const SignatureDetail = ({
             position: "sticky",
             top: 0,
             zIndex: 1,
-            p: 2,
+            p: 2.5,
             backgroundColor: "#fff",
+          }}
+          spacing={1}
+        >
+          <SignatureIcon />
+          <Typography variant="h6" sx={{ fontWeight: "700", fontSize: "16px" }}>
+            {name}
+          </Typography>
+        </Stack>
+        <Divider />
+        <Stack
+          direction="row"
+          alignItems={"center"}
+          // sx={{
+          //   position: "sticky",
+          //   top: 0,
+          //   zIndex: 1,
+          //   p: 2,
+          //   backgroundColor: "#fff",
+          // }}
+          sx={{
+            p: 2,
           }}
         >
           <Stack direction={"row"} alignItems={"center"} gap={1} flexGrow={1}>
@@ -107,11 +130,8 @@ export const SignatureDetail = ({
               </Typography>
             </Box>
           </Stack>
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
         </Stack>
-
+        <Divider />
         {warnings.length > 0 && (
           <Accordion
             disableGutters

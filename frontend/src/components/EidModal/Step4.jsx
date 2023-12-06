@@ -42,11 +42,11 @@ export const Step4 = ({ image, personalInfomation }) => {
               label={t("electronic.step42")}
               defaultValue={personalInfomation?.fullName}
               sx={{ width: "100%" }}
-              InputLabelProps={{
-                sx: {
-                  backgroundColor: "signingWFBackground.main",
-                },
-              }}
+              // InputLabelProps={{
+              //   sx: {
+              //     backgroundColor: "signingWFBackground.main",
+              //   },
+              // }}
               inputProps={{
                 sx: {
                   readOnly: true,
@@ -62,11 +62,11 @@ export const Step4 = ({ image, personalInfomation }) => {
               label={t("electronic.step43")}
               defaultValue={personalInfomation?.gender}
               sx={{ width: "100%" }}
-              InputLabelProps={{
-                sx: {
-                  backgroundColor: "signingWFBackground.main",
-                },
-              }}
+              // InputLabelProps={{
+              //   sx: {
+              //     backgroundColor: "signingWFBackground.main",
+              //   },
+              // }}
               inputProps={{
                 sx: {
                   readOnly: true,
@@ -82,11 +82,11 @@ export const Step4 = ({ image, personalInfomation }) => {
               label={t("electronic.step44")}
               defaultValue={personalInfomation?.birthDate}
               sx={{ width: "100%" }}
-              InputLabelProps={{
-                sx: {
-                  backgroundColor: "signingWFBackground.main",
-                },
-              }}
+              // InputLabelProps={{
+              //   sx: {
+              //     backgroundColor: "signingWFBackground.main",
+              //   },
+              // }}
               inputProps={{
                 sx: {
                   readOnly: true,
@@ -102,11 +102,11 @@ export const Step4 = ({ image, personalInfomation }) => {
               label={t("electronic.step45")}
               defaultValue={personalInfomation?.personalNumber}
               sx={{ width: "100%" }}
-              InputLabelProps={{
-                sx: {
-                  backgroundColor: "signingWFBackground.main",
-                },
-              }}
+              // InputLabelProps={{
+              //   sx: {
+              //     backgroundColor: "signingWFBackground.main",
+              //   },
+              // }}
               inputProps={{
                 sx: {
                   readOnly: true,
@@ -122,11 +122,11 @@ export const Step4 = ({ image, personalInfomation }) => {
               label={t("electronic.step46")}
               defaultValue={personalInfomation?.nationality}
               sx={{ width: "100%" }}
-              InputLabelProps={{
-                sx: {
-                  backgroundColor: "signingWFBackground.main",
-                },
-              }}
+              // InputLabelProps={{
+              //   sx: {
+              //     backgroundColor: "signingWFBackground.main",
+              //   },
+              // }}
               inputProps={{
                 sx: {
                   readOnly: true,
@@ -142,11 +142,11 @@ export const Step4 = ({ image, personalInfomation }) => {
               label={t("electronic.step47")}
               defaultValue={personalInfomation?.placeOfOrigin}
               sx={{ width: "100%" }}
-              InputLabelProps={{
-                sx: {
-                  backgroundColor: "signingWFBackground.main",
-                },
-              }}
+              // InputLabelProps={{
+              //   sx: {
+              //     backgroundColor: "signingWFBackground.main",
+              //   },
+              // }}
               inputProps={{
                 sx: {
                   readOnly: true,

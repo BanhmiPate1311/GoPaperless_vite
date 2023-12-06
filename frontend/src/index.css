@@ -29,7 +29,7 @@
   -text-security: disc;
 }
 
-canvas {
+canvas.step6 {
   position: absolute;
   top: 46.5%;
   left: 50%;
@@ -54,4 +54,28 @@ video {
   width: 469px;
   padding: 10px 0;
   transform: translate(-50%, -50%);
+}
+
+.inputStyle {
+  width: 43px !important;
+  height: 43px;
+  border-radius: 7px;
+  border: 0px;
+  margin-left: 8px;
+  margin-right: 8px;
+  /* background: #dddddd; */
+  font-size: 20px;
+  border: 1px solid #3b82f6;
+
+  /* width: 3rem!important;
+  height: 3rem;
+  margin: 0 1rem;
+  font-size: 2rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,.3); */
+}
+
+.containerStyle {
+  display: flex;
+  justify-content: center;
 }

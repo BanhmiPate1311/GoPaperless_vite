@@ -16,8 +16,7 @@ export const SignerInfor = ({ data }) => {
         borderRadius={2}
         mb={1}
       >
-        {data.firstName}
-        {data.lastName}
+        {data.lastName} {data.firstName}
       </Box>
       <Typography variant="h6" fontWeight={600}>
         Name
@@ -29,7 +28,7 @@ export const SignerInfor = ({ data }) => {
         borderRadius={2}
         mb={1}
       >
-        {data.lastName}
+        {data.firstName}
       </Box>
       <Typography variant="h6" fontWeight={600}>
         Email

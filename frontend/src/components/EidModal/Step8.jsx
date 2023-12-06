@@ -4,9 +4,9 @@ import CircularProgress, {
 } from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
-import AuthCode from "react-auth-code-input";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import OtpInput from "react-otp-input";
 
 function CircularProgressWithLabel(props) {
   const formatTime = (seconds) => {
@@ -85,6 +85,7 @@ CircularProgressWithLabel.propTypes = {
 };
 
 export const Step8 = ({
+  otp,
   setOtp,
   onDisableSubmit,
   processOTPResend,
@@ -94,7 +95,7 @@ export const Step8 = ({
   const { t } = useTranslation();
   const [progress, setProgress] = useState(100);
   const [isFirst, setIsFirst] = useState(true);
-  const AuthInputRef = useRef(null);
+  const [otp1, setOtp1] = useState("");
 
   useEffect(() => {
     if (progress > 0.5) {
@@ -120,6 +121,7 @@ export const Step8 = ({
   // const [result, setResult] = useState();
   // console.log("result: ", result);
   const handleOnChange = (res) => {
+    setOtp1(res);
     console.log("res: ", res.length);
     if (res.length === 6) {
       setOtp(res);
@@ -143,7 +145,8 @@ export const Step8 = ({
       setProgress(100);
       setErrorPG(null);
       setIsFirst(true);
-      AuthInputRef.current?.clear();
+      // AuthInputRef.current?.clear();
+      setOtp1("");
       processOTPResend();
       setEnResend(false);
       setTimeout(() => {
@@ -152,36 +155,50 @@ export const Step8 = ({
     }
   };
   return (
-    <Box color="#26293F">
-      <Typography fontSize="24px" fontWeight={600} lineHeight="36px">
-        {/* Enter your phone number to receive a verification code. */}
+    <Box>
+      <Typography variant="h6" sx={{ fontWeight: 700, color: "textBold.main" }}>
+        {/* Enter The Code That Was Sent To Your Phone */}
         {t("electronic.step81")}
       </Typography>
-      <Typography marginTop="26px" textAlign="center" fontSize="24px">
-        {/* Phone Verification */}
-        {t("electronic.step82")}
-      </Typography>
       <Typography
+        fontSize="15px"
+        my={3}
+        textAlign="center"
+        color="signingtextBlue.main"
+      >
+        {/* Enter The Code That Was Sent To Your Phone */}
+        {t("electronic.step81")}
+      </Typography>
+      {/* <Typography
         color="#1976D2"
         marginTop="26px"
         marginBottom="10px"
         textAlign="center"
       >
-        {/* Enter The Code That Was Sent To Your Phone */}
         {t("electronic.step83")}
-      </Typography>
-      <Box className="container">
+      </Typography> */}
+      {/* <Box className="container">
         <AuthCode
           ref={AuthInputRef}
           containerClassName="phoneContainer"
           inputClassName="phoneinputverified"
           onChange={handleOnChange}
         />
-      </Box>
-      <Box textAlign="center" marginTop="50px">
+      </Box> */}
+      <OtpInput
+        value={otp1}
+        onChange={handleOnChange}
+        numInputs={6}
+        //   renderSeparator={<span>-</span>}
+        renderInput={(props) => <input {...props} />}
+        inputStyle="inputStyle"
+        containerStyle="containerStyle"
+        inputType="tel"
+      />
+      <Box textAlign="center" mt={3}>
         <CircularProgressWithLabel size={100} value={progress} />
       </Box>
-      <Typography fontSize="14px" textAlign="center" marginTop="30px">
+      <Typography fontSize="14px" textAlign="center" mt={3}>
         {/* Verification process might take up to 5 minitues. */}
         {t("electronic.step84")}
       </Typography>
@@ -204,6 +221,7 @@ export const Step8 = ({
 };
 
 Step8.propTypes = {
+  otp: PropTypes.string,
   setOtp: PropTypes.func,
   onDisableSubmit: PropTypes.func,
   processOTPResend: PropTypes.func,

@@ -352,7 +352,7 @@ export const Document = ({ props, workFlow, signatures }) => {
         );
       })}
 
-      <div
+      {/* <div
         style={{
           alignItems: "center",
           display: "flex",
@@ -377,7 +377,7 @@ export const Document = ({ props, workFlow, signatures }) => {
         >
           Draft
         </div>
-      </div>
+      </div> */}
 
       {props.annotationLayer.children}
       {props.textLayer.children}

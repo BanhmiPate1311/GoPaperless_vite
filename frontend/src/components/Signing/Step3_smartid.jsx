@@ -115,7 +115,7 @@ export const Step3_smartid = forwardRef(
           flexGrow={1}
         >
           <PhoneInputField
-            label="Phone Number"
+            label=""
             name="phoneNumber"
             control={control}
             onChange={onchange}
@@ -128,7 +128,7 @@ export const Step3_smartid = forwardRef(
           flexGrow={1}
         >
           <InputField
-            label="Code"
+            label=""
             name="personalCode"
             control={control}
             InputLabelProps={{

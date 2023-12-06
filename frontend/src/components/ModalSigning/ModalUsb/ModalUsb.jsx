@@ -21,7 +21,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -105,6 +105,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   const formRef = useRef();
   const sdk = useRef(null);
   let lang = getLang();
+  const [errorApi, setErrorApi] = useState(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
   // const urlWithoutProtocol = "localhost:3000";
 
@@ -170,7 +171,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       timeOutInterval,
       lang,
       function (response) {
-        // console.log("response: ", response);
+        console.log("response: ", response);
         resolve(response);
         disconnectWSHTML();
       },
@@ -220,7 +221,10 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
     });
   };
 
-  const error = getCertificate?.error?.message || packFile?.error?.message;
+  useEffect(() => {
+    const error1 = getCertificate?.error?.message || packFile?.error?.message;
+    setErrorApi(error1);
+  }, [getCertificate?.error, packFile?.error]);
 
   return (
     <Dialog
@@ -359,7 +363,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
             />
           </Box>
           <Stack width={"100%"} mb={2}>
-            {error && <Alert severity="error">{error}</Alert>}
+            {errorApi && <Alert severity="error">{errorApi}</Alert>}
           </Stack>
         </DialogContentText>
       </DialogContent>

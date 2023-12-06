@@ -151,6 +151,7 @@ public class FpsService {
         requestData.put("page", data.getPage());
         requestData.put("dimension", data.getDimension());
         requestData.put("visible_enabled", data.getVisibleEnabled());
+        System.out.println("requestData: " + requestData);
 //        List<String> list = new ArrayList<>();
 //        list.add("ESEAL");
 //        requestData.put("level_of_assurance", list);

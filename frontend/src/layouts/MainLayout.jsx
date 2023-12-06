@@ -31,7 +31,7 @@ export const MainLayout = () => {
     // queryFn: ({signal}) => apiService.checkHeaderFooter(signing_token, signal),  dùng khi muốn cancel request
     // refetchOnWindowFocus: false, // không refetch lại khi chuyển tab, đã set default
     // keepPreviousData: true, // dùng khi phân trang nhằm cải thiện UX
-    // enabled: id !== undefined chỉ gọi api khi có giá trị id
+    enabled: signingToken !== undefined, //chỉ gọi api khi có giá trị id
   });
   // console.log("checkHeader: ", headerFooter?.data);
   return (

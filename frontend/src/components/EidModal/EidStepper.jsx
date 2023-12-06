@@ -19,6 +19,7 @@ import Step5 from "./Step5";
 import Step6 from "./Step6";
 import Step7 from "./Step7";
 import Step8 from "./Step8";
+import TestAuth from "./TestAuth";
 
 export const EidStepper = ({ onClose, workFlow, signatureData }) => {
   // console.log("workFlow: ", workFlow);
@@ -578,6 +579,7 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
   };
 
   const steps = [
+    // <TestAuth key="testAuth" />,
     <Step1 key="step1" isIdentifyRegistered={isIdentifyRegistered} />,
     <Step2 key="step2" onDisableSubmit={handleDisableSubmit} />,
     <Step3 key="step3" />,

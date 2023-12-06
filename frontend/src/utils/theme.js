@@ -40,7 +40,7 @@ export let theme = extendTheme({
         },
         // grey 200
         signingBackground: {
-          main: "#eeeeee",
+          main: "#E8EBF0",
         },
         //white
         signingWFBackground: {
@@ -51,7 +51,7 @@ export let theme = extendTheme({
           main: "#F3FBFF",
         },
         accordingBackGround: {
-          main: "#eee",
+          main: "#F3F5F8",
         },
         signerBackGround: {
           main: "#A6D1FF",

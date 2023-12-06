@@ -204,7 +204,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
           <Accordion
             expanded={expanded === "info"}
             onChange={handleChangeShow("info")}
-            // disableGutters
+            disableGutters
             elevation={0}
           >
             <AccordionSummary
@@ -301,7 +301,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
           <Accordion
             expanded={expanded === "certificated"}
             onChange={handleChangeShow("certificated")}
-            // disableGutters
+            disableGutters
             elevation={0}
           >
             <AccordionSummary

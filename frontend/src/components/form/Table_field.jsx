@@ -168,7 +168,7 @@ export const TableField = ({ data }) => {
                         <WaitingSig />
                       )}
                       <Typography variant="h6">
-                        {item.firstName} {item.lastName}
+                        {item.lastName} {item.firstName}
                       </Typography>
                     </Stack>
                   </TableCell>

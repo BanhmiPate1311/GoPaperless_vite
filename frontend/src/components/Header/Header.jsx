@@ -23,7 +23,7 @@ export const Header = ({ headerFooter }) => {
         top: 0,
         left: 0,
         width: "100%",
-
+        zIndex: 1,
         px: 5,
         background: check
           ? metaData.headerBackgroundColor

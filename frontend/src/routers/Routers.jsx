@@ -1,6 +1,5 @@
-import LemNhem from "@/components/LemNhem";
 import { MainLayout } from "@/layouts";
-import { Signing } from "@/pages";
+import { NotFound, Signing, Validation } from "@/pages";
 import { useRoutes } from "react-router-dom";
 
 const Routers = () => {
@@ -10,12 +9,16 @@ const Routers = () => {
       element: <MainLayout />,
       children: [
         {
-          path: "/sktT1",
-          element: <LemNhem />,
-        },
-        {
           path: "/view/signing/:signing_token",
           element: <Signing />,
+        },
+        {
+          path: "/view/validation/:upload_token/show",
+          element: <Validation />,
+        },
+        {
+          path: "/view/*",
+          element: <NotFound />,
         },
       ],
     },

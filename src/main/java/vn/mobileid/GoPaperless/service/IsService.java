@@ -118,6 +118,7 @@ public class IsService {
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
             String sSignature_id = data.getUsbCertId();
+            System.out.println("sSignature_id: " + sSignature_id);
             String signature = signatures.get(0);
 
             List<String> listCertChain = new ArrayList<>();

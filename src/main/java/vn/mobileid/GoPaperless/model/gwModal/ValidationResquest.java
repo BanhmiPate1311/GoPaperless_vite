@@ -1,4 +1,4 @@
-package vn.mobileid.GoPaperless.model.Electronic.request;
+package vn.mobileid.GoPaperless.model.gwModal;
 
 public class ValidationResquest {
     private String uploadToken;

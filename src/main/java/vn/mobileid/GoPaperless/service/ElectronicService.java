@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.PadesConstants;
 import vn.mobileid.GoPaperless.model.Electronic.request.CheckIdentityRequest;
 import vn.mobileid.GoPaperless.model.Electronic.request.FaceAndCreateRequest;
+import vn.mobileid.GoPaperless.model.Electronic.request.ProcessPerFormRequest;
 import vn.mobileid.GoPaperless.model.Electronic.request.UpdateSubjectRequest;
 import vn.mobileid.GoPaperless.model.Electronic.response.PerformResponse;
 import vn.mobileid.GoPaperless.model.Electronic.response.SubjectResponse;
@@ -376,6 +377,10 @@ public class ElectronicService {
         PerformResponse performResponse = processPerForm(faceAndCreateRequest.getLang(), faceAndCreateRequest.getCode(), faceAndCreateRequest.getType(), null, subject_id, process_id, sImageFace);
         performResponse.setSubject_id(subject_id);
         return performResponse;
+    }
+
+    public PerformResponse processOtp(ProcessPerFormRequest processPerFormRequest) throws Exception {
+        return processPerForm(processPerFormRequest.getLang(), null, null, processPerFormRequest.getOtp(), processPerFormRequest.getSubject_id(), processPerFormRequest.getProcess_id(), null);
     }
 
     public String updateSubject(UpdateSubjectRequest updateSubjectRequest) throws Exception {

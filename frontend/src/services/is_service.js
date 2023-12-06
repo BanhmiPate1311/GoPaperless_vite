@@ -25,6 +25,7 @@ export const isService = {
       fieldName: data.fieldName,
       hashList: data.hashList,
       usbCertChain: data.certChain.value,
+      usbCertId: data.certChain.id,
       signerId: data.signerId,
       signatures: data.signatures,
       documentId: data.documentId,

@@ -305,7 +305,7 @@ export const Step6 = ({
             height: 300,
           }}
         />
-        <canvas width={454} height={300} ref={canvasRef} />
+        <canvas className="step6" width={454} height={300} ref={canvasRef} />
         {/* <button
     onClick={() => {
       const image = captureFace(prediction.current);
