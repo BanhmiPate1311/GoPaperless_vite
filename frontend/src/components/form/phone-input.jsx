@@ -45,6 +45,9 @@ export const PhoneInputField = ({
         // onFocus={(phone, country) => {
         //   if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
         // }}
+        // disableDropdown
+        // disableCountryCode
+        // renderStringAsFlag={"vn"}
         inputStyle={{
           height: "40px",
           opacity: disabled ? "0.5" : "1",

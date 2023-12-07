@@ -304,6 +304,8 @@ public class RsspService {
         requestData.put("numSignatures", numSignatures);
         requestData.put("requestID", otpRequestID);
         requestData.put("authorizeCode", otp);
+        requestData.put("validityPeriod", 300);
+        requestData.put("operationMode", "S");
         requestData.put("lang", lang);
         requestData.put("profile", profile);
 
@@ -556,7 +558,10 @@ public class RsspService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("user", jwt.getDocument_number());
         requestData.put("userType", jwt.getDocument_type());
+        requestData.put("authorizeCode", "");
+        requestData.put("requestID", "");
         requestData.put("certificateProfile", "T2PSB21D");
+        requestData.put("signingProfileValue", 0);
         requestData.put("SCAL", 1);
         requestData.put("authMode", "EXPLICIT/OTP-SMS");
         requestData.put("multisign", 1);
