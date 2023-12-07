@@ -276,7 +276,7 @@ public class FpsService {
         requestData.put("signature_algorithm", "RSA");
         requestData.put("signed_hash", "SHA256");
         requestData.put("certificate_chain", data.getCertificateChain());
-        System.out.println("Request Data: " + requestData);
+        System.out.println("hashSignatureField Data: " + requestData);
 
 //        Gson gson = new Gson();
 //        System.out.println("Request Data: " + gson.toJson(requestData));
@@ -323,6 +323,8 @@ public class FpsService {
         requestData.put("hash_value", data.getHashValue());
         requestData.put("signature_value", data.getSignatureValue());
         requestData.put("certificate_chain", data.getCertificateChain());
+
+        System.out.println("signDocument Data: " + requestData);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 

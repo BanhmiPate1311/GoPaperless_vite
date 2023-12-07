@@ -169,7 +169,7 @@ export const ModalSigningImage2 = ({
   // };
 
   const handleTextSubmit = (data) => {
-    // console.log("data: ", data);
+    console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
       imageBase64: removeBase64Prefix(data),

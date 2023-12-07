@@ -6,6 +6,10 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
     private String otp;
     private String signerId;
     private String signingToken;
+    private String signingPurpose;
+    private String country;
+    private String countryRealtime;
+    private String imageBase64;
     private String fileName;
     private String signerToken;
     private String signingOption;
@@ -126,5 +130,37 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
 
     public void setDocumentId(int documentId) {
         this.documentId = documentId;
+    }
+
+    public String getSigningPurpose() {
+        return signingPurpose;
+    }
+
+    public void setSigningPurpose(String signingPurpose) {
+        this.signingPurpose = signingPurpose;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCountryRealtime() {
+        return countryRealtime;
+    }
+
+    public void setCountryRealtime(String countryRealtime) {
+        this.countryRealtime = countryRealtime;
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 }

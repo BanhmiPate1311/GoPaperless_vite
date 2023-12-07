@@ -93,7 +93,7 @@
     "step104": "Kinnitusprotsess võib võtta kuni 5 minutit.",
     "step105": "Saada OTP uuesti",
 
-    "step111": "Teie identiteet on kinnitatud.",
+    "step111": "Nõustuge teenusepakkuja teenusetingimustega",
     "step112": "Dokumendi allkirjastamiseks nõustuge meie sertifitseerimistingimustega.",
     "step113": "Olen lugenud",
     "step114": "Sertifitseerimistavade avaldus.",
@@ -101,18 +101,18 @@
     "step116": "videotuvastusprotsessi kohta.",
     "step117": "Valige kaugallkirjastamise teenusepakkuja",
 
-    "step11a1": "Sertifikaat on olemas",
-    "step11a2": "Lisa uus sertifikaat",
+    "step121": "Sertifikaat on olemas",
+    "step122": "Lisa uus sertifikaat",
 
-    "step121": "Olete valmis dokumendi allkirjastama.",
-    "step122": "Dokumendi kvalifitseeritud elektroonilise allkirjaga allkirjastamiseks kinnitage oma telefoninumber.",
+    "step131": "Olete valmis dokumendi allkirjastama.",
+    "step132": "Dokumendi kvalifitseeritud elektroonilise allkirjaga allkirjastamiseks kinnitage oma telefoninumber.",
 
-    "step131": "Sisestage kood, mis teie telefoni saadeti",
-    "step132": "Teie telefonile on saadetud kinnituskood:",
-    "step133": "Sisestage kood, mis teie telefoni saadeti",
-    "step134": "Kinnitusprotsess võib võtta kuni 5 minutit.",
-    "step135": "Saada OTP uuesti",
-    "step136": "OTP on kehtetu",
+    "step141": "Sisestage kood, mis teie telefoni saadeti",
+    "step142": "Teie telefonile on saadetud kinnituskood:",
+    "step143": "Sisestage kood, mis teie telefoni saadeti",
+    "step144": "Kinnitusprotsess võib võtta kuni 5 minutit.",
+    "step145": "Saada OTP uuesti",
+    "step146": "OTP on kehtetu",
 
     "eid not found": "EID-lugejat ei leitud",
     "camera not found": "Viga kaamerale juurdepääsul",

@@ -94,7 +94,7 @@
     "step104": "Verification process might take up to 5 minitues.",
     "step105": "Resend OTP",
 
-    "step111": "Your identity has been verified.",
+    "step111": "Please accept provider’s terms of service",
     "step112": "Please accept our certification terms to sign the document.",
     "step113": "I have read the",
     "step114": "Certification Practices Statement.",
@@ -102,18 +102,18 @@
     "step116": "on the Video Identification Process.",
     "step117": "Select Remote Signing Service Provider",
 
-    "step11a1": "The certificate exists",
-    "step11a2": "Add new certificate",
+    "step121": "The certificate exists",
+    "step122": "Add new certificate",
 
-    "step121": "You are ready to sign the document.",
-    "step122": "Confirm your phone number in order to sign the document with a Qualified Electronic Signature.",
+    "step131": "You are ready to sign the document.",
+    "step132": "Confirm your phone number in order to sign the document with a Qualified Electronic Signature.",
 
-    "step131": "Enter the code that was sent to your phone.",
-    "step132": "A verification code has been sent to your phone:",
-    "step133": "Enter The Code That Was Sent To Your Phone",
-    "step134": "Verification process might take up to 5 minitues.",
-    "step135": "Resend OTP",
-    "step136": "OTP invalid",
+    "step141": "Enter the code that was sent to your phone.",
+    "step142": "A verification code has been sent to your phone:",
+    "step143": "Enter The Code That Was Sent To Your Phone",
+    "step144": "Verification process might take up to 5 minitues.",
+    "step145": "Resend OTP",
+    "step146": "OTP invalid",
 
     "eid not found": "EID Reader Notfound",
     "camera not found": "Error accessing camera",

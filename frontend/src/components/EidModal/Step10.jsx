@@ -1,12 +1,11 @@
-import Box from "@mui/material/Box";
+import { Box, Typography } from "@mui/material";
 import CircularProgress, {
   circularProgressClasses,
 } from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import OtpInput from "react-otp-input";
+import OTPInput from "react-otp-input";
 
 function CircularProgressWithLabel(props) {
   const formatTime = (seconds) => {
@@ -84,12 +83,13 @@ CircularProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const Step8 = ({
+const Step10 = ({
   setOtp,
   onDisableSubmit,
   processOTPResend,
   setErrorPG,
   perFormProcess,
+  isFetching,
 }) => {
   const { t } = useTranslation();
   const [progress, setProgress] = useState(100);
@@ -153,38 +153,32 @@ export const Step8 = ({
       }, 180000);
     }
   };
+
   return (
     <Box>
       <Typography variant="h6" sx={{ fontWeight: 700, color: "textBold.main" }}>
-        {/* Enter The Code That Was Sent To Your Phone */}
-        {t("electronic.step81")}
-      </Typography>
-      <Typography
-        fontSize="15px"
-        my={3}
-        textAlign="center"
-        color="signingtextBlue.main"
-      >
-        {/* Enter The Code That Was Sent To Your Phone */}
-        {t("electronic.step81")}
+        {/* Enter your phone number to receive a verification code. */}
+        {t("electronic.step101")}
       </Typography>
       {/* <Typography
+        variant="h6"
+        textAlign={"center"}
+        mt={2}
+        sx={{ color: "signingtextBlue.main" }}
+      >
+       
+        {t("electronic.step102")}
+      </Typography> */}
+      <Typography
         color="#1976D2"
         marginTop="26px"
         marginBottom="10px"
         textAlign="center"
       >
-        {t("electronic.step83")}
-      </Typography> */}
-      {/* <Box className="container">
-        <AuthCode
-          ref={AuthInputRef}
-          containerClassName="phoneContainer"
-          inputClassName="phoneinputverified"
-          onChange={handleOnChange}
-        />
-      </Box> */}
-      <OtpInput
+        {/* Enter The Code That Was Sent To Your Phone */}
+        {t("electronic.step103")}
+      </Typography>
+      <OTPInput
         value={otp1}
         onChange={handleOnChange}
         numInputs={6}
@@ -193,14 +187,14 @@ export const Step8 = ({
         inputStyle="inputStyle"
         containerStyle="containerStyle"
         inputType="tel"
-        // disabled={}
+        disabled={isFetching}
       />
-      <Box textAlign="center" mt={3}>
+      <Box textAlign="center" marginTop="50px">
         <CircularProgressWithLabel size={100} value={progress} />
       </Box>
-      <Typography fontSize="14px" textAlign="center" mt={3}>
+      <Typography fontSize="14px" textAlign="center" marginTop="30px">
         {/* Verification process might take up to 5 minitues. */}
-        {t("electronic.step84")}
+        {t("electronic.step104")}
       </Typography>
       <Box
         textAlign="center"
@@ -214,19 +208,20 @@ export const Step8 = ({
         // className="buttontet"
         disabled={!enResend}
       >
-        {t("electronic.step85")}
+        {t("electronic.step105")}
       </Box>
     </Box>
   );
 };
 
-Step8.propTypes = {
-  otp: PropTypes.string,
+Step10.propTypes = {
   setOtp: PropTypes.func,
   onDisableSubmit: PropTypes.func,
   processOTPResend: PropTypes.func,
+  handleCloseModal1: PropTypes.func,
   setErrorPG: PropTypes.func,
   perFormProcess: PropTypes.func,
+  isFetching: PropTypes.bool,
 };
 
-export default Step8;
+export default Step10;

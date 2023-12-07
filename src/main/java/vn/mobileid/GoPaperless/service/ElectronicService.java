@@ -1,23 +1,32 @@
 package vn.mobileid.GoPaperless.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
+import com.nimbusds.jwt.JWTParser;
+import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.mobileid.GoPaperless.model.Electronic.datatypes.JwtModel;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.PadesConstants;
-import vn.mobileid.GoPaperless.model.Electronic.request.CheckIdentityRequest;
-import vn.mobileid.GoPaperless.model.Electronic.request.FaceAndCreateRequest;
-import vn.mobileid.GoPaperless.model.Electronic.request.ProcessPerFormRequest;
-import vn.mobileid.GoPaperless.model.Electronic.request.UpdateSubjectRequest;
+import vn.mobileid.GoPaperless.model.Electronic.request.*;
 import vn.mobileid.GoPaperless.model.Electronic.response.PerformResponse;
 import vn.mobileid.GoPaperless.model.Electronic.response.SubjectResponse;
 import vn.mobileid.GoPaperless.model.Electronic.response.TokenResponse;
 import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
+import vn.mobileid.GoPaperless.model.apiModel.Participants;
+import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
+import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
+import vn.mobileid.GoPaperless.model.fpsModel.HashFileRequest;
+import vn.mobileid.GoPaperless.model.rsspModel.*;
 import vn.mobileid.GoPaperless.process.AWSCall;
 import vn.mobileid.GoPaperless.process.HttpUtilsAWS;
+import vn.mobileid.GoPaperless.process.ProcessDb;
+import vn.mobileid.GoPaperless.utils.CommonFunction;
 import vn.mobileid.GoPaperless.utils.Difinitions;
 import vn.mobileid.GoPaperless.utils.LoadParamSystem;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -29,9 +38,22 @@ public class ElectronicService {
     final private int timeOut = 5000;
     final private String contentType = "application/json";
     private String accessToken;
+    private final FpsService fpsService;
+    private final PostBack postBack;
+
+    private final ProcessDb connect;
 
     @Autowired
     private AWSCall aWSCall;
+
+    private final RsspService rsspService;
+
+    public ElectronicService(FpsService fpsService, PostBack postBack, ProcessDb connect, RsspService rsspService) {
+        this.fpsService = fpsService;
+        this.postBack = postBack;
+        this.connect = connect;
+        this.rsspService = rsspService;
+    }
 
     public String checkPersonalCode(String lang, String code, String type, String connectorName) throws IOException {
         String sPropertiesFMS = "";
@@ -396,5 +418,277 @@ public class ElectronicService {
             purpose = "AMEND";
         }
         return createProcess(updateSubjectRequest.getLang(), updateSubjectRequest.getPhoneNumber(), updateSubjectRequest.getEmail(), updateSubjectRequest.getSubject_id(), updateSubjectRequest.getJwt(), process_type, purpose);
+    }
+
+    public String processOTPResend(ProcessPerFormRequest processPerFormRequest) throws Exception {
+//        String response = electronicRepository.processOTPResend(processPerFormRequest.getLang(), processPerFormRequest.getJwt(), processPerFormRequest.getSubject_id(), processPerFormRequest.getProcess_id());
+        String subject_id = processPerFormRequest.getSubject_id();
+        String process_id = processPerFormRequest.getProcess_id();
+        String lang = processPerFormRequest.getLang();
+        String jwt = processPerFormRequest.getJwt();
+
+        String bearerToken = "Bearer " + accessToken;
+        Map<String, Object> request = new HashMap<>();
+        Map<String, Object> claim_sources = new HashMap<>();
+
+        request.put("subject_id", subject_id);
+        request.put("process_id", process_id);
+        request.put("lang", lang);
+        if (jwt != null) {
+            claim_sources.put("JWT", jwt);
+            request.put("claim_sources", claim_sources);
+        }
+
+        String bodyRequest = gson.toJson(request);
+
+        String otpResendUrl = PadesConstants.BASE_URL + "/v2/e-identity/process/otp/resend ";
+        System.out.println("otpResendUrl: " + otpResendUrl);
+
+        aWSCall = new AWSCall(
+                otpResendUrl,
+                "PUT",
+                PadesConstants.ACCESSKEY,
+                PadesConstants.SECRETKEY,
+                PadesConstants.REGIONNAME,
+                PadesConstants.SERVICENAME,
+                5000,
+                PadesConstants.XAPIKEY,
+                contentType,
+                null);
+        String response = HttpUtilsAWS.invokeHttpRequest(
+                new URL(otpResendUrl),
+                "PUT",
+                this.timeOut,
+                aWSCall.getAWSV4AuthForFormData(bodyRequest, bearerToken, null),
+                bodyRequest);
+        System.out.println("SubjectResponse: " + response);
+
+        JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
+        String message = jsonObject.get("message").getAsString();
+        System.out.println("processId: " + message);
+
+        return message;
+    }
+
+
+
+    public List<CertResponse> checkCertificate(CheckCertificateRequest checkCertificateRequest) throws Exception {
+        SignedJWT jwt1 = (SignedJWT) JWTParser.parse(checkCertificateRequest.getJwt());
+
+        JwtModel jwtModel = gson.fromJson(jwt1.getPayload().toString(), JwtModel.class);
+
+        if (jwtModel.getDocument_type().equals("CITIZENCARD")) {
+            jwtModel.setDocument_type("CITIZEN-IDENTITY-CARD");
+        }
+//        String mobile = jwtModel.getPhone_number().replace("84", "0");
+//        jwtModel.setPhone_number(mobile);
+
+//        session = rsspService.handShake(lang, connectorNameRSSP, enterpriseId, workFlowId);
+//        if (session == null) {
+//            session = rsspService.handShake(checkCertificateRequest.getLang(), checkCertificateRequest.getConnectorNameRSSP(), checkCertificateRequest.getEnterpriseId(), checkCertificateRequest.getWorkFlowId());
+////            commonRepository.connectorLog(connectorLogRequest);
+//        }
+//        session = rsspService.handShake(checkCertificateRequest.getLang(), checkCertificateRequest.getConnectorNameRSSP(), checkCertificateRequest.getEnterpriseId(), checkCertificateRequest.getWorkFlowId());
+
+        rsspService.getProperty(checkCertificateRequest);
+
+        rsspService.login();
+        rsspService.ownerCreate(jwtModel, checkCertificateRequest.getLang());
+        try {
+            CredentialList credentialList = rsspService.credentialsList(checkCertificateRequest.getLang(), jwtModel.getDocument_type() + ":" + jwtModel.getDocument_number());
+            CredentialInfo credentialinFo = null;
+
+            List<CertResponse> listCertificate = new ArrayList<>();
+            if (credentialList.getCerts().size() > 0) {
+                for (CredentialItem credential : credentialList.getCerts()) {
+                    String credentialID = credential.getCredentialID();
+                    credentialinFo = rsspService.getCredentialinFo(checkCertificateRequest.getLang(), credentialID);
+                    if (credentialinFo != null) {
+                        String authMode = credentialinFo.getAuthMode();
+                        String status = credentialinFo.getCert().getStatus();
+//                    System.out.println("authMode ne: " + authMode);
+//                    System.out.println("status ne: " + status);
+                        if ("EXPLICIT_OTP_SMS".equals(authMode) && "OPERATED".equals(status)) {
+                            int lastIndex = credentialinFo.getCert().getCertificates().size() - 1;
+                            String certChain = credentialinFo.getCert().getCertificates().get(lastIndex);
+
+                            Object[] info1 = new Object[3];
+                            String[] time = new String[2];
+                            int[] intRes = new int[1];
+
+                            CommonFunction.VoidCertificateComponents(certChain, info1, time, intRes);
+                            if (intRes[0] == 0) {
+                                CertResponse certResponse = new CertResponse();
+                                certResponse.setSubject(CommonFunction.getCommonnameInDN(info1[0].toString()));
+                                certResponse.setIssuer(CommonFunction.getCommonnameInDN(info1[1].toString()));
+                                certResponse.setValidFrom(time[0]);
+                                certResponse.setValidTo(time[1]);
+                                certResponse.setCert(certChain);
+                                certResponse.setCredentialID(credentialID);
+//                        certResponse.setCodeNumber(codeNumber);
+
+                                listCertificate.add(certResponse);
+                            }
+                        }
+                    }
+                }
+            }
+            return listCertificate;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public CertResponse createCertificate(CheckCertificateRequest checkCertificateRequest) throws Throwable {
+
+        SignedJWT jwt1 = (SignedJWT) JWTParser.parse(checkCertificateRequest.getJwt());
+        Gson gson = new Gson();
+        JwtModel jwtModel = gson.fromJson(jwt1.getPayload().toString(), JwtModel.class);
+        System.out.println("type: " + jwtModel.getDocument_type());
+        if (jwtModel.getDocument_type().equals("CITIZENCARD")) {
+            jwtModel.setDocument_type("CITIZEN-IDENTITY-CARD");
+        }
+
+        String credentialID = rsspService.credentialsIssue( jwtModel, checkCertificateRequest.getLang());
+        System.out.println("credentialID: " + credentialID);
+
+        CredentialInfo credentialinFo = rsspService.getCredentialinFo(checkCertificateRequest.getLang(), credentialID);
+        if (credentialinFo != null) {
+            int lastIndex = credentialinFo.getCert().getCertificates().size() - 1;
+            String certChain = credentialinFo.getCert().getCertificates().get(lastIndex);
+
+            Object[] info1 = new Object[3];
+            String[] time = new String[2];
+            int[] intRes = new int[1];
+
+            CommonFunction.VoidCertificateComponents(certChain, info1, time, intRes);
+            if (intRes[0] == 0) {
+                CertResponse certResponse = new CertResponse();
+                certResponse.setSubject(CommonFunction.getCommonnameInDN(info1[0].toString()));
+                certResponse.setIssuer(CommonFunction.getCommonnameInDN(info1[1].toString()));
+                certResponse.setValidFrom(time[0]);
+                certResponse.setValidTo(time[1]);
+                certResponse.setCert(certChain);
+                certResponse.setCredentialID(credentialID);
+//                        certResponse.setCodeNumber(codeNumber);
+                return certResponse;
+            }
+        }
+        return null;
+    }
+
+    public String credentialOTP(CheckCertificateRequest checkCertificateRequest) throws Throwable {
+        return rsspService.sendOTP(checkCertificateRequest.getLang(), checkCertificateRequest.getCredentialID());
+    }
+
+    public String authorizeOTPFps(AuthorizeOTPRequest authorizeOTPRequest, HttpServletRequest request) throws Throwable {
+        String field_name = authorizeOTPRequest.getFieldName();
+        System.out.println("field_name: " + field_name);
+        String connectorName = authorizeOTPRequest.getConnectorName();
+        int enterpriseId = authorizeOTPRequest.getEnterpriseId();
+        int workFlowId = authorizeOTPRequest.getWorkFlowId();
+        String signingToken = authorizeOTPRequest.getSigningToken();
+        String signerToken = authorizeOTPRequest.getSignerToken();
+        String lang = authorizeOTPRequest.getLang();
+        String codeNumber = authorizeOTPRequest.getCodeNumber();
+        String credentialID = authorizeOTPRequest.getCredentialID();
+        String signingOption = authorizeOTPRequest.getSigningOption();
+        String signerId = authorizeOTPRequest.getSignerId();
+        String certChain = authorizeOTPRequest.getCertChain();
+        String fileName = authorizeOTPRequest.getFileName();
+        int lastFileId = authorizeOTPRequest.getLastFileId();
+        int documentId = authorizeOTPRequest.getDocumentId();
+        String signingPurpose = authorizeOTPRequest.getSigningPurpose();
+        String country = !Objects.equals(authorizeOTPRequest.getCountry(), "") ? authorizeOTPRequest.getCountry() : authorizeOTPRequest.getCountryRealtime();
+        String imageBase64 = authorizeOTPRequest.getImageBase64();
+        String otpRequestID = authorizeOTPRequest.getRequestID();
+        String otp = authorizeOTPRequest.getOtp();
+
+        try {
+            boolean error = false;
+            WorkFlowList rsWFList = new WorkFlowList();
+            connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
+            String sResult = "0";
+
+            if (rsWFList == null || rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
+//                error = true;
+                sResult = "Signer Status invalid";// trạng thái không hợp lệ
+                return sResult;
+//                throw new Exception(sResult);
+            }
+
+            // check workflow participant
+            Participants rsParticipant = new Participants();
+            connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(rsParticipant, signerToken);
+            if (rsParticipant == null || rsParticipant.getSignerStatus() != Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_PENDING) {
+                return sResult = "The document has already been signed";
+            }
+
+            String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
+
+            List<String> listCertChain = new ArrayList<>();
+            listCertChain.add(certChain);
+
+            HashFileRequest hashFileRequest = new HashFileRequest();
+
+            hashFileRequest.setCertificateChain(listCertChain);
+            hashFileRequest.setSigningReason(signingPurpose);
+            hashFileRequest.setSignatureAlgorithm("RSA");
+            hashFileRequest.setSignedHash("SHA256");
+            hashFileRequest.setSigningLocation(country);
+            hashFileRequest.setFieldName(field_name);
+            hashFileRequest.setHandSignatureImage(imageBase64);
+
+            String hashList = fpsService.hashSignatureField(documentId, hashFileRequest);
+
+            HashAlgorithmOID hashAlgo = HashAlgorithmOID.SHA_256;
+            DocumentDigests doc = new DocumentDigests();
+            doc.hashAlgorithmOID = "2.16.840.1.101.3.4.2.1";
+            doc.hashes = new ArrayList<>();
+            doc.hashes.add(CommonFunction.base64Decode(hashList));
+
+            String sad = rsspService.authorizeOtp(lang, credentialID, 1,otpRequestID, otp);
+
+            String signAlgo = "1.2.840.113549.1.1.1";
+            List<byte[]> signatures = rsspService.signHash(lang, credentialID, doc, signAlgo, sad);
+            String signature = Base64.getEncoder().encodeToString(signatures.get(0));
+            System.out.println("kiem tra signature: " + signature);
+
+            FpsSignRequest fpsSignRequest = new FpsSignRequest();
+            fpsSignRequest.setFieldName(field_name);
+            fpsSignRequest.setHashValue(hashList);
+            fpsSignRequest.setSignatureValue(signature);
+
+
+            fpsSignRequest.setCertificateChain(listCertChain);
+
+            System.out.println("dong goi signature: ");
+
+            String responseSign = fpsService.signDocument(documentId, fpsSignRequest);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode signNode = objectMapper.readTree(responseSign);
+            String uuid = signNode.get("uuid").asText();
+            int fileSize = signNode.get("file_size").asInt();
+            String digest = signNode.get("digest").asText();
+            String signedHash = signNode.get("signed_hash").asText();
+            String signedTime = signNode.get("signed_time").asText();
+            String sSignature_id = signNode.get("signature_name").asText();
+
+
+            int isSetPosition = 1;
+            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            return responseSign;
+
+        } catch (Exception e) {
+//            if (field_name == null || field_name.isEmpty()) {
+//                fpsService.deleteSignatue(documentId, signerId);
+//            }
+
+
+            throw new Exception(e.getMessage());
+        }
+
+//        return sad;
     }
 }

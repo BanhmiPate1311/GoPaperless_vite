@@ -29,12 +29,17 @@ export const Step7 = ({ onDisableSubmit, phoneNumberRef }) => {
     onDisableSubmit(true);
   }, []);
   return (
-    <Box color="#26293F">
+    <Box>
       <Typography variant="h6" sx={{ fontWeight: 700, color: "textBold.main" }}>
         {/* Enter your phone number to receive a verification code. */}
         {t("electronic.step71")}
       </Typography>
-      <Typography variant="h6" textAlign={"center"} mt={2}>
+      <Typography
+        variant="h6"
+        textAlign={"center"}
+        mt={2}
+        sx={{ color: "signingtextBlue.main" }}
+      >
         {/* Phone Verification */}
         {t("electronic.step73")}
       </Typography>

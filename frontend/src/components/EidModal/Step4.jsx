@@ -34,7 +34,7 @@ export const Step4 = ({ image, personalInfomation }) => {
       </Box>
 
       <Box sx={{ flexGrow: 1 }} mt={1}>
-        <Grid container spacing={1.5}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               size="small"
@@ -48,8 +48,8 @@ export const Step4 = ({ image, personalInfomation }) => {
               //   },
               // }}
               inputProps={{
+                readOnly: true,
                 sx: {
-                  readOnly: true,
                   backgroundColor: "signingWFBackground.main",
                 },
               }}
@@ -68,8 +68,8 @@ export const Step4 = ({ image, personalInfomation }) => {
               //   },
               // }}
               inputProps={{
+                readOnly: true,
                 sx: {
-                  readOnly: true,
                   backgroundColor: "signingWFBackground.main",
                 },
               }}
@@ -88,8 +88,8 @@ export const Step4 = ({ image, personalInfomation }) => {
               //   },
               // }}
               inputProps={{
+                readOnly: true,
                 sx: {
-                  readOnly: true,
                   backgroundColor: "signingWFBackground.main",
                 },
               }}
@@ -108,8 +108,8 @@ export const Step4 = ({ image, personalInfomation }) => {
               //   },
               // }}
               inputProps={{
+                readOnly: true,
                 sx: {
-                  readOnly: true,
                   backgroundColor: "signingWFBackground.main",
                 },
               }}
@@ -128,8 +128,8 @@ export const Step4 = ({ image, personalInfomation }) => {
               //   },
               // }}
               inputProps={{
+                readOnly: true,
                 sx: {
-                  readOnly: true,
                   backgroundColor: "signingWFBackground.main",
                 },
               }}
@@ -148,8 +148,8 @@ export const Step4 = ({ image, personalInfomation }) => {
               //   },
               // }}
               inputProps={{
+                readOnly: true,
                 sx: {
-                  readOnly: true,
                   backgroundColor: "signingWFBackground.main",
                 },
               }}

@@ -111,6 +111,7 @@
             <version>1.50</version>
         </dependency>
 
+<!--        parse header to set mobile template-->
         <dependency>
             <groupId>com.github.ua-parser</groupId>
             <artifactId>uap-java</artifactId>
@@ -142,6 +143,7 @@
             <!--<systemPath>E:\PPL_V2\paperless-main-sign\lib\MobileID-FMS-Client-2019.08.23-rv116.jar</systemPath>-->
         </dependency>
 
+<!--        parse dg infor ò citizen card -->
         <dependency>
             <groupId>jmrtd-0.7.18</groupId>
             <artifactId>jmrtd-0.7.18</artifactId>
@@ -151,6 +153,13 @@
             <groupId>scuba-smartcards-0.0.19</groupId>
             <artifactId>scuba-smartcards-0.0.19</artifactId>
             <version>0.0.19</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>9.31</version>
         </dependency>
     </dependencies>
 

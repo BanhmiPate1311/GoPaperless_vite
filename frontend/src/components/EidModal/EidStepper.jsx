@@ -20,9 +20,14 @@ import Step6 from "./Step6";
 import Step7 from "./Step7";
 import Step8 from "./Step8";
 import TestAuth from "./TestAuth";
+import Step9 from "./Step9";
+import Step10 from "./Step10";
+import Step11 from "./Step11";
+import { useConnectorList } from "@/hook";
+import Step12 from "./Step12";
 
 export const EidStepper = ({ onClose, workFlow, signatureData }) => {
-  // console.log("workFlow: ", workFlow);
+  console.log("workFlow: ", workFlow);
   //   console.log("signatureData: ", signatureData);
   const { t } = useTranslation();
   const [errorPG, setErrorPG] = useState(null);
@@ -54,12 +59,17 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
   const [skipped, setSkipped] = useState(new Set());
 
   let lang = getLang();
+  const connectorName = "MOBILE_ID_IDENTITY";
 
   const signerId = getSigner(workFlow)?.signerId;
 
   const [subject, setSubject] = useState("");
 
   const [isIdentifyRegistered, setIsIdentifyRegistered] = useState(false);
+
+  const providerName = ["SMART_ID_SIGNING"];
+  const connectorList = useConnectorList(providerName);
+  console.log("connectorList: ", connectorList.data);
 
   useEffect(() => {
     checkIdentity();
@@ -413,71 +423,71 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
     }
   };
 
-  const credentialOTP = async () => {
-    setIsFetching(true);
-    const data = {
-      lang: lang,
-      credentialID: certificate.credentialID,
-      connectorName: connectorName,
-      enterpriseId: workFlow.enterpriseId,
-      workFlowId: workFlow.workFlowId,
-    };
-    try {
-      // const response = await api.post("/elec/credentialOTP", data);
-      const response = await electronicService.credentialOTP(data);
-      setRequestID(response.data);
-      setIsFetching(false);
-      if (activeStep === 12) {
-        handleNext();
-      }
-    } catch (error) {
-      setIsFetching(false);
-      console.log("error", error);
-    }
-  };
+  // const credentialOTP = async () => {
+  //   setIsFetching(true);
+  //   const data = {
+  //     lang: lang,
+  //     credentialID: certificate.credentialID,
+  //     connectorName: connectorName,
+  //     enterpriseId: workFlow.enterpriseId,
+  //     workFlowId: workFlow.workFlowId,
+  //   };
+  //   try {
+  //     // const response = await api.post("/elec/credentialOTP", data);
+  //     const response = await electronicService.credentialOTP(data);
+  //     setRequestID(response.data);
+  //     setIsFetching(false);
+  //     if (activeStep === 12) {
+  //       handleNext();
+  //     }
+  //   } catch (error) {
+  //     setIsFetching(false);
+  //     console.log("error", error);
+  //   }
+  // };
 
-  const authorizeOTP = async (otp) => {
-    dispatch(apiControllerManagerActions.clearsetMessageSuccess());
-    console.log("authorizeOTP");
-    setIsFetching(true);
-    setErrorPG(null);
-    const data = {
-      lang: lang,
-      credentialID: certificate.credentialID,
-      requestID: requestID,
-      otp: otp,
-      signerId: signerId,
-      signingToken: workFlow.signingToken,
-      fileName: workFlow.fileName,
-      signerToken: workFlow.signerToken,
-      connectorName: connectorName,
-      signingOption: "electronic_id",
-      codeNumber: code,
-      type: type,
-      certChain: certificate.cert,
-      enterpriseId: workFlow.enterpriseId,
-      workFlowId: workFlow.workFlowId,
-      fieldName: signature ? signature.field_name : "",
-      lastFileId: workFlow.lastFileId,
-      documentId: workFlow.documentId,
-    };
-    try {
-      // const response = await api.post("/elec/authorizeOTP", data);
-      const response = await electronicService.authorizeOTP(data);
-      // setRequestID(response.data);
-      // handleNext();
-      window.parent.postMessage(
-        { data: response.data, status: "Success" },
-        "*"
-      );
-      dispatch(apiControllerManagerActions.setMessageSuccess());
-      // handleCloseModal1();
-    } catch (error) {
-      console.log("error", error);
-      setIsFetching(false);
-      setErrorPG(error.response.data.message);
-    }
-  };
+  // const authorizeOTP = async (otp) => {
+  //   // dispatch(apiControllerManagerActions.clearsetMessageSuccess());
+  //   console.log("authorizeOTP");
+  //   setIsFetching(true);
+  //   setErrorPG(null);
+  //   const data = {
+  //     lang: lang,
+  //     credentialID: certificate.credentialID,
+  //     requestID: requestID,
+  //     otp: otp,
+  //     signerId: signerId,
+  //     signingToken: workFlow.signingToken,
+  //     fileName: workFlow.fileName,
+  //     signerToken: workFlow.signerToken,
+  //     connectorName: connectorName,
+  //     signingOption: "electronic_id",
+  //     codeNumber: code,
+  //     type: type,
+  //     certChain: certificate.cert,
+  //     enterpriseId: workFlow.enterpriseId,
+  //     workFlowId: workFlow.workFlowId,
+  //     fieldName: signature ? signature.field_name : "",
+  //     lastFileId: workFlow.lastFileId,
+  //     documentId: workFlow.documentId,
+  //   };
+  //   try {
+  //     // const response = await api.post("/elec/authorizeOTP", data);
+  //     const response = await electronicService.authorizeOTP(data);
+  //     // setRequestID(response.data);
+  //     // handleNext();
+  //     window.parent.postMessage(
+  //       { data: response.data, status: "Success" },
+  //       "*"
+  //     );
+  //     // dispatch(apiControllerManagerActions.setMessageSuccess());
+  //     // handleCloseModal1();
+  //   } catch (error) {
+  //     console.log("error", error);
+  //     setIsFetching(false);
+  //     setErrorPG(error.response.data.message);
+  //   }
+  // };
 
   const isStepOptional = (step) => {
     return step === 15;
@@ -548,24 +558,24 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
       case 7:
         perFormProcess(otp);
         break;
-      // case 8:
-      //   updateSubject();
-      //   break;
-      // case 9:
-      //   perFormProcess(otp);
-      //   break;
-      // case 10:
-      //   checkCertificate();
-      //   // createCertificate();
-      //   break;
-      // case 11:
-      //   if (certificate) {
-      //     handleNext();
-      //   } else {
-      //     createCertificate();
-      //   }
-      //   // checkCertificate();
-      //   break;
+      case 8:
+        updateSubject();
+        break;
+      case 9:
+        perFormProcess(otp);
+        break;
+      case 10:
+        checkCertificate();
+        // createCertificate();
+        break;
+      case 11:
+        if (certificate) {
+          handleNext();
+        } else {
+          // createCertificate();
+        }
+        // checkCertificate();
+        break;
       // case 12:
       //   credentialOTP();
       //   break;
@@ -608,29 +618,34 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
       setErrorPG={setErrorPG}
       perFormProcess={perFormProcess}
     />,
-    // <Step9
-    //   onDisableSubmit={handleDisableSubmit}
-    //   emailRef={emailRef}
-    //   setErrorPG={setErrorPG}
-    // />,
-    // <Step10
-    //   isFetching={isFetching}
-    //   setOtp={setOtp}
-    //   onDisableSubmit={handleDisableSubmit}
-    //   processOTPResend={processOTPResend}
-    //   handleCloseModal1={onClose}
-    //   setErrorPG={setErrorPG}
-    //   perFormProcess={perFormProcess}
-    // />,
-    // <Step11
-    //   onDisableSubmit={handleDisableSubmit}
-    //   providerSelected={providerSelected}
-    //   isFetching={isFetching}
-    // />,
-    // <Step11a
-    //   certificateList={certificateList}
-    //   setCertificate={setCertificate}
-    // />,
+    <Step9
+      key={"step9"}
+      onDisableSubmit={handleDisableSubmit}
+      emailRef={emailRef}
+      setErrorPG={setErrorPG}
+    />,
+    <Step10
+      key={"step10"}
+      isFetching={isFetching}
+      setOtp={setOtp}
+      onDisableSubmit={handleDisableSubmit}
+      processOTPResend={processOTPResend}
+      handleCloseModal1={onClose}
+      setErrorPG={setErrorPG}
+      perFormProcess={perFormProcess}
+    />,
+    <Step11
+      key={"step11"}
+      onDisableSubmit={handleDisableSubmit}
+      providerSelected={providerSelected}
+      isFetching={isFetching}
+      connectorList={connectorList?.data.SMART_ID_SIGNING}
+    />,
+    <Step12
+      key={"step12"}
+      certificateList={certificateList}
+      setCertificate={setCertificate}
+    />,
     // <Step12 phoneNumberRef={phoneNumberRef} />,
     // <Step13
     //   setOtp={setOtp}

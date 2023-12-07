@@ -93,7 +93,7 @@
     "step104": "Quá trình xác minh có thể mất tới 5 phút.",
     "step105": "Gửi lại OTP",
 
-    "step111": "Danh tính của bạn đã được xác minh.",
+    "step111": "Vui lòng chấp nhận điều khoản dịch vụ của nhà cung cấp",
     "step112": "Hãy chấp nhận các điều khoản chứng nhận của chúng tôi để ký vào tài liệu.",
     "step113": "Tôi đã đọc",
     "step114": "Chính sách bảo mật.",
@@ -101,18 +101,18 @@
     "step116": "trong Quy trình nhận dạng video.",
     "step117": "Chọn nhà cung cấp dịch vụ ký từ xa",
 
-    "step11a1": "Chứng thư số tồn tại",
-    "step11a2": "Thêm mới chứng thư số",
+    "step121": "Chứng thư số tồn tại",
+    "step122": "Thêm mới chứng thư số",
 
-    "step121": "Bạn đã sẵn sàng ký vào tài liệu.",
-    "step122": "Xác nhận số điện thoại của bạn để ký tài liệu bằng Chữ ký điện tử hợp lệ.",
+    "step131": "Bạn đã sẵn sàng ký vào tài liệu.",
+    "step132": "Xác nhận số điện thoại của bạn để ký tài liệu bằng Chữ ký điện tử hợp lệ.",
 
-    "step131": "Nhập mã được gửi đến điện thoại của bạn",
-    "step132": "Mã xác thực đã được gửi đến điện thoại của bạn:",
-    "step133": "Nhập mã được gửi đến điện thoại của bạn",
-    "step134": "Quá trình xác minh có thể mất tới 5 phút.",
-    "step135": "Gửi lại OTP",
-    "step136": "OTP không hợp lệ",
+    "step141": "Nhập mã được gửi đến điện thoại của bạn",
+    "step142": "Mã xác thực đã được gửi đến điện thoại của bạn:",
+    "step143": "Nhập mã được gửi đến điện thoại của bạn",
+    "step144": "Quá trình xác minh có thể mất tới 5 phút.",
+    "step145": "Gửi lại OTP",
+    "step146": "OTP không hợp lệ",
 
     "eid not found": "Trình đọc EID không tìm thấy",
     "camera not found": "Lỗi khi truy cập máy ảnh",

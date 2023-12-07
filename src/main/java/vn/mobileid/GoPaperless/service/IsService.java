@@ -117,8 +117,8 @@ public class IsService {
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
-            String sSignature_id = data.getUsbCertId();
-            System.out.println("sSignature_id: " + sSignature_id);
+//            String sSignature_id = data.getUsbCertId();
+//            System.out.println("sSignature_id: " + sSignature_id);
             String signature = signatures.get(0);
 
             List<String> listCertChain = new ArrayList<>();
@@ -139,6 +139,7 @@ public class IsService {
             String digest = signNode.get("digest").asText();
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
+            String sSignature_id = signNode.get("signature_name").asText();
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary

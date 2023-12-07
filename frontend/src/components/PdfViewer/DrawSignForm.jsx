@@ -135,6 +135,7 @@ export const DrawSignForm = forwardRef(
           </Button>
         </Box>
         <Stack
+          ref={sigCanvasRef}
           sx={{
             overflow: "hidden",
             borderRadius: "6px",
@@ -175,7 +176,7 @@ export const DrawSignForm = forwardRef(
               minHeight: "100px",
               // padding: "2rem 0",
             }}
-            ref={sigCanvasRef}
+            // ref={sigCanvasRef}
           >
             <Stack
               direction="row"

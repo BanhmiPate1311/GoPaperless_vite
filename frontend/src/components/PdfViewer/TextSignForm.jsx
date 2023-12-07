@@ -116,6 +116,7 @@ export const TextSignForm = forwardRef(
           />
         </Box>
         <Stack
+          ref={sigTextRef}
           sx={{
             overflow: "hidden",
             borderRadius: "6px",
@@ -158,7 +159,7 @@ export const TextSignForm = forwardRef(
               minHeight: "100px",
               // padding: "2rem 0",
             }}
-            ref={sigTextRef}
+            // ref={sigTextRef}
           >
             <Box
               sx={{

@@ -2,6 +2,7 @@ package vn.mobileid.GoPaperless.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -11,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import ua_parser.Client;
 import ua_parser.Parser;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
+import vn.mobileid.GoPaperless.model.Electronic.datatypes.JwtModel;
+import vn.mobileid.GoPaperless.model.Electronic.request.CheckCertificateRequest;
 import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
@@ -25,6 +28,8 @@ import vn.mobileid.GoPaperless.utils.VCStoringService;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class RsspService {
@@ -281,6 +286,98 @@ public class RsspService {
         }
     }
 
+    public String authorizeOtp(String lang, String credentialID, int numSignatures,
+                               String otpRequestID, String otp) throws Exception {
+        System.out.println("____________credentials/authorize____________");
+        String authorizeOtpUrl = property.getBaseUrl() + "credentials/authorize";
+        System.out.println("authorizeOtpUrl: " + authorizeOtpUrl);
+        // numSignatures =1;
+        String authHeader = bearer;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", authHeader);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("vcEnabled", true);
+        requestData.put("credentialID", credentialID);
+        requestData.put("numSignatures", numSignatures);
+        requestData.put("requestID", otpRequestID);
+        requestData.put("authorizeCode", otp);
+        requestData.put("lang", lang);
+        requestData.put("profile", profile);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+
+            ResponseEntity<String> response = restTemplate.exchange(authorizeOtpUrl, HttpMethod.POST, httpEntity, String.class);
+            String responseBody = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            System.out.println("error: " + jsonNode.get("error").asInt());
+            System.out.println("getErrorDescription: " + jsonNode.get("errorDescription").asText());
+            System.out.println("response: " + response.getStatusCode());
+
+            if (jsonNode.get("error").asInt() == 3005 || jsonNode.get("error").asInt() == 3006) {
+                login();
+                return authorizeOtp(lang, credentialID, numSignatures, otpRequestID, otp);
+            } else if (jsonNode.get("error").asInt() != 0) {
+                System.out.println("Err Code: " + jsonNode.get("error").asInt());
+                System.out.println("Err Desscription: " + jsonNode.get("errorDescription").asText());
+                throw new Exception(jsonNode.get("errorDescription").asText());
+            }
+            return jsonNode.get("SAD").asText();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public String sendOTP(String lang, String credentialID) throws Throwable {
+        System.out.println("____________credentials/sendOTP____________");
+
+        String sendOTPUrl = property.getBaseUrl() + "credentials/sendOTP";
+        String authHeader = bearer;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", authHeader);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("credentialID", credentialID);
+        requestData.put("lang", lang);
+        requestData.put("profile", profile);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+
+            ResponseEntity<String> response = restTemplate.exchange(sendOTPUrl, HttpMethod.POST, httpEntity, String.class);
+            String responseBody = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            System.out.println("error: " + jsonNode.get("error").asInt());
+            System.out.println("getErrorDescription: " + jsonNode.get("errorDescription").asText());
+            System.out.println("response: " + response.getStatusCode());
+
+            if (jsonNode.get("error").asInt() == 3005 || jsonNode.get("error").asInt() == 3006) {
+                login();
+                return sendOTP(lang, credentialID);
+            } else if (jsonNode.get("error").asInt() != 0) {
+                System.out.println("Err Code: " + jsonNode.get("error").asInt());
+                System.out.println("Err Desscription: " + jsonNode.get("errorDescription").asText());
+                throw new Exception(jsonNode.get("errorDescription").asText());
+            }
+            return response.getBody();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public List<byte[]> signHash(String lang, String credentialID, DocumentDigests doc, String signAlgo, String sad) throws Exception {
         System.out.println("____________signatures/signHash____________");
         String signHashUrl = property.getBaseUrl() + "signatures/signHash";
@@ -331,6 +428,190 @@ public class RsspService {
             throw new Exception(e.getMessage());
         }
 
+    }
+
+    public void getProperty(CheckCertificateRequest checkCertificateRequest) throws Exception {
+        ConnectorName connectorName = connect.getIdentierConnector(checkCertificateRequest.getConnectorNameRSSP());
+        System.out.println("getCertificates");
+        String prefixCode = connectorName.getPrefixCode();
+//        this.lang = request.getLanguage();
+//        boolean codeEnable = true;
+//        Property property = new Property();
+        JsonNode jsonObject = new ObjectMapper().readTree(connectorName.getIdentifier());
+        JsonNode attributes = jsonObject.get("attributes");
+
+        for (JsonNode att : attributes) {
+            JsonNode nameNode = att.get("name");
+            JsonNode valueNode = att.get("value");
+
+            if (nameNode != null && valueNode != null) {
+                String name = nameNode.asText();
+                String value = valueNode.asText();
+
+                if ("URI".equals(name)) {
+//                    BaseURL = value;
+                    property.setBaseUrl(value);
+                }
+                if ("NAME".equals(name)) {
+                    property.setRelyingParty(value);
+                }
+                if ("USERNAME".equals(name)) {
+                    property.setRelyingPartyUser(value);
+                }
+                if ("PASSWORD".equals(name)) {
+                    property.setRelyingPartyPassword(value);
+                }
+                if ("SIGNATURE".equals(name)) {
+                    property.setRelyingPartySignature(value);
+                }
+                if ("KEYSTORE_FILE_URL".equals(name)) {
+                    if (devMode) {
+                        property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
+                    } else {
+                        property.setRelyingPartyKeyStore(value);
+                    }
+                }
+                if ("KEYSTORE_PASSWORD".equals(name)) {
+                    property.setRelyingPartyKeyStorePassword(value);
+                }
+//                if ("VERIFICATION_CODE_ENABLED".equals(name)) {
+//                    codeEnable = Boolean.parseBoolean(value);
+//                }
+            }
+        }
+//        return property;
+    }
+
+    public String ownerCreate(JwtModel jwt, String lang) throws Exception {
+        System.out.println("____________owner/create____________");
+
+        String ownerCreateUrl = property.getBaseUrl() + "owner/create";
+//        OwnerCreateRequest request = new OwnerCreateRequest();
+
+//        request.phone = jwt.getPhone_number();
+//        request.username = jwt.getDocument_number();
+//        request.fullname = jwt.getName();
+//        request.email = (jwt.getEmail() != null && !"".equals(jwt.getEmail())) ? jwt.getEmail() : jwt.getDocument_number() + "@gmail.com";
+//        request.identificationType = jwt.getDocument_type();
+//        request.identification = jwt.getDocument_number();
+//        request.lang = lang;
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("phone", jwt.getPhone_number());
+        requestData.put("username", jwt.getDocument_number());
+        requestData.put("fullname", jwt.getName());
+        requestData.put("email", (jwt.getEmail() != null && !"".equals(jwt.getEmail())) ? jwt.getEmail() : jwt.getDocument_number() + "@gmail.com");
+        requestData.put("identificationType", jwt.getDocument_type());
+        requestData.put("identification", jwt.getDocument_number());
+        requestData.put("lang", lang);
+        requestData.put("profile", profile);
+
+
+        String authHeader = bearer;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", authHeader);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+
+            ResponseEntity<String> response = restTemplate.exchange(ownerCreateUrl, HttpMethod.POST, httpEntity, String.class);
+            String responseBody = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            System.out.println("error: " + jsonNode.get("error").asInt());
+            System.out.println("getErrorDescription: " + jsonNode.get("errorDescription").asText());
+            System.out.println("response: " + response.getStatusCode());
+
+            if (jsonNode.get("error").asInt() == 3005 || jsonNode.get("error").asInt() == 3006) {
+                login();
+                return ownerCreate(jwt, lang);
+            } else if (jsonNode.get("error").asInt() != 0) {
+                System.out.println("Err Code: " + jsonNode.get("error").asInt());
+                System.out.println("Err Desscription: " + jsonNode.get("errorDescription").asText());
+//                throw new Exception(jsonNode.get("errorDescription").asText());
+            }
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("credentialsLists/info error: ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public String credentialsIssue(JwtModel jwt, String lang) throws Exception {
+        System.out.println("____________credentials/issue____________");
+        String credentialsIssueUrl = property.getBaseUrl() + "credentials/issue";
+
+        System.out.println("type: " + jwt.getDocument_type());
+        String authHeader = bearer;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", authHeader);
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("user", jwt.getDocument_number());
+        requestData.put("userType", jwt.getDocument_type());
+        requestData.put("certificateProfile", "T2PSB21D");
+        requestData.put("SCAL", 1);
+        requestData.put("authMode", "EXPLICIT/OTP-SMS");
+        requestData.put("multisign", 1);
+        requestData.put("hsmProfileID", 0);
+        requestData.put("certificates", "single");
+        requestData.put("lang", lang);
+        requestData.put("profile", profile);
+
+        Map<String, Object> certificateDetails = new HashMap<>();
+        certificateDetails.put("commonName", jwt.getName());
+        certificateDetails.put("telephoneNumber", jwt.getPhone_number());
+        certificateDetails.put("stateOrProvince", jwt.getCity_province());
+        certificateDetails.put("country", "VN");
+        certificateDetails.put("email", (jwt.getEmail() != null && !"".equals(jwt.getEmail())) ? jwt.getEmail() : jwt.getDocument_number() + "@gmail.com");
+
+
+        Map<String, Object> identification = new HashMap<>();
+        identification.put("type", "CITIZEN_IDENTITY_CARD");
+        identification.put("value", jwt.getDocument_number());
+        List<Map<String, Object>> identifications = new ArrayList<>();
+        identifications.add(identification);
+
+        certificateDetails.put("identifications", identifications);
+
+        requestData.put("certDetails", certificateDetails);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+
+            ResponseEntity<String> response = restTemplate.exchange(credentialsIssueUrl, HttpMethod.POST, httpEntity, String.class);
+            String responseBody = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            System.out.println("error: " + jsonNode.get("error").asInt());
+            System.out.println("getErrorDescription: " + jsonNode.get("errorDescription").asText());
+            System.out.println("response: " + response.getStatusCode());
+
+            if (jsonNode.get("error").asInt() == 3005 || jsonNode.get("error").asInt() == 3006) {
+                login();
+                return credentialsIssue(jwt, lang);
+            } else if (jsonNode.get("error").asInt() != 0) {
+                System.out.println("Err Code: " + jsonNode.get("error").asInt());
+                System.out.println("Err Desscription: " + jsonNode.get("errorDescription").asText());
+                throw new Exception(jsonNode.get("errorDescription").asText());
+            }
+            return jsonNode.get("credentialID").asText();
+        } catch (HttpClientErrorException e) {
+            System.out.println("credentialsLists/info error: ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            throw new Exception(e.getMessage());
+        }
     }
 
     public Map<String, Object> getCertificates(RsspRequest request) throws Exception {
@@ -470,20 +751,12 @@ public class RsspService {
             WorkFlowList rsWFList = new WorkFlowList();
             connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
             String sResult = "0";
-//            ObjectMapper mapper = new ObjectMapper();
-//            String json = mapper.writeValueAsString(rsWFList);
-//            System.out.println("json: " + json);
 
-            // check workflow status
-//            if (rsWFList[0] == null || rsWFList[0].length == 0 || rsWFList[0][0].WORKFLOW_STATUS != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
-//                error = true;
-//                sResult = "Signer Status invalid";// trạng thái không hợp lệ
-//                throw new Exception(sResult);
-//            }
             if (rsWFList == null || rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
 //                error = true;
                 sResult = "Signer Status invalid";// trạng thái không hợp lệ
-                throw new Exception(sResult);
+                return sResult;
+//                throw new Exception(sResult);
             }
 
             // check workflow participant
@@ -501,9 +774,9 @@ public class RsspService {
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
-            long millis = System.currentTimeMillis();
-            String sSignatureHash = signerToken + millis;
-            String sSignature_id = prefixCode + "-" + CommonFunction.toHexString(CommonFunction.hashPass(sSignatureHash)).toUpperCase();
+//            long millis = System.currentTimeMillis();
+//            String sSignatureHash = signerToken + millis;
+//            String sSignature_id = prefixCode + "-" + CommonFunction.toHexString(CommonFunction.hashPass(sSignatureHash)).toUpperCase();
 
 
             // get user-agent
@@ -585,6 +858,7 @@ public class RsspService {
             String digest = signNode.get("digest").asText();
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
+            String sSignature_id = signNode.get("signature_name").asText();
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary

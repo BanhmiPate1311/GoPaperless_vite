@@ -28,7 +28,7 @@ export const PhoneInputField2 = ({
         onFocus={(phone, country) => {
           if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
         }}
-        inputStyle={{ height: "56px", opacity: disabled ? "0.5" : "1" }}
+        inputStyle={{ height: "40px", opacity: disabled ? "0.5" : "1" }}
         disabled={disabled}
         copyNumbersOnly={false}
       />

@@ -93,7 +93,7 @@
     "step104": "Der Verifizierungsprozess kann bis zu 5 Minuten dauern.",
     "step105": "OTP erneut senden",
 
-    "step111": "Ihre Identität wurde überprüft.",
+    "step111": "Bitte akzeptieren Sie die Nutzungsbedingungen des Anbieters",
     "step112": "Bitte akzeptieren Sie unsere Zertifizierungsbedingungen, um das Dokument zu unterzeichnen.",
     "step113": "Ich habe das gelesen",
     "step114": "Erklärung zu den Zertifizierungspraktiken.",
@@ -101,18 +101,18 @@
     "step116": "zum Video-Identifizierungsprozess.",
     "step117": "Wählen Sie Remote Signing Service Provider aus",
 
-    "step11a1": "Das Zertifikat existiert",
-    "step11a2": "Neues Zertifikat hinzufügen",
+    "step121": "Das Zertifikat existiert",
+    "step122": "Neues Zertifikat hinzufügen",
 
-    "step121": "Sie sind bereit, das Dokument zu signieren.",
-    "step122": "Bestätigen Sie Ihre Telefonnummer, um das Dokument mit einer qualifizierten elektronischen Signatur zu signieren.",
+    "step131": "Sie sind bereit, das Dokument zu signieren.",
+    "step132": "Bestätigen Sie Ihre Telefonnummer, um das Dokument mit einer qualifizierten elektronischen Signatur zu signieren.",
 
-    "step131": "Geben Sie den Code ein, der an Ihr Telefon gesendet wurde",
-    "step132": "Ein Bestätigungscode wurde an Ihr Telefon gesendet:",
-    "step133": "Geben Sie den Code ein, der an Ihr Telefon gesendet wurde",
-    "step134": "Der Verifizierungsprozess kann bis zu 5 Minuten dauern.",
-    "step135": "OTP erneut senden",
-    "step136": "OTP ungültig",
+    "step141": "Geben Sie den Code ein, der an Ihr Telefon gesendet wurde",
+    "step142": "Ein Bestätigungscode wurde an Ihr Telefon gesendet:",
+    "step143": "Geben Sie den Code ein, der an Ihr Telefon gesendet wurde",
+    "step144": "Der Verifizierungsprozess kann bis zu 5 Minuten dauern.",
+    "step145": "OTP erneut senden",
+    "step146": "OTP ungültig",
 
     "eid not found": "EID-Leser nicht gefunden",
     "camera not found": "Fehler beim Zugriff auf die Kamera",

@@ -142,6 +142,7 @@ const UploadSignForm = forwardRef(
           />
         </Box>
         <Stack
+          ref={sigFileRef}
           sx={{
             overflow: "hidden",
             borderRadius: "6px",
@@ -184,7 +185,7 @@ const UploadSignForm = forwardRef(
               minHeight: "100px",
               // padding: "2rem 0",
             }}
-            ref={sigFileRef}
+            // ref={sigFileRef}
           >
             <Box
               sx={{
