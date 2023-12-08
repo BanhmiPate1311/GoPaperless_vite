@@ -23,6 +23,7 @@ import { useParams } from "react-router-dom";
 import { DrawSignForm, TextSignForm } from "../PdfViewer";
 import UploadSignForm from "../PdfViewer/UploadSignForm";
 import Slide from "@mui/material/Slide";
+import useCountry from "@/hook/use-country";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -123,6 +124,20 @@ export const ModalSigningImage2 = ({
       reason: signer.customReason ? signer.customReason : "Purpose: signature",
     });
   }
+
+  // const { address } = useCountry();
+  // console.log("address: ", address);
+  // setDataSigning({
+  //   ...dataSigning,
+  //   country: signer.metaInformation?.country
+  //     ? signer.metaInformation?.country
+  //     : address,
+  //   countryRealtime: address,
+  //   signingPurpose: signer.signingPurpose
+  //     ? signer.signingPurpose
+  //     : "signature",
+  //   reason: signer.customReason ? signer.customReason : "Purpose: signature",
+  // });
 
   const currentDatetime = new Date();
   const options = {

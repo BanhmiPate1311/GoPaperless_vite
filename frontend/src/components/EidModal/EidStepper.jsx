@@ -1,33 +1,38 @@
 import loading from "@/assets/images/ajax-loader.gif";
-import { getLang, getSigner } from "@/utils/commonFunction";
+import ISPluginClient from "@/assets/js/checkid";
+import { useConnectorList } from "@/hook";
+import { electronicService } from "@/services/electronic_service";
+import { getLang } from "@/utils/commonFunction";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 import { Fragment, useEffect, useRef, useState } from "react";
-import Step1 from "./Step1";
-import { electronicService } from "@/services/electronic_service";
 import { useTranslation } from "react-i18next";
+import Step1 from "./Step1";
+import Step10 from "./Step10";
+import Step11 from "./Step11";
+import Step12 from "./Step12";
 import Step2 from "./Step2";
-import ISPluginClient from "@/assets/js/checkid";
 import Step3 from "./Step3";
-import { jwtDecode } from "jwt-decode";
 import Step4 from "./Step4";
 import Step5 from "./Step5";
 import Step6 from "./Step6";
 import Step7 from "./Step7";
 import Step8 from "./Step8";
-import TestAuth from "./TestAuth";
 import Step9 from "./Step9";
-import Step10 from "./Step10";
-import Step11 from "./Step11";
-import { useConnectorList } from "@/hook";
-import Step12 from "./Step12";
 
-export const EidStepper = ({ onClose, workFlow, signatureData }) => {
-  console.log("workFlow: ", workFlow);
+export const EidStepper = ({
+  onClose,
+  workFlow,
+  setTitle,
+  setDataSigning,
+  handleShowModalSignImage,
+}) => {
+  // console.log("workFlow: ", workFlow);
   //   console.log("signatureData: ", signatureData);
   const { t } = useTranslation();
   const [errorPG, setErrorPG] = useState(null);
@@ -44,7 +49,6 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
   const [certificate, setCertificate] = useState(null);
   const [certificateList, setCertificateList] = useState(null);
   const [processId, setProcessId] = useState(null);
-  const [requestID, setRequestID] = useState(null);
   const [imageFace, setImageFace] = useState(null);
   const [shouldDetectFaces, setShouldDetectFaces] = useState(true);
   const [direction, setDirection] = useState(null);
@@ -61,15 +65,23 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
   let lang = getLang();
   const connectorName = "MOBILE_ID_IDENTITY";
 
-  const signerId = getSigner(workFlow)?.signerId;
-
   const [subject, setSubject] = useState("");
 
   const [isIdentifyRegistered, setIsIdentifyRegistered] = useState(false);
 
   const providerName = ["SMART_ID_SIGNING"];
   const connectorList = useConnectorList(providerName);
-  console.log("connectorList: ", connectorList.data);
+  // console.log("connectorList: ", connectorList.data);
+
+  useEffect(() => {
+    switch (activeStep) {
+      case 11:
+        setTitle(t("modal.title1"));
+        break;
+      default:
+        setTitle(t("electronic.title"));
+    }
+  }, [activeStep]);
 
   useEffect(() => {
     checkIdentity();
@@ -312,8 +324,10 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
       process_id: processId,
     };
     try {
+      setIsFetching(true);
       // const response = await api.post("/elec/processPerForm", data);
       const response = await electronicService.perFormProcess(data);
+      setIsFetching(false);
       if (response.data.status === 0) {
         setJwt(response.data.jwt);
         try {
@@ -343,6 +357,7 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
         setIsFetching(false);
       }
     } catch (error) {
+      setIsFetching(false);
       console.log("error: ", error);
       // setErrorPG(t("electronic.step136"));
       setErrorPG(error.response.data.message);
@@ -383,6 +398,7 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
     try {
       // const response = await api.post("/elec/checkCertificate", data);
       const response = await electronicService.checkCertificate(data);
+      console.log("response: ", response);
       setIsFetching(false);
       if (response.data.length === 0) {
         createCertificate();
@@ -414,80 +430,25 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
       const response = await electronicService.createCertificate(data);
       setIsFetching(false);
       setCertificate(response.data);
+      setDataSigning({
+        ...workFlow,
+        connectorName: "MOBILE_ID_IDENTITY",
+        email: emailRef.current,
+        phoneNumber: phoneNumberRef.current,
+        certChain: response.data,
+      });
+
+      onClose();
+      handleShowModalSignImage();
+
       // handleNext();
-      setActiveStep(12);
+      // setActiveStep(12);
     } catch (error) {
       setIsFetching(false);
       console.log("error", error);
       setErrorPG(error.response.data.message);
     }
   };
-
-  // const credentialOTP = async () => {
-  //   setIsFetching(true);
-  //   const data = {
-  //     lang: lang,
-  //     credentialID: certificate.credentialID,
-  //     connectorName: connectorName,
-  //     enterpriseId: workFlow.enterpriseId,
-  //     workFlowId: workFlow.workFlowId,
-  //   };
-  //   try {
-  //     // const response = await api.post("/elec/credentialOTP", data);
-  //     const response = await electronicService.credentialOTP(data);
-  //     setRequestID(response.data);
-  //     setIsFetching(false);
-  //     if (activeStep === 12) {
-  //       handleNext();
-  //     }
-  //   } catch (error) {
-  //     setIsFetching(false);
-  //     console.log("error", error);
-  //   }
-  // };
-
-  // const authorizeOTP = async (otp) => {
-  //   // dispatch(apiControllerManagerActions.clearsetMessageSuccess());
-  //   console.log("authorizeOTP");
-  //   setIsFetching(true);
-  //   setErrorPG(null);
-  //   const data = {
-  //     lang: lang,
-  //     credentialID: certificate.credentialID,
-  //     requestID: requestID,
-  //     otp: otp,
-  //     signerId: signerId,
-  //     signingToken: workFlow.signingToken,
-  //     fileName: workFlow.fileName,
-  //     signerToken: workFlow.signerToken,
-  //     connectorName: connectorName,
-  //     signingOption: "electronic_id",
-  //     codeNumber: code,
-  //     type: type,
-  //     certChain: certificate.cert,
-  //     enterpriseId: workFlow.enterpriseId,
-  //     workFlowId: workFlow.workFlowId,
-  //     fieldName: signature ? signature.field_name : "",
-  //     lastFileId: workFlow.lastFileId,
-  //     documentId: workFlow.documentId,
-  //   };
-  //   try {
-  //     // const response = await api.post("/elec/authorizeOTP", data);
-  //     const response = await electronicService.authorizeOTP(data);
-  //     // setRequestID(response.data);
-  //     // handleNext();
-  //     window.parent.postMessage(
-  //       { data: response.data, status: "Success" },
-  //       "*"
-  //     );
-  //     // dispatch(apiControllerManagerActions.setMessageSuccess());
-  //     // handleCloseModal1();
-  //   } catch (error) {
-  //     console.log("error", error);
-  //     setIsFetching(false);
-  //     setErrorPG(error.response.data.message);
-  //   }
-  // };
 
   const isStepOptional = (step) => {
     return step === 15;
@@ -570,9 +531,18 @@ export const EidStepper = ({ onClose, workFlow, signatureData }) => {
         break;
       case 11:
         if (certificate) {
-          handleNext();
+          setDataSigning({
+            ...workFlow,
+            connectorName: "MOBILE_ID_IDENTITY",
+            email: emailRef.current,
+            phoneNumber: phoneNumberRef.current,
+            certChain: certificate,
+          });
+          onClose();
+          handleShowModalSignImage();
+          // handleNext(); // chuyển modal
         } else {
-          // createCertificate();
+          createCertificate();
         }
         // checkCertificate();
         break;
@@ -807,7 +777,9 @@ EidStepper.propTypes = {
   workFlow: PropTypes.object,
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  signatureData: PropTypes.object,
+  setTitle: PropTypes.func,
+  setDataSigning: PropTypes.func,
+  handleShowModalSignImage: PropTypes.func,
 };
 
 export default EidStepper;

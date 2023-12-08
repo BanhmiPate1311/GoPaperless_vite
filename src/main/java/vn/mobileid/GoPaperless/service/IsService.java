@@ -3,6 +3,7 @@ package vn.mobileid.GoPaperless.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import vn.mobileid.GoPaperless.controller.GatewayAPI;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
@@ -21,11 +22,13 @@ public class IsService {
     private final ProcessDb connect;
     private final FpsService fpsService;
     private final PostBack postBack;
+    private final GatewayAPI gatewayAPI;
 
-    public IsService(ProcessDb connect, FpsService fpsService, PostBack postBack) {
+    public IsService(ProcessDb connect, FpsService fpsService, PostBack postBack, GatewayAPI gatewayAPI) {
         this.connect = connect;
         this.fpsService = fpsService;
         this.postBack = postBack;
+        this.gatewayAPI = gatewayAPI;
     }
 
     public Map<String, String> getHash(RsspRequest data) throws Exception {
@@ -139,13 +142,15 @@ public class IsService {
             String digest = signNode.get("digest").asText();
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
-            String sSignature_id = signNode.get("signature_name").asText();
+            String signatureName = signNode.get("signature_name").asText();
+
+            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
 
             int isSetPosition = 1;
-            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

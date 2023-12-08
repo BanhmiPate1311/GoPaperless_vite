@@ -7,6 +7,7 @@
     "copyright": "Авторские права",
     "custom": "Обычай",
     "deadline": "Крайний срок",
+
     "email": "Электронная почта",
     "initials": "Инициалы",
     "jobtitle": "Должность",
@@ -23,6 +24,10 @@
     "signatures": "Подписи",
     "version": "Версия",
     "workflow": "Рабочий процесс"
+  },
+  "signing": {
+    "document_information": "Информация о документе",
+    "download_completed": "Загрузка завершена"
   },
   "batch": {
     "collapse": "Свернуть все",
@@ -129,6 +134,10 @@
     "cam lookstraight": "ПОЖАЛУЙСТА, СМОТРИТЕ ПРЯМО В КАМЕРУ.",
     "camSuccess": "ЗАГРУЗКА ЗАШИФРОВАННОГО 3D СКАНИРОВАНИЯ ЛИЦА.",
     "faceSuccess": "УСПЕХ"
+  },
+  "modal": {
+    "title1": "Wählen Sie ein Zertifikat aus",
+    "subtitle1": "Mit der Auswahl des Zertifikats erkläre ich mich mit der Übermittlung meines Namens und meines persönlichen Identifikationscodes an den Dienstleister einverstanden"
   },
   "validation": {
     "val1": "Этот отчет о проверке подготовлен квалифицированным поставщиком трастовых услуг UAB в соответствии с ",

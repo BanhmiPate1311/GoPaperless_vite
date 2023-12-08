@@ -7,6 +7,7 @@
     "copyright": "Urheberrecht",
     "custom": "Brauch",
     "deadline": "Frist",
+
     "email": "Email",
     "initials": "Initialen",
     "jobtitle": "Berufsbezeichnung",
@@ -23,6 +24,10 @@
     "signatures": "Unterschriften",
     "version": "Ausführung",
     "workflow": "Arbeitsablauf"
+  },
+  "signing": {
+    "document_information": "Dokument information",
+    "download_completed": "Download abgeschlossen"
   },
   "batch": {
     "collapse": "Alles kollabieren",
@@ -129,6 +134,10 @@
     "cam lookstraight": "BITTE SCHAUEN SIE DIREKT IN DIE KAMERA.",
     "camSuccess": "VERSCHLÜSSELTER 3D-FACESCAN HOCHLADEN.",
     "faceSuccess": "ERFOLG"
+  },
+  "modal": {
+    "title1": "Wählen Sie ein Zertifikat aus",
+    "subtitle1": "Mit der Auswahl des Zertifikats erkläre ich mich mit der Übermittlung meines Namens und meines persönlichen Identifikationscodes an den Dienstleister einverstanden"
   },
   "validation": {
     "val1": "Dieser Validierungsbericht wird von einem qualifizierten Vertrauensdienstleister (UAB) gemäß erstellt ",

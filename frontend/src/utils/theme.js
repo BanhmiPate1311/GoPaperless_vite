@@ -73,8 +73,8 @@ export let theme = extendTheme({
         },
         //lighter
         signingtext2: {
-          light: "#6B7280",
-          main: "#6B7280",
+          light: "#4F4E4E",
+          main: "#4F4E4E",
         },
         signingtextBlue: {
           light: "#3B82F6",

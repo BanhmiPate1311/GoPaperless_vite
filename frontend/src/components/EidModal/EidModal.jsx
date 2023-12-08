@@ -1,12 +1,12 @@
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
+import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { EidStepper } from ".";
-import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute",
@@ -24,8 +24,15 @@ const style = {
   overflowY: "auto",
   fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
 };
-export const EidModal = ({ open, onClose, workFlow, signatureData }) => {
-  const { t } = useTranslation();
+export const EidModal = ({
+  open,
+  onClose,
+  workFlow,
+  setDataSigning,
+  handleShowModalSignImage,
+}) => {
+  const [title, setTitle] = useState("");
+
   return (
     <Box>
       <Modal
@@ -78,13 +85,15 @@ export const EidModal = ({ open, onClose, workFlow, signatureData }) => {
                   p: 0,
                 }}
               >
-                {t("electronic.title")}
+                {title}
               </Typography>
             </Stack>
             <EidStepper
               onClose={onClose}
-              signatureData={signatureData}
+              setDataSigning={setDataSigning}
               workFlow={workFlow}
+              setTitle={setTitle}
+              handleShowModalSignImage={handleShowModalSignImage}
             />
           </Box>
         </Grow>
@@ -98,6 +107,8 @@ EidModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   signatureData: PropTypes.object,
+  setDataSigning: PropTypes.func,
+  handleShowModalSignImage: PropTypes.func,
 };
 
 export default EidModal;

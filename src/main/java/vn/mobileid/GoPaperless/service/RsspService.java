@@ -2,7 +2,6 @@ package vn.mobileid.GoPaperless.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -11,6 +10,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import ua_parser.Client;
 import ua_parser.Parser;
+import vn.mobileid.GoPaperless.controller.GatewayAPI;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.JwtModel;
 import vn.mobileid.GoPaperless.model.Electronic.request.CheckCertificateRequest;
@@ -28,8 +28,6 @@ import vn.mobileid.GoPaperless.utils.VCStoringService;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 public class RsspService {
@@ -47,6 +45,8 @@ public class RsspService {
 
     private final PostBack postBack;
 
+    private final GatewayAPI gatewayAPI;
+
     private final Property property;
 
     private final GatewayService gatewayService;
@@ -54,9 +54,10 @@ public class RsspService {
 
     private final VCStoringService vcStoringService;
 
-    public RsspService(ProcessDb connect, PostBack postBack, Property property, GatewayService gatewayService, FpsService fpsService, VCStoringService vcStoringService) {
+    public RsspService(ProcessDb connect, PostBack postBack, GatewayAPI gatewayAPI, Property property, GatewayService gatewayService, FpsService fpsService, VCStoringService vcStoringService) {
         this.connect = connect;
         this.postBack = postBack;
+        this.gatewayAPI = gatewayAPI;
         this.property = property;
         this.gatewayService = gatewayService;
         this.fpsService = fpsService;
@@ -374,7 +375,7 @@ public class RsspService {
                 System.out.println("Err Desscription: " + jsonNode.get("errorDescription").asText());
                 throw new Exception(jsonNode.get("errorDescription").asText());
             }
-            return response.getBody();
+            return jsonNode.get("responseID").asText();
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -559,12 +560,12 @@ public class RsspService {
         requestData.put("user", jwt.getDocument_number());
         requestData.put("userType", jwt.getDocument_type());
         requestData.put("authorizeCode", "");
-        requestData.put("requestID", "");
         requestData.put("certificateProfile", "T2PSB21D");
         requestData.put("signingProfileValue", 0);
         requestData.put("SCAL", 1);
         requestData.put("authMode", "EXPLICIT/OTP-SMS");
         requestData.put("multisign", 1);
+        requestData.put("requestID", "");
         requestData.put("hsmProfileID", 0);
         requestData.put("certificates", "single");
         requestData.put("lang", lang);
@@ -579,7 +580,7 @@ public class RsspService {
 
 
         Map<String, Object> identification = new HashMap<>();
-        identification.put("type", "CITIZEN_IDENTITY_CARD");
+        identification.put("type", "CITIZEN-IDENTITY-CARD");
         identification.put("value", jwt.getDocument_number());
         List<Map<String, Object>> identifications = new ArrayList<>();
         identifications.add(identification);
@@ -863,13 +864,15 @@ public class RsspService {
             String digest = signNode.get("digest").asText();
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
-            String sSignature_id = signNode.get("signature_name").asText();
+            String signatureName = signNode.get("signature_name").asText();
+
+            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
 
             int isSetPosition = 1;
-            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

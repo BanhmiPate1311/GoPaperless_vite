@@ -12,8 +12,10 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router-dom";
 import { NotFound } from "../NotFound";
+import { useTranslation } from "react-i18next";
 
 export const Signing = () => {
+  const { t } = useTranslation();
   const { signing_token: signingToken } = useParams();
   const [search] = useSearchParams();
   const signerToken = search.get("access_token");
@@ -88,13 +90,13 @@ export const Signing = () => {
                 color="signingtext1.main"
                 variant="h6"
                 component="div"
-                sx={{ flexGrow: 1 }}
+                sx={{ flexGrow: 1, textTransform: "uppercase" }}
               >
-                DOCUMENTS INFORMATION
+                {t("signing.document_information")}
               </Typography>
               {/* <VisibilityIcon sx={{ color: "signingtext1.main" }} /> */}
               <Chip
-                label="Download completed"
+                label={t("signing.download_completed")}
                 component="a"
                 disabled={!checkWorkFlowStatus}
                 // href="#basic-chip"

@@ -7,6 +7,7 @@
     "copyright": "版 权",
     "custom": "风俗",
     "deadline": "最后期限",
+
     "email": "电子邮件",
     "initials": "缩写",
     "jobtitle": "职称",
@@ -23,6 +24,10 @@
     "signatures": "签名",
     "version": "版 本",
     "workflow": "工作流程"
+  },
+  "signing": {
+    "document_information": "文档信息",
+    "download_completed": "下载完成"
   },
   "batch": {
     "collapse": "全 部 收 縮",
@@ -129,6 +134,10 @@
     "cam lookstraight": "请直视相机.",
     "camSuccess": "上传加密的 3D 面部扫描.",
     "faceSuccess": "成功"
+  },
+  "modal": {
+    "title1": "选择证书",
+    "subtitle1": "选择证书即表示我同意将我的姓名和个人识别码转移给服务提供商"
   },
   "validation": {
     "val1": "该验证报告由合格信托服务提供商 UAB 根据 ",

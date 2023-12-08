@@ -57,6 +57,8 @@ public class ApiController {
                     if (enterprise.getId() == participants.getEnterpriseId()) {
                         map.put("loGo", enterprise.getLogo());
                         map.put("metadataGatewayView", enterprise.getMetadataGatewayView());
+                        map.put("name", enterprise.getName());
+                        map.put("notificationEmail", enterprise.getNotificationEmail());
                     }
                 }
             }
@@ -114,6 +116,7 @@ public class ApiController {
             signingWorkflowDto.setSigningToken(signingToken);
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
             signingWorkflowDto.setLastFileUuid(lastFile.getLastPplFileUuid());
+            signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
 
             String base64 = fpsService.getBase64ImagePdf(lastFile.getDocumentId());
             signingWorkflowDto.setPdfBase64(base64);

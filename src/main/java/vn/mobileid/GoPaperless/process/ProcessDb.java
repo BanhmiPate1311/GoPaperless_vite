@@ -226,6 +226,7 @@ public class ProcessDb {
                 response.setWorkflowDocumentName(rs.getString("WORKFLOW_DOCUMENT_NAME"));
                 response.setWorkflowDocumentFormat(rs.getString("WORKFLOW_DOCUMENT_FORMAT"));
                 response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
+                response.setDeadlineAt(rs.getString("DEADLINE_AT"));
             }
 
         } catch (Exception e) {
@@ -328,6 +329,8 @@ public class ProcessDb {
                 enterprise.setId(rs.getInt("ID"));
                 enterprise.setMetadataGatewayView(rs.getString("METADATA_GATEWAY_VIEW"));
                 enterprise.setLogo(rs.getString("LOGO"));
+                enterprise.setName(rs.getString("NAME"));
+                enterprise.setNotificationEmail(rs.getString("NOTIFICATION_EMAIL"));
                 enterpriseList.add(enterprise);
             }
         } catch (Exception e) {

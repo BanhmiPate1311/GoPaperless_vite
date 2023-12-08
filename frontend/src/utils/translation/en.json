@@ -7,6 +7,7 @@
     "copyright": "Copyright",
     "custom": "Custom",
     "deadline": "Deadline",
+
     "email": "Email",
     "initials": "Initials",
     "jobtitle": "Job Title",
@@ -24,6 +25,10 @@
     "version": "Version",
     "workflow": "WorkFlow",
     "workflowName": "WorkFlow Name"
+  },
+  "signing": {
+    "document_information": "Document Information",
+    "download_completed": "Download Completed"
   },
   "batch": {
     "collapse": "Collapse all",
@@ -130,6 +135,10 @@
     "cam lookstraight": "PLEASE LOOK DIRECTLY AT THE CAMERA.",
     "camSuccess": "UPLOADING ENCRYPTED 3D FACESCAN.",
     "faceSuccess": "SUCCESS"
+  },
+  "modal": {
+    "title1": "Select a certificate",
+    "subtitle1": "By choosing the certificate, I agree to the transfer of my name and personal identification code to the service provider"
   },
   "validation": {
     "val1": "This validation report is prepared by a Qualified Trust Service Provider, UAB, in accordance with ",

@@ -134,7 +134,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <OverView />
+        <OverView workFlow={workFlow} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Participant workFlow={workFlow} />

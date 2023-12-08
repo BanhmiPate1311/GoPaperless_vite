@@ -1,12 +1,25 @@
 import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
+import { useCommonHook } from "@/hook";
+import { apiService } from "@/services/api_service";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+import { convertTime } from "@/utils/commonFunction";
 
-export const OverView = () => {
+export const OverView = ({ workFlow }) => {
+  // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
+  const { signingToken } = useCommonHook();
+  const { data: headerFooter } = useQuery({
+    queryKey: ["checkHeader"],
+    queryFn: () => apiService.checkHeaderFooter(signingToken),
+    enabled: signingToken !== undefined, //chỉ gọi api khi có giá trị id
+  });
+  // console.log("headerFooter: ", headerFooter?.data);
   return (
     <Box>
       <Box sx={{ p: 2 }}>
@@ -45,7 +58,7 @@ export const OverView = () => {
                 color: "white",
               }}
             >
-              G
+              {headerFooter?.data?.name.charAt(0)}
             </Stack>
             <Box>
               <Typography
@@ -54,7 +67,7 @@ export const OverView = () => {
                   color: "black",
                 }}
               >
-                Gopaperless Enterprise
+                {headerFooter?.data?.name}
               </Typography>
               <Typography
                 variant="h4"
@@ -62,27 +75,33 @@ export const OverView = () => {
                   color: "black",
                 }}
               >
-                info@goparperless.com
+                {headerFooter?.data?.notificationEmail}
               </Typography>
             </Box>
           </Stack>
         </Box>
-        <Box
-          sx={{
-            border: "1px solid",
-            borderColor: "borderColor.main",
-            borderRadius: 2,
-            p: "5px 15px",
-          }}
-        >
-          <Typography sx={{ color: "signingtext2.main" }}>
-            {t("0-common.deadline")}
-          </Typography>
-          <Typography>13/11/2023 17:35:58</Typography>
-        </Box>
+        {workFlow.deadlineAt && (
+          <Box
+            sx={{
+              border: "1px solid",
+              borderColor: "borderColor.main",
+              borderRadius: 2,
+              p: "5px 15px",
+            }}
+          >
+            <Typography sx={{ color: "signingtext2.main" }}>
+              {t("0-common.deadline")}
+            </Typography>
+            <Typography variant="h6">
+              {convertTime(workFlow.deadlineAt)}
+            </Typography>
+          </Box>
+        )}
       </Stack>
     </Box>
   );
 };
-
+OverView.propTypes = {
+  workFlow: PropTypes.object,
+};
 export default OverView;

@@ -90,11 +90,29 @@ export const Step8 = ({
   processOTPResend,
   setErrorPG,
   perFormProcess,
+  isFetching,
 }) => {
   const { t } = useTranslation();
   const [progress, setProgress] = useState(100);
   const [isFirst, setIsFirst] = useState(true);
   const [otp1, setOtp1] = useState("");
+
+  const containerStyle = {
+    display: "flex",
+    justifyContent: "center",
+  };
+
+  const inputStyle = {
+    width: "43px",
+    height: "43px",
+    borderRadius: "7px",
+    marginLeft: "8px",
+    marginRight: "8px",
+    /* background: #dddddd; */
+    fontSize: "20px",
+    border: "1px solid #3b82f6",
+    disabled: true,
+  };
 
   useEffect(() => {
     if (progress > 0.5) {
@@ -116,6 +134,24 @@ export const Step8 = ({
       // handleCloseModal1();
     }
   }, [progress]);
+
+  const handlePaste = (event) => {
+    const data = event.clipboardData.getData("text");
+    // cut "-" from the data
+    const formattedData = data.replace(/-/g, "");
+
+    setOtp1(formattedData);
+    if (formattedData.length === 6) {
+      setOtp(formattedData);
+      onDisableSubmit(false);
+      if (isFirst) {
+        setIsFirst(false);
+        perFormProcess(formattedData);
+      }
+    } else {
+      onDisableSubmit(true);
+    }
+  };
 
   // const [result, setResult] = useState();
   // console.log("result: ", result);
@@ -189,11 +225,12 @@ export const Step8 = ({
         onChange={handleOnChange}
         numInputs={6}
         //   renderSeparator={<span>-</span>}
-        renderInput={(props) => <input {...props} />}
-        inputStyle="inputStyle"
-        containerStyle="containerStyle"
+        renderInput={(props) => <input disabled={isFetching} {...props} />}
+        inputStyle={inputStyle}
+        containerStyle={containerStyle}
         inputType="tel"
-        // disabled={}
+        shouldAutoFocus={true}
+        onPaste={handlePaste}
       />
       <Box textAlign="center" mt={3}>
         <CircularProgressWithLabel size={100} value={progress} />
@@ -227,6 +264,7 @@ Step8.propTypes = {
   processOTPResend: PropTypes.func,
   setErrorPG: PropTypes.func,
   perFormProcess: PropTypes.func,
+  isFetching: PropTypes.bool,
 };
 
 export default Step8;

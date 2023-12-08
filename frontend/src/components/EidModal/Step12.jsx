@@ -1,21 +1,19 @@
+import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
+import styled from "@emotion/styled";
 import {
   Box,
-  Button,
-  ButtonGroup,
   FormControl,
   FormControlLabel,
-  FormLabel,
   Radio,
   RadioGroup,
   Stack,
   Typography,
 } from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
 import ToggleButton from "@mui/material/ToggleButton";
-import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -39,6 +37,7 @@ const Step12 = ({ certificateList, setCertificate }) => {
   };
   const [cerSelected, setCerSelected] = useState(0);
   const handleTokenSelected = (index) => {
+    console.log("index: ", index);
     setCerSelected(index);
   };
   useEffect(() => {
@@ -89,15 +88,6 @@ const Step12 = ({ certificateList, setCertificate }) => {
   ));
   return (
     <Box>
-      <Stack>
-        <Typography
-          className="modal-title fw-bold"
-          style={{ color: "#2978eb", fontSize: "30px" }}
-          id="exampleModalToggleLabel2"
-        >
-          {t("usb.usb3")}
-        </Typography>
-      </Stack>
       <Typography
         style={{
           color: "#000",
@@ -105,7 +95,7 @@ const Step12 = ({ certificateList, setCertificate }) => {
           fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
         }}
       >
-        {t("usb.usb4")}
+        {t("modal.subtitle1")}
       </Typography>
 
       <FormControl fullWidth>
@@ -119,20 +109,15 @@ const Step12 = ({ certificateList, setCertificate }) => {
           <FormControlLabel
             value="certs"
             control={<Radio />}
-            label={t("electronicid.step11a1")}
+            label={t("electronic.step121")}
             sx={{
               "& .MuiFormControlLabel-label": {
                 fontWeight: "bold !important",
+                fontSize: "14px",
               },
               color: "#2978EB",
             }}
           />
-          {/* button group ở đây */}
-          {/* <ButtonGroup disabled={value !== "certs"}>
-              <Button>Option 1</Button>
-              <Button>Option 2</Button>
-              <Button>Option 3</Button>
-            </ButtonGroup> */}
           <Typography
             component="div"
             id="transition1-modal-description"
@@ -149,16 +134,25 @@ const Step12 = ({ certificateList, setCertificate }) => {
               role="group"
               aria-label="Vertical radio toggle button group"
             >
-              {content}
+              <ToggleButtonGroup
+                orientation="vertical"
+                value={cerSelected}
+                exclusive
+                // onChange={handleChange}
+                sx={{ width: "100%" }}
+              >
+                {content}
+              </ToggleButtonGroup>
             </div>
           </Typography>
           <FormControlLabel
             value="none"
             control={<Radio />}
-            label={t("electronicid.step11a2")}
+            label={t("electronic.step122")}
             sx={{
               "& .MuiFormControlLabel-label": {
                 fontWeight: "bold !important",
+                fontSize: "14px",
               },
               color: "#2978EB",
             }}

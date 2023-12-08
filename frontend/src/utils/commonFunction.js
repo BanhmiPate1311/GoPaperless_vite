@@ -1,7 +1,3 @@
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
-import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
-import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import i18n from "./languages/i18n";
 
 export const getSignature = (value, signerId, workflowId) => {
@@ -178,6 +174,19 @@ export const convertTypeEid = (criteria) => {
       return "Smart ID";
     case "USB_TOKEN_SIGNING":
       return "USB Token";
+  }
+};
+
+export const convertEidType = (type) => {
+  switch (type) {
+    case "CITIZEN_CARD":
+      return "CITIZEN-IDENTITY-CARD";
+    case "Mobile ID":
+      return "MOBILE_ID_SIGNING";
+    case "Smart ID":
+      return "SMART_ID_SIGNING";
+    case "USB Token":
+      return "USB_TOKEN_SIGNING";
   }
 };
 

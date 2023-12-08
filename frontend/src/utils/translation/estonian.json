@@ -7,6 +7,7 @@
     "copyright": "Autoriõigus",
     "custom": "Kohandatud",
     "deadline": "Tähtaeg",
+
     "email": "Meil",
     "initials": "Initsiaalid",
     "jobtitle": "Töö Nimetus",
@@ -23,6 +24,10 @@
     "signatures": "Allkirjad",
     "version": "Versioon",
     "workflow": "Töövoog"
+  },
+  "signing": {
+    "document_information": "Dokumenti info",
+    "download_completed": "Allalaadimine lõpetatud"
   },
   "batch": {
     "collapse": "Ahenda kõik",
@@ -129,6 +134,10 @@
     "cam lookstraight": "PALUN VAATA OTSE KAAMERA.",
     "camSuccess": "Krüpteeritud 3D FACESCANI ÜLESLAADIMINE.",
     "faceSuccess": "EDU"
+  },
+  "modal": {
+    "title1": "Valige sertifikaat",
+    "subtitle1": "Sertifikaadi valimisega nõustun oma nime ja isikukoodi edastamisega teenusepakkujale"
   },
   "validation": {
     "val1": "Selle valideerimisaruande koostab Qualified Trust Service Provider, UAB, vastavalt ",

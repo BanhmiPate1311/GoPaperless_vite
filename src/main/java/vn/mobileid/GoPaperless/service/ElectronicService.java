@@ -7,6 +7,7 @@ import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.mobileid.GoPaperless.controller.GatewayAPI;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.JwtModel;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.PadesConstants;
 import vn.mobileid.GoPaperless.model.Electronic.request.*;
@@ -40,6 +41,7 @@ public class ElectronicService {
     private String accessToken;
     private final FpsService fpsService;
     private final PostBack postBack;
+    private final GatewayAPI gatewayAPI;
 
     private final ProcessDb connect;
 
@@ -48,9 +50,10 @@ public class ElectronicService {
 
     private final RsspService rsspService;
 
-    public ElectronicService(FpsService fpsService, PostBack postBack, ProcessDb connect, RsspService rsspService) {
+    public ElectronicService(FpsService fpsService, PostBack postBack, GatewayAPI gatewayAPI, ProcessDb connect, RsspService rsspService) {
         this.fpsService = fpsService;
         this.postBack = postBack;
+        this.gatewayAPI = gatewayAPI;
         this.connect = connect;
         this.rsspService = rsspService;
     }
@@ -506,9 +509,9 @@ public class ElectronicService {
                     if (credentialinFo != null) {
                         String authMode = credentialinFo.getAuthMode();
                         String status = credentialinFo.getCert().getStatus();
-//                    System.out.println("authMode ne: " + authMode);
-//                    System.out.println("status ne: " + status);
-                        if ("EXPLICIT_OTP_SMS".equals(authMode) && "OPERATED".equals(status)) {
+                    System.out.println("authMode ne: " + authMode);
+                    System.out.println("status ne: " + status);
+                        if ("EXPLICIT/OTP-SMS".equals(authMode) && "OPERATED".equals(status)) {
                             int lastIndex = credentialinFo.getCert().getCertificates().size() - 1;
                             String certChain = credentialinFo.getCert().getCertificates().get(lastIndex);
 
@@ -673,11 +676,13 @@ public class ElectronicService {
             String digest = signNode.get("digest").asText();
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
-            String sSignature_id = signNode.get("signature_name").asText();
+            String signatureName = signNode.get("signature_name").asText();
 
+            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
+            System.out.println("signatureId: " + signatureId);
 
             int isSetPosition = 1;
-            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, sSignature_id, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

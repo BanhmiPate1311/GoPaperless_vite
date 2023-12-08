@@ -17,6 +17,7 @@ public class SigningWorkflowDto {
     private String signingToken;
     private List<Participants> participants;
     private String pdfBase64;
+    private String deadlineAt;
 
     public int getDocumentId() {
         return documentId;
@@ -112,5 +113,13 @@ public class SigningWorkflowDto {
 
     public void setPdfBase64(String pdfBase64) {
         this.pdfBase64 = pdfBase64;
+    }
+
+    public String getDeadlineAt() {
+        return deadlineAt;
+    }
+
+    public void setDeadlineAt(String deadlineAt) {
+        this.deadlineAt = deadlineAt;
     }
 }

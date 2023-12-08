@@ -13,6 +13,7 @@ public class LastFile {
     private String workflowDocumentName;
     private String workflowDocumentFormat;
     private int enterpriseId;
+    private String deadlineAt;
 
     public int getPplWorkflowId() {
         return pplWorkflowId;
@@ -108,5 +109,13 @@ public class LastFile {
 
     public void setEnterpriseId(int enterpriseId) {
         this.enterpriseId = enterpriseId;
+    }
+
+    public String getDeadlineAt() {
+        return deadlineAt;
+    }
+
+    public void setDeadlineAt(String deadlineAt) {
+        this.deadlineAt = deadlineAt;
     }
 }

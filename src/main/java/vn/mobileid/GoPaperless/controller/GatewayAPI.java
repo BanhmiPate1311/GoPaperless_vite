@@ -1,9 +1,12 @@
 package vn.mobileid.GoPaperless.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import vn.mobileid.GoPaperless.model.gwModal.ValidationResquest;
 import vn.mobileid.GoPaperless.model.gwModal.PrepareSigningRequest;
@@ -151,5 +154,36 @@ public class GatewayAPI {
         responseEntity = restTemplate.exchange(getValidViewUrl, HttpMethod.GET, null, String.class);
 
         return responseEntity.getBody();
+    }
+
+    public String getSignatureId(String uuid, String signatureName, String fileName) throws Exception {
+        System.out.println("get signature id");
+        String getSignatureIdUrl = baseUrl + "/api/internalusage/validation/signature-id";
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("uuid", uuid);
+        requestData.put("signature_name", signatureName);
+        requestData.put("name", fileName);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(getSignatureIdUrl, HttpMethod.POST, httpEntity, String.class);
+            String responseBody = response.getBody();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            return jsonNode.get("signature_id").asText();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            throw new Exception(e.getMessage());
+        }
     }
 }

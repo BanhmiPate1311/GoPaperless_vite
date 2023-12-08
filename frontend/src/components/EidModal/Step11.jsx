@@ -1,5 +1,3 @@
-import { useConnectorList } from "@/hook";
-import { api } from "@/utils/api";
 import {
   Box,
   FormControl,
@@ -51,17 +49,6 @@ const Step11 = ({
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
     providerSelected.current = event.target.value;
-  };
-
-  const [options, SetOptions] = useState([]);
-
-  const getConnectorName = async (param) => {
-    try {
-      const response = await api.post("/base64Logo", { param });
-      SetOptions(response.data);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   // useEffect(() => {
@@ -157,6 +144,7 @@ const Step11 = ({
             marginTop: "20px",
             fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif !important",
           }}
+          size="small"
         >
           <InputLabel
             id="demo-simple-select-label"

@@ -7,6 +7,7 @@
     "copyright": "Bản quyền",
     "custom": "Điều chỉnh",
     "deadline": "Thời hạn",
+
     "email": "E-mail",
     "initials": "Tên Viết Tắt",
     "jobtitle": "Chức Danh",
@@ -23,6 +24,10 @@
     "signatures": "Chữ ký",
     "version": "Phiên bản",
     "workflow": "Luồng công việc"
+  },
+  "signing": {
+    "document_information": "Thông tin tài liệu",
+    "download_completed": "Tải hoàn tất"
   },
   "batch": {
     "collapse": "Thu gọn tất cả",
@@ -129,6 +134,10 @@
     "cam lookstraight": "VUI LÒNG NHÌN THẲNG VÀO CAMERA.",
     "camSuccess": "ĐANG TẢI LÊN HÌNH ẢNH KHUÔN MẶT 3D MÃ HOÁ.",
     "faceSuccess": "THÀNH CÔNG"
+  },
+  "modal": {
+    "title1": "Chọn chứng thư số",
+    "subtitle1": "Bằng việc lựa chọn chứng thư số, tôi đồng ý chuyển tên và mã số nhận dạng cá nhân của mình cho nhà cung cấp dịch vụ"
   },
   "validation": {
     "val1": "Báo cáo xác nhận này được chuẩn bị bởi Nhà cung cấp dịch vụ ủy thác đủ tiêu chuẩn, UAB, tuân theo ",
