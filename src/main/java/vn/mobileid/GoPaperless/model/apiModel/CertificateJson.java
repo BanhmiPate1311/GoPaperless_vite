@@ -23,6 +23,8 @@ public class CertificateJson {
     public String signer;
     @JsonProperty("signer_info")
     public SignerInfoJson signer_info;
+    @JsonProperty("signer_info_dto")
+    public SignerInfoJson signer_info_dto;
     @JsonProperty("status")
     public String status;
     @JsonProperty("file")

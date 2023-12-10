@@ -5,7 +5,7 @@ export const rsspService = {
     return api.post("rssp/getCertificates", {
       language: data.language,
       codeNumber: data.codeNumber,
-      connectorName: data.connector,
+      connectorName: data.connectorName,
     });
   },
 

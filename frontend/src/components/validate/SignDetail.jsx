@@ -46,7 +46,12 @@ export const SignDetail = ({ sign, signType }) => {
       {sign.value.map((val, i) => {
         return (
           <AccordionDetails key={i} sx={{ padding: "unset !important" }}>
-            <ShowSignature sig={val} sign={sign} signType={signType} />
+            <ShowSignature
+              sig={val}
+              sign={sign}
+              signType={signType}
+              index={i}
+            />
             {/* <Divider /> */}
           </AccordionDetails>
         );

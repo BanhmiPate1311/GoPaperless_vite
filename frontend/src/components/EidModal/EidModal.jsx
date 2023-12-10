@@ -32,7 +32,7 @@ export const EidModal = ({
   handleShowModalSignImage,
 }) => {
   const [title, setTitle] = useState("");
-
+  console.log("workFlow: ", workFlow);
   return (
     <Box>
       <Modal

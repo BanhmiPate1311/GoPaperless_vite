@@ -2,6 +2,7 @@ package vn.mobileid.GoPaperless.model.rsspModel;
 
 public class CertResponse {
     private String subject;
+    private String subjectDN;
     private String issuer;
     private String validFrom;
     private String validTo;
@@ -17,6 +18,14 @@ public class CertResponse {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getSubjectDN() {
+        return subjectDN;
+    }
+
+    public void setSubjectDN(String subjectDN) {
+        this.subjectDN = subjectDN;
     }
 
     public String getIssuer() {

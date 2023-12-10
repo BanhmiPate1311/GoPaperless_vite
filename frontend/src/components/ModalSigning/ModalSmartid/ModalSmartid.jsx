@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef, useState } from "react";
 
 import Slide from "@mui/material/Slide";
+import { useTranslation } from "react-i18next";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -105,6 +106,7 @@ function CircularProgressWithLabel(props) {
 
 export const ModalSmartid = ({ open, onClose, dataSigning }) => {
   //   console.log("dataSigning: ", dataSigning);
+  const { t } = useTranslation();
 
   const queryClient = useQueryClient();
   const timer = useRef(null);
@@ -124,12 +126,15 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
         onClose();
         return true;
       } catch (error) {
-        console.log("error1: ", error);
+        // console.log("error1: ", error);
+        setProgress(0);
         clearInterval(timer.current);
         throw new Error(error.response?.data?.message || "An error occurred");
       }
     },
     retry: 0,
+    staleTime: 0,
+    cacheTime: 5 * 60 * 1000,
   });
 
   const handelCancel = (e) => {
@@ -139,13 +144,15 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
     onClose();
   };
 
-  console.log("error: ", sign?.error?.message);
+  // console.log("error: ", sign?.error?.message);
 
   const { data: getVc } = useQuery({
     queryKey: ["getVc"],
     queryFn: () => {
       return rsspService.getVc(dataSigning);
     },
+    staleTime: 0,
+    cacheTime: 5 * 60 * 1000,
   });
 
   // console.log("getVc: ", getVc?.data);
@@ -207,7 +214,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           }}
         >
           {/* {title} */}
-          Sign Document
+          {t("signing.sign_document")}
         </Typography>
         {/* {subtitle && (
       <Typography variant="h5" width={"100%"}>
@@ -242,30 +249,29 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
             // mb: 5,
           }}
         >
-          <Typography variant="body2">Your verification code is:</Typography>
+          <Typography variant="body2">{t("modal.smartid1")}</Typography>
           <Box p={3} textAlign={"center"}>
             <Typography fontSize={"40px"} fontWeight={"bold"}>
-              {getVc?.data}
+              {getVc?.data ? getVc?.data : <CircularProgress />}
               {/* 1983-1991 */}
             </Typography>
             <Typography>
-              Your verification code will expire in{" "}
-              <span style={{ fontWeight: "bold" }}>{mathRound(progress)}s</span>
+              {t("modal.smartid2")}{" "}
+              <span style={{ fontWeight: "bold" }}>
+                {mathRound(progress)} {t("modal.smartid3")}
+              </span>
             </Typography>
           </Box>
           {/* <Box sx={{ flexGrow: 1, mb: 2 }}>
             <BorderLinearProgress variant="determinate" value={progress} />
           </Box> */}
-          <Typography variant="body2">
-            If the code above matches the one you see on your device screen,
-            please enter your Smart-ID PIN2.
-          </Typography>
+          <Typography variant="body2">{t("modal.smartid4")}</Typography>
           <Box textAlign="center" marginTop="50px">
             <CircularProgressWithLabel size={100} value={progress} />
           </Box>
           <Typography fontSize="14px" textAlign="center" my="30px">
             {/* Verification process might take up to 5 minitues. */}
-            Verification process might take up to 5 minitues.
+            {t("electronic.step104")}
           </Typography>
           <Stack width={"100%"} mb={2}>
             {sign?.error && (
@@ -280,7 +286,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={handelCancel}
         >
-          Cancel
+          {t("0-common.cancel")}
         </Button>
         {/* <Button
           variant="outlined"

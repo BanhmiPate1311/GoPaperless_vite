@@ -1,11 +1,9 @@
-import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { t } from "i18next";
 import PropTypes from "prop-types";
@@ -59,7 +57,7 @@ const DialogField = ({ open, data, title, handleClose }) => {
           {title}
         </Typography>
       </DialogTitle>
-      <IconButton
+      {/* <IconButton
         aria-label="close"
         onClick={handleClose}
         sx={{
@@ -70,7 +68,7 @@ const DialogField = ({ open, data, title, handleClose }) => {
         }}
       >
         <CloseIcon />
-      </IconButton>
+      </IconButton> */}
       {/* <Box sx={{ px: "24px" }}>
         <Divider />
       </Box> */}

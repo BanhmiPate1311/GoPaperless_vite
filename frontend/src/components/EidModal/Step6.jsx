@@ -301,7 +301,7 @@ export const Step6 = ({
           // style={{ display: "none" }}
           style={{ zIndex: -100 }}
           videoConstraints={{
-            width: 454,
+            width: 469,
             height: 300,
           }}
         />

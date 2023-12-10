@@ -6,16 +6,14 @@ import PropTypes from "prop-types";
 import { SelectField } from "../form";
 import CheckBoxField from "../form/checkbox-field";
 import ToggleAlignment from "../form/toggle-alignment";
+import { useTranslation } from "react-i18next";
 
 export const AddSubtitle = ({ control }) => {
+  const { t } = useTranslation();
   const dataSelect = [
     {
       label: "0123456789",
       value: 10,
-    },
-    {
-      label: "9876543210",
-      value: 20,
     },
   ];
 
@@ -28,13 +26,13 @@ export const AddSubtitle = ({ control }) => {
   });
   return (
     <>
-      <FormLabel component="legend">Include Text</FormLabel>
+      <FormLabel component="legend">{t("signing.include_text")}</FormLabel>
       <FormGroup sx={{ flexDirection: "row" }}>
         <Box width={"50%"}>
           <CheckBoxField
             name="name"
             control={control}
-            label="Name"
+            label={t("0-common.name")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -45,7 +43,7 @@ export const AddSubtitle = ({ control }) => {
           <CheckBoxField
             name="date"
             control={control}
-            label="Date"
+            label={t("0-common.date")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -56,7 +54,7 @@ export const AddSubtitle = ({ control }) => {
           <CheckBoxField
             name="logo"
             control={control}
-            label="Logo"
+            label={t("0-common.logo")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -67,7 +65,7 @@ export const AddSubtitle = ({ control }) => {
           <CheckBoxField
             name="reason"
             control={control}
-            label="Reason"
+            label={t("0-common.Reason")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -75,7 +73,9 @@ export const AddSubtitle = ({ control }) => {
               },
             }}
           />
-          <FormLabel component="legend">Text Direction</FormLabel>
+          <FormLabel component="legend">
+            {t("0-common.text direction")}
+          </FormLabel>
           <ToggleAlignment
             name="alignment"
             control={control}
@@ -88,7 +88,7 @@ export const AddSubtitle = ({ control }) => {
           <CheckBoxField
             name="dn"
             control={control}
-            label="Distinguished Name"
+            label={t("0-common.distinguished name")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -99,7 +99,7 @@ export const AddSubtitle = ({ control }) => {
           <CheckBoxField
             name="itver"
             control={control}
-            label="IText Version"
+            label={t("0-common.itext version")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -110,7 +110,7 @@ export const AddSubtitle = ({ control }) => {
           <CheckBoxField
             name="location"
             control={control}
-            label="Location"
+            label={t("0-common.Location")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -121,7 +121,7 @@ export const AddSubtitle = ({ control }) => {
           <CheckBoxField
             name="label"
             control={control}
-            label="Labels"
+            label={t("0-common.labels")}
             sx={{
               width: "100%",
               "& .MuiCheckbox-root": {
@@ -129,7 +129,9 @@ export const AddSubtitle = ({ control }) => {
               },
             }}
           />
-          <FormLabel component="legend">Text Direction</FormLabel>
+          <FormLabel component="legend">
+            {t("0-common.digits format")}
+          </FormLabel>
           <SelectField
             name="format"
             control={control}

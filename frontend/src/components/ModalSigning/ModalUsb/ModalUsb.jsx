@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
 import ISPluginClient from "@/assets/js/checkid";
 import { PasswordField } from "@/components/form";
@@ -26,6 +27,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -33,7 +35,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
-  console.log("dataSigning: ", dataSigning);
+  // console.log("dataSigning: ", dataSigning);
 
   const isPending = usePending();
 
@@ -51,35 +53,39 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       .required("Please input your pin"),
   });
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       pin: "",
     },
     resolver: yupResolver(schema),
   });
 
+  const { t } = useTranslation();
+
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+
   const usbHash = useUsbHash(dataSigning);
   // console.log("usbHash: ", usbHash.data);
   const queryClient = useQueryClient();
 
   const packFile = useUsbPackFile(dataSigning);
-  console.log("packFile: ", packFile);
+  // console.log("packFile: ", packFile);
 
   const getCertificate = useMutation({
     mutationFn: async (data) => {
-      console.log("data: ", data);
+      // console.log("data: ", data);
       try {
         const response = await connectWS(data);
         // console.log("response: ", response);
         return response;
       } catch (error) {
-        console.log("error: ", error);
+        // console.log("error: ", error);
         throw new Error(error);
       }
     },
 
     onSuccess: (data) => {
-      console.log("data: ", data);
+      // console.log("data: ", data);
       // setDataSigning({
       //   ...dataSigning,
       //   signatures: data.signatures,
@@ -100,7 +106,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       return data;
     },
   });
-  console.log("getCertificate: ", getCertificate);
+  // console.log("getCertificate: ", getCertificate);
   const formRef = useRef();
   const sdk = useRef(null);
   let lang = getLang();
@@ -108,12 +114,26 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   const urlWithoutProtocol = getUrlWithoutProtocol();
   // const urlWithoutProtocol = "localhost:3000";
 
+  useEffect(() => {
+    if (
+      watch("pin").length >= dataSigning?.tokenDetails?.minPinLength &&
+      watch("pin").length <= dataSigning?.tokenDetails?.maxPinLength
+    ) {
+      setIsSubmitDisabled(false);
+    } else {
+      setIsSubmitDisabled(true);
+    }
+    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
+    //   onDisableSubmit(true);
+    // }
+  }, [watch("pin"), setIsSubmitDisabled, watch]);
+
   function disconnectWSHTML() {
     sdk.current.shutdown();
   }
 
   const connectWS = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     return new Promise(function (resolve, reject) {
       const ipWS = "127.0.0.1";
       const portWS = "9505";
@@ -123,29 +143,29 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
         portWS,
         typeOfWS,
         function () {
-          console.log("connected");
+          // console.log("connected");
           //            socket onopen => connected
           getSignature(data, resolve, reject);
           // flagFailedConnectHTML = 1;
         },
         function () {
           //            socket disconnected
-          console.log("Connect error");
+          // console.log("Connect error");
         },
         function () {
           //            socket stopped
         },
         function () {
-          console.log("connected denied");
+          // console.log("connected denied");
           // console.log("statusCallBack: ", statusCallBack);
           disconnectWSHTML();
         },
         function (cmd, id, error, data) {
-          console.log("id: ", id);
+          // console.log("id: ", id);
           //RECEIVE
-          console.log("cmd: ", cmd);
-          console.log("error: ", error);
-          console.log("data: ", data);
+          // console.log("cmd: ", cmd);
+          // console.log("error: ", error);
+          // console.log("data: ", data);
         }
       );
     });
@@ -170,19 +190,19 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       timeOutInterval,
       lang,
       function (response) {
-        console.log("response: ", response);
+        // console.log("response: ", response);
         resolve(response);
         disconnectWSHTML();
       },
       function (error, mess) {
-        console.log("error: ", error);
-        console.log("mess: ", mess);
+        // console.log("error: ", error);
+        // console.log("mess: ", mess);
         reject(mess);
         // setErrorGetCert(mess);
         disconnectWSHTML();
       },
       function () {
-        console.log("timeout");
+        // console.log("timeout");
         sdk.current = null;
       }
     );
@@ -204,7 +224,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
     // console.log("data: ", data1);
     usbHash.mutateAsync(dataSigning, {
       onSuccess: (data) => {
-        console.log("data: ", data);
+        // console.log("data: ", data);
         setDataSigning({
           ...dataSigning,
           pin: data1.pin,
@@ -264,11 +284,10 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
           }}
         >
           {/* {title} */}
-          Sign Document
+          {t("signing.sign_document")}
         </Typography>
         <Typography variant="h5" width={"100%"}>
-          By signing, i agree to the transfer of my name and personal
-          identification code to the service provide.
+          {t("modal.usb1")}
         </Typography>
       </DialogTitle>
       <IconButton
@@ -319,12 +338,14 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                 {dataSigning?.certChain?.subject?.commonName}
               </Typography>
               <Typography fontSize="14px">
-                Issuer: {dataSigning?.certChain?.issuer?.commonName}
+                {t("0-common.issuer")}:{" "}
+                {dataSigning?.certChain?.issuer?.commonName}
               </Typography>
               <Typography fontSize="14px">
-                Valid:{" "}
+                {t("0-common.valid")}:{" "}
                 {convertTime(dataSigning?.certChain?.validFrom).split(" ")[0]}{" "}
-                to {convertTime(dataSigning?.certChain?.validTo).split(" ")[0]}
+                {t("0-common.to")}{" "}
+                {convertTime(dataSigning?.certChain?.validTo).split(" ")[0]}
               </Typography>
             </Box>
           </Stack>
@@ -334,7 +355,8 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
             textAlign={"center"}
             color={"signingtextBlue.main"}
           >
-            Enter <span style={{ fontWeight: "bold" }}>PIN</span> for signing
+            {/* Enter <span style={{ fontWeight: "bold" }}>PIN</span> for signing */}
+            {t("modal.usb2")}
           </Typography>
           <Box
             width={"100%"}
@@ -372,11 +394,11 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={handelCancel}
         >
-          Cancel
+          {t("0-common.cancel")}
         </Button>
         <Button
           variant="outlined"
-          disabled={isPending}
+          disabled={isPending || isSubmitDisabled}
           startIcon={
             isPending ? <CircularProgress color="inherit" size="1em" /> : null
           }
@@ -384,7 +406,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
           onClick={handleSubmitClick}
           type="button"
         >
-          Sign
+          {t("0-common.sign")}
         </Button>
       </DialogActions>
     </Dialog>

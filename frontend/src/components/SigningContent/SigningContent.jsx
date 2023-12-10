@@ -3,11 +3,11 @@ import { apiService } from "@/services/api_service";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 // import Stack from "@mui/material/Stack";
+import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { PdfViewer } from "../PdfViewer";
-import { TabBar } from "../TabBar";
-import { Typography } from "@mui/material";
+import { PdfViewer } from "./PdfViewer";
+import { TabBar } from "./TabBar";
 
 export const SigningContent = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);

@@ -1,6 +1,5 @@
 export * from "./Dialog_field";
 export * from "./Table_field";
-export * from "./SignerInfor";
 export * from "./Select_field";
 export * from "./phone-input";
 export * from "./input-field";

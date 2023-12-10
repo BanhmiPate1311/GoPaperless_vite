@@ -248,7 +248,7 @@ export const EidModal2 = ({ open, onClose, dataSigning, signatureData }) => {
                   p: 0,
                 }}
               >
-                title
+                {t("electronic.title")}
               </Typography>
             </Stack>
             <Stack sx={{ width: "100%", height: 570 - 20 - 31 }}>

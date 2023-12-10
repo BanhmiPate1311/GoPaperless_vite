@@ -56,11 +56,11 @@ export const MainLayout = () => {
           mx: "auto",
         }}
       >
-        {headerFooter?.headerVisible !== 0 && (
+        {headerFooter?.data.headerVisible !== 0 && (
           <Header headerFooter={headerFooter?.data} />
         )}
         <Outlet />
-        {headerFooter?.headerVisible !== 0 && (
+        {headerFooter?.data.headerVisible !== 0 && (
           <Footer headerFooter={headerFooter?.data} />
         )}
       </Container>

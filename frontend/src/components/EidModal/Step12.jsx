@@ -1,4 +1,5 @@
 import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
+import { convertTime } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
 import {
   Box,
@@ -76,11 +77,11 @@ const Step12 = ({ certificateList, setCertificate }) => {
           </Typography>
           <Typography fontSize="14px">
             {/* {t("usb.usb9")} */}
-            Issuer: {value.issuer}
+            {t("0-common.issuer")}: {value.issuer}
           </Typography>
           <Typography fontSize="14px">
-            Valid: {value.validFrom.split(" ")[0]} to{" "}
-            {value.validTo.split(" ")[0]}
+            {t("0-common.valid")}: {convertTime(value.validFrom).split(" ")[0]}{" "}
+            {t("0-common.to")} {convertTime(value.validTo).split(" ")[0]}
           </Typography>
         </Box>
       </Stack>

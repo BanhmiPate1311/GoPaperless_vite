@@ -700,16 +700,17 @@ public class RsspService {
                         CommonFunction.VoidCertificateComponents(certChain, info1, time, intRes);
                         if (intRes[0] == 0) {
                             CertResponse certResponse = new CertResponse();
+                            certResponse.setSubjectDN(info1[0].toString());
                             certResponse.setSubject(CommonFunction.getCommonnameInDN(info1[0].toString()));
                             certResponse.setIssuer(CommonFunction.getCommonnameInDN(info1[1].toString()));
-                            certResponse.setValidFrom(time[0]);
-                            certResponse.setValidTo(time[1]);
+                            certResponse.setValidFrom(CommonFunction.convertToGetTimeZoneSmartCert(time[0]));
+                            certResponse.setValidTo(CommonFunction.convertToGetTimeZoneSmartCert(time[1]));
                             certResponse.setCert(certChain);
                             certResponse.setCredentialID(credentialID);
 //                        certResponse.setCodeNumber(codeNumber);
-                            certResponse.setRelyingParty(property.getRelyingParty());
-                            certResponse.setPrefixCode(prefixCode);
-                            certResponse.setCodeEnable(codeEnable);
+//                            certResponse.setRelyingParty(property.getRelyingParty());
+//                            certResponse.setPrefixCode(prefixCode);
+//                            certResponse.setCodeEnable(codeEnable);
                             listCertificate.add(certResponse);
                         }
                     }

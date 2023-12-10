@@ -1,4 +1,5 @@
-import CloseIcon from "@mui/icons-material/Close";
+import { ReactComponent as DocumentDetail } from "@/assets/images/validation/detail_document.svg";
+import { createValidSubTitle, createValidTitle } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
@@ -13,18 +14,18 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ReactComponent as DocumentDetail } from "@/assets/images/validation/detail_document.svg";
-import { createValidSubTitle, createValidTitle } from "@/utils/commonFunction";
 
-export const ShowSignature = ({ sig, sign, signType }) => {
+export const ShowSignature = ({ sig, sign, signType, index }) => {
   const { t } = useTranslation();
 
   const signTitle = signType + " is valid";
   const subTitle = "Electronic " + signType;
 
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleDrawer = () => {
-    setIsOpen((prevState) => !prevState);
+  const [isOpen, setIsOpen] = useState([false]);
+  const toggleDrawer = (index) => {
+    const newIsOpen = [...isOpen];
+    newIsOpen[index] = !newIsOpen[index];
+    setIsOpen(newIsOpen);
   };
   const handleClose = () => {
     setIsOpen(false);
@@ -154,7 +155,7 @@ export const ShowSignature = ({ sig, sign, signType }) => {
       </div>
 
       <Drawer
-        open={isOpen}
+        open={isOpen[index]}
         onClose={toggleDrawer}
         anchor="right"
         sx={{

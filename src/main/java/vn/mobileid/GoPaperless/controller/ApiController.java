@@ -6,7 +6,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +24,7 @@ import vn.mobileid.GoPaperless.utils.CommonFunction;
 import vn.mobileid.GoPaperless.utils.Difinitions;
 import vn.mobileid.GoPaperless.utils.LoadParamSystem;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,10 +143,17 @@ public class ApiController {
                     CertificateJson itemParse = oMapperParse.readValue(sCertificate, CertificateJson.class);
 
                     if (itemParse != null) {
-                        sIssue = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.issuer);
-                        sOwner = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.subject);
-                        sFrom = itemParse.signer_info.certificate.valid_from;
-                        sTo = itemParse.signer_info.certificate.valid_to;
+                        if(itemParse.signer_info != null){
+                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.issuer);
+                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.subject);
+                            sFrom = itemParse.signer_info.certificate.valid_from;
+                            sTo = itemParse.signer_info.certificate.valid_to;
+                        } else {
+                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.issuer);
+                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.subject);
+                            sFrom = itemParse.signer_info_dto.certificate.valid_from;
+                            sTo = itemParse.signer_info_dto.certificate.valid_to;
+                        }
                     }
                     if (!"".equals(sIssue)) {
                         sIssue = CommonFunction.getCommonNameInDN(sIssue);
@@ -294,6 +304,17 @@ public class ApiController {
             // trả về lỗi không tìm thấy file để download
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
         }
+    }
+
+    @RequestMapping(value = {"/download/checkid"}, method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadCheckId() throws IOException {
+        // Đọc file checkid.exe từ thư mục tài nguyên tĩnh
+        Resource resource = new ClassPathResource("static/checkid_client_installer.exe");
+//        Resource resource = new UrlResource("static/checkid.zip");
+        // Trả về file dưới dạng response để người dùng tải về
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"checkid_client_installer.exe\"")
+                .body(resource);
     }
 
 }

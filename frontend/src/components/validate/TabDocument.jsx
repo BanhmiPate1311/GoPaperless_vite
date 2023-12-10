@@ -210,5 +210,7 @@ export const TabDocument = ({ validFile }) => {
     </Box>
   );
 };
-
+TabDocument.propTypes = {
+  validFile: PropTypes.object,
+};
 export default TabDocument;

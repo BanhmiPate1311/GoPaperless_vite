@@ -509,8 +509,8 @@ public class ElectronicService {
                     if (credentialinFo != null) {
                         String authMode = credentialinFo.getAuthMode();
                         String status = credentialinFo.getCert().getStatus();
-                    System.out.println("authMode ne: " + authMode);
-                    System.out.println("status ne: " + status);
+//                    System.out.println("authMode ne: " + authMode);
+//                    System.out.println("status ne: " + status);
                         if ("EXPLICIT/OTP-SMS".equals(authMode) && "OPERATED".equals(status)) {
                             int lastIndex = credentialinFo.getCert().getCertificates().size() - 1;
                             String certChain = credentialinFo.getCert().getCertificates().get(lastIndex);
@@ -522,10 +522,11 @@ public class ElectronicService {
                             CommonFunction.VoidCertificateComponents(certChain, info1, time, intRes);
                             if (intRes[0] == 0) {
                                 CertResponse certResponse = new CertResponse();
+                                certResponse.setSubjectDN(info1[0].toString());
                                 certResponse.setSubject(CommonFunction.getCommonnameInDN(info1[0].toString()));
                                 certResponse.setIssuer(CommonFunction.getCommonnameInDN(info1[1].toString()));
-                                certResponse.setValidFrom(time[0]);
-                                certResponse.setValidTo(time[1]);
+                                certResponse.setValidFrom(CommonFunction.convertToGetTimeZoneSmartCert(time[0]));
+                                certResponse.setValidTo(CommonFunction.convertToGetTimeZoneSmartCert(time[1]));
                                 certResponse.setCert(certChain);
                                 certResponse.setCredentialID(credentialID);
 //                        certResponse.setCodeNumber(codeNumber);

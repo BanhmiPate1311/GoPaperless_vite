@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import loading from "@/assets/images/ajax-loader.gif";
 import ISPluginClient from "@/assets/js/checkid";
 import { useConnectorList } from "@/hook";
@@ -24,6 +25,7 @@ import Step6 from "./Step6";
 import Step7 from "./Step7";
 import Step8 from "./Step8";
 import Step9 from "./Step9";
+import { CircularProgress } from "@mui/material";
 
 export const EidStepper = ({
   onClose,
@@ -108,6 +110,7 @@ export const EidStepper = ({
     try {
       const response = await electronicService.checkIdentity(data);
       if (response.data) {
+        console.log("response.data: ", response.data);
         setSubject(response.data);
       }
       if (response.data.status === 0) {
@@ -718,7 +721,7 @@ export const EidStepper = ({
                   </Button>
                 )}
 
-                <Button
+                {/* <Button
                   variant="contained"
                   onClick={handleSubmitClick}
                   disabled={
@@ -763,6 +766,36 @@ export const EidStepper = ({
                   ) : (
                     t("0-common.continue")
                   )}
+                </Button> */}
+
+                <Button
+                  variant="contained"
+                  disabled={
+                    isFetching ||
+                    // activeStep === 5 ||
+                    ((activeStep === 1 ||
+                      activeStep === 6 ||
+                      activeStep === 7 ||
+                      activeStep === 8 ||
+                      activeStep === 9 ||
+                      activeStep === 10 ||
+                      activeStep === 13) &&
+                      isSubmitDisabled)
+                  }
+                  startIcon={
+                    isFetching ? (
+                      <CircularProgress color="inherit" size="1em" />
+                    ) : null
+                  }
+                  sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
+                  onClick={handleSubmitClick}
+                  type="button"
+                >
+                  {errorPG
+                    ? t("0-common.retry")
+                    : activeStep === steps.length - 1
+                    ? t("0-common.submit")
+                    : t("0-common.continue")}
                 </Button>
               </Box>
             </Box>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import "@/assets/style/pdfViewer.css";
 import { Box } from "@mui/material";
 import { Viewer, Worker } from "@react-pdf-viewer/core";

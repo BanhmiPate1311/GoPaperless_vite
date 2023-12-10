@@ -135,7 +135,7 @@ public class CommonFunction {
             if (certstr.toUpperCase().contains("END CERTIFICATE")) {
                 certstr = certstr.replace("-----END CERTIFICATE-----", "");
             }
-            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             CertificateFactory certFactory1 = CertificateFactory.getInstance("X.509");
 //            InputStream in = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(certstr));
             byte[] certBytes = Base64.getDecoder().decode(certstr);
@@ -146,8 +146,10 @@ public class CommonFunction {
             System.out.println("info[0]: " + info[0]);
             info[1] = cert.getIssuerDN();
             info[2] = cert.getSerialNumber().toString(16);
-            time[0] = formatter.format(cert.getNotBefore());
-            time[1] = formatter.format(cert.getNotAfter());
+//            time[0] = formatter.format(cert.getNotBefore());
+//            time[1] = formatter.format(cert.getNotAfter());
+            time[0] = cert.getNotBefore().toString();
+            time[1] = cert.getNotAfter().toString();
             intRes[0] = 0;
         } catch (Exception e) {
             System.out.print("VoidCertificateComponents: " + e.getMessage());
@@ -522,6 +524,17 @@ public class CommonFunction {
         LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
         ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
 
+        String zonedDateTimeString = zonedDateTime.toString();
+        String[] zonedDateTimeStringArray = zonedDateTimeString.split("\\[");
+        //        System.out.println(zonedDateTimeStringWithoutTimeZone);
+        return zonedDateTimeStringArray[0];
+    }
+
+    public static String convertToGetTimeZoneSmartCert(String time){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy");
+        LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
         String zonedDateTimeString = zonedDateTime.toString();
         String[] zonedDateTimeStringArray = zonedDateTimeString.split("\\[");
         //        System.out.println(zonedDateTimeStringWithoutTimeZone);

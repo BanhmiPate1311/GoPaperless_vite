@@ -1,5 +1,5 @@
+import useCountry from "@/hook/use-country";
 import { apiService } from "@/services/api_service";
-import { api } from "@/utils/api";
 import { removeBase64Prefix } from "@/utils/commonFunction";
 import CloseIcon from "@mui/icons-material/Close";
 import DrawIcon from "@mui/icons-material/Draw";
@@ -13,17 +13,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
+import Slide from "@mui/material/Slide";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { DrawSignForm, TextSignForm } from "../PdfViewer";
-import UploadSignForm from "../PdfViewer/UploadSignForm";
-import Slide from "@mui/material/Slide";
-import useCountry from "@/hook/use-country";
+import { DrawSignForm, TextSignForm } from "../SigningContent/PdfViewer";
+import UploadSignForm from "../SigningContent/PdfViewer/UploadSignForm";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -71,6 +71,7 @@ export const ModalSigningImage2 = ({
   setDataSigning,
   handleShowmodal,
 }) => {
+  const { t } = useTranslation();
   // console.log("dataSigning: ", dataSigning);
   // console.log("signer: ", signer);
   // console.log("open: ", open);
@@ -78,6 +79,7 @@ export const ModalSigningImage2 = ({
 
   const { signing_token: signingToken } = useParams();
   const [value, setValue] = useState(0);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
   const textElement = useRef();
   const drawElement = useRef();
@@ -89,6 +91,10 @@ export const ModalSigningImage2 = ({
   });
 
   // console.log("headerFooter: ", headerFooter?.data);
+
+  const handleDisableSubmit = (disabled) => {
+    setIsSubmitDisabled(disabled);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -105,27 +111,40 @@ export const ModalSigningImage2 = ({
     }
   }, [open]);
 
-  async function getWeather(latitude, longitude) {
-    let res = await api.get(
-      `http://api.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=trunkey2003`
-    );
-    console.log(res.data);
-    // console.log(res.data.location.name);
+  // async function getWeather(latitude, longitude) {
+  //   let res = await api.get(
+  //     `http://api.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=trunkey2003`
+  //   );
+  //   console.log(res.data);
+  //   // console.log(res.data.location.name);
 
+  //   setDataSigning({
+  //     ...dataSigning,
+  //     country: signer.metaInformation?.country
+  //       ? signer.metaInformation?.country
+  //       : res.data.countryCode,
+  //     countryRealtime: res.data.countryCode,
+  //     signingPurpose: signer.signingPurpose
+  //       ? signer.signingPurpose
+  //       : "signature",
+  //     reason: signer.customReason ? signer.customReason : "Purpose: signature",
+  //   });
+  // }
+
+  const { address } = useCountry();
+  useEffect(() => {
     setDataSigning({
       ...dataSigning,
       country: signer.metaInformation?.country
         ? signer.metaInformation?.country
-        : res.data.countryCode,
-      countryRealtime: res.data.countryCode,
+        : address,
+      countryRealtime: address,
       signingPurpose: signer.signingPurpose
         ? signer.signingPurpose
         : "signature",
       reason: signer.customReason ? signer.customReason : "Purpose: signature",
     });
-  }
-
-  // const { address } = useCountry();
+  }, [address]);
   // console.log("address: ", address);
   // setDataSigning({
   //   ...dataSigning,
@@ -154,24 +173,24 @@ export const ModalSigningImage2 = ({
     currentDatetime
   );
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      // Geolocation is supported
-      let latitude = "";
-      let longitude = "";
-      navigator.geolocation.getCurrentPosition(function (position) {
-        console.log("Latitude is :", position.coords.latitude);
-        console.log("Longitude is :", position.coords.longitude);
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //     // Geolocation is supported
+  //     let latitude = "";
+  //     let longitude = "";
+  //     navigator.geolocation.getCurrentPosition(function (position) {
+  //       console.log("Latitude is :", position.coords.latitude);
+  //       console.log("Longitude is :", position.coords.longitude);
+  //       latitude = position.coords.latitude;
+  //       longitude = position.coords.longitude;
 
-        // Call getWeather function inside the callback
-        getWeather(latitude, longitude);
-      });
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }, []);
+  //       // Call getWeather function inside the callback
+  //       getWeather(latitude, longitude);
+  //     });
+  //   } else {
+  //     console.error("Geolocation is not supported by this browser.");
+  //   }
+  // }, []);
 
   // const handleShowmodal = () => {
   //   switch (dataSigning.provider) {
@@ -184,7 +203,7 @@ export const ModalSigningImage2 = ({
   // };
 
   const handleTextSubmit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     setDataSigning({
       ...dataSigning,
       imageBase64: removeBase64Prefix(data),
@@ -265,7 +284,7 @@ export const ModalSigningImage2 = ({
           }}
         >
           {/* {title} */}
-          Sign Document
+          {t("signing.sign_document")}
         </Typography>
         {/* {subtitle && (
           <Typography variant="h5" width={"100%"}>
@@ -315,7 +334,7 @@ export const ModalSigningImage2 = ({
             <Tab
               icon={<KeyboardIcon fontSize="small" />}
               iconPosition="start"
-              label="Text"
+              label={t("0-common.text")}
               sx={{
                 textTransform: "capitalize",
               }}
@@ -324,7 +343,7 @@ export const ModalSigningImage2 = ({
             <Tab
               icon={<DrawIcon fontSize="small" />}
               iconPosition="start"
-              label="Draw"
+              label={t("0-common.draw")}
               sx={{
                 textTransform: "capitalize",
               }}
@@ -333,7 +352,7 @@ export const ModalSigningImage2 = ({
             <Tab
               icon={<UploadIcon fontSize="small" />}
               iconPosition="start"
-              label="Upload"
+              label={t("0-common.upload")}
               sx={{
                 textTransform: "capitalize",
               }}
@@ -349,6 +368,7 @@ export const ModalSigningImage2 = ({
               dataSigning={dataSigning}
               headerFooter={headerFooter?.data}
               formattedDatetime={formattedDatetime}
+              onDisableSubmit={handleDisableSubmit}
             />
             {/* text */}
           </TabPanel>
@@ -360,6 +380,7 @@ export const ModalSigningImage2 = ({
               dataSigning={dataSigning}
               headerFooter={headerFooter?.data}
               formattedDatetime={formattedDatetime}
+              onDisableSubmit={handleDisableSubmit}
             />
             {/* draw */}
           </TabPanel>
@@ -371,6 +392,7 @@ export const ModalSigningImage2 = ({
               dataSigning={dataSigning}
               headerFooter={headerFooter?.data}
               formattedDatetime={formattedDatetime}
+              onDisableSubmit={handleDisableSubmit}
             />
           </TabPanel>
         </DialogContentText>
@@ -381,11 +403,11 @@ export const ModalSigningImage2 = ({
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={onClose}
         >
-          Close
+          {t("0-common.close")}
         </Button>
         <Button
-          variant="outlined"
-          //   disabled={isPending}
+          variant="contained"
+          disabled={isSubmitDisabled}
           //   startIcon={
           //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
           //   }
@@ -393,7 +415,7 @@ export const ModalSigningImage2 = ({
           onClick={handleSubmitClick}
           type="button"
         >
-          Sign
+          {t("0-common.sign")}
         </Button>
       </DialogActions>
     </Dialog>

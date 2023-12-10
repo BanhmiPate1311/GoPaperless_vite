@@ -1,4 +1,5 @@
 import { SigningContent } from "@/components/SigningContent";
+import { useCommonHook } from "@/hook";
 import { apiService } from "@/services/api_service";
 import { checkWorkflowStatus } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -10,15 +11,12 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useSearchParams } from "react-router-dom";
-import { NotFound } from "../NotFound";
 import { useTranslation } from "react-i18next";
+import { NotFound } from "../NotFound";
 
 export const Signing = () => {
   const { t } = useTranslation();
-  const { signing_token: signingToken } = useParams();
-  const [search] = useSearchParams();
-  const signerToken = search.get("access_token");
+  const { signingToken, signerToken } = useCommonHook();
   // const queryClient = useQueryClient();
 
   const { data: workFlowValid } = useQuery({
@@ -98,6 +96,7 @@ export const Signing = () => {
               <Chip
                 label={t("signing.download_completed")}
                 component="a"
+                color={checkWorkFlowStatus ? "primary" : undefined}
                 disabled={!checkWorkFlowStatus}
                 // href="#basic-chip"
                 href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}

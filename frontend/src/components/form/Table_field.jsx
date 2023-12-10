@@ -3,6 +3,7 @@ import { ReactComponent as SignedIcon } from "@/assets/images/svg/signed_icon.sv
 import { ReactComponent as WaitingMySig } from "@/assets/images/svg/waiting_mysig.svg";
 import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
 import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
+import { useCommonHook } from "@/hook";
 import { checkSignerStatus } from "@/utils/commonFunction";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -17,17 +18,13 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
-import { SignerInfor } from ".";
-import DialogField from "./Dialog_field";
 
 export const TableField = ({ data }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState([false]);
 
-  const [search] = useSearchParams();
-  const signerToken = search.get("access_token");
+  const { signerToken } = useCommonHook();
 
   const columns = [
     { id: "stt", label: "#", minWidth: 40 },
@@ -188,14 +185,14 @@ export const TableField = ({ data }) => {
                       <WarningIcon />
                     </IconButton>
                   </TableCell>
-                  {open[index] && (
+                  {/* {open[index] && (
                     <DialogField
                       open={open[index]}
                       title={"signer information"}
                       data={<SignerInfor data={item} />}
                       handleClose={() => handleClose(index)}
                     />
-                  )}
+                  )} */}
                 </TableRow>
               );
             })}

@@ -47,7 +47,8 @@ public class FpsService {
 
     public String getBase64ImagePdf(int documentId) throws Exception {
         System.out.println("getBase64ImagePdf");
-        String getImageBase64Url = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId;
+        String getImageBase64Url = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/base64";
+        System.out.println("getImageBase64Url: " + getImageBase64Url);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -56,9 +57,11 @@ public class FpsService {
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<byte[]> response = restTemplate.exchange(getImageBase64Url, HttpMethod.GET, httpEntity, byte[].class);
-            // convert array of bytes into base64
-            return java.util.Base64.getEncoder().encodeToString(response.getBody());
+            ResponseEntity<String> response = restTemplate.exchange(getImageBase64Url, HttpMethod.GET, httpEntity, String.class);
+//            System.out.println("response: " + response.getBody());
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(response.getBody());
+            return jsonNode.get("file_data").asText();
         } catch (HttpClientErrorException e) {
             HttpStatus statusCode = e.getStatusCode();
             System.out.println("HTTP Status Code: " + statusCode.value());
