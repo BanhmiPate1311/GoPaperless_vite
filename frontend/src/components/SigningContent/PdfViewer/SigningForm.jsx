@@ -11,7 +11,6 @@ import {
   getLang,
   getSigner,
 } from "@/utils/commonFunction";
-import CloseIcon from "@mui/icons-material/Close";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -20,7 +19,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
+import Slide from "@mui/material/Slide";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
@@ -34,7 +33,6 @@ import {
   Step5_usb,
   Step6_eid,
 } from "../Signing";
-import Slide from "@mui/material/Slide";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -379,7 +377,7 @@ const SigningForm = ({
           </Typography>
         )}
       </DialogTitle>
-      <IconButton
+      {/* <IconButton
         aria-label="close"
         onClick={onClose}
         sx={{
@@ -390,7 +388,7 @@ const SigningForm = ({
         }}
       >
         <CloseIcon />
-      </IconButton>
+      </IconButton> */}
       {/* <Box sx={{ px: "24px" }}>
         <Divider />
       </Box> */}

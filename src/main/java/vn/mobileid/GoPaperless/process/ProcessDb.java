@@ -774,6 +774,8 @@ public class ProcessDb {
         Connection conns = null;
         CallableStatement proc_stmt = null;
         try {
+            System.out.println("dzo day");
+            System.out.println("pSIGNED_TIME" + pSIGNED_TIME);
             System.out.println("pGRACE_PERIOD_END_TIME" + pGRACE_PERIOD_END_TIME);
             System.out.println("pPPL_FILE_SIGNED_ID" + pPPL_FILE_SIGNED_ID);
             System.out.println("pLAST_MODIFIED_BY" + pLAST_MODIFIED_BY);

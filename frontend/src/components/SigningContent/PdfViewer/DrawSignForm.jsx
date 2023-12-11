@@ -68,8 +68,13 @@ export const DrawSignForm = forwardRef(
 
     const sigCanvasRef = useRef(null);
 
-    const nameValue = dataSigning.certChain.subject;
-    const dnValue = dataSigning.certChain.subjectDN;
+    const nameValue =
+      typeof dataSigning.certChain.subject === "string"
+        ? dataSigning.certChain.subject
+        : dataSigning.certChain.subject.commonName;
+    const dnValue = dataSigning.certChain.subjectDN
+      ? dataSigning.certChain.subjectDN
+      : "";
     const reasonValue = dataSigning.reason;
     const logoValue = headerFooter.loGo ? headerFooter.loGo : logo1;
     const location = dataSigning.countryRealtime;
@@ -129,7 +134,7 @@ export const DrawSignForm = forwardRef(
       watch("name") ||
       watch("date") ||
       watch("reason") ||
-      watch("dn") ||
+      (watch("dn") && subtitle.dnText) ||
       watch("itver") ||
       watch("location");
 

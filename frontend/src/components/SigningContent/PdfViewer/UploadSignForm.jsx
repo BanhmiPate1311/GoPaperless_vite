@@ -78,7 +78,10 @@ const UploadSignForm = forwardRef(
       setOpenCrop(false);
     };
 
-    const nameValue = dataSigning.certChain.subject;
+    const nameValue =
+      typeof dataSigning.certChain.subject === "string"
+        ? dataSigning.certChain.subject
+        : dataSigning.certChain.subject.commonName;
     const dnValue = dataSigning.certChain.subjectDN
       ? dataSigning.certChain.subjectDN
       : "";

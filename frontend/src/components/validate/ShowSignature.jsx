@@ -16,12 +16,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const ShowSignature = ({ sig, sign, signType, index }) => {
+  console.log("index: ", index);
   const { t } = useTranslation();
 
   const signTitle = signType + " is valid";
   const subTitle = "Electronic " + signType;
 
   const [isOpen, setIsOpen] = useState([false]);
+  console.log("isOpen: ", isOpen);
   const toggleDrawer = (index) => {
     const newIsOpen = [...isOpen];
     newIsOpen[index] = !newIsOpen[index];
@@ -102,7 +104,7 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
   // event.stopPropagation() ngăn chặn sự kiện click này được truyền lên AccordionSummary và Accordion, giúp Switch được xử lý độc lập với AccordionSummary và Accordion.
   return (
     <div>
-      <div onClick={toggleDrawer}>
+      <div onClick={() => toggleDrawer(index)}>
         <Box
           sx={{
             display: "block",
@@ -156,7 +158,7 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
 
       <Drawer
         open={isOpen[index]}
-        onClose={toggleDrawer}
+        onClose={() => toggleDrawer(index)}
         anchor="right"
         sx={{
           "& .MuiDrawer-paper": {

@@ -163,7 +163,9 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
       onClose={handleClose}
       sx={{
         "& .MuiDrawer-paper": {
-          borderRadius: "10px",
+          // borderRadius: "10px",
+          borderTopLeftRadius: "10px",
+          borderBottomLeftRadius: "10px",
         },
       }}
     >
@@ -222,7 +224,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
               {status === 2 ? (
                 <>
                   <SvgIcon
-                    color="primary"
+                    color="success"
                     sx={{ fontSize: 16 }}
                     viewBox={"0 0 16 16"}
                   >
@@ -232,7 +234,8 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                   <Typography
                     variant="h5"
                     sx={{
-                      color: check ? "textSuccess.main" : "signingtext1.main",
+                      // color: check ? "textSuccess.main" : "signingtext1.main",
+                      color: "success.main",
                     }}
                   >
                     {t("signing.signature_valid")}
@@ -295,7 +298,10 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                   >
                     {item.subtitle}
                   </Typography>
-                  <Divider sx={{ my: 1 }} />
+                  {index !== participantInfo.info.length - 1 && (
+                    <Divider sx={{ my: 1 }} />
+                  )}
+                  {/* <Divider sx={{ my: 1 }} /> */}
                 </Box>
               ))}
             </AccordionDetails>
@@ -361,6 +367,9 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                     {item.subtitle}
                   </Typography>
                   <Divider sx={{ my: 1 }} />
+                  {/* {index !== participantInfo.certificated.length - 1 && (
+                    <Divider sx={{ my: 1 }} />
+                  )} */}
                 </Box>
               ))}
             </AccordionDetails>

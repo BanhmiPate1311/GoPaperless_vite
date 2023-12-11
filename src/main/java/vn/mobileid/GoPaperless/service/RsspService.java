@@ -109,14 +109,14 @@ public class RsspService {
                     System.out.println("Response Desscription: " + response.getBody().getErrorDescription());
                     System.out.println("Response ID: " + response.getBody().getResponseID());
                     System.out.println("AccessToken: " + response.getBody().getAccessToken());
-                    throw new Exception(response.getBody().getErrorDescription());
+//                    throw new Exception(response.getBody().getErrorDescription());
                 }
                 login();
             } else if (response.getBody().getError() != 0) {
                 System.out.println("Err code khac 0: " + response.getBody().getError());
                 System.out.println("Err Desscription: " + response.getBody().getErrorDescription());
                 System.out.println("Response ID: " + response.getBody().getResponseID());
-                throw new Exception(response.getBody().getErrorDescription());
+//                throw new Exception(response.getBody().getErrorDescription());
             } else {
                 this.bearer = "Bearer " + response.getBody().getAccessToken();
 
@@ -745,9 +745,9 @@ public class RsspService {
         System.out.println("signingPurpose: " + signingPurpose);
         String signingToken = signRequest.getSigningToken();
         int workFlowId = signRequest.getWorkFlowId();
-        String relyingParty = signRequest.getCertChain().getRelyingParty();
+        String relyingParty = signRequest.getRelyingParty();
         String prefixCode = signRequest.getCertChain().getPrefixCode();
-        boolean codeEnable = signRequest.getCertChain().isCodeEnable();
+        boolean codeEnable = signRequest.isCodeEnable();
         String credentialID = signRequest.getCertChain().getCredentialID();
         String certChain = signRequest.getCertChain().getCert();
 
@@ -866,18 +866,19 @@ public class RsspService {
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
             String signatureName = signNode.get("signature_name").asText();
+            System.out.println("signedTime: " + signedTime);
 
             String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
-
+            System.out.println("signatureId: " + signatureId);
             int isSetPosition = 1;
             postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             if (field_name == null || field_name.isEmpty()) {
                 fpsService.deleteSignatue(documentId, signerId);
             }

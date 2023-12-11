@@ -40,18 +40,33 @@ export const MainLayout = () => {
         minHeight: "100vh",
         backgroundColor: "signingBackground.main",
         padding:
-          headerFooter?.headerVisible !== 0
+          headerFooter?.data.headerVisible !== 0
             ? (theme) =>
                 `${theme.GoPaperless.headerHeight} 0 ${theme.GoPaperless.footerBarHeight}`
-            : "0",
+            : 0,
       }}
     >
       <Container
         maxWidth={false}
         disableGutters
         sx={{
-          height: (theme) =>
-            `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`,
+          height:
+            headerFooter?.data.headerVisible !== 0
+              ? (theme) =>
+                  `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
+              : "100vh",
+
+          // height: (theme) =>
+          //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`,
+
+          // height: {
+          //   xs: "100%",
+          //   lg:
+          //     headerFooter?.data.headerVisible !== 0
+          //       ? (theme) =>
+          //           `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
+          //       : "100vh",
+          // },
 
           mx: "auto",
         }}

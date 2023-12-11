@@ -58,7 +58,7 @@ export const OverView = ({ workFlow }) => {
                 color: "white",
               }}
             >
-              {headerFooter?.data?.name.charAt(0)}
+              {headerFooter?.data?.name?.charAt(0)}
             </Stack>
             <Box>
               <Typography

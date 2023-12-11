@@ -73,7 +73,10 @@ export const Participant = ({ participantsList, signType }) => {
             src={imageNotFound}
           /> */}
           <Typography textAlign="center" variant="h5" fontWeight="bold">
-            {t("validation.signatureNotFound")}
+            {signType === "Signature"
+              ? t("validation.signatureNotFound")
+              : t("validation.sealNotFound")}
+            {/* {t("validation.signatureNotFound")} */}
           </Typography>
         </Box>
       ) : (

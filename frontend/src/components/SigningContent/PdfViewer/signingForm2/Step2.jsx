@@ -71,7 +71,10 @@ export const Step2 = ({
     } else {
       onDisableSubmit(false);
     }
-    if (provider === "USB_TOKEN_SIGNING" && errorPG) {
+    if (
+      (provider === "USB_TOKEN_SIGNING" || provider === "ELECTRONIC_ID") &&
+      errorPG
+    ) {
       onDisableSubmit(true);
     }
   }, [connectorName, onDisableSubmit, provider, errorPG]);
@@ -170,11 +173,26 @@ export const Step2 = ({
         </FormControl>
       </Box>
       {/* <CheckIdSoft name="messageError" /> */}
-      {provider === "USB_TOKEN_SIGNING" && (errorPG || errorApi) && (
+      {provider === "USB_TOKEN_SIGNING" && errorApi && (
         <Box width={"100%"} mt={2}>
-          <Alert severity="error">{errorPG || errorApi}</Alert>
+          <Alert severity="error">{errorApi}</Alert>
         </Box>
       )}
+      {(provider === "USB_TOKEN_SIGNING" || provider === "ELECTRONIC_ID") &&
+        errorPG && (
+          <Box width={"100%"} mt={2}>
+            <Alert severity="error">
+              {errorPG}
+              <a
+                href="/view/uiApi/download/checkid"
+                download
+                style={{ color: "#991B1B", fontWeight: "bold" }}
+              >
+                {t("modal.download")}
+              </a>
+            </Alert>
+          </Box>
+        )}
     </Stack>
   );
 };

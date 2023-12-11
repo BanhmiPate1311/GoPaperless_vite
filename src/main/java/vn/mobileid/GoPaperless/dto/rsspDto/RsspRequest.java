@@ -27,6 +27,8 @@ public class RsspRequest {
     private String signingPurpose;
     private String signingToken;
     private String hashList;
+    private String relyingParty;
+    private boolean codeEnable;
     private List<String> signatures;
     private int workFlowId;
 
@@ -220,6 +222,22 @@ public class RsspRequest {
 
     public void setHashList(String hashList) {
         this.hashList = hashList;
+    }
+
+    public String getRelyingParty() {
+        return relyingParty;
+    }
+
+    public void setRelyingParty(String relyingParty) {
+        this.relyingParty = relyingParty;
+    }
+
+    public boolean isCodeEnable() {
+        return codeEnable;
+    }
+
+    public void setCodeEnable(boolean codeEnable) {
+        this.codeEnable = codeEnable;
     }
 
     public List<String> getSignatures() {

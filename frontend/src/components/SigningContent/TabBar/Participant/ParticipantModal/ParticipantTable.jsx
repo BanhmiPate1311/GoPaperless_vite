@@ -175,7 +175,7 @@ const ParticipantTable = ({ data }) => {
                     </Stack>
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "16px" }}>
-                    {item.lastName}
+                    {item.firstName}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "16px" }}>
                     {item.email}

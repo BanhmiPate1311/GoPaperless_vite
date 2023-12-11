@@ -119,11 +119,16 @@ public class ApiController {
             signingWorkflowDto.setSigningToken(signingToken);
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
             signingWorkflowDto.setLastFileUuid(lastFile.getLastPplFileUuid());
-            signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
+            if(lastFile.getDeadlineAt() != null){
+                signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
+            }
+//            signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
 
+            System.out.println("get connect xong: " );
             String base64 = fpsService.getBase64ImagePdf(lastFile.getDocumentId());
             signingWorkflowDto.setPdfBase64(base64);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("getLastFile: " + e.getMessage());
             throw new Exception(e.getMessage());
         }
@@ -144,11 +149,13 @@ public class ApiController {
 
                     if (itemParse != null) {
                         if(itemParse.signer_info != null){
+                            System.out.println("trên");
                             sIssue = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.issuer);
                             sOwner = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.subject);
                             sFrom = itemParse.signer_info.certificate.valid_from;
                             sTo = itemParse.signer_info.certificate.valid_to;
                         } else {
+                            System.out.println("duoi");
                             sIssue = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.issuer);
                             sOwner = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.subject);
                             sFrom = itemParse.signer_info_dto.certificate.valid_from;
@@ -163,8 +170,8 @@ public class ApiController {
                     }
                     participant.setIssuer(sIssue);
                     participant.setOwner(sOwner);
-                    participant.setValidFrom(sFrom);
-                    participant.setValidTo(sTo);
+                    participant.setValidFrom(CommonFunction.convertToGetTimeZoneSmartCert(sFrom));
+                    participant.setValidTo(CommonFunction.convertToGetTimeZoneSmartCert(sTo));
                 }
             }
             List<Participants> participantsList = new ArrayList<>(participants);

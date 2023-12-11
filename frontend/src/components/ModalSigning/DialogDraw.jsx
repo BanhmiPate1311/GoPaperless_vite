@@ -6,6 +6,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 import { useController } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import SignatureCanvas from "react-signature-canvas";
 
 export const DialogDraw = ({
@@ -20,6 +21,8 @@ export const DialogDraw = ({
     fieldState: { error },
   } = useController({ name, control });
   const sigCanvasRef = useRef(null);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (error) {
@@ -76,10 +79,10 @@ export const DialogDraw = ({
           //   }}
           onClick={() => sigCanvasRef.current.clear()}
         >
-          Clear
+          {t("0-common.clear")}
         </Button>
         <Button variant="outlined" onClick={handleClose}>
-          Cancel
+          {t("0-common.cancel")}
         </Button>
         <Button
           variant="contained"
@@ -88,7 +91,7 @@ export const DialogDraw = ({
             handleClose();
           }}
         >
-          Apply
+          {t("0-common.apply")}
         </Button>
       </DialogActions>
     </Dialog>

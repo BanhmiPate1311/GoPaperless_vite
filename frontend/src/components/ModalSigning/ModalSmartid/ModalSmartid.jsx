@@ -1,5 +1,4 @@
 import { rsspService } from "@/services/rssp_service";
-import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,7 +10,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -222,7 +220,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
       </Typography>
     )} */}
       </DialogTitle>
-      <IconButton
+      {/* <IconButton
         aria-label="close"
         onClick={onClose}
         sx={{
@@ -233,7 +231,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
         }}
       >
         <CloseIcon />
-      </IconButton>
+      </IconButton> */}
       {/* <Box sx={{ px: "24px" }}>
     <Divider />
   </Box> */}

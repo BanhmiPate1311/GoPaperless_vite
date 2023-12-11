@@ -270,12 +270,21 @@ export const Step6 = ({
   };
   return (
     <Box>
-      <Typography variant="h6" sx={{ fontWeight: 700, color: "textBold.main" }}>
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: 700, color: "textBold.main" }}
+        textAlign={"center"}
+      >
         {/* Identity verification process in progress. */}
         {t("electronic.step61")}
       </Typography>
 
-      <Typography variant="h6" marginBottom="10px" marginTop="6px">
+      <Typography
+        variant="h6"
+        marginBottom="10px"
+        marginTop="6px"
+        textAlign={"center"}
+      >
         {/* Please do not close this page. After your identity is verified, next
     step will open automatically. */}
         {t("electronic.step62")}
@@ -301,11 +310,11 @@ export const Step6 = ({
           // style={{ display: "none" }}
           style={{ zIndex: -100 }}
           videoConstraints={{
-            width: 469,
+            width: 440, //469
             height: 300,
           }}
         />
-        <canvas className="step6" width={454} height={300} ref={canvasRef} />
+        <canvas className="step6" width={440} height={300} ref={canvasRef} />
         {/* <button
     onClick={() => {
       const image = captureFace(prediction.current);

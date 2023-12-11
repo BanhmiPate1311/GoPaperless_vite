@@ -539,6 +539,7 @@ public class ElectronicService {
             }
             return listCertificate;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
@@ -687,6 +688,7 @@ public class ElectronicService {
             return responseSign;
 
         } catch (Exception e) {
+            e.printStackTrace();
 //            if (field_name == null || field_name.isEmpty()) {
 //                fpsService.deleteSignatue(documentId, signerId);
 //            }

@@ -96,6 +96,10 @@ export const EidStepper = ({
   }, []);
 
   useEffect(() => {
+    setErrorPG(null);
+  }, [activeStep]);
+
+  useEffect(() => {
     if (imageFace != null) {
       faceAndCreate();
     }

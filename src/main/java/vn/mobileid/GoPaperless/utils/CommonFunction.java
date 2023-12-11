@@ -7,6 +7,7 @@ package vn.mobileid.GoPaperless.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import okhttp3.*;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -30,10 +31,9 @@ import java.security.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -43,7 +43,7 @@ import java.util.*;
  */
 
 public class CommonFunction {
-
+    final public static OkHttpClient httpClient = new OkHttpClient();
     final public static String HASH_SHA256 = "SHA-256";
     final public static String HASH_SHA1 = "SHA-1";
     public static final String OID_CN = "2.5.4.3";
@@ -407,21 +407,11 @@ public class CommonFunction {
             String sJson = oMapperParse.writeValueAsString(certJson);
             System.err.println("UrlPostBack: " + url);
             System.err.println("Requet: " + sJson);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), sJson);
+            Request request = new Request.Builder().url(url).post(requestBody).build();
+            Response response = httpClient.newCall(request).execute();
+            System.out.println("requestbody PostBackJsonCertificateObject " + response.toString());
 
-            RestTemplate restTemplate = new RestTemplate();
-            Map<String, Object> requestData = new HashMap<>();
-            requestData.put("action", sAction);
-            requestData.put("token", sToken);
-            requestData.put("signer", sSigner);
-            requestData.put("signer_info", signerJson);
-            requestData.put("status", sStatus);
-            requestData.put("file", sFile);
-            requestData.put("file_digest", sFileSigest);
-            requestData.put("valid_to", time[1]);
-            requestData.put("signature_id", sSignature_id);
-            HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData);
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-            System.out.println("response: " + response.getBody());
 
 
             // HttpPost request = new HttpPost(url);
@@ -539,5 +529,34 @@ public class CommonFunction {
         String[] zonedDateTimeStringArray = zonedDateTimeString.split("\\[");
         //        System.out.println(zonedDateTimeStringWithoutTimeZone);
         return zonedDateTimeStringArray[0];
+    }
+
+    public static String convertTimeToUpDb(String time){
+
+//        String time = "2023-08-28T10:30:48+07:00";
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = inputFormat.parse(time);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public static String convertTimeSentPostBack(String inputDateString){
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+        // Convert to the desired time zone (e.g., UTC+0)
+        OffsetDateTime adjustedDateTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC);
+
+        // Format the adjusted OffsetDateTime to the desired output format
+        String outputDateString = adjustedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+
+        System.out.println("Original Date String: " + inputDateString);
+        System.out.println("Formatted Date String: " + outputDateString);
+        return outputDateString;
     }
 }

@@ -8,12 +8,16 @@ import PropTypes from "prop-types";
 import { useRef } from "react";
 import Cropper from "react-cropper";
 import { useController } from "react-hook-form";
+import "cropperjs/dist/cropper.css";
+import { useTranslation } from "react-i18next";
 
 export const DialogFile = ({ open, handleClose, name, control, data }) => {
   const {
     field: { onChange },
     // fieldState: { error },
   } = useController({ name, control });
+
+  const { t } = useTranslation();
 
   const imgCropSectionRef = useRef(null);
 
@@ -71,7 +75,7 @@ export const DialogFile = ({ open, handleClose, name, control, data }) => {
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={keepOriginal}>
-          Keep Original
+          {t("modal.upload1")}
         </Button>
         <Button
           variant="contained"
@@ -79,7 +83,7 @@ export const DialogFile = ({ open, handleClose, name, control, data }) => {
             getCropData();
           }}
         >
-          Crop
+          {t("modal.upload2")}
         </Button>
       </DialogActions>
     </Dialog>

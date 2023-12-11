@@ -31,10 +31,6 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
 
   // convert "2023-24-01T15:22:37+07:00" from yyyy-dd-mmThh:mm:ssZ to dd/mm/yyyy hh:mm:ss 24 hour
 
-  const originalTime = "2023-24-01T15:22:37+07:00";
-  const convertedTime = convertTime(originalTime);
-  console.log(convertedTime); // Output: 24/01/2023 15:22:37
-
   const signArray = {
     certificated: [
       {
@@ -72,7 +68,9 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
       onClose={handleClose}
       sx={{
         "& .MuiDrawer-paper": {
-          borderRadius: "10px",
+          // borderRadius: "10px",
+          borderTopLeftRadius: "10px",
+          borderBottomLeftRadius: "10px",
         },
       }}
     >

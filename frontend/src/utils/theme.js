@@ -8,7 +8,7 @@ import {
 export let theme = extendTheme({
   GoPaperless: {
     headerHeight: "55px",
-    footerBarHeight: "66px",
+    footerBarHeight: "55px",
     appBarHeight: "48px",
     containerMaxWidth: "1920px",
   },
@@ -59,7 +59,7 @@ export let theme = extendTheme({
         // grey 300
         borderColor: {
           light: "#DFDBD6",
-          main: "#e0e0e0",
+          main: "#E5E7EB",
         },
         // grey 300
         borderColorBlue: {
@@ -190,8 +190,12 @@ export let theme = extendTheme({
       styleOverrides: {
         root: {
           // background: '#df0f0f', // set cho tất cả MuiButton
-          // color: 'white',
+          color: "#1F2937",
           textTransform: "capitalize",
+          "&.Mui-disabled": {
+            // Correct selector for the disabled state
+            color: "#fff", // Add the # symbol before the color value
+          },
         },
       },
       variants: [

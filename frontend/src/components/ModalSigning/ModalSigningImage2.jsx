@@ -1,7 +1,6 @@
 import useCountry from "@/hook/use-country";
 import { apiService } from "@/services/api_service";
 import { removeBase64Prefix } from "@/utils/commonFunction";
-import CloseIcon from "@mui/icons-material/Close";
 import DrawIcon from "@mui/icons-material/Draw";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -12,7 +11,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -292,7 +290,7 @@ export const ModalSigningImage2 = ({
           </Typography>
         )} */}
       </DialogTitle>
-      <IconButton
+      {/* <IconButton
         aria-label="close"
         onClick={onClose}
         sx={{
@@ -303,7 +301,7 @@ export const ModalSigningImage2 = ({
         }}
       >
         <CloseIcon />
-      </IconButton>
+      </IconButton> */}
       {/* <Box sx={{ px: "24px" }}>
         <Divider />
       </Box> */}

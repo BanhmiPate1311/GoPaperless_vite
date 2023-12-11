@@ -290,7 +290,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
           {t("modal.usb1")}
         </Typography>
       </DialogTitle>
-      <IconButton
+      {/* <IconButton
         aria-label="close"
         onClick={onClose}
         sx={{
@@ -301,7 +301,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
         }}
       >
         <CloseIcon />
-      </IconButton>
+      </IconButton> */}
       {/* <Box sx={{ px: "24px" }}>
     <Divider />
   </Box> */}
@@ -397,7 +397,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
           {t("0-common.cancel")}
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           disabled={isPending || isSubmitDisabled}
           startIcon={
             isPending ? <CircularProgress color="inherit" size="1em" /> : null

@@ -33,7 +33,7 @@ export const Signatures = ({ signedInfo }) => {
           justifyContent="center"
           direction="row"
         >
-          <ValidIcon sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} />
+          <ValidIcon sx={{ color: "#3B82F6", fontSize: "18px" }} />
         </Stack>
       ),
       title: t("signing.signature_valid"),

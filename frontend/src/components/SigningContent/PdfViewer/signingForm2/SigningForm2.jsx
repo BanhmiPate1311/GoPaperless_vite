@@ -13,6 +13,7 @@ import {
   getSigner,
   getUrlWithoutProtocol,
 } from "@/utils/commonFunction";
+import { Alert, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -27,7 +28,6 @@ import { useMutation } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import { Step1, Step2, Step3_smartid, Step4, Step5_usb, Step6_eid } from ".";
 
@@ -67,12 +67,14 @@ export const SigningForm2 = ({
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
   const [errorPG, setErrorPG] = useState(null);
+  const [unavail, setUnavail] = useState(null);
   const [criteria, setCriteria] = useState("PHONE");
   const [criteriaEid, setCriteriaEid] = useState("CITIZEN-IDENTITY-CARD");
   const [code, setCode] = useState("");
   const [certSelected, setCertSelected] = useState(0);
 
   const [activeStep, setActiveStep] = useState(1);
+  console.log("activeStep: ", activeStep);
 
   const signer = getSigner(workFlow);
 
@@ -241,6 +243,10 @@ export const SigningForm2 = ({
     }
   }, [open]);
 
+  useEffect(() => {
+    setUnavail(null);
+  }, [assurance, criteria, provider, connectorName]);
+
   const filterPrefix = prefixList?.data?.filter(
     (item) => item.type === "PHONE-ID" || item.type === "PERSONAL-ID"
   );
@@ -265,8 +271,10 @@ export const SigningForm2 = ({
       case 1:
         if (assurance === "eseal") {
           // onClose();
-          toast.warn("Functionality is under development!");
+          // toast.warn("Functionality is under development!");
+          setUnavail("Functionality is under development!");
         } else {
+          setUnavail(null);
           setIsSubmitDisabled(true);
           handleNext(1);
         }
@@ -285,7 +293,8 @@ export const SigningForm2 = ({
             if (connectorName === "SMART_ID_MOBILE_ID") {
               handleNext(1);
             } else {
-              toast.warn("Functionality is under development!");
+              // toast.warn("Functionality is under development!");
+              setUnavail("Functionality is under development!");
             }
             break;
           case "USB_TOKEN_SIGNING":
@@ -306,12 +315,17 @@ export const SigningForm2 = ({
 
             break;
           case "ELECTRONIC_ID":
+            console.log("connectorName: ", connectorName);
             if (connectorName === "Vietnam") {
               setActiveStep(6);
             } else {
               // onClose();
-              toast.warn("Functionality is under development!");
+              // toast.warn("Functionality is under development!");
+              setUnavail("Functionality is under development!");
             }
+            break;
+          default:
+            setUnavail("Functionality is under development!");
             break;
         }
 
@@ -337,6 +351,8 @@ export const SigningForm2 = ({
         dataApi.current = {
           ...dataApi.current,
           requestID: requestID,
+          relyingParty: smartIdCertificate?.data?.relyingParty,
+          codeEnable: smartIdCertificate?.data?.codeEnable,
           certChain: smartIdCertificate?.data?.listCertificate[certSelected],
         };
         setDataSigning(dataApi.current);
@@ -506,6 +522,7 @@ export const SigningForm2 = ({
             borderRadius: "5px",
             paddingBottom: "5px",
             marginBottom: "10px",
+            // boxShadow: "0px 2px 4px rgba(70, 118, 251, 0.54)",
           }}
         >
           {title}
@@ -541,6 +558,8 @@ export const SigningForm2 = ({
           backgroundColor: "dialogBackground.main",
           height: "100%",
           // py: "10px",
+          borderBottom: "1px solid",
+          borderColor: "borderColor.main",
         }}
       >
         <DialogContentText
@@ -551,11 +570,13 @@ export const SigningForm2 = ({
           sx={{
             height: "100%",
           }}
+          className="choyoyoy"
         >
-          <Box sx={{ mt: 0, mb: 1, height: "100%" }}>
+          <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
             {/* {steps[activeStep]} */}
-            {steps[activeStep - 1]}
-          </Box>
+            <Box flexGrow={1}>{steps[activeStep - 1]}</Box>
+            {unavail && <Alert severity="error">{unavail}</Alert>}
+          </Stack>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ p: "17px 27px 23px", height: "78px" }}>

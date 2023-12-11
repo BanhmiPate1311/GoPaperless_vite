@@ -115,13 +115,15 @@ public class PostBack {
             int pPPL_WORKFLOW_ID = rsWFList.getId();// sStatusWFCheck[0];
             connect.USP_GW_PPL_WORKFLOW_FILE_ADD(pPPL_WORKFLOW_ID, pFILE_ID[0], Difinitions.CONFIG_WORKFLOW_FILE_SIGNED_FILE, "", sFileID_Last, "", "");
             System.out.println("signedTime: " + signedTime);
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             try {
-                Date date = inputFormat.parse(signedTime);
-                String sDateSign = outputFormat.format(date);
-                System.out.println(sDateSign);
+//                Date date = inputFormat.parse(signedTime);
+//                String sDateSign = outputFormat.format(date);
+                String TimePostback = CommonFunction.convertTimeSentPostBack(signedTime);
+                String sDateSign = CommonFunction.convertTimeToUpDb(signedTime);
+                System.out.println("sDateSign: " + sDateSign);
                 // call again to get the latest status
                 rsWFList = new WorkFlowList();
                 connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
@@ -135,8 +137,8 @@ public class PostBack {
                         + signingToken + "/download/" + sSigner;
                 String sJsonCertResult = CommonFunction.JsonCertificateObject(certEncode, serialNumber, sDateSign, signingOption, sAction, signingToken,
                         sSigner, sStatus, sFileSigner, digest, sSignature_id, sCountryCode);
-                if (!"".equals(rsWFList.getPostBackUrl())) {
-                    CommonFunction.PostBackJsonCertificateObject(rsWFList.getPostBackUrl(), certEncode, serialNumber, sDateSign, signingOption, sAction, signingToken,
+                if (!"".equals(rsWFList.getPostBackUrl()) && rsWFList.getPostBackUrl() != null) {
+                    CommonFunction.PostBackJsonCertificateObject(rsWFList.getPostBackUrl(), certEncode, serialNumber, TimePostback, signingOption, sAction, signingToken,
                             sSigner, sStatus, sFileSigner, digest, sSignature_id, sCountryCode);
 
                 }

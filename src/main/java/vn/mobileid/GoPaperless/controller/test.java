@@ -5,6 +5,8 @@ import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -16,7 +18,7 @@ import static vn.mobileid.GoPaperless.utils.TimeUtils.convertToCurrentTimezone;
 
 
 public class test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
 //        String time = "2023-12-04 09:24:26";
 //        ZoneId timezone = ZoneId.systemDefault();
 ////        ZonedDateTime zonedDateTime = convertToCurrentTimezone(time);
@@ -61,6 +63,21 @@ public class test {
 //            System.out.println("HTTP Status Code: " + statusCode.value());
 //
 //        }
+
+        // convert  "2023-08-28T10:30:48+07:00" to "2023-08-28 10:30:48.0"
+//        String inputDateString = "2023-08-28T10:30:48+07:00";
+//
+//        // Parse the input date string
+//        OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+//
+//        // Convert to the desired time zone (e.g., UTC+0)
+//        OffsetDateTime adjustedDateTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC);
+//
+//        // Format the adjusted OffsetDateTime to the desired output format
+//        String outputDateString = adjustedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+//
+//        System.out.println("Original Date String: " + inputDateString);
+//        System.out.println("Formatted Date String: " + outputDateString);
 
     }
 }

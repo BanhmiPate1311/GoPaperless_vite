@@ -158,6 +158,7 @@ export const PdfViewer = ({ workFlow }) => {
   // }, [cursors]);
 
   const handleContextMenu = (page) => (event) => {
+    console.log("event: ", event);
     // console.log("page: ", page);
     if (isSetPos || checkSignerStatus(signer, signerToken) === 2) return;
     const rect = event.currentTarget.getBoundingClientRect();
