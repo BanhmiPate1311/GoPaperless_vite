@@ -10,13 +10,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef, useState } from "react";
-
-import Slide from "@mui/material/Slide";
 import { useTranslation } from "react-i18next";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -139,7 +138,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
     e.preventDefault();
     queryClient.cancelQueries({ queryKey: ["signFile"] });
     clearInterval(timer.current);
-    onClose();
+    // onClose();
   };
 
   // console.log("error: ", sign?.error?.message);
@@ -287,13 +286,18 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           {t("0-common.cancel")}
         </Button>
         {/* <Button
-          variant="outlined"
-          //   disabled={isPending}
-          //   startIcon={
-          //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          //   }
+          variant="contained"
+          disabled={sign.isFetching}
+          startIcon={
+            sign.isFetching ? (
+              <CircularProgress color="inherit" size="1em" />
+            ) : null
+          }
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
-          //   onClick={handleSubmitClick}
+          onClick={() => {
+            queryClient.invalidateQueries({ queryKey: ["sign"] });
+            queryClient.invalidateQueries({ queryKey: ["getVc"] });
+          }}
           type="button"
         >
           Sign

@@ -155,12 +155,17 @@ export const PdfViewer = ({ workFlow }) => {
   //       pdfRange[index][i].removeEventListener("mouseleave", mouseOut);
   //     };
   //   }
-  // }, [cursors]);
+  // }, [cursors]);MuiDialog-container MuiBox-root css-i9gxme
 
   const handleContextMenu = (page) => (event) => {
     console.log("event: ", event);
     // console.log("page: ", page);
-    if (isSetPos || checkSignerStatus(signer, signerToken) === 2) return;
+    if (
+      isSetPos ||
+      checkSignerStatus(signer, signerToken) === 2 ||
+      event.target.className !== "rpv-core__text-layer"
+    )
+      return;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - rect.left; // Xác định vị trí x dựa trên vị trí của chuột
 

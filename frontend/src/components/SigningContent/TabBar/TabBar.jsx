@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { OverView } from "./OverView";
 import { Participant } from "./Participant";
 import { Signatures } from "./Signatures";
+import { Seals } from "./Seals";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -166,8 +167,8 @@ export const TabBar = ({ workFlow, signedInfo }) => {
           eSealList2={eSealList2}
           signType="eSeal"
         /> */}
-        {/* <Seals signedInfo={eSealList2} /> */}
-        <Signatures signedInfo={eSealList2} />
+        <Seals signedInfo={eSealList2} />
+        {/* <Signatures signedInfo={eSealList2} /> */}
       </TabPanel>
     </Box>
   );

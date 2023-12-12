@@ -8,25 +8,21 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { SealsInfo } from "./SealsInfo";
+import { SignaturesInfo } from "../Signatures/SignaturesInfo";
 
-export const Seals = ({ eSealList, eSealList2 }) => {
-  console.log("eSealList2: ", eSealList2);
-  console.log("eSealList: ", eSealList);
+export const Seals = ({ signedInfo }) => {
   const { t } = useTranslation();
 
-  // const signType = "Signature";
+  const signType = "Signature";
 
   const valueSign = [
     {
       name: t("validation.sigValidTitle"),
-      value: eSealList2
-        ?.filter(
-          (sig) =>
-            sig.value.warnings?.length === 0 &&
-            sig.value.signature.is_valid === true
-        )
-        .concat(eSealList),
+      value: signedInfo.filter(
+        (sig) =>
+          sig.value.warnings?.length === 0 &&
+          sig.value.signature.is_valid === true
+      ),
       icon: (
         <Stack
           padding="7px"
@@ -43,7 +39,7 @@ export const Seals = ({ eSealList, eSealList2 }) => {
     },
     {
       name: t("validation.indeterminateTitle"),
-      value: eSealList2.filter(
+      value: signedInfo.filter(
         (sig) =>
           sig.value.warnings?.length > 0 &&
           sig.value.signature.is_valid === true
@@ -64,8 +60,8 @@ export const Seals = ({ eSealList, eSealList2 }) => {
     },
     {
       name: t("validation.invalidSig"),
-      value: eSealList2.filter((sig) => {
-        console.log("invalid: ", sig.value.signature.is_valid);
+      value: signedInfo.filter((sig) => {
+        // console.log("invalid: ", sig.value.signature.is_valid);
 
         return sig.value.signature.is_valid === false;
       }),
@@ -103,13 +99,13 @@ export const Seals = ({ eSealList, eSealList2 }) => {
               fontSize: "10px",
             }}
           >
-            {eSealList.length + eSealList2.length}
+            {signedInfo.length}
           </Avatar>
         </Stack>
       </Box>
 
       {/* <Divider sx={{ color: "borderColor.main" }} /> */}
-      {/* {newSign.length === 0 ? (
+      {newSign.length === 0 ? (
         <Box>
           <Box width={200} textAlign="center" mx="auto">
             <img
@@ -119,20 +115,29 @@ export const Seals = ({ eSealList, eSealList2 }) => {
               alt="loading"
             />
           </Box>
+          {/* <Box
+            component="img"
+            sx={{
+              width: "200px",
+            }}
+            alt="The house from the offer."
+            src={imageNotFound}
+          /> */}
           <Typography textAlign="center" variant="h5" fontWeight="bold">
-            {t("validation.signatureNotFound")}
+            {t("validation.sealNotFound")}
           </Typography>
         </Box>
       ) : (
-        newSign.map((val, i) => <SealsInfo sign={val} key={i} />)
-      )} */}
+        newSign.map((val, i) => (
+          <SignaturesInfo sign={val} signType={signType} key={i} />
+        ))
+      )}
     </Box>
   );
 };
 
 Seals.propTypes = {
-  eSealList: PropTypes.array,
-  eSealList2: PropTypes.array,
+  signedInfo: PropTypes.array,
 };
 
 export default Seals;

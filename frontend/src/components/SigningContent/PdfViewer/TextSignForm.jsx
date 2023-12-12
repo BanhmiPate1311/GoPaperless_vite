@@ -63,7 +63,7 @@ export const TextSignForm = forwardRef(
       },
       resolver: yupResolver(schema),
     });
-    console.log("dataSigning: ", dataSigning);
+    // console.log("dataSigning: ", dataSigning);
     const { t } = useTranslation();
     const sigTextRef = useRef(null);
 
