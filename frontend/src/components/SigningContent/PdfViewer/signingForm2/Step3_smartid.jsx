@@ -50,9 +50,9 @@ export const Step3_smartid = ({
 
   return (
     <Stack sx={{ minWidth: 400, height: "100%" }}>
-      <Box mb={4} width={"100%"}>
+      <Box mb="15px" width={"100%"}>
         <FormControl fullWidth size="small">
-          <Typography variant="h6" color="#1F2937" fontWeight={600}>
+          <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
             {t("signing.search_criteria")}
           </Typography>
           <Select
@@ -83,7 +83,7 @@ export const Step3_smartid = ({
         // mt={6}
         flexGrow={1}
       >
-        <Typography variant="h6" color="#1F2937" fontWeight={600}>
+        <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
           {t("signing.phoneNumber")}
         </Typography>
         <PhoneInput
@@ -109,7 +109,7 @@ export const Step3_smartid = ({
         display={isPhoneSelect ? "none" : "block"}
         flexGrow={1}
       >
-        <Typography variant="h6" color="#1F2937" fontWeight={600}>
+        <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
           {t("signing.personalCode")}
         </Typography>
         <TextField

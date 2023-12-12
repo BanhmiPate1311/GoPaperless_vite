@@ -181,11 +181,12 @@
   },
   "signingForm": {
     "step2": "Valige Remote Signing Service Provider",
-    "title1": "Mobiil-ID-ga allkirjastamisel luuakse kvalifitseeritud elektrooniline allkiri, millel on omakäelise allkirjaga samaväärne õiguslik toime.",
+    "title1": "Smart-ID allkirjastamisel luuakse kvalifitseeritud elektrooniline allkiri, millel on omakäelise allkirjaga samaväärne õiguslik toime.",
     "title2": "Sertifikaadi valimisega nõustun oma nime ja isikukoodi edastamisega teenusepakkujale.",
     "title3": "Valige dokumendi tüüp",
     "title4": "Valige kindluse tase",
-    "title5": "Kindluse tase"
+    "title5": "Kindluse tase",
+    "title6": "Funktsioon on ootel!"
   },
   "validation": {
     "basicLiability": "Põhivastutus",

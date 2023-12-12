@@ -81,14 +81,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
                   <Typography variant="h6">
                     {signvalue.value.signature.certificate.subject.common_name}
                   </Typography>
-                  <Typography variant="h5">
-                    {/* {status === 2
-                      ? "Qualified Advance Signature"
-                      : status === 1
-                      ? "Waiting for my signature"
-                      : "Waiting for signature"} */}
-                    {sign.name}
-                  </Typography>
+                  <Typography variant="h5">{sign.name}</Typography>
                 </Box>
                 <IconButton onClick={() => toggleDrawer(index)}>
                   <ShowDetailIcon />

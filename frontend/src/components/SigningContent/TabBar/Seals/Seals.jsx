@@ -1,5 +1,6 @@
+import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
-import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 import Error from "@mui/icons-material/Error";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
@@ -7,23 +8,25 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { SignaturesInfo } from "./SignaturesInfo";
-import imageNotFound from "@/assets/images/noSignature.png";
+import { SealsInfo } from "./SealsInfo";
 
-export const Signatures = ({ signedInfo }) => {
-  // console.log("signedInfo: ", signedInfo);
+export const Seals = ({ eSealList, eSealList2 }) => {
+  console.log("eSealList2: ", eSealList2);
+  console.log("eSealList: ", eSealList);
   const { t } = useTranslation();
 
-  const signType = "Signature";
+  // const signType = "Signature";
 
   const valueSign = [
     {
       name: t("validation.sigValidTitle"),
-      value: signedInfo.filter(
-        (sig) =>
-          sig.value.warnings?.length === 0 &&
-          sig.value.signature.is_valid === true
-      ),
+      value: eSealList2
+        ?.filter(
+          (sig) =>
+            sig.value.warnings?.length === 0 &&
+            sig.value.signature.is_valid === true
+        )
+        .concat(eSealList),
       icon: (
         <Stack
           padding="7px"
@@ -40,7 +43,7 @@ export const Signatures = ({ signedInfo }) => {
     },
     {
       name: t("validation.indeterminateTitle"),
-      value: signedInfo.filter(
+      value: eSealList2.filter(
         (sig) =>
           sig.value.warnings?.length > 0 &&
           sig.value.signature.is_valid === true
@@ -61,8 +64,8 @@ export const Signatures = ({ signedInfo }) => {
     },
     {
       name: t("validation.invalidSig"),
-      value: signedInfo.filter((sig) => {
-        // console.log("invalid: ", sig.value.signature.is_valid);
+      value: eSealList2.filter((sig) => {
+        console.log("invalid: ", sig.value.signature.is_valid);
 
         return sig.value.signature.is_valid === false;
       }),
@@ -88,9 +91,9 @@ export const Signatures = ({ signedInfo }) => {
     <Box>
       <Box sx={{ p: 2 }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <SignatureIcon />
+          <SealIcon />
           <Typography variant="h6" sx={{ fontWeight: "550" }}>
-            {t("0-common.signatures")}
+            {t("0-common.seals")}
           </Typography>
           <Avatar
             sx={{
@@ -100,13 +103,13 @@ export const Signatures = ({ signedInfo }) => {
               fontSize: "10px",
             }}
           >
-            {signedInfo.length}
+            {eSealList.length + eSealList2.length}
           </Avatar>
         </Stack>
       </Box>
 
       {/* <Divider sx={{ color: "borderColor.main" }} /> */}
-      {newSign.length === 0 ? (
+      {/* {newSign.length === 0 ? (
         <Box>
           <Box width={200} textAlign="center" mx="auto">
             <img
@@ -116,29 +119,20 @@ export const Signatures = ({ signedInfo }) => {
               alt="loading"
             />
           </Box>
-          {/* <Box
-            component="img"
-            sx={{
-              width: "200px",
-            }}
-            alt="The house from the offer."
-            src={imageNotFound}
-          /> */}
           <Typography textAlign="center" variant="h5" fontWeight="bold">
             {t("validation.signatureNotFound")}
           </Typography>
         </Box>
       ) : (
-        newSign.map((val, i) => (
-          <SignaturesInfo sign={val} signType={signType} key={i} />
-        ))
-      )}
+        newSign.map((val, i) => <SealsInfo sign={val} key={i} />)
+      )} */}
     </Box>
   );
 };
 
-Signatures.propTypes = {
-  signedInfo: PropTypes.array,
+Seals.propTypes = {
+  eSealList: PropTypes.array,
+  eSealList2: PropTypes.array,
 };
 
-export default Signatures;
+export default Seals;

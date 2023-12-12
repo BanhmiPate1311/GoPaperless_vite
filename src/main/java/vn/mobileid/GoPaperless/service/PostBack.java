@@ -70,7 +70,7 @@ public class PostBack {
         String pHMAC = "";
         String pCREATED_BY = "";
         String pURL = "";
-        String SIGNATURE_TYPE = "qes";
+        String SIGNATURE_TYPE = "aes";
         int[] pFILE_ID = new int[1];
 
 

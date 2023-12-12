@@ -181,11 +181,12 @@
   },
   "signingForm": {
     "step2": "Wählen Sie Remote Signing Service Provider aus",
-    "title1": "Durch das Signieren mit Mobile-ID wird eine qualifizierte elektronische Signatur erstellt, die die gleiche Rechtswirkung wie eine handschriftliche Unterschrift hat.",
+    "title1": "Durch das Signieren mit Smart-ID wird eine qualifizierte elektronische Signatur erstellt, die die gleiche Rechtswirkung wie eine handschriftliche Unterschrift hat.",
     "title2": "Mit der Auswahl des Zertifikats erkläre ich mich mit der Übermittlung meines Namens und meiner persönlichen Identifikationsnummer an den Dienstleister einverstanden.",
     "title3": "Wählen Sie den Dokumenttyp aus",
     "title4": "Wählen Sie den Sicherheitsniveau aus",
-    "title5": "Grad der Sicherheit"
+    "title5": "Grad der Sicherheit",
+    "title6": "Funktionalität befindet sich in der Entwicklung!"
   },
   "validation": {
     "basicLiability": "Grundhaftung",

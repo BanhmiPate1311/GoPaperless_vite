@@ -26,6 +26,7 @@ export const Document = ({ props, workFlow, signatures }) => {
   // const signatures = queryClient.getQueryData(["signatures"]);
 
   let isSetPos = checkIsPosition(workFlow);
+  // console.log("isSetPos: ", isSetPos);
 
   const pdfPage = {
     currentPage: props.pageIndex + 1,
@@ -314,7 +315,6 @@ export const Document = ({ props, workFlow, signatures }) => {
   return (
     <div
       ref={dropSig(dropSigRef)}
-      className="kakaka"
       style={{ width: "100%", height: "100%", position: "relative" }}
       id={`pdf-view-${props.pageIndex}`}
     >
@@ -329,7 +329,7 @@ export const Document = ({ props, workFlow, signatures }) => {
         }}
       >
         <AdsClick id="mouse-icon" />
-        {(!isSetPos || checkSignerStatus(signer, signerToken) === 1) && (
+        {!isSetPos && checkSignerStatus(signer, signerToken) === 1 && (
           <div style={{ marginLeft: "20px" }}>Right Click</div>
         )}
       </div>

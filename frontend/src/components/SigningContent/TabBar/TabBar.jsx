@@ -52,12 +52,20 @@ export const TabBar = ({ workFlow, signedInfo }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState(0);
 
-  const participantsList = workFlow.participants.filter(
-    (item) => item.signerId !== ""
+  // const participantsList = workFlow.participants.filter(
+  //   (item) => item.signerId !== ""
+  // );
+
+  //1: signature, 3: seal
+  const eSealList = signedInfo?.filter(
+    (sig) => sig.ppl_file_attr_type_id === 1
   );
-  const eSealList = workFlow.participants.filter(
-    (item) => item.signerId === ""
+
+  const eSealList2 = signedInfo?.filter(
+    (sig) => sig.ppl_file_attr_type_id === 3
   );
+
+  // console.log("eSealList2: ", eSealList2);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -144,18 +152,28 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         <OverView workFlow={workFlow} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Participant participantsList={participantsList} signType="Signature" />
+        <Participant
+          participantsList={workFlow.participants}
+          signType="Signature"
+        />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Signatures signedInfo={signedInfo} />
+        <Signatures signedInfo={eSealList} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Participant participantsList={eSealList} signType="eSeal" />
+        {/* <Participant
+          participantsList={eSealList}
+          eSealList2={eSealList2}
+          signType="eSeal"
+        /> */}
+        {/* <Seals signedInfo={eSealList2} /> */}
+        <Signatures signedInfo={eSealList2} />
       </TabPanel>
     </Box>
   );
 };
 TabBar.propTypes = {
   workFlow: PropTypes.object,
+  signedInfo: PropTypes.array,
 };
 export default TabBar;

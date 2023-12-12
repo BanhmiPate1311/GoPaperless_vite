@@ -161,11 +161,11 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
           disconnectWSHTML();
         },
         function (cmd, id, error, data) {
-          // console.log("id: ", id);
+          console.log("id: ", id);
           //RECEIVE
-          // console.log("cmd: ", cmd);
-          // console.log("error: ", error);
-          // console.log("data: ", data);
+          console.log("cmd: ", cmd);
+          console.log("error: ", error);
+          console.log("data: ", data);
         }
       );
     });
@@ -195,8 +195,8 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
         disconnectWSHTML();
       },
       function (error, mess) {
-        // console.log("error: ", error);
-        // console.log("mess: ", mess);
+        console.log("error: ", error);
+        console.log("mess: ", mess);
         reject(mess);
         // setErrorGetCert(mess);
         disconnectWSHTML();

@@ -6,7 +6,6 @@
 package vn.mobileid.GoPaperless.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import okhttp3.*;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
@@ -18,19 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import vn.mobileid.GoPaperless.model.apiModel.*;
-import vn.mobileid.GoPaperless.model.rsspModel.SignHashResponse;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.*;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -148,8 +142,10 @@ public class CommonFunction {
             info[2] = cert.getSerialNumber().toString(16);
 //            time[0] = formatter.format(cert.getNotBefore());
 //            time[1] = formatter.format(cert.getNotAfter());
-            time[0] = cert.getNotBefore().toString();
-            time[1] = cert.getNotAfter().toString();
+//            time[0] = cert.getNotBefore().toString();
+//            time[1] = cert.getNotAfter().toString();
+            time[0] = convertToISO8601(cert.getNotBefore());
+            time[1] = convertToISO8601(cert.getNotAfter());
             intRes[0] = 0;
         } catch (Exception e) {
             System.out.print("VoidCertificateComponents: " + e.getMessage());
@@ -558,5 +554,18 @@ public class CommonFunction {
         System.out.println("Original Date String: " + inputDateString);
         System.out.println("Formatted Date String: " + outputDateString);
         return outputDateString;
+    }
+
+    public static String convertToISO8601(Date date) {
+        // Convert Date to Instant
+        Instant instant = date.toInstant();
+
+        // Create ZonedDateTime from Instant
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+
+        // Format ZonedDateTime to ISO 8601 string
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+        return zonedDateTime.format(formatter);
     }
 }

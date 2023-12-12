@@ -48,7 +48,7 @@ export const DrawSignForm = forwardRef(
       defaultValues: {
         drawUrl: "",
         name: false,
-        email: "",
+        email: dataSigning.email,
         date: false,
         logo: false,
         reason: false,

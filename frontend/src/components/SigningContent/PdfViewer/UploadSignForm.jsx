@@ -50,7 +50,7 @@ const UploadSignForm = forwardRef(
         fileUrl: "",
         imageScrop: "",
         name: false,
-        email: "",
+        email: dataSigning.email,
         date: false,
         logo: false,
         reason: false,

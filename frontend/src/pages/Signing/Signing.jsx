@@ -90,7 +90,8 @@ export const Signing = () => {
                 component="div"
                 sx={{ flexGrow: 1, textTransform: "uppercase" }}
               >
-                {t("signing.document_information")}
+                {/* {t("signing.document_information")} */}
+                {workFlow?.data?.documentName}
               </Typography>
               {/* <VisibilityIcon sx={{ color: "signingtext1.main" }} /> */}
               <Chip

@@ -121,9 +121,9 @@ export const Step2 = ({
 
   return (
     <Stack sx={{ width: "100%", height: "100%" }}>
-      <Box mb={4} width={"100%"}>
+      <Box mb="10px" width={"100%"}>
         <FormControl fullWidth size="small">
-          <Typography variant="h6" color="#1F2937" fontWeight={600}>
+          <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
             {t("signing.signing_method")}
           </Typography>
           <Select
@@ -152,7 +152,7 @@ export const Step2 = ({
       </Box>
       <Box width={"100%"} flexGrow={1}>
         <FormControl fullWidth size="small" disabled={provider === ""}>
-          <Typography variant="h6" color="#1F2937" fontWeight={600}>
+          <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
             {t("signingForm.step2")}
           </Typography>
           <Select

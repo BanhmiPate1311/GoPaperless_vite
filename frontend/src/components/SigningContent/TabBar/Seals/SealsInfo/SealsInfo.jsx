@@ -1,9 +1,4 @@
 import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
-import { ReactComponent as Signed_Icon } from "@/assets/images/svg/signed_icon2.svg";
-import { ReactComponent as SignerSelected } from "@/assets/images/svg/signer_select.svg";
-import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
-import { useCommonHook } from "@/hook";
-import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -15,14 +10,13 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { SigningDetail } from "../SigningDetail";
+import { SignatureDetail } from "../SignatureDetail";
 
-export const ParticipantInfo = ({ participantsList, signType }) => {
-  const { t } = useTranslation();
-  const { signerToken } = useCommonHook();
+export const SealsInfo = ({ sign }) => {
+  // console.log("sign: ", sign);
   const [isOpen, setIsOpen] = useState([false]);
   // console.log("isOpen: ", isOpen);
+  // let name = sign.name + " " + signType;
 
   const [expand, setExpand] = useState(true);
 
@@ -31,7 +25,6 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
     newIsOpen[index] = !newIsOpen[index];
     setIsOpen(newIsOpen);
   };
-
   return (
     <Accordion disableGutters elevation={0} expanded={expand}>
       <AccordionSummary
@@ -48,11 +41,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
           height: "36px",
         }}
       >
-        <Typography variant="h6">
-          {signType === "Signature"
-            ? t("0-common.participants")
-            : t("0-common.seals")}
-        </Typography>
+        <Typography variant="h6">{sign.title}</Typography>
         <Avatar
           sx={{
             bgcolor: "signingtextBlue.main",
@@ -61,66 +50,50 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
             fontSize: "10px",
           }}
         >
-          {participantsList.length}
+          {sign.value.length}
         </Avatar>
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0 }}>
-        {participantsList.map((participant, index) => {
-          const status = checkSignerStatus(participant, signerToken);
-          // console.log("status: ", status);
-          const check = checkSignerWorkFlow(participant, signerToken);
+        {sign.value.map((signvalue, index) => {
+          // console.log("signvalue: ", signvalue);
+          // const status = checkSignerStatus(participant, signerToken);
+          // const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
             <Box key={index}>
               <Stack
                 direction={"row"}
                 spacing={1}
-                backgroundColor={check ? "signerBackGround.main" : ""}
-                color={check ? "signingtextBlue.main" : ""}
+                backgroundColor="signingWFBackground.main"
+                // color={check ? "signingtextBlue.main" : ""}
                 sx={{
                   px: 2,
                 }}
                 alignItems={"center"}
                 borderTop="1px solid"
                 borderBottom={
-                  index === participantsList.length - 1 ? "1px solid" : ""
+                  index === sign.value.length - 1 ? "1px solid" : ""
                 }
                 borderColor="borderColor.main"
               >
-                {/* {check ? (
-                  <SignerSelected />
-                ) : (
-                  <WaitingSig width={24} height={24} />
-                )} */}
-                {status === 2 ? (
-                  <Signed_Icon />
-                ) : check ? (
-                  <SignerSelected />
-                ) : (
-                  <WaitingSig width={24} height={24} />
-                )}
+                {sign.icon}
                 <Box flexGrow={1}>
                   <Typography variant="h6">
-                    {participant.lastName} {participant.firstName}
+                    {signvalue.value.signature.certificate.subject.common_name}
                   </Typography>
-                  <Typography variant="h5">
-                    {status === 2
-                      ? participant.signerId
-                        ? t("signing.signature_valid")
-                        : t("validation.sealValidTitle2")
-                      : status === 1
-                      ? t("signing.wait_my_signature")
-                      : t("signing.wait_signature")}
-                  </Typography>
+                  <Typography variant="h5">{sign.name}</Typography>
                 </Box>
                 <IconButton onClick={() => toggleDrawer(index)}>
                   <ShowDetailIcon />
                 </IconButton>
-                <SigningDetail
-                  open={isOpen[index]}
-                  participant={participant}
-                  handleClose={() => toggleDrawer(index)}
-                />
+                {isOpen[index] && (
+                  <SignatureDetail
+                    open={isOpen[index]}
+                    signDetail={signvalue}
+                    sign={sign}
+                    handleClose={() => toggleDrawer(index)}
+                  />
+                )}
               </Stack>
             </Box>
           );
@@ -129,8 +102,11 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
     </Accordion>
   );
 };
-ParticipantInfo.propTypes = {
-  participantsList: PropTypes.array,
+
+SealsInfo.propTypes = {
+  signedInfo: PropTypes.array,
   signType: PropTypes.string,
+  sign: PropTypes.object,
 };
-export default ParticipantInfo;
+
+export default SealsInfo;

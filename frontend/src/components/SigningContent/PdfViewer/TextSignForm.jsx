@@ -45,9 +45,12 @@ export const TextSignForm = forwardRef(
 
     const { control, handleSubmit, watch } = useForm({
       defaultValues: {
-        text: "",
+        text:
+          typeof dataSigning.certChain.subject === "string"
+            ? dataSigning.certChain.subject
+            : dataSigning.certChain.subject.commonName,
         name: false,
-        email: "",
+        email: dataSigning.email,
         date: false,
         logo: false,
         reason: false,
@@ -60,7 +63,7 @@ export const TextSignForm = forwardRef(
       },
       resolver: yupResolver(schema),
     });
-    // console.log("dataSigning: ", dataSigning);
+    console.log("dataSigning: ", dataSigning);
     const { t } = useTranslation();
     const sigTextRef = useRef(null);
 
@@ -211,6 +214,7 @@ export const TextSignForm = forwardRef(
             label={t("0-common.email")}
             name="email"
             type="email"
+            // defaultValues={dataSigning.email}
             control={control}
             sx={{
               my: 1,

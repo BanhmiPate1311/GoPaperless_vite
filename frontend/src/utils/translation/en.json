@@ -182,11 +182,12 @@
   "signingForm": {
     "step2": "Select Remote Signing Service Provider",
     "step3": "",
-    "title1": "Signing with Mobile-ID creates a qualified electronic signature which has equivalent legal effect of a handwritten signature.",
+    "title1": "Signing with Smart-ID creates a qualified electronic signature which has equivalent legal effect of a handwritten signature.",
     "title2": "By choosing the certificate, I agree to the transfer of my name and personal identification code to the service provider.",
     "title3": "Select document type",
     "title4": "Select level of Assurance",
-    "title5": "Level of Assurance"
+    "title5": "Level of Assurance",
+    "title6": "Functionality is under development!"
   },
   "validation": {
     "basicLiability": "Basic liability",

@@ -14,6 +14,7 @@ import { ParticipantModal } from "./ParticipantModal";
 
 // eslint-disable-next-line react/prop-types
 export const Participant = ({ participantsList, signType }) => {
+  // console.log("participantsList: ", participantsList);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -28,6 +29,7 @@ export const Participant = ({ participantsList, signType }) => {
     <Box>
       <Stack sx={{ p: 2 }} direction="row" justifyContent="space-between">
         <Stack direction="row" spacing={1} alignItems="center">
+          {/* {signType === "Signature" ? <ParticipantIcon /> : <SealIcon />} */}
           <ParticipantIcon />
           <Typography sx={{ fontWeight: "550" }} variant="h6">
             {signType === "Signature"

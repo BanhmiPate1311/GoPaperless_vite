@@ -74,9 +74,10 @@ export const SigningForm2 = ({
   const [certSelected, setCertSelected] = useState(0);
 
   const [activeStep, setActiveStep] = useState(1);
-  console.log("activeStep: ", activeStep);
+  // console.log("activeStep: ", activeStep);
 
   const signer = getSigner(workFlow);
+  // console.log("signer: ", signer);
 
   const signingOptions = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.keys(item)[0])
@@ -99,6 +100,7 @@ export const SigningForm2 = ({
     language: lang,
     fieldName: signer.signerId,
     lastFileUuid: workFlow.lastFileUuid,
+    email: signer?.email,
   });
   // console.log("dataApi: ", dataApi.current);
 
@@ -272,7 +274,7 @@ export const SigningForm2 = ({
         if (assurance === "eseal") {
           // onClose();
           // toast.warn("Functionality is under development!");
-          setUnavail("Functionality is under development!");
+          setUnavail(t("signingForm.title6"));
         } else {
           setUnavail(null);
           setIsSubmitDisabled(true);
@@ -294,7 +296,7 @@ export const SigningForm2 = ({
               handleNext(1);
             } else {
               // toast.warn("Functionality is under development!");
-              setUnavail("Functionality is under development!");
+              setUnavail(t("signingForm.title6"));
             }
             break;
           case "USB_TOKEN_SIGNING":
@@ -321,11 +323,11 @@ export const SigningForm2 = ({
             } else {
               // onClose();
               // toast.warn("Functionality is under development!");
-              setUnavail("Functionality is under development!");
+              setUnavail(t("signingForm.title6"));
             }
             break;
           default:
-            setUnavail("Functionality is under development!");
+            setUnavail(t("signingForm.title6"));
             break;
         }
 
@@ -508,7 +510,7 @@ export const SigningForm2 = ({
       <DialogTitle
         component="div"
         id="scroll-dialog-title"
-        sx={{ backgroundColor: "dialogBackground.main", paddingBottom: "0px" }}
+        sx={{ backgroundColor: "dialogBackground.main" }}
       >
         <Typography
           variant="h6"
@@ -533,6 +535,7 @@ export const SigningForm2 = ({
             width={"100%"}
             color="#475569"
             fontWeight={500}
+            // paddingBottom="15px"
           >
             {subtitle}
           </Typography>
@@ -560,6 +563,7 @@ export const SigningForm2 = ({
           // py: "10px",
           borderBottom: "1px solid",
           borderColor: "borderColor.main",
+          pt: "10px",
         }}
       >
         <DialogContentText

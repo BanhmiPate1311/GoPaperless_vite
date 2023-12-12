@@ -52,17 +52,29 @@ public class ApiController {
         Map<String, Object> map = new HashMap<>();
         map.put("documenId", participants.getDocumentId());
         map.put("headerVisible", participants.getVisibleHeaderFooter());
-        if (participants.getVisibleHeaderFooter() == 1) {
-            List<Enterprise> enterprises = LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
+//        if (participants.getVisibleHeaderFooter() == 1) {
+//            List<Enterprise> enterprises = LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
+//
+//            if (enterprises.size() > 0) {
+//                for (Enterprise enterprise : enterprises) {
+//                    if (enterprise.getId() == participants.getEnterpriseId()) {
+//                        map.put("loGo", enterprise.getLogo());
+//                        map.put("metadataGatewayView", enterprise.getMetadataGatewayView());
+//                        map.put("name", enterprise.getName());
+//                        map.put("notificationEmail", enterprise.getNotificationEmail());
+//                    }
+//                }
+//            }
+//        }
+        List<Enterprise> enterprises = LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
 
-            if (enterprises.size() > 0) {
-                for (Enterprise enterprise : enterprises) {
-                    if (enterprise.getId() == participants.getEnterpriseId()) {
-                        map.put("loGo", enterprise.getLogo());
-                        map.put("metadataGatewayView", enterprise.getMetadataGatewayView());
-                        map.put("name", enterprise.getName());
-                        map.put("notificationEmail", enterprise.getNotificationEmail());
-                    }
+        if (enterprises.size() > 0) {
+            for (Enterprise enterprise : enterprises) {
+                if (enterprise.getId() == participants.getEnterpriseId()) {
+                    map.put("loGo", enterprise.getLogo());
+                    map.put("metadataGatewayView", enterprise.getMetadataGatewayView());
+                    map.put("name", enterprise.getName());
+                    map.put("notificationEmail", enterprise.getNotificationEmail());
                 }
             }
         }
@@ -141,7 +153,7 @@ public class ApiController {
                     String sFrom = "";
                     String sTo = "";
                     String sCertificate = CommonFunction.CheckTextNull(participant.getCertificate());
-
+                    System.out.println("signed time: " + participant.getSignedTime());
                     participant.setSignedTime(CommonFunction.convertToGetTimeZone(participant.getSignedTime()));
 
                     ObjectMapper oMapperParse = new ObjectMapper();
@@ -170,8 +182,10 @@ public class ApiController {
                     }
                     participant.setIssuer(sIssue);
                     participant.setOwner(sOwner);
-                    participant.setValidFrom(CommonFunction.convertToGetTimeZoneSmartCert(sFrom));
-                    participant.setValidTo(CommonFunction.convertToGetTimeZoneSmartCert(sTo));
+                    System.out.println("sFrom: " + sFrom);
+                    System.out.println("sTo: " + sTo);
+                    participant.setValidFrom(sFrom);
+                    participant.setValidTo(sTo);
                 }
             }
             List<Participants> participantsList = new ArrayList<>(participants);

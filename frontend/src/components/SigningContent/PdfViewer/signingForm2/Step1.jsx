@@ -24,7 +24,7 @@ export const Step1 = ({ assurance, setAssurance, onDisableSubmit }) => {
   return (
     <Box sx={{ minWidth: 400 }}>
       <FormControl fullWidth size="small">
-        <Typography variant="h6" color="#1F2937" fontWeight={600}>
+        <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
           {t("signingForm.title5")}
         </Typography>
         <Select

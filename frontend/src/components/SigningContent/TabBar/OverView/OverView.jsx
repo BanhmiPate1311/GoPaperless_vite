@@ -29,7 +29,10 @@ export const OverView = ({ workFlow }) => {
           spacing={1}
           alignItems="center"
         >
-          <OverviewIcon /> {t("0-common.overview")}
+          <OverviewIcon />
+          <Typography sx={{ fontWeight: "550" }} variant="h6">
+            {t("0-common.overview")}
+          </Typography>
         </Stack>
       </Box>
 
