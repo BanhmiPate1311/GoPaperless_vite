@@ -1,3 +1,4 @@
+import { useSmartIdSign } from "@/hook";
 import { rsspService } from "@/services/rssp_service";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -13,7 +14,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -107,50 +108,92 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
 
   const queryClient = useQueryClient();
   const timer = useRef(null);
+  // click on cancel
+  const [signFileController, setSignFileController] = useState(
+    new AbortController()
+  );
+  // const [getVCController, setGetVCController] = useState(new AbortController());
+  const handleCancelSign = () => {
+    signFileController.abort();
+    // getVCController.abort();
+    setSignFileController(new AbortController());
+    // setGetVCController(new AbortController());
+    clearInterval(timer.current);
+    onClose();
+  };
 
-  const sign = useQuery({
-    queryKey: ["signFile"],
-    queryFn: async ({ signal }) => {
-      try {
-        const response = await rsspService.signFile(dataSigning, { signal });
-        window.parent.postMessage(
-          { data: response.data, status: "Success" },
-          "*"
-        );
+  // const sign = useQuery({
+  //   queryKey: ["signFile"],
+  //   queryFn: async ({ signal }) => {
+  //     try {
+  //       const response = await rsspService.signFile(dataSigning, { signal });
+  // window.parent.postMessage({ data: response.data, status: "Success" }, "*");
+  //       queryClient.invalidateQueries({ queryKey: ["getField"] });
+  //       queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
+  //       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+  //       onClose();
+  //       return true;
+  //     } catch (error) {
+  //       // console.log("error1: ", error);
+  //       setProgress(0);
+  //       clearInterval(timer.current);
+  //       throw new Error(error.response?.data?.message || "An error occurred");
+  //     }
+  //   },
+  //   retry: 0,
+  //   staleTime: 0,
+  //   cacheTime: 5 * 60 * 1000,
+  // });
+
+  const smartSign = useSmartIdSign({ signal: signFileController.signal });
+  console.log("smartSign: ", smartSign);
+
+  useEffect(() => {
+    smartSign.mutate(dataSigning, {
+      onSuccess: (data) => {
+        window.parent.postMessage({ data: data.data, status: "Success" }, "*");
         queryClient.invalidateQueries({ queryKey: ["getField"] });
         queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
         queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
         onClose();
         return true;
-      } catch (error) {
-        // console.log("error1: ", error);
+      },
+      onError: (err) => {
+        console.log("err: ", err);
         setProgress(0);
         clearInterval(timer.current);
-        throw new Error(error.response?.data?.message || "An error occurred");
-      }
-    },
-    retry: 0,
-    staleTime: 0,
-    cacheTime: 5 * 60 * 1000,
-  });
+      },
+    });
+    getVCEnabled();
+  }, []);
 
-  const handelCancel = (e) => {
-    e.preventDefault();
-    queryClient.cancelQueries({ queryKey: ["signFile"] });
-    clearInterval(timer.current);
-    // onClose();
-  };
+  // const handelCancel = (e) => {
+  //   e.preventDefault();
+  //   queryClient.cancelQueries({ queryKey: ["signFile"] });
+  //   clearInterval(timer.current);
+  //   // onClose();
+  // };
 
   // console.log("error: ", sign?.error?.message);
 
-  const { data: getVc } = useQuery({
-    queryKey: ["getVc"],
-    queryFn: () => {
-      return rsspService.getVc(dataSigning);
-    },
-    staleTime: 0,
-    cacheTime: 5 * 60 * 1000,
-  });
+  // const { data: getVc } = useQuery({
+  //   queryKey: ["getVc"],
+  //   queryFn: () => {
+  //     return rsspService.getVc(dataSigning);
+  //   },
+  //   staleTime: 0,
+  //   cacheTime: 5 * 60 * 1000,
+  // });
+  const [vcode, setVc] = useState(null);
+  console.log("vcode: ", vcode);
+  const getVCEnabled = async () => {
+    const response = await rsspService.getVc({
+      requestID: dataSigning.requestID,
+    });
+    console.log("response: ", response.data);
+    setVc(response.data);
+    // setVCEnabled(false);
+  };
 
   // console.log("getVc: ", getVc?.data);
 
@@ -249,7 +292,8 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           <Typography variant="body2">{t("modal.smartid1")}</Typography>
           <Box p={3} textAlign={"center"}>
             <Typography fontSize={"40px"} fontWeight={"bold"}>
-              {getVc?.data ? getVc?.data : <CircularProgress />}
+              {/* {getVc?.data ? getVc.data : <CircularProgress />} */}
+              {vcode ? vcode : <CircularProgress />}
               {/* 1983-1991 */}
             </Typography>
             <Typography>
@@ -271,8 +315,10 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
             {t("electronic.step104")}
           </Typography>
           <Stack width={"100%"} mb={2}>
-            {sign?.error && (
-              <Alert severity="error">{sign?.error?.message}</Alert>
+            {smartSign?.error && (
+              <Alert severity="error">
+                {smartSign?.error?.response?.data.message}
+              </Alert>
             )}
           </Stack>
         </DialogContentText>
@@ -281,27 +327,48 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
         <Button
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
-          onClick={handelCancel}
+          onClick={handleCancelSign}
         >
           {t("0-common.cancel")}
         </Button>
-        {/* <Button
+        <Button
           variant="contained"
-          disabled={sign.isFetching}
+          disabled={smartSign.isPending}
           startIcon={
-            sign.isFetching ? (
+            smartSign.isPending ? (
               <CircularProgress color="inherit" size="1em" />
             ) : null
           }
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={() => {
-            queryClient.invalidateQueries({ queryKey: ["sign"] });
-            queryClient.invalidateQueries({ queryKey: ["getVc"] });
+            setProgress(100);
+            setVc(null);
+            // queryClient.invalidateQueries({ queryKey: ["getVc"] });
+            smartSign.mutate(dataSigning, {
+              onSuccess: (data) => {
+                window.parent.postMessage(
+                  { data: data.data, status: "Success" },
+                  "*"
+                );
+                queryClient.invalidateQueries({ queryKey: ["getField"] });
+                queryClient.invalidateQueries({
+                  queryKey: ["verifySignatures"],
+                });
+                queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+                onClose();
+                return true;
+              },
+              onError: () => {
+                setProgress(0);
+                clearInterval(timer.current);
+              },
+            });
+            getVCEnabled();
           }}
           type="button"
         >
-          Sign
-        </Button> */}
+          {t("0-common.retry")}
+        </Button>
       </DialogActions>
     </Dialog>
   );

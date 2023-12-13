@@ -19,11 +19,12 @@ export const Signatures = ({ signedInfo }) => {
   const valueSign = [
     {
       name: t("validation.sigValidTitle"),
-      value: signedInfo.filter(
-        (sig) =>
-          sig.value.warnings?.length === 0 &&
+      value: signedInfo.filter((sig) => {
+        return (
+          sig.value?.warnings === undefined &&
           sig.value.signature.is_valid === true
-      ),
+        );
+      }),
       icon: (
         <Stack
           padding="7px"
@@ -40,11 +41,9 @@ export const Signatures = ({ signedInfo }) => {
     },
     {
       name: t("validation.indeterminateTitle"),
-      value: signedInfo.filter(
-        (sig) =>
-          sig.value.warnings?.length > 0 &&
-          sig.value.signature.is_valid === true
-      ),
+      value: signedInfo.filter((sig) => {
+        return sig.value?.warnings && sig.value.signature.is_valid === true;
+      }),
       icon: (
         <Stack
           padding="7px"

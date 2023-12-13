@@ -20,6 +20,18 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
   const warnings = signDetail.value.warnings ? signDetail.value.warnings : [];
   const errors = signDetail.value.errors ? signDetail.value.errors : [];
 
+  const commonName = signDetail?.value?.signature?.certificate?.issuer
+    ?.common_name
+    ? signDetail?.value?.signature?.certificate?.issuer?.common_name
+    : "";
+  const organization = signDetail?.value?.signature?.certificate?.issuer
+    ?.organization
+    ? ", " + signDetail?.value?.signature?.certificate?.issuer?.organization
+    : "";
+  const country = signDetail?.value?.signature?.certificate?.issuer?.country
+    ? ", " + signDetail?.value?.signature?.certificate?.issuer?.country
+    : "";
+
   //   const signTitle = signType + " is valid";
   // const subTitle = "Electronic " + signType;
 
@@ -41,9 +53,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
       },
       {
         title: t("0-common.Certificate issuer"),
-        subtitle: signDetail.value.signature.certificate.issuer.common_name
-          ? signDetail.value.signature.certificate.issuer.common_name
-          : null,
+        subtitle: commonName + organization + country,
       },
       {
         title: t("0-common.Certificate Owner"),

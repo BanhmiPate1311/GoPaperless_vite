@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "../Signatures/SignaturesInfo";
 
 export const Seals = ({ signedInfo }) => {
+  console.log("Seals: ", signedInfo);
   const { t } = useTranslation();
 
   const signType = "Signature";
@@ -18,11 +19,12 @@ export const Seals = ({ signedInfo }) => {
   const valueSign = [
     {
       name: t("validation.sigValidTitle"),
-      value: signedInfo.filter(
-        (sig) =>
-          sig.value.warnings?.length === 0 &&
+      value: signedInfo.filter((sig) => {
+        return (
+          sig.value?.warnings === undefined &&
           sig.value.signature.is_valid === true
-      ),
+        );
+      }),
       icon: (
         <Stack
           padding="7px"
@@ -39,11 +41,9 @@ export const Seals = ({ signedInfo }) => {
     },
     {
       name: t("validation.indeterminateTitle"),
-      value: signedInfo.filter(
-        (sig) =>
-          sig.value.warnings?.length > 0 &&
-          sig.value.signature.is_valid === true
-      ),
+      value: signedInfo.filter((sig) => {
+        return sig.value?.warnings && sig.value.signature.is_valid === true;
+      }),
       icon: (
         <Stack
           padding="7px"

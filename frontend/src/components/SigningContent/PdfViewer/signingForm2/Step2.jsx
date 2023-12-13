@@ -184,7 +184,7 @@ export const Step2 = ({
             <Alert severity="error">
               {errorPG}
               <a
-                href="/view/uiApi/download/checkid"
+                href="https://checkid.mobile-id.vn/dtis/plugin/gw/checkid_client_installer.exe"
                 download
                 style={{ color: "#991B1B", fontWeight: "bold" }}
               >

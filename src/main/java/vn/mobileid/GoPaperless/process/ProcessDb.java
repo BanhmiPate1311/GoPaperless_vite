@@ -270,7 +270,7 @@ public class ProcessDb {
         return convrtr;
     }
 
-    public void USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(int pPPL_FILE_ID, List<PplFileDetail> listPplFileDetail) throws Exception {
+    public void USP_GW_PPL_FILE_DETAIL_GET(int pPPL_FILE_ID, List<PplFileDetail> listPplFileDetail) throws Exception {
 //        String convrtr = "1";
         Connection conns = null;
         CallableStatement proc_stmt = null;
@@ -279,7 +279,7 @@ public class ProcessDb {
         try {
             System.out.println("pPPL_FILE_ID: " + pPPL_FILE_ID);
             conns = OpenDatabase();
-            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(?,?) }");
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_FILE_DETAIL_GET(?,?) }");
             proc_stmt.setInt("pPPL_FILE_ID", pPPL_FILE_ID);
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
 

@@ -208,7 +208,7 @@ public class ApiController {
     public ResponseEntity<?> getSignedInfo(@RequestBody ApiDtoRequest request) throws Exception {
         System.out.println("getSignedInfo");
         List<PplFileDetail> listPplFileDetail = new ArrayList<>();
-        connect.USP_GW_PPL_FILE_DETAIL_GET_SIGNATURE(request.getFileId(), listPplFileDetail);
+        connect.USP_GW_PPL_FILE_DETAIL_GET(request.getFileId(), listPplFileDetail);
 
         return new ResponseEntity<>(listPplFileDetail, HttpStatus.OK);
     }

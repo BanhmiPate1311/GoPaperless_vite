@@ -96,6 +96,10 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       };
       packFile.mutate(request, {
         onSuccess: (data) => {
+          window.parent.postMessage(
+            { data: data.data, status: "Success" },
+            "*"
+          );
           queryClient.invalidateQueries({ queryKey: ["getField"] });
           queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
           queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });

@@ -16,4 +16,12 @@ useSmartIdCertificate.propTypes = {
   data: PropTypes.object,
 };
 
-export default useSmartIdCertificate;
+export const useSmartIdSign = ({ signal }) => {
+  const { mutate, data, isLoading, isPending, error } = useMutation({
+    mutationFn: async (data) => {
+      const response = await rsspService.signFile(data, { signal });
+      return response.data;
+    },
+  });
+  return { mutate, data, isLoading, isPending, error };
+};
