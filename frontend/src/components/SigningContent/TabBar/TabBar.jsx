@@ -92,7 +92,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         sx={{
           borderLeft: 1,
           borderColor: "divider",
-          width: "130px",
+          width: "120px",
           ".Mui-selected": {
             backgroundColor: "signingBackground.main",
             borderRadius: "10px",

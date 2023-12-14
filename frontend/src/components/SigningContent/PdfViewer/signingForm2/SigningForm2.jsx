@@ -334,8 +334,16 @@ export const SigningForm2 = ({
         break;
       case 3:
         if (criteria === "PHONE") {
+          let phoneWithoutDialCode = code.slice(dialCode.current.length);
+          if (phoneWithoutDialCode.match(/^0+/)) {
+            // Remove all leading '0's, leaving at least one '0'
+            phoneWithoutDialCode = phoneWithoutDialCode.replace(/^0+/, "");
+            setCode(dialCode.current + phoneWithoutDialCode);
+            break;
+          }
+
           codeNumber =
-            criteria + ":" + code.replace(dialCode.current, "0").trim();
+            criteria + ":" + (dialCode.current + phoneWithoutDialCode);
         } else {
           codeNumber = criteria + ":" + code;
         }

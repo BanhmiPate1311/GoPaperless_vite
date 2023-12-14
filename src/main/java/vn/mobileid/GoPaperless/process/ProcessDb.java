@@ -334,7 +334,7 @@ public class ProcessDb {
                 enterpriseList.add(enterprise);
             }
         } catch (Exception e) {
-            System.out.println("USP_GW_PPL_WORKFLOW_GET: " + e.getMessage());
+            System.out.println("USP_GW_ENTERPRISE_LIST: " + e.getMessage());
         } finally {
             if (rs != null) {
                 rs.close();

@@ -139,6 +139,8 @@ export const TextSignForm = forwardRef(
         <Stack
           ref={sigTextRef}
           sx={{
+            // opacity: 0.5,
+            // background: "transparent",
             overflow: "hidden",
             borderRadius: "6px",
             border: "1px solid #357EEB",

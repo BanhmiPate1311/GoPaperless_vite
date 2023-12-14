@@ -30,6 +30,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowEidModal, setShowEidModal] = useState([false]);
   const [isShowEidModalSign, setShowEidModalSign] = useState([false]);
 
+  const [showTopbar, setShowTopbar] = useState(false);
+
   // const [isOpenSigningForm, setOpenSigningForm] = useState(false);
   // const [isShowModalSignImage, setShowModalSignImage] = useState(false);
 
@@ -224,16 +226,31 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
 
   const [{ isDragged }, drag] = useDrag({
     type: "Signature",
-    item: {
-      ...signatureData,
-      index,
-      dimension: {
-        width: signatureData.dimension?.width,
-        height: signatureData.dimension?.height,
-      },
+    // item: {
+    //   ...signatureData,
+    //   index,
+    //   dimension: {
+    //     width: signatureData.dimension?.width,
+    //     height: signatureData.dimension?.height,
+    //   },
+    // },
+    item: () => {
+      // Your drag item properties...
+      setShowTopbar(false);
+      return {
+        ...signatureData,
+        index,
+        dimension: {
+          width: signatureData.dimension?.width,
+          height: signatureData.dimension?.height,
+        },
+      };
     },
     canDrag: signerId === signatureData.field_name && !isSetPos,
-    end: (item, monitor) => {},
+
+    end: (item, monitor) => {
+      setShowTopbar(true);
+    },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
       isDragged: monitor.getItem(),
@@ -246,26 +263,28 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       <div
         style={{
           position: "absolute",
-          top: 0,
+          top: -25,
           left: 0,
           zIndex: 10,
           display: signerId === signatureData.field_name ? "flex" : "none",
+          width: "100%",
         }}
       >
         <EditIcon
           style={{
-            fontSize: "14px",
+            fontSize: "24px",
             zIndex: 10,
             color: "#6B7280",
             cursor: "pointer",
             opacity: 1,
+            marginLeft: "auto",
           }}
           onMouseDown={() => handleOpenSigningForm(index)}
         />
         <DeleteOutlineIcon
           onMouseDown={() => handleRemoveSignature(index)}
           style={{
-            fontSize: "14px",
+            fontSize: "24px",
             zIndex: 10,
             color: "#EF4444",
             cursor: "pointer",
@@ -378,13 +397,14 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         >
           <Box
             // onDoubleClick={() => setShowModalSetting(true)}
+
             ref={drag(dragRef)}
             id="drag"
             sx={{
               backgroundColor:
                 signatureData.signed || signerId !== signatureData.field_name
-                  ? "accordingBackGround.main"
-                  : "signerBackGround.main",
+                  ? "rgba(217, 223, 228, 0.7)"
+                  : "rgba(166, 209, 255, 0.7)",
               height: "100%",
               position: "relative",
               padding: "10px",
@@ -392,10 +412,17 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              // opacity: 0.7,
+            }}
+            onMouseMove={(e) => {
+              setShowTopbar(true);
+            }}
+            onMouseLeave={(e) => {
+              setShowTopbar(false);
             }}
           >
             <Box>
-              <TopBar signatureData={signatureData} />
+              {showTopbar && <TopBar signatureData={signatureData} />}
               <Typography variant="h5">Signature</Typography>
             </Box>
           </Box>

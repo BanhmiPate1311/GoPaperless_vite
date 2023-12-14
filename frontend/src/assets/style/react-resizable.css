@@ -3,10 +3,14 @@
 }
 .react-resizable-handle {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border: 1px solid #797979;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAI5JREFUOE/l06EOwkAMANA3jeCXgE/ALiHB43B4DAqHnCcogsCAgQS+gP9AY8iRO4G5jU1ysslrr21a6PCKDtaf4RHObXqe4dEGL3APMGzpl8pLXHBM622KA7zhEGEfzyZ4hSv2EQ4xwbQOr2N/CQ4wxxivHN7ghF2s+AVzAytDZmwj7KFCin/Cdd/O3s0b1XYZEBzuiuIAAAAASUVORK5CYII=");
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
 }
 .react-resizable-handle-sw {
   bottom: 0;

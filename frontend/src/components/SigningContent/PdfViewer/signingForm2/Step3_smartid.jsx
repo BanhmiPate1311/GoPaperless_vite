@@ -23,16 +23,36 @@ export const Step3_smartid = ({
 
   // console.log("code: ", code);
   useEffect(() => {
-    if (
-      (isPhoneSelect && code.length < 11) ||
-      (!isPhoneSelect && code.length < 9)
-    ) {
-      onDisableSubmit(true);
-    } else {
-      onDisableSubmit(false);
+    // let phoneWithoutDialCode = code.slice(dialCode.current.length);
+    // if (phoneWithoutDialCode.match(/^0+/)) {
+    //   // Remove all leading '0's, leaving at least one '0'
+    //   phoneWithoutDialCode = phoneWithoutDialCode.replace(/^0+/, "");
+    // }
+    if (isPhoneSelect) {
+      let phoneWithoutDialCode = code.slice(dialCode.current.length);
+      console.log("phoneWithoutDialCode: ", phoneWithoutDialCode);
+      if (
+        phoneWithoutDialCode.match(/^0+/) &&
+        phoneWithoutDialCode.length === 10
+      ) {
+        onDisableSubmit(false);
+      } else if (
+        phoneWithoutDialCode.match(/^(?!0+)/) &&
+        phoneWithoutDialCode.length === 9
+      ) {
+        onDisableSubmit(false);
+      } else {
+        onDisableSubmit(true);
+      }
     }
-    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
+
+    // if (
+    //   (isPhoneSelect && code.length < 11) ||
+    //   (!isPhoneSelect && code.length < 9)
+    // ) {
     //   onDisableSubmit(true);
+    // } else {
+    //   onDisableSubmit(false);
     // }
   }, [isPhoneSelect, code]);
   const handleChange1 = (event) => {
@@ -101,6 +121,11 @@ export const Step3_smartid = ({
             width: "100%",
           }}
           copyNumbersOnly={false}
+          countryCodeEditable={false}
+          // enableLongNumbers={11}
+          inputProps={{
+            maxLength: 16,
+          }}
         />
       </Box>
       {/* ) : ( */}
