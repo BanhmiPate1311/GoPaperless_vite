@@ -88,7 +88,7 @@ export const Signatures = ({ signedInfo }) => {
       <Box sx={{ p: 2 }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <SignatureIcon />
-          <Typography variant="h6" sx={{ fontWeight: "550" }}>
+          <Typography variant="h3" sx={{ fontWeight: "550" }}>
             {t("0-common.signatures")}
           </Typography>
           <Avatar

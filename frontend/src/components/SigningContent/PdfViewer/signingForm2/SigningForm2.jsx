@@ -270,18 +270,18 @@ export const SigningForm2 = ({
   const requestID = uuidv4();
   const handleSubmitClick = () => {
     switch (activeStep) {
+      // case 1:
+      //   if (assurance === "eseal") {
+      //     // onClose();
+      //     // toast.warn("Functionality is under development!");
+      //     setUnavail(t("signingForm.title6"));
+      //   } else {
+      //     setUnavail(null);
+      //     setIsSubmitDisabled(true);
+      //     handleNext(1);
+      //   }
+      //   break;
       case 1:
-        if (assurance === "eseal") {
-          // onClose();
-          // toast.warn("Functionality is under development!");
-          setUnavail(t("signingForm.title6"));
-        } else {
-          setUnavail(null);
-          setIsSubmitDisabled(true);
-          handleNext(1);
-        }
-        break;
-      case 2:
         dataApi.current = {
           ...dataApi.current,
           signerId: signer.signerId,
@@ -399,14 +399,14 @@ export const SigningForm2 = ({
   };
 
   const steps = [
-    <Step1
-      key="step1"
-      assurance={assurance}
-      setAssurance={setAssurance}
-      onDisableSubmit={handleDisableSubmit}
-    />,
+    // <Step1
+    //   key="step1"
+    //   assurance={assurance}
+    //   setAssurance={setAssurance}
+    //   onDisableSubmit={handleDisableSubmit}
+    // />,
     <Step2
-      key="step2"
+      key="step1"
       provider={provider}
       setProvider={setProvider}
       connectorName={connectorName}
@@ -456,7 +456,7 @@ export const SigningForm2 = ({
     />,
   ];
 
-  let { title, subtitle } = useMemo(() => {
+  let { title } = useMemo(() => {
     switch (activeStep) {
       case 1:
         return {
@@ -496,21 +496,11 @@ export const SigningForm2 = ({
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
-      // sx={{
-      //   ".MuiDialog-container": {
-      //     ".MuiPaper-root": {
-      //       width: "470px",
-      //       maxWidth: "470px", // Set your width here
-      //       height: "648px",
-      //       borderRadius: "10px",
-      //     },
-      //   },
-      // }}
       PaperProps={{
         sx: {
-          width: "470px",
-          maxWidth: "470px", // Set your width here
-          height: "648px",
+          width: "500px",
+          maxWidth: "500px", // Set your width here
+          height: "700px",
           borderRadius: "10px",
         },
       }}
@@ -518,7 +508,11 @@ export const SigningForm2 = ({
       <DialogTitle
         component="div"
         id="scroll-dialog-title"
-        sx={{ backgroundColor: "dialogBackground.main" }}
+        sx={{
+          backgroundColor: "dialogBackground.main",
+          p: "10px 20px",
+          height: "51px",
+        }}
       >
         <Typography
           variant="h6"
@@ -531,39 +525,12 @@ export const SigningForm2 = ({
             borderColor: "signingtextBlue.main",
             borderRadius: "5px",
             paddingBottom: "5px",
-            marginBottom: "10px",
-            // boxShadow: "0px 2px 4px rgba(70, 118, 251, 0.54)",
           }}
         >
           {title}
         </Typography>
-        {subtitle && (
-          <Typography
-            variant="h6"
-            width={"100%"}
-            color="#475569"
-            fontWeight={500}
-            // paddingBottom="15px"
-          >
-            {subtitle}
-          </Typography>
-        )}
       </DialogTitle>
-      {/* <IconButton
-        aria-label="close"
-        onClick={onClose}
-        sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: (theme) => theme.palette.grey[500],
-        }}
-      >
-        <CloseIcon />
-      </IconButton> */}
-      {/* <Box sx={{ px: "24px" }}>
-        <Divider />
-      </Box> */}
+
       <DialogContent
         sx={{
           backgroundColor: "dialogBackground.main",
@@ -571,7 +538,7 @@ export const SigningForm2 = ({
           // py: "10px",
           borderBottom: "1px solid",
           borderColor: "borderColor.main",
-          pt: "10px",
+          p: "0 20px 10px",
         }}
       >
         <DialogContentText
@@ -582,7 +549,7 @@ export const SigningForm2 = ({
           sx={{
             height: "100%",
           }}
-          className="choyoyoy"
+          // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
             {/* {steps[activeStep]} */}
@@ -591,7 +558,7 @@ export const SigningForm2 = ({
           </Stack>
         </DialogContentText>
       </DialogContent>
-      <DialogActions sx={{ p: "17px 27px 23px", height: "78px" }}>
+      <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
         <Button
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}

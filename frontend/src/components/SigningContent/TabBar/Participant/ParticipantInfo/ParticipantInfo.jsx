@@ -45,10 +45,10 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
             justifyContent: "space-between",
             alignItems: "center",
           },
-          height: "36px",
+          height: "25px",
         }}
       >
-        <Typography variant="h6">
+        <Typography variant="h2" color="textBlack.main">
           {signType === "Signature"
             ? t("0-common.participants")
             : t("0-common.seals")}
@@ -86,6 +86,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                   index === participantsList.length - 1 ? "1px solid" : ""
                 }
                 borderColor="borderColor.main"
+                height="50px"
               >
                 {/* {check ? (
                   <SignerSelected />
@@ -100,10 +101,10 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                   <WaitingSig width={24} height={24} />
                 )}
                 <Box flexGrow={1}>
-                  <Typography variant="h6">
+                  <Typography variant="h3" color="textBlack.main">
                     {participant.lastName} {participant.firstName}
                   </Typography>
-                  <Typography variant="h5">
+                  <Typography variant="h2" color="signingtext2.main">
                     {status === 2
                       ? participant.signerId
                         ? t("signing.signature_valid")

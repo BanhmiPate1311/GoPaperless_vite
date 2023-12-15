@@ -89,6 +89,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
+        // textColor="primary"
         sx={{
           borderLeft: 1,
           borderColor: "divider",
@@ -96,13 +97,16 @@ export const TabBar = ({ workFlow, signedInfo }) => {
           ".Mui-selected": {
             backgroundColor: "signingBackground.main",
             borderRadius: "10px",
+            color: "signingtext1.main",
           },
           ".MuiTab-root ": {
             textTransform: "none",
-            // wordWrap: "break-word",
+            wordWrap: "break-word",
           },
+          // color: "red",
           p: 1,
           textTransform: "capitalize",
+          fontSize: "12px",
         }}
         // TabIndicatorProps={{
         //   sx: {
@@ -120,6 +124,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
               <OverviewIcon />
             </SvgIcon>
           }
+          sx={{ fontSize: "12px" }}
           {...a11yProps(0)}
         />
         <Tab
@@ -129,6 +134,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
               <ParticipantIcon />
             </SvgIcon>
           }
+          sx={{ fontSize: "12px" }}
           {...a11yProps(1)}
         />
         <Tab
@@ -138,6 +144,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
               <SignatureIcon />
             </SvgIcon>
           }
+          sx={{ fontSize: "12px" }}
           {...a11yProps(2)}
         />
         <Tab
@@ -147,6 +154,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
               <SealIcon />
             </SvgIcon>
           }
+          sx={{ fontSize: "12px" }}
           {...a11yProps(3)}
         />
       </Tabs>

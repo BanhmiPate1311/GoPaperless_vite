@@ -187,11 +187,12 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
               <Typography
                 fontWeight="550"
                 textTransform="uppercase"
-                variant="h6"
+                variant="h3"
+                color="textBlack.main"
               >
                 {participant.lastName} {participant.firstName}
               </Typography>
-              <Typography variant="h5" color={"signingtext2.main"}>
+              <Typography variant="h2" color={"signingtext2.main"}>
                 {participant.email}
               </Typography>
             </Box>
@@ -232,7 +233,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                   </SvgIcon>
                   {/* <PencilSigningIcon /> */}
                   <Typography
-                    variant="h5"
+                    variant="h2"
                     sx={{
                       // color: check ? "textSuccess.main" : "signingtext1.main",
                       color: "success.main",
@@ -251,7 +252,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                     <PencilSigningIcon />
                   </SvgIcon>
                   <Typography
-                    variant="h5"
+                    variant="h2"
                     sx={{
                       color: check
                         ? "signingtextBlue.main"
@@ -265,7 +266,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                 <>
                   <PencilIcon />
                   <Typography
-                    variant="h5"
+                    variant="h2"
                     sx={{
                       color: check
                         ? "signingtextBlue.main"
@@ -291,7 +292,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                     {item.title}
                   </Typography>
                   <Typography
-                    variant="h5"
+                    variant="h6"
                     sx={{
                       color: "signingtext2.main",
                     }}

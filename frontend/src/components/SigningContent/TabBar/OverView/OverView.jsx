@@ -30,7 +30,7 @@ export const OverView = ({ workFlow }) => {
           alignItems="center"
         >
           <OverviewIcon />
-          <Typography sx={{ fontWeight: "550" }} variant="h6">
+          <Typography sx={{ fontWeight: "550" }} variant="h3">
             {t("0-common.overview")}
           </Typography>
         </Stack>
@@ -46,7 +46,7 @@ export const OverView = ({ workFlow }) => {
             p: "5px 15px",
           }}
         >
-          <Typography sx={{ color: "signingtext2.main" }}>
+          <Typography sx={{ color: "signingtext2.main" }} variant="h6">
             {t("0-common.shared_by")}
           </Typography>
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -63,24 +63,19 @@ export const OverView = ({ workFlow }) => {
             >
               {headerFooter?.data?.name?.charAt(0)}
             </Stack>
-            <Box>
+            <Stack justifyContent={"center"}>
               <Typography
                 variant="h6"
                 sx={{
-                  color: "black",
+                  color: "textBlack.main",
                 }}
               >
                 {headerFooter?.data?.name}
               </Typography>
-              <Typography
-                variant="h4"
-                sx={{
-                  color: "black",
-                }}
-              >
+              <Typography variant="h2" sx={{ color: "signingtext2.main" }}>
                 {headerFooter?.data?.notificationEmail}
               </Typography>
-            </Box>
+            </Stack>
           </Stack>
         </Box>
         {workFlow.deadlineAt && (
@@ -92,10 +87,10 @@ export const OverView = ({ workFlow }) => {
               p: "5px 15px",
             }}
           >
-            <Typography sx={{ color: "signingtext2.main" }}>
+            <Typography sx={{ color: "signingtext2.main" }} variant="h6">
               {t("0-common.deadline")}
             </Typography>
-            <Typography variant="h6">
+            <Typography variant="h6" sx={{ color: "textBlack.main" }}>
               {convertTime(workFlow.deadlineAt)}
             </Typography>
           </Box>

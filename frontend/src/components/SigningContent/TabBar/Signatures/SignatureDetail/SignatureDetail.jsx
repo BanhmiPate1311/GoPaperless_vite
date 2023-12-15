@@ -1,4 +1,6 @@
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as WarningIcon2 } from "@/assets/images/svg/warning2_icon.svg";
+import { ReactComponent as ErrorIcon } from "@/assets/images/svg/error_icon.svg";
 import { convertTime } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -94,11 +96,12 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
             zIndex: 1,
             p: 2.5,
             backgroundColor: "#fff",
+            height: "60px",
           }}
           spacing={1}
         >
           <SignatureIcon />
-          <Typography variant="h6" sx={{ fontWeight: "700", fontSize: "16px" }}>
+          <Typography variant="h3" sx={{ fontWeight: "700" }}>
             {name}
           </Typography>
         </Stack>
@@ -115,19 +118,28 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
           // }}
           sx={{
             p: 2,
+            height: "91px",
           }}
         >
-          <Stack direction={"row"} alignItems={"center"} gap={1} flexGrow={1}>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            gap={1}
+            flexGrow={1}
+            bgcolor={"signingBackground.main"}
+            p="12px 16px"
+            borderRadius="10px"
+          >
             {sign.icon}
             <Box>
               <Typography
                 fontWeight="550"
                 textTransform="uppercase"
-                variant="h6"
+                variant="h3"
               >
                 {sign.name}
               </Typography>
-              <Typography variant="h5" color={"signingtext2.main"}>
+              <Typography variant="h2">
                 {t("validation.signSubTitle")}
               </Typography>
             </Box>
@@ -158,10 +170,14 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                   justifyContent: "space-between",
                   alignItems: "center",
                 },
-                height: "36px",
+                height: "25px",
               }}
             >
-              <Typography variant="h6" sx={{ width: "90%", flexShrink: 0 }}>
+              <WarningIcon2 />
+              <Typography
+                variant="h2"
+                sx={{ width: "90%", flexShrink: 0, pl: "10px" }}
+              >
                 {t("validation.sigWarnings")}
               </Typography>
             </AccordionSummary>
@@ -170,7 +186,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                 <Box key={i}>
                   <AccordionDetails
                     sx={{
-                      fontSize: "13px",
+                      fontSize: "14px",
                       padding: "15px 24px",
                       width: "100%",
                       py: 1,
@@ -222,6 +238,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                 height: "36px",
               }}
             >
+              <ErrorIcon />
               <Typography variant="h6" sx={{ width: "90%", flexShrink: 0 }}>
                 {t("validation.sigErrors")}
               </Typography>
@@ -231,7 +248,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                 <Box key={i}>
                   <AccordionDetails
                     sx={{
-                      fontSize: "13px",
+                      fontSize: "14px",
                       padding: "15px 24px",
                       width: "100%",
                       py: 1,
@@ -261,7 +278,9 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
               <Typography variant="h6" fontWeight={"bold"}>
                 {step.title}
               </Typography>
-              <Typography variant="h5">{step.subtitle}</Typography>
+              <Typography variant="h6" color="signingtext2.main">
+                {step.subtitle}
+              </Typography>
               <Divider
                 sx={{
                   // width: "calc(100% - 24px)",

@@ -51,7 +51,7 @@ export const SigningContent = ({ workFlow }) => {
     >
       {/* width={{ xs: "100%", lg: "70%" }} */}
       <Box
-        width={{ xs: "100%", lg: "75%" }}
+        width={{ xs: "100%", lg: "72%" }}
         height={{ xs: "500px", lg: "100%" }} // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha, ở màn hình sx sẽ cao 500px
       >
         <Typography
@@ -68,7 +68,7 @@ export const SigningContent = ({ workFlow }) => {
         </Box>
       </Box>
       <Box
-        width={{ xs: "100%", lg: "25%" }}
+        width={{ xs: "100%", lg: "28%" }}
         // height={{ xs: "100%", lg: "100%" }}
       >
         <TabBar workFlow={workFlow} signedInfo={signedInfo} />

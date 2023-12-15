@@ -63,7 +63,7 @@ export const PdfViewer = ({ workFlow }) => {
     queryFn: () =>
       fpsService.getVerification({ documentId: workFlow.documentId }),
     select: (data) => {
-      console.log("data: ", data);
+      // console.log("data: ", data);
       const newData = [...data.data];
       let newresult = [...getField];
       if (newData.length === 0) return newresult;

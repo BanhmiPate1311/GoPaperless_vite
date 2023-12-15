@@ -121,57 +121,60 @@ export const Step2 = ({
 
   return (
     <Stack sx={{ width: "100%", height: "100%" }}>
-      <Box mb="10px" width={"100%"}>
-        <FormControl fullWidth size="small">
-          <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
-            {t("signing.signing_method")}
-          </Typography>
-          <Select
-            labelId="demo-simple-select1-label"
-            id="demo-simple-select"
-            value={provider}
-            onChange={handleChange1}
-            sx={{
-              "& .MuiListItemSecondaryAction-root": {
-                right: "30px",
-                display: "flex",
-              },
-              backgroundColor: "signingWFBackground.main",
-            }}
-          >
-            {mapProvider.map((item, i) => {
-              return (
-                <MenuItem key={i} value={item.value}>
-                  {item.label}
-                  <ListItemSecondaryAction>{item.icon}</ListItemSecondaryAction>
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </Box>
-      <Box width={"100%"} flexGrow={1}>
-        <FormControl fullWidth size="small" disabled={provider === ""}>
-          <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
-            {t("signingForm.step2")}
-          </Typography>
-          <Select
-            labelId="demo-simple-select1-label"
-            id="demo-simple-select"
-            value={connectorName}
-            onChange={handleChange2}
-            sx={{
-              "& .MuiListItemSecondaryAction-root": {
-                right: "30px",
-                display: "flex",
-              },
-              backgroundColor: "signingWFBackground.main",
-            }}
-          >
-            {data2}
-          </Select>
-        </FormControl>
-      </Box>
+      <FormControl fullWidth size="small" sx={{ mb: "15px" }}>
+        <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
+          {t("signing.signing_method")}
+        </Typography>
+        <Select
+          labelId="demo-simple-select1-label"
+          id="demo-simple-select"
+          value={provider}
+          onChange={handleChange1}
+          sx={{
+            "& .MuiListItemSecondaryAction-root": {
+              right: "30px",
+              display: "flex",
+            },
+            backgroundColor: "signingWFBackground.main",
+          }}
+        >
+          {mapProvider.map((item, i) => {
+            return (
+              <MenuItem key={i} value={item.value}>
+                {item.label}
+                <ListItemSecondaryAction>{item.icon}</ListItemSecondaryAction>
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+
+      <FormControl
+        fullWidth
+        size="small"
+        disabled={provider === ""}
+        sx={{ flexGrow: 1 }}
+      >
+        <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
+          {t("signingForm.step2")}
+        </Typography>
+        <Select
+          labelId="demo-simple-select1-label"
+          id="demo-simple-select"
+          value={connectorName}
+          onChange={handleChange2}
+          sx={{
+            "& .MuiListItemSecondaryAction-root": {
+              right: "30px",
+              display: "flex",
+            },
+            backgroundColor: "signingWFBackground.main",
+          }}
+        >
+          {data2}
+        </Select>
+      </FormControl>
+
       {/* <CheckIdSoft name="messageError" /> */}
       {provider === "USB_TOKEN_SIGNING" && errorApi && (
         <Box width={"100%"} mt={2}>
@@ -184,7 +187,7 @@ export const Step2 = ({
             <Alert severity="error">
               {errorPG}
               <a
-                href="https://checkid.mobile-id.vn/dtis/plugin/gw/checkid_client_installer.exe"
+                href="https://checkid.mobile-id.vn/plugin/gw/checkid_client_installer.exe"
                 download
                 style={{ color: "#991B1B", fontWeight: "bold" }}
               >

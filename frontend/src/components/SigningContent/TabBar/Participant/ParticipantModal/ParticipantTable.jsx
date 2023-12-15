@@ -87,7 +87,7 @@ const ParticipantTable = ({ data }) => {
           sx={{
             elevation: 0,
             borderCollapse: "separate",
-            borderSpacing: "0px 8px",
+            borderSpacing: "0px 10px",
             backgroundColor: "dialogBackground.main",
           }}
         >
@@ -109,12 +109,13 @@ const ParticipantTable = ({ data }) => {
                   // borderRadius: "10px",
                   backgroundColor: "dialogBackground.main",
                   fontSize: "12px",
+                  p: "15px 20px",
                 }}
               >
                 {t("0-common.parallel")} ({Signed}/{data.length})
               </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow sx={{ height: "46px" }}>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
@@ -130,6 +131,8 @@ const ParticipantTable = ({ data }) => {
                     //   i === columns.length - 1 ? "10px" : "",
                     backgroundColor: "dialogBackground.main",
                     fontSize: "16px",
+                    p: "10px 26px",
+                    my: "10px",
                   }}
                 >
                   {column.label}
@@ -146,6 +149,7 @@ const ParticipantTable = ({ data }) => {
                   sx={{
                     backgroundColor: "white",
                     fontSize: "16px",
+                    height: "45px",
                   }}
                 >
                   <TableCell
@@ -154,11 +158,12 @@ const ParticipantTable = ({ data }) => {
                     sx={{
                       borderTopLeftRadius: "10px",
                       borderBottomLeftRadius: "10px",
+                      p: "10px 26px",
                     }}
                   >
                     {index + 1}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" sx={{ p: "10px 26px" }}>
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <PerSonIcon />
                       {/* {tableCheckStatus(item, signerToken)} */}
@@ -174,10 +179,16 @@ const ParticipantTable = ({ data }) => {
                       </Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell align="left" sx={{ fontSize: "16px" }}>
+                  <TableCell
+                    align="left"
+                    sx={{ fontSize: "16px", p: "10px 26px" }}
+                  >
                     {item.firstName}
                   </TableCell>
-                  <TableCell align="left" sx={{ fontSize: "16px" }}>
+                  <TableCell
+                    align="left"
+                    sx={{ fontSize: "16px", p: "10px 26px" }}
+                  >
                     {item.email}
                   </TableCell>
                   <TableCell
@@ -185,6 +196,7 @@ const ParticipantTable = ({ data }) => {
                     sx={{
                       borderTopRightRadius: "10px",
                       borderBottomRightRadius: "10px",
+                      p: "10px 26px",
                     }}
                   >
                     <IconButton

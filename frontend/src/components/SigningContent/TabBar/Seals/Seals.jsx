@@ -88,7 +88,7 @@ export const Seals = ({ signedInfo }) => {
       <Box sx={{ p: 2 }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <SealIcon />
-          <Typography variant="h6" sx={{ fontWeight: "550" }}>
+          <Typography variant="h3" sx={{ fontWeight: "550" }}>
             {t("0-common.seals")}
           </Typography>
           <Avatar
@@ -106,7 +106,7 @@ export const Seals = ({ signedInfo }) => {
 
       {/* <Divider sx={{ color: "borderColor.main" }} /> */}
       {newSign.length === 0 ? (
-        <Box>
+        <Box width="100%">
           <Box width={200} textAlign="center" mx="auto">
             <img
               width="100%"

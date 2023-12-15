@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import Signature from "./Signature";
+import { ReactComponent as MouseIcon } from "@/assets/images/svg/mouse-right.svg";
 import { AdsClick } from "@mui/icons-material";
 import {
   checkIsPosition,
@@ -12,6 +13,7 @@ import {
   getSigner,
 } from "@/utils/commonFunction";
 import { useCommonHook } from "@/hook";
+import { SvgIcon } from "@mui/material";
 // import Signature from "./Signature";
 export const Document = ({ props, workFlow, signatures }) => {
   // console.log("signatures: ", signatures);
@@ -328,9 +330,17 @@ export const Document = ({ props, workFlow, signatures }) => {
           position: "absolute",
         }}
       >
-        <AdsClick id="mouse-icon" />
+        {/* <AdsClick id="mouse-icon" /> */}
         {!isSetPos && checkSignerStatus(signer, signerToken) === 1 && (
-          <div style={{ marginLeft: "20px" }}>Right Click</div>
+          <SvgIcon
+            component={MouseIcon}
+            inheritViewBox
+            sx={{
+              width: "25px",
+              height: "25px",
+              color: "#545454",
+            }}
+          />
         )}
       </div>
       {props.canvasLayer.children}

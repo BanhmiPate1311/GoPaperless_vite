@@ -38,10 +38,10 @@ export const SignaturesInfo = ({ sign, signType }) => {
             justifyContent: "space-between",
             alignItems: "center",
           },
-          height: "36px",
+          height: "25px",
         }}
       >
-        <Typography variant="h6">{sign.title}</Typography>
+        <Typography variant="h2">{sign.title}</Typography>
         <Avatar
           sx={{
             bgcolor: "signingtextBlue.main",
@@ -53,14 +53,14 @@ export const SignaturesInfo = ({ sign, signType }) => {
           {sign.value.length}
         </Avatar>
       </AccordionSummary>
-      <AccordionDetails sx={{ p: 0 }}>
+      <AccordionDetails sx={{ p: 0, width: "100%" }}>
         {sign.value.map((signvalue, index) => {
           // console.log("signvalue: ", signvalue);
           // const status = checkSignerStatus(participant, signerToken);
           // const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
-            <Box key={index}>
+            <Box key={index} width="100%" height="50px">
               <Stack
                 direction={"row"}
                 spacing={1}
@@ -75,13 +75,15 @@ export const SignaturesInfo = ({ sign, signType }) => {
                   index === sign.value.length - 1 ? "1px solid" : ""
                 }
                 borderColor="borderColor.main"
+                width="100%"
+                height={"100%"}
               >
                 {sign.icon}
                 <Box flexGrow={1}>
                   <Typography variant="h6">
                     {signvalue.value.signature.certificate.subject.common_name}
                   </Typography>
-                  <Typography variant="h5">{sign.name}</Typography>
+                  <Typography variant="h2">{sign.name}</Typography>
                 </Box>
                 <IconButton onClick={() => toggleDrawer(index)}>
                   <ShowDetailIcon />

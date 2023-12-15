@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
+import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
+import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
+import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
 import "@/assets/style/react-resizable.css";
 import { fpsService } from "@/services/fps_service";
 import { checkIsPosition, getSigner } from "@/utils/commonFunction";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import EditIcon from "@mui/icons-material/Edit";
 import Box from "@mui/material/Box";
+import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
@@ -15,7 +17,6 @@ import { ModalSigningImage2 } from "../../ModalSigning";
 import { EidModal2 } from "../../ModalSigning/ModalEid";
 import { ModalSmartid } from "../../ModalSigning/ModalSmartid";
 import { ModalUsb } from "../../ModalSigning/ModalUsb";
-import SigningForm from "./SigningForm";
 import { SigningForm2 } from "./signingForm2";
 
 /* eslint-disable react/prop-types */
@@ -263,14 +264,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       <div
         style={{
           position: "absolute",
-          top: -25,
-          left: 0,
+          top: -15,
+          right: 0,
           zIndex: 10,
           display: signerId === signatureData.field_name ? "flex" : "none",
-          width: "100%",
+          // width: "100%",
+          backgroundColor: "#D9DFE4",
         }}
       >
-        <EditIcon
+        {/* <EditIcon
           style={{
             fontSize: "24px",
             zIndex: 10,
@@ -280,8 +282,44 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             marginLeft: "auto",
           }}
           onMouseDown={() => handleOpenSigningForm(index)}
+        /> */}
+        {/* <SignIcon onMouseDown={() => handleOpenSigningForm(index)} /> */}
+
+        <SvgIcon
+          component={SignIcon}
+          inheritViewBox
+          sx={{
+            width: "15px",
+            height: "15px",
+            color: "#545454",
+            cursor: "pointer",
+          }}
+          onClick={() => handleOpenSigningForm(index)}
         />
-        <DeleteOutlineIcon
+        <SvgIcon
+          component={SettingIcon}
+          inheritViewBox
+          sx={{
+            width: "15px",
+            height: "15px",
+            color: "#545454",
+            cursor: "pointer",
+            mx: "5px",
+          }}
+          // onClick={() => handleOpenSigningForm(index)}
+        />
+        <SvgIcon
+          component={GarbageIcon}
+          inheritViewBox
+          sx={{
+            width: "15px",
+            height: "15px",
+            color: "#545454",
+            cursor: "pointer",
+          }}
+          onClick={() => handleRemoveSignature(index)}
+        />
+        {/* <DeleteOutlineIcon
           onMouseDown={() => handleRemoveSignature(index)}
           style={{
             fontSize: "24px",
@@ -291,7 +329,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             opacity: 1,
             display: isSetPos ? "none" : "block",
           }}
-        />
+        /> */}
       </div>
     );
   };
@@ -404,7 +442,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               backgroundColor:
                 signatureData.signed || signerId !== signatureData.field_name
                   ? "rgba(217, 223, 228, 0.7)"
-                  : "rgba(166, 209, 255, 0.7)",
+                  : "rgba(254, 240, 138, 0.7)",
               height: "100%",
               position: "relative",
               padding: "10px",
@@ -413,6 +451,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               alignItems: "center",
               justifyContent: "center",
               // opacity: 0.7,
+              border: "2px dashed",
+              borderColor:
+                signatureData.signed || signerId !== signatureData.field_name
+                  ? "rgba(217, 223, 228, 0.7)"
+                  : "rgba(254, 240, 138, 0.7)",
             }}
             onMouseMove={(e) => {
               setShowTopbar(true);
@@ -420,10 +463,29 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
+            onClick={(e) => {
+              if (
+                e.target.id === "drag" ||
+                e.target.parentElement?.id === "drag" ||
+                e.target.id === "click-duoc"
+              ) {
+                // Your existing logic for opening the signing form...
+                handleOpenSigningForm(index);
+              }
+            }}
           >
-            <Box>
+            <Box width={"100%"}>
               {showTopbar && <TopBar signatureData={signatureData} />}
-              <Typography variant="h5">Signature</Typography>
+              <Box
+                id="click-duoc"
+                variant="h5"
+                width={"100%"}
+                borderBottom="2px dotted"
+                borderColor="#EAB308"
+                textAlign={"center"}
+              >
+                Signature
+              </Box>
             </Box>
           </Box>
         </ResizableBox>

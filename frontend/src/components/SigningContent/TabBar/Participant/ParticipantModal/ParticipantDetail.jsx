@@ -30,9 +30,10 @@ export const ParticipantDetail = ({ open, data, title, handleClose }) => {
       aria-describedby="scroll-dialog-description"
       sx={{
         "& .MuiDialog-container": {
-          "& .MuiPaper-root": {
-            // width: "100%",
-            maxWidth: "900px", // Set your width here
+          "> .MuiPaper-root": {
+            width: "500%",
+            maxWidth: "500px", // Set your width here
+            height: "700px",
             borderRadius: "10px",
           },
         },
@@ -81,16 +82,17 @@ export const ParticipantDetail = ({ open, data, title, handleClose }) => {
           ref={descriptionElementRef}
           tabIndex={-1}
         >
-          <Box width={"400px"} pt={2}>
+          <Box width={"100%"} pt={2}>
             <Typography variant="h6" fontWeight={600}>
               {t("0-common.signer")}
             </Typography>
             <Box
               p={1}
               color={"signingtext1.main"}
-              bgcolor={"accordingBackGround.main"}
+              bgcolor={"#E8EBF0"}
               borderRadius={2}
-              mb={1}
+              mb="15px"
+              fontSize={"14px"}
             >
               {data.lastName} {data.firstName}
             </Box>
@@ -100,9 +102,10 @@ export const ParticipantDetail = ({ open, data, title, handleClose }) => {
             <Box
               p={1}
               color={"signingtext1.main"}
-              bgcolor={"accordingBackGround.main"}
+              bgcolor={"#E8EBF0"}
               borderRadius={2}
-              mb={1}
+              mb="15px"
+              fontSize={"14px"}
             >
               {data.firstName}
             </Box>
@@ -112,9 +115,10 @@ export const ParticipantDetail = ({ open, data, title, handleClose }) => {
             <Box
               p={1}
               color={"signingtext1.main"}
-              bgcolor={"accordingBackGround.main"}
+              bgcolor={"#E8EBF0"}
               borderRadius={2}
               mb={1}
+              fontSize={"14px"}
             >
               {data.email}
             </Box>

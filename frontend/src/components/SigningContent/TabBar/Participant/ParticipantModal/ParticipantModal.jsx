@@ -27,13 +27,22 @@ export const ParticipantModal = ({ open, data, title, handleClose }) => {
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
-      sx={{
-        "& .MuiDialog-container": {
-          "& .MuiPaper-root": {
-            // width: "100%",
-            maxWidth: "900px", // Set your width here
-            borderRadius: "10px",
-          },
+      // sx={{
+      //   "& .MuiDialog-container": {
+      //     "> .MuiPaper-root": {
+      //       width: "100%",
+      //       height: "650px",
+      //       maxWidth: "950px", // Set your width here
+      //       borderRadius: "10px",
+      //     },
+      //   },
+      // }}
+      PaperProps={{
+        sx: {
+          width: "950px",
+          maxWidth: "950px", // Set your width here
+          height: "650px",
+          borderRadius: "10px",
         },
       }}
     >
@@ -53,6 +62,7 @@ export const ParticipantModal = ({ open, data, title, handleClose }) => {
             borderColor: "signingtextBlue.main",
             borderRadius: "5px",
             paddingBottom: "5px",
+            height: "31px",
           }}
         >
           {title}

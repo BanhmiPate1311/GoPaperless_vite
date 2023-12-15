@@ -24,6 +24,14 @@ export let theme = extendTheme({
     h4: {
       fontSize: 12, // Adjust the font size as needed
     },
+    h3: {
+      fontSize: 16, // Adjust the font size as needed
+      color: "#1F2937",
+    },
+    h2: {
+      fontSize: 10, // Adjust the font size as needed
+      color: "#767676",
+    },
   },
   colorSchemes: {
     light: {
@@ -40,7 +48,7 @@ export let theme = extendTheme({
         },
         // grey 200
         signingBackground: {
-          main: "#E8EBF0",
+          main: "#F3F5F8",
         },
         //white
         signingWFBackground: {
@@ -68,13 +76,13 @@ export let theme = extendTheme({
         },
         // gray
         signingtext1: {
-          light: "#1C1C1C",
-          main: "#1C1C1C",
+          light: "#1F2937",
+          main: "#1F2937",
         },
         //lighter
         signingtext2: {
-          light: "#4F4E4E",
-          main: "#4F4E4E",
+          light: "#767676 ",
+          main: "#767676 ",
         },
         signingtextBlue: {
           light: "#3B82F6",
@@ -83,8 +91,11 @@ export let theme = extendTheme({
         error: {
           main: red.A400,
         },
-        text: {
-          main: "#000",
+        textBlack: {
+          main: "#1F2937",
+        },
+        textBlur: {
+          main: "#767676",
         },
         textBold: {
           main: "#475569",

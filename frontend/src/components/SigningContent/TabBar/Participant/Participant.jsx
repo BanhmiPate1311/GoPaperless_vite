@@ -31,7 +31,7 @@ export const Participant = ({ participantsList, signType }) => {
         <Stack direction="row" spacing={1} alignItems="center">
           {/* {signType === "Signature" ? <ParticipantIcon /> : <SealIcon />} */}
           <ParticipantIcon />
-          <Typography sx={{ fontWeight: "550" }} variant="h6">
+          <Typography sx={{ fontWeight: "550" }} variant="h3">
             {signType === "Signature"
               ? t("0-common.participants")
               : t("0-common.seals")}
