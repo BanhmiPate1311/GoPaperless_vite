@@ -28,7 +28,7 @@ export const Header = ({ headerFooter }) => {
         background: check
           ? metaData.headerBackgroundColor
           : "-webkit-linear-gradient(right, #0a98e7 0%, #3e3a94 100%)",
-        cursor: `url(${logo1}), auto`,
+        // cursor: `url(${mouse}), auto`,
       }}
     >
       <Box

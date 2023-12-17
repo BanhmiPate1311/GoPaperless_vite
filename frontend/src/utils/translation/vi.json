@@ -52,7 +52,16 @@
     "valid": "Hợp lệ",
     "version": "Phiên bản",
     "workflow": "Luồng công việc",
-    "workflowName": "Tên luồng công việc"
+    "workflowName": "Tên luồng công việc",
+    "general": "Tổng quan",
+    "details": "Chi tiết",
+    "field name": "Tên trường",
+    "screen": "Màn hình",
+    "left": "Bên trái",
+    "top": "Bên trên",
+    "width": "Chiều rộng",
+    "height": "Chiều cao",
+    "save": "Lưu"
   },
   "batch": {
     "collapse": "Thu gọn tất cả",
@@ -159,7 +168,12 @@
     "upload1": "Giữ nguyên",
     "upload2": "Cắt",
     "usb1": "Bằng việc ký tên, tôi đồng ý chuyển tên và mã số nhận dạng cá nhân của mình cho đơn vị cung cấp dịch vụ.",
-    "usb2": "Nhập mã PIN để ký"
+    "usb2": "Nhập mã PIN để ký",
+
+    "modal1_title": "Chỉnh sửa trường chữ ký",
+    "modal1_1": "Xác thực người ký qua OTP",
+    "modal1_2": "Xác thực OTP (SMS)",
+    "modal1_3": "Không tự động hiển thị hộp thoại này khi trường chữ ký bị xóa"
   },
   "signing": {
     "contact_information": "Thông tin liên lạc",
@@ -169,7 +183,7 @@
     "indeterminate signatures": "Chữ ký không xác định",
     "invalid signatures": "Chữ ký không hợp lệ",
     "participant_information": "Thông tin người tham gia",
-    "personalCode": "Mã số cá nhân",
+    "personal_code": "Mã số căn cước công dân",
     "phoneNumber": "Số điện thoại",
     "search_criteria": "Tiêu chí tìm kiếm",
     "select_certificate": "Chọn chứng thư số",
@@ -177,10 +191,12 @@
     "signature_valid": "Chữ ký hợp lệ",
     "signing_method": "Phương thức ký",
     "wait_my_signature": "Đang chờ chữ ký của tôi",
-    "wait_signature": "Đang chờ chữ ký"
+    "wait_signature": "Đang chờ chữ ký",
+    "passport": "Mã hộ chiếu",
+    "identity_card": "Mã chứng minh nhân dân"
   },
   "signingForm": {
-    "step2": "Chọn nhà cung cấp dịch vụ ký từ xa",
+    "step1": "Chọn nhà cung cấp dịch vụ ký từ xa",
     "title1": "Việc ký bằng Smart-ID tạo ra chữ ký điện tử đủ tiêu chuẩn có hiệu lực pháp lý tương đương với chữ ký viết tay.",
     "title2": "Bằng việc lựa chọn chứng chỉ, tôi đồng ý chuyển tên và mã số nhận dạng cá nhân của mình cho nhà cung cấp dịch vụ.",
     "title3": "Chọn loại tài liệu",

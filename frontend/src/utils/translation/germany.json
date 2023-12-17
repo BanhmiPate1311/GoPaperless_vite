@@ -52,7 +52,16 @@
     "valid": "Gültig",
     "version": "Ausführung",
     "workflow": "Arbeitsablauf",
-    "workflowName": "Arbeitsablauf Name"
+    "workflowName": "Arbeitsablauf Name",
+    "general": "Allgemein",
+    "details": "Einzelheiten",
+    "field name": "Feldname",
+    "screen": "Bildschirm",
+    "left": "Links",
+    "top": "Spitze",
+    "width": "Breite",
+    "height": "Höhe",
+    "save": "Speichern"
   },
   "batch": {
     "collapse": "Alles kollabieren",
@@ -159,7 +168,12 @@
     "upload1": "Bleib Original",
     "upload2": "Ernte",
     "usb1": "Mit meiner Unterschrift erkläre ich mich mit der Weitergabe meines Namens und meiner persönlichen Identifikationsnummer an den Dienstleister einverstanden.",
-    "usb2": "Geben Sie die PIN zum Signieren ein"
+    "usb2": "Geben Sie die PIN zum Signieren ein",
+
+    "modal1_title": "Signaturfeld bearbeiten",
+    "modal1_1": "Authentifizieren Sie den Unterzeichner über OTP",
+    "modal1_2": "OTP-Authentifizierung (SMS)",
+    "modal1_3": "Dieses Dialogfeld nicht automatisch anzeigen, wenn ein Signaturfeld gelöscht wird"
   },
   "signing": {
     "contact_information": "Kontaktinformation",
@@ -169,7 +183,7 @@
     "indeterminate signatures": "Unbestimmte Signaturen",
     "invalid signatures": "Ungültige Signaturen",
     "participant_information": "Teilnehmerinformationen",
-    "personalCode": "Persönlicher Code",
+    "personal_code": "Bürgeridentifikationscode",
     "phoneNumber": "Telefonnummer",
     "search_criteria": "Suchkriterium",
     "select_certificate": "Zertifikat auswählen",
@@ -177,10 +191,12 @@
     "signature_valid": "Signatur ist gültig",
     "signing_method": "Signierungsmethode",
     "wait_my_signature": "Warte auf meine Signatur",
-    "wait_signature": "Warte auf Signatur"
+    "wait_signature": "Warte auf Signatur",
+    "passport": "Passcode",
+    "identity_card": "Personalausweiscode"
   },
   "signingForm": {
-    "step2": "Wählen Sie Remote Signing Service Provider aus",
+    "step1": "Wählen Sie Remote Signing Service Provider aus",
     "title1": "Durch das Signieren mit Smart-ID wird eine qualifizierte elektronische Signatur erstellt, die die gleiche Rechtswirkung wie eine handschriftliche Unterschrift hat.",
     "title2": "Mit der Auswahl des Zertifikats erkläre ich mich mit der Übermittlung meines Namens und meiner persönlichen Identifikationsnummer an den Dienstleister einverstanden.",
     "title3": "Wählen Sie den Dokumenttyp aus",

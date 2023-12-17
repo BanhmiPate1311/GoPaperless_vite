@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 import { useTranslation } from "react-i18next";
 
-export const Step6_eid = ({
+export const Step3_eid = ({
   data,
   criteria,
   setCriteria,
@@ -28,6 +28,17 @@ export const Step6_eid = ({
   const handleChange1 = (event) => {
     // console.log("event: ", event.target.value);
     setCriteria(event.target.value);
+  };
+
+  const createTitle = () => {
+    switch (criteria) {
+      case "CITIZEN-IDENTITY-CARD":
+        return t("signing.personal_code");
+      case "PASSPORT-ID":
+        return t("signing.passport");
+      case "PERSONAL-ID":
+        return t("signing.identity_card");
+    }
   };
 
   return (
@@ -61,7 +72,7 @@ export const Step6_eid = ({
 
       <Box width={"100%"} flexGrow={1}>
         <Typography variant="h6" color="#1F2937" fontWeight={600}>
-          {t("signing.personalCode")}
+          {createTitle()}
         </Typography>
         <TextField
           fullWidth
@@ -90,7 +101,7 @@ export const Step6_eid = ({
   );
 };
 
-Step6_eid.propTypes = {
+Step3_eid.propTypes = {
   data: PropTypes.array,
   criteria: PropTypes.string,
   setCriteria: PropTypes.func,
@@ -98,4 +109,4 @@ Step6_eid.propTypes = {
   setCode: PropTypes.func,
   onDisableSubmit: PropTypes.func,
 };
-export default Step6_eid;
+export default Step3_eid;

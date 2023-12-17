@@ -8,7 +8,7 @@ import { FormControl, Select, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-input-2";
 
-export const Step3_smartid = ({
+export const Step2_smartid = ({
   data,
   dialCode,
   errorApi,
@@ -101,6 +101,17 @@ export const Step3_smartid = ({
     }
   };
 
+  const createTitle = () => {
+    switch (criteria) {
+      case "CITIZEN-IDENTITY-CARD":
+        return t("signing.personal_code");
+      case "PASSPORT-ID":
+        return t("signing.passport");
+      case "PERSONAL-ID":
+        return t("signing.identity_card");
+    }
+  };
+
   return (
     <Stack sx={{ width: "100%", height: "100%" }}>
       <FormControl fullWidth size="small" sx={{ mb: "15px" }}>
@@ -166,7 +177,7 @@ export const Step3_smartid = ({
         flexGrow={1}
       >
         <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
-          {t("signing.personalCode")}
+          {createTitle()}
         </Typography>
         <TextField
           fullWidth
@@ -197,7 +208,7 @@ export const Step3_smartid = ({
   );
 };
 
-Step3_smartid.propTypes = {
+Step2_smartid.propTypes = {
   data: PropTypes.array,
   dialCode: PropTypes.object,
   errorApi: PropTypes.string,
@@ -208,4 +219,4 @@ Step3_smartid.propTypes = {
   onDisableSubmit: PropTypes.func,
 };
 
-export default Step3_smartid;
+export default Step2_smartid;

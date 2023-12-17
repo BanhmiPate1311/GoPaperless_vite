@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 // import { SelectField } from "../../form";
 
 // eslint-disable-next-line react/prop-types
-export const Step1 = ({ assurance, setAssurance, onDisableSubmit }) => {
+export const StepDoiTen = ({ assurance, setAssurance, onDisableSubmit }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -44,8 +44,8 @@ export const Step1 = ({ assurance, setAssurance, onDisableSubmit }) => {
   );
 };
 
-Step1.propTypes = {
+StepDoiTen.propTypes = {
   onDisableSubmit: PropTypes.func,
 };
 
-export default Step1;
+export default StepDoiTen;

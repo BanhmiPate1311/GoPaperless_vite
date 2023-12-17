@@ -9,10 +9,9 @@ import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { ContentRight, DialogFile } from "../../ModalSigning";
-import AddSubtitle from "../../ModalSigning/AddSubtitle";
 import { InputField, UploadField } from "../../form";
 import { useTranslation } from "react-i18next";
+import { AddSubtitle, ContentRight, DialogFile } from "@/components/modal2";
 
 const UploadSignForm = forwardRef(
   (

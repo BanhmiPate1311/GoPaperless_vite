@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import ISPluginClient from "@/assets/js/checkid";
 import {
   useConnectorList,
@@ -13,7 +14,7 @@ import {
   getSigner,
   getUrlWithoutProtocol,
 } from "@/utils/commonFunction";
-import { Alert, Stack } from "@mui/material";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -23,13 +24,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useMutation } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
-import { Step1, Step2, Step3_smartid, Step4, Step5_usb, Step6_eid } from ".";
+import { Step1, Step2_smartid, Step3_eid } from ".";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -39,7 +41,7 @@ export const SigningForm2 = ({
   open,
   onClose,
   workFlow,
-  handleShowModalSignImage,
+  handleShowModal2,
   handleShowEidModal,
   setDataSigning,
 }) => {
@@ -267,21 +269,11 @@ export const SigningForm2 = ({
   };
   let dllUsb = "";
   let codeNumber = "";
-  const requestID = uuidv4();
+  // const requestID = uuidv4();
   const handleSubmitClick = () => {
     switch (activeStep) {
-      // case 1:
-      //   if (assurance === "eseal") {
-      //     // onClose();
-      //     // toast.warn("Functionality is under development!");
-      //     setUnavail(t("signingForm.title6"));
-      //   } else {
-      //     setUnavail(null);
-      //     setIsSubmitDisabled(true);
-      //     handleNext(1);
-      //   }
-      //   break;
       case 1:
+        //choose provider
         dataApi.current = {
           ...dataApi.current,
           signerId: signer.signerId,
@@ -310,7 +302,7 @@ export const SigningForm2 = ({
                   ...dataApi.current,
                   ...data,
                 };
-                setActiveStep(5);
+                // setActiveStep(3);
                 // onStepSubmit({ ...data1, ...data });
               },
             });
@@ -319,7 +311,7 @@ export const SigningForm2 = ({
           case "ELECTRONIC_ID":
             console.log("connectorName: ", connectorName);
             if (connectorName === "Vietnam") {
-              setActiveStep(6);
+              setActiveStep(3);
             } else {
               // onClose();
               // toast.warn("Functionality is under development!");
@@ -332,7 +324,8 @@ export const SigningForm2 = ({
         }
 
         break;
-      case 3:
+      case 2:
+        // smart id
         if (criteria === "PHONE") {
           let phoneWithoutDialCode = code.slice(dialCode.current.length);
           if (phoneWithoutDialCode.match(/^0+/)) {
@@ -352,34 +345,15 @@ export const SigningForm2 = ({
           codeNumber: codeNumber,
         };
         smartIdCertificate.mutate(dataApi.current, {
-          onSuccess: () => {
-            handleNext(1);
+          onSuccess: (data) => {
+            console.log("data: ", data);
+            // handleNext(1); // chưa
+            handleShowModal2();
+            // onClose();
           },
         });
         break;
-      case 4:
-        dataApi.current = {
-          ...dataApi.current,
-          requestID: requestID,
-          relyingParty: smartIdCertificate?.data?.relyingParty,
-          codeEnable: smartIdCertificate?.data?.codeEnable,
-          certChain: smartIdCertificate?.data?.listCertificate[certSelected],
-        };
-        setDataSigning(dataApi.current);
-        // handleNext(1);
-        onClose();
-        handleShowModalSignImage();
-        break;
-      case 5:
-        dataApi.current = {
-          ...dataApi.current,
-          certChain: dataApi.current.signingCertificates[certSelected],
-        };
-        setDataSigning(dataApi.current);
-        onClose();
-        handleShowModalSignImage();
-        break;
-      case 6:
+      case 3:
         codeNumber = criteriaEid + ":" + code;
         dataApi.current = {
           ...dataApi.current,
@@ -392,6 +366,31 @@ export const SigningForm2 = ({
         onClose();
         handleShowEidModal();
         break;
+      case 4:
+        // smart id get certchain
+        dataApi.current = {
+          ...dataApi.current,
+          requestID: uuidv4(),
+          relyingParty: smartIdCertificate?.data?.relyingParty,
+          codeEnable: smartIdCertificate?.data?.codeEnable,
+          certChain: smartIdCertificate?.data?.listCertificate[certSelected],
+        };
+        setDataSigning(dataApi.current);
+        // handleNext(1);
+        onClose();
+        handleShowModal2();
+        break;
+      // case 5:
+      // usb token get certChain
+      //   dataApi.current = {
+      //     ...dataApi.current,
+      //     certChain: dataApi.current.signingCertificates[certSelected],
+      //   };
+      //   setDataSigning(dataApi.current);
+      //   onClose();
+      //   handleShowModal2();
+      //   break;
+
       default:
         // perFormProcess(); // chỉ để test
         handleNext();
@@ -405,7 +404,7 @@ export const SigningForm2 = ({
     //   setAssurance={setAssurance}
     //   onDisableSubmit={handleDisableSubmit}
     // />,
-    <Step2
+    <Step1
       key="step1"
       provider={provider}
       setProvider={setProvider}
@@ -418,8 +417,8 @@ export const SigningForm2 = ({
       errorPG={errorPG}
       errorApi={certificateInfor?.error?.message}
     />,
-    <Step3_smartid
-      key="step3"
+    <Step2_smartid
+      key="step2"
       data={filterPrefix}
       dialCode={dialCode}
       errorApi={smartIdCertificate?.error?.response?.data?.message}
@@ -429,23 +428,23 @@ export const SigningForm2 = ({
       setCode={setCode}
       onDisableSubmit={handleDisableSubmit}
     />,
-    <Step4
-      key="step4"
-      data={smartIdCertificate?.data?.listCertificate}
-      certSelected={certSelected}
-      setCertSelected={setCertSelected}
-      onDoubleClick={handleSubmitClick}
-      onDisableSubmit={handleDisableSubmit}
-    />,
-    <Step5_usb
-      key="step5"
-      data={dataApi.current.signingCertificates}
-      certSelected={certSelected}
-      setCertSelected={setCertSelected}
-      onDoubleClick={handleSubmitClick}
-      onDisableSubmit={handleDisableSubmit}
-    />,
-    <Step6_eid
+    // <Step4
+    //   key="step4"
+    //   data={smartIdCertificate?.data?.listCertificate}
+    //   certSelected={certSelected}
+    //   setCertSelected={setCertSelected}
+    //   onDoubleClick={handleSubmitClick}
+    //   onDisableSubmit={handleDisableSubmit}
+    // />,
+    // <Step5_usb
+    //   key="step5"
+    //   data={dataApi.current.signingCertificates}
+    //   certSelected={certSelected}
+    //   setCertSelected={setCertSelected}
+    //   onDoubleClick={handleSubmitClick}
+    //   onDisableSubmit={handleDisableSubmit}
+    // />,
+    <Step3_eid
       key="step6"
       data={filterPrefixEid}
       criteria={criteriaEid}
@@ -489,7 +488,7 @@ export const SigningForm2 = ({
 
   return (
     <Dialog
-      keepMounted={false}
+      // keepMounted
       TransitionComponent={Transition}
       open={!!open}
       onClose={onClose}
@@ -572,7 +571,11 @@ export const SigningForm2 = ({
           startIcon={
             isPending ? <CircularProgress color="inherit" size="1em" /> : null
           }
-          sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
+          sx={{
+            borderRadius: "10px",
+            borderColor: "borderColor.main",
+            marginLeft: "20px !important",
+          }}
           onClick={handleSubmitClick}
           type="button"
         >
@@ -585,7 +588,7 @@ export const SigningForm2 = ({
 SigningForm2.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  handleShowModalSignImage: PropTypes.func,
+  handleShowModal2: PropTypes.func,
   handleShowEidModal: PropTypes.func,
   workFlow: PropTypes.object,
   dataSigning: PropTypes.object,

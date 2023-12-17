@@ -333,7 +333,7 @@ const SigningForm = ({
 
   return (
     <Dialog
-      keepMounted={false}
+      // keepMounted={false}
       TransitionComponent={Transition}
       open={!!open}
       onClose={onClose}

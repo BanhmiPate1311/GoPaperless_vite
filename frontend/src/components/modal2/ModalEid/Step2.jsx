@@ -180,6 +180,23 @@ const Step2 = ({
     }
   };
 
+  const containerStyle = {
+    display: "flex",
+    justifyContent: "center",
+  };
+
+  const inputStyle = {
+    width: "43px",
+    height: "43px",
+    borderRadius: "7px",
+    marginLeft: "8px",
+    marginRight: "8px",
+    /* background: #dddddd; */
+    fontSize: "20px",
+    border: "1px solid #3b82f6",
+    disabled: true,
+  };
+
   return (
     <Box>
       <Typography variant="h6" sx={{ fontWeight: 700, color: "textBold.main" }}>
@@ -209,8 +226,10 @@ const Step2 = ({
         numInputs={6}
         //   renderSeparator={<span>-</span>}
         renderInput={(props) => <input disabled={isFetching} {...props} />}
-        inputStyle="inputStyle"
-        containerStyle="containerStyle"
+        // inputStyle="inputStyle"
+        // containerStyle="containerStyle"
+        inputStyle={inputStyle}
+        containerStyle={containerStyle}
         inputType="tel"
         shouldAutoFocus={true}
         onPaste={handlePaste}

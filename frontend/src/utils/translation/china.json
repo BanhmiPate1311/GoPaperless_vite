@@ -52,7 +52,16 @@
     "valid": "有效",
     "version": "版 本",
     "workflow": "工作流程",
-    "workflowName": "工作流程名称"
+    "workflowName": "工作流程名称",
+    "general": "一般的",
+    "details": "细节",
+    "field name": "字段名称",
+    "screen": "屏幕",
+    "left": "左边",
+    "top": "顶部",
+    "width": "宽度",
+    "height": "高度",
+    "save": "节省"
   },
   "batch": {
     "collapse": "全 部 收 縮",
@@ -159,7 +168,12 @@
     "upload1": "保持原创",
     "upload2": "庄稼",
     "usb1": "通过签名，我同意将我的姓名和个人识别码转移给服务提供商.",
-    "usb2": "输入 PIN 码进行签名"
+    "usb2": "输入 PIN 码进行签名",
+
+    "modal1_title": "编辑签名字段",
+    "modal1_1": "通过 OTP 验证签名者身份",
+    "modal1_2": "OTP 身份验证（短信",
+    "modal1_3": "删除签名字段时不自动显示此对话框"
   },
   "signing": {
     "contact_information": "联系信息",
@@ -169,7 +183,7 @@
     "indeterminate signatures": "不确定的签名",
     "invalid signatures": "无效的签名",
     "participant_information": "参与者信息",
-    "personalCode": "个人代码",
+    "personal_code": "公民识别码",
     "phoneNumber": "电话号码",
     "search_criteria": "搜索条件",
     "select_certificate": "选择证书",
@@ -177,10 +191,12 @@
     "signature_valid": "签名有效",
     "signing_method": "签名方式",
     "wait_my_signature": "等待我的签名",
-    "wait_signature": "等待签名"
+    "wait_signature": "等待签名",
+    "passport": "护照代码",
+    "identity_card": "身份证号码"
   },
   "signingForm": {
-    "step2": "选择远程签名服务提供商",
+    "step1": "选择远程签名服务提供商",
     "title1": "使用 Smart-ID 签名可创建合格的电子签名，与手写签名具有同等法律效力.",
     "title2": "通过选择证书，我同意将我的姓名和个人识别码转移给服务提供商.",
     "title3": "选择文档类型",

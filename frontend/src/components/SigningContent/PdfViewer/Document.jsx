@@ -1,27 +1,17 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { fpsService } from "@/services/fps_service";
+import { checkIsPosition } from "@/utils/commonFunction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import Signature from "./Signature";
-import { ReactComponent as MouseIcon } from "@/assets/images/svg/mouse-right.svg";
-import { AdsClick } from "@mui/icons-material";
-import {
-  checkIsPosition,
-  checkSignerStatus,
-  getSigner,
-} from "@/utils/commonFunction";
-import { useCommonHook } from "@/hook";
-import { SvgIcon } from "@mui/material";
 // import Signature from "./Signature";
 export const Document = ({ props, workFlow, signatures }) => {
   // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
-
-  const signer = getSigner(workFlow);
-  const { signerToken } = useCommonHook();
 
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
@@ -256,71 +246,77 @@ export const Document = ({ props, workFlow, signatures }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const pdfRange = [];
   const cursor = [];
-  useEffect(() => {
-    // nghe sự kiện bên trong file pdf
-    pdfRange[props.pageIndex] = document.getElementById(
-      `pdf-view-${props.pageIndex}`
-    );
-    cursor[props.pageIndex] = document.querySelector(
-      `.cursor-${props.pageIndex}`
-    );
+  // useEffect(() => {
+  //   // nghe sự kiện bên trong file pdf
+  //   pdfRange[props.pageIndex] = document.getElementById(
+  //     `pdf-view-${props.pageIndex}`
+  //   );
+  //   cursor[props.pageIndex] = document.querySelector(
+  //     `.cursor-${props.pageIndex}`
+  //   );
 
-    const mouseMove = (e) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left; // Xác định vị trí x dựa trên vị trí của chuột
+  //   const mouseMove = (e) => {
+  //     if (isSetPos) return;
+  //     const rect = e.currentTarget.getBoundingClientRect();
+  //     const x = e.clientX - rect.left; // Xác định vị trí x dựa trên vị trí của chuột
 
-      const y = e.clientY - rect.top;
-      if (
-        e.target instanceof SVGElement ||
-        e.target.className.includes("MuiListItemText-primary") ||
-        e.target.className.includes("MuiListItemButton-root")
-      ) {
-        cursor[props.pageIndex].style.display = "none";
-      } else {
-        pdfRange[props.pageIndex].style.cursor = "none";
-        setMousePosition({
-          x: x,
-          y: y,
-        });
-        cursor[props.pageIndex].style.display = "block";
-      }
-    };
+  //     const y = e.clientY - rect.top;
+  //     if (
+  //       e.target instanceof SVGElement ||
+  //       e.target.className.includes("MuiListItemText-primary") ||
+  //       e.target.className.includes("MuiListItemButton-root")
+  //     ) {
+  //       cursor[props.pageIndex].style.display = "none";
+  //     } else {
+  //       pdfRange[props.pageIndex].style.cursor = "none";
+  //       setMousePosition({
+  //         x: x,
+  //         y: y,
+  //       });
+  //       cursor[props.pageIndex].style.display = "block";
+  //     }
+  //   };
 
-    const mouseOut = () => {
-      cursor[props.pageIndex].style.display = "none";
-    };
+  //   const mouseOut = () => {
+  //     cursor[props.pageIndex].style.display = "none";
+  //   };
 
-    pdfRange[props.pageIndex].addEventListener("mousemove", mouseMove);
+  //   pdfRange[props.pageIndex].addEventListener("mousemove", mouseMove);
 
-    pdfRange[props.pageIndex].addEventListener("mouseleave", mouseOut);
+  //   pdfRange[props.pageIndex].addEventListener("mouseleave", mouseOut);
 
-    // // Trình nghe sự kiện click và mousedown toàn bộ trang
-    // const handleGlobalClickAndMouseDown = (e) => {
-    //   // console.log("e: ", e);
-    //   // if (
-    //   //   (menuRef.current.contains(e.target) &&
-    //   //     e.target.className?.includes("pdf-page")) ||
-    //   //   !menuRef.current.contains(e.target)
-    //   // ) {
-    //   //   handleCloseContextMenu();
-    //   // }
-    //   handleCloseContextMenu();
-    // };
+  //   // // Trình nghe sự kiện click và mousedown toàn bộ trang
+  //   // const handleGlobalClickAndMouseDown = (e) => {
+  //   //   // console.log("e: ", e);
+  //   //   // if (
+  //   //   //   (menuRef.current.contains(e.target) &&
+  //   //   //     e.target.className?.includes("pdf-page")) ||
+  //   //   //   !menuRef.current.contains(e.target)
+  //   //   // ) {
+  //   //   //   handleCloseContextMenu();
+  //   //   // }
+  //   //   handleCloseContextMenu();
+  //   // };
 
-    return () => {
-      // window.removeEventListener("mousedown", handleGlobalClickAndMouseDown);
-      pdfRange[props.pageIndex].removeEventListener("mousemove", mouseMove);
-      pdfRange[props.pageIndex].removeEventListener("mouseleave", mouseOut);
-    };
-  }, [props.scale, cursor, pdfRange]);
+  //   return () => {
+  //     // window.removeEventListener("mousedown", handleGlobalClickAndMouseDown);
+  //     pdfRange[props.pageIndex].removeEventListener("mousemove", mouseMove);
+  //     pdfRange[props.pageIndex].removeEventListener("mouseleave", mouseOut);
+  //   };
+  // }, [props.scale, cursor, pdfRange]);
 
   return (
     <div
       ref={dropSig(dropSigRef)}
-      style={{ width: "100%", height: "100%", position: "relative" }}
+      style={{
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        cursor: isSetPos ? "auto" : `url(${mouse}), auto`,
+      }}
       id={`pdf-view-${props.pageIndex}`}
     >
-      <div
+      {/* <div
         className={`cursor cursor-${props.pageIndex}`}
         style={{
           top: mousePosition.y,
@@ -330,19 +326,17 @@ export const Document = ({ props, workFlow, signatures }) => {
           position: "absolute",
         }}
       >
-        {/* <AdsClick id="mouse-icon" /> */}
-        {!isSetPos && checkSignerStatus(signer, signerToken) === 1 && (
-          <SvgIcon
-            component={MouseIcon}
-            inheritViewBox
-            sx={{
-              width: "25px",
-              height: "25px",
-              color: "#545454",
-            }}
-          />
-        )}
-      </div>
+        
+        <SvgIcon
+          component={MouseIcon}
+          inheritViewBox
+          sx={{
+            width: "25px",
+            height: "25px",
+            color: "#545454",
+          }}
+        />
+      </div> */}
       {props.canvasLayer.children}
 
       {signatures?.map((signatureData, index) => {

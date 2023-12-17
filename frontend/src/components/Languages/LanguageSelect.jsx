@@ -129,7 +129,7 @@ export const LanguageSelect = ({ color = "white" }) => {
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
-        keepMounted
+        // keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >

@@ -48,10 +48,12 @@ export const Step4 = ({ image, personalInfomation }) => {
               //   },
               // }}
               inputProps={{
-                readOnly: true,
                 sx: {
                   backgroundColor: "signingWFBackground.main",
                 },
+              }}
+              InputProps={{
+                readOnly: true,
               }}
             />
           </Grid>

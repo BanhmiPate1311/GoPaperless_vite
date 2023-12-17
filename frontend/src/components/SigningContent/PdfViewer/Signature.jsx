@@ -2,34 +2,40 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
+import { ReactComponent as GiunIcon } from "@/assets/images/svg/congiun.svg";
 import "@/assets/style/react-resizable.css";
 import { fpsService } from "@/services/fps_service";
 import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
-import Typography from "@mui/material/Typography";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
 import { EidModal } from "../../EidModal";
-import { ModalSigningImage2 } from "../../ModalSigning";
-import { EidModal2 } from "../../ModalSigning/ModalEid";
-import { ModalSmartid } from "../../ModalSigning/ModalSmartid";
-import { ModalUsb } from "../../ModalSigning/ModalUsb";
-import { SigningForm2 } from "./signingForm2";
+import { SigningForm2 } from "../../modal1";
+import { ModalSigningImage2 } from "@/components/modal2";
+import { ModalSmartid } from "@/components/modal2/ModalSmartid";
+import { ModalUsb } from "@/components/modal2/ModalUsb";
+import { EidModal2 } from "@/components/modal2/ModalEid";
+import { AssuranceModal } from "@/components/modal2_assurance";
+import { SignatureSetting } from "@/components/modal_setting";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("page: ", page);
   // console.log("index: ", index);
   // console.log("signatureData: ", signatureData);
+  const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
+
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
   const [isShowModalSmartid, setShowModalSmartid] = useState([false]);
   const [isShowModalUsb, setShowModalUsb] = useState([false]);
   const [isShowEidModal, setShowEidModal] = useState([false]);
   const [isShowEidModalSign, setShowEidModalSign] = useState([false]);
+
+  const [isShowModal2, setShowModal2] = useState([false]);
 
   const [showTopbar, setShowTopbar] = useState(false);
 
@@ -116,6 +122,18 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     },
   });
 
+  const handleOpenModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = true;
+    setOpenModalSetting(newValue);
+  };
+
+  const handleCloseModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = false;
+    setOpenModalSetting(newValue);
+  };
+
   const handleOpenSigningForm = (index) => {
     const newValue = [...isOpenSigningForm];
     newValue[index] = true;
@@ -187,6 +205,18 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     const newValue = [...isShowEidModalSign];
     newValue[index] = false;
     setShowEidModalSign(newValue);
+  };
+
+  const handleShowModal2 = (index) => {
+    const newValue = [...isShowModal2];
+    newValue[index] = true;
+    setShowModal2(newValue);
+  };
+
+  const handleCloseModal2 = (index) => {
+    const newValue = [...isShowModal2];
+    newValue[index] = false;
+    setShowModal2(newValue);
   };
 
   const handleShowmodal = (index) => {
@@ -306,7 +336,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             cursor: "pointer",
             mx: "5px",
           }}
-          // onClick={() => handleOpenSigningForm(index)}
+          onClick={() => handleOpenModalSetting(index)}
         />
         <SvgIcon
           component={GarbageIcon}
@@ -316,6 +346,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             height: "15px",
             color: "#545454",
             cursor: "pointer",
+            display: isSetPos ? "none" : "block",
           }}
           onClick={() => handleRemoveSignature(index)}
         />
@@ -454,8 +485,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               border: "2px dashed",
               borderColor:
                 signatureData.signed || signerId !== signatureData.field_name
-                  ? "rgba(217, 223, 228, 0.7)"
-                  : "rgba(254, 240, 138, 0.7)",
+                  ? "black"
+                  : "#EAB308",
             }}
             onMouseMove={(e) => {
               setShowTopbar(true);
@@ -464,6 +495,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               setShowTopbar(false);
             }}
             onClick={(e) => {
+              if (signatureData.signed || signerId !== signatureData.field_name)
+                return;
               if (
                 e.target.id === "drag" ||
                 e.target.parentElement?.id === "drag" ||
@@ -474,18 +507,29 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               }
             }}
           >
-            <Box width={"100%"}>
-              {showTopbar && <TopBar signatureData={signatureData} />}
-              <Box
-                id="click-duoc"
-                variant="h5"
-                width={"100%"}
-                borderBottom="2px dotted"
-                borderColor="#EAB308"
-                textAlign={"center"}
-              >
-                Signature
-              </Box>
+            {showTopbar && <TopBar signatureData={signatureData} />}
+            <Box
+              id="click-duoc"
+              variant="h5"
+              width={"100%"}
+              borderBottom="2px dotted"
+              borderColor="#EAB308"
+              textAlign={"center"}
+              height="45px"
+            >
+              Signature
+              <br />
+              <SvgIcon
+                component={GiunIcon}
+                inheritViewBox
+                sx={{
+                  width: "15px",
+                  height: "15px",
+                  color: "#545454",
+                  // cursor: "pointer",
+                }}
+                onClick={() => handleOpenSigningForm(index)}
+              />
             </Box>
           </Box>
         </ResizableBox>
@@ -502,6 +546,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           setDataSigning={setDataSigning}
         />
       )} */}
+      {isOpenModalSetting[index] && (
+        <SignatureSetting
+          open={isOpenModalSetting[index]}
+          onClose={() => handleCloseModalSetting(index)}
+          signer={signer}
+          setDataSigning={setDataSigning}
+          signatureData={signatureData}
+        />
+      )}
 
       {isOpenSigningForm[index] && (
         <SigningForm2
@@ -509,7 +562,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           onClose={() => handleCloseSigningForm(index)}
           // index={signatureData.page - 1}
           workFlow={workFlow}
-          handleShowModalSignImage={() => handleShowModalSignImage(index)}
+          handleShowModal2={() => handleShowModal2(index)}
           handleShowEidModal={() => handleShowEidModal(index)}
           setDataSigning={setDataSigning}
         />
@@ -554,6 +607,16 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <EidModal2
           open={isShowEidModalSign[index]}
           onClose={() => handleCloseEidModalSign(index)}
+          dataSigning={dataSigning}
+          setDataSigning={setDataSigning}
+          signatureData={signatureData}
+        />
+      )}
+
+      {isShowModal2[index] && (
+        <AssuranceModal
+          open={isShowModal2[index]}
+          onClose={() => handleCloseModal2(index)}
           dataSigning={dataSigning}
           setDataSigning={setDataSigning}
           signatureData={signatureData}

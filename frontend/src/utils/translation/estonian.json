@@ -52,7 +52,16 @@
     "valid": "Kehtiv",
     "version": "Versioon",
     "workflow": "Töövoog",
-    "workflowName": "Töövoog Nimi"
+    "workflowName": "Töövoog Nimi",
+    "general": "Kindral",
+    "details": "Üksikasjad",
+    "field name": "Välja nimi",
+    "screen": "Ekraan",
+    "left": "Vasakule",
+    "top": "Üles",
+    "width": "Laius",
+    "height": "Kõrgus",
+    "save": "Salvesta"
   },
   "batch": {
     "collapse": "Ahenda kõik",
@@ -159,7 +168,12 @@
     "upload1": "Hoidke originaal",
     "upload2": "Kärpimine",
     "usb1": "Allkirjastades nõustun oma nime ja isikukoodi edastamisega teenuse osutajale.",
-    "usb2": "Sisestage allkirjastamiseks PIN-kood"
+    "usb2": "Sisestage allkirjastamiseks PIN-kood",
+
+    "modal1_title": "Redigeeri allkirjavälja",
+    "modal1_1": "Autentige allkirjastaja OTP kaudu",
+    "modal1_2": "OTP autentimine (SMS)",
+    "modal1_3": "Ära näita seda dialoogi automaatselt, kui allkirjaväli kukub"
   },
   "signing": {
     "contact_information": "Kontakti info",
@@ -169,7 +183,7 @@
     "indeterminate signatures": "Määramatud allkirjad",
     "invalid signatures": "Kehtetu allkirjad",
     "participant_information": "Osalejate teave",
-    "personalCode": "Isikukood",
+    "personal_code": "Kodaniku isikukood",
     "phoneNumber": "Telefoninumber",
     "search_criteria": "Otsingu kriteerium",
     "select_certificate": "Valige sertifikaat",
@@ -177,10 +191,12 @@
     "signature_valid": "Allkiri on kehtiv",
     "signing_method": "Allkirjastamise meetod",
     "wait_my_signature": "Ootan minu allkirja",
-    "wait_signature": "Allkirja ootamine"
+    "wait_signature": "Allkirja ootamine",
+    "passport": "Passi kood",
+    "identity_card": "Isikutunnistuse kood"
   },
   "signingForm": {
-    "step2": "Valige Remote Signing Service Provider",
+    "step1": "Valige Remote Signing Service Provider",
     "title1": "Smart-ID allkirjastamisel luuakse kvalifitseeritud elektrooniline allkiri, millel on omakäelise allkirjaga samaväärne õiguslik toime.",
     "title2": "Sertifikaadi valimisega nõustun oma nime ja isikukoodi edastamisega teenusepakkujale.",
     "title3": "Valige dokumendi tüüp",

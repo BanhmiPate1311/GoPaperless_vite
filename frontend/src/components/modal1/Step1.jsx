@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const Step2 = ({
+export const Step1 = ({
   provider,
   setProvider,
   connectorName,
@@ -156,7 +156,7 @@ export const Step2 = ({
         sx={{ flexGrow: 1 }}
       >
         <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
-          {t("signingForm.step2")}
+          {t("signingForm.step1")}
         </Typography>
         <Select
           labelId="demo-simple-select1-label"
@@ -200,7 +200,7 @@ export const Step2 = ({
   );
 };
 
-Step2.propTypes = {
+Step1.propTypes = {
   provider: PropTypes.string,
   setProvider: PropTypes.func,
   connectorName: PropTypes.string,
@@ -214,4 +214,4 @@ Step2.propTypes = {
   setErrorApi: PropTypes.func,
 };
 
-export default Step2;
+export default Step1;

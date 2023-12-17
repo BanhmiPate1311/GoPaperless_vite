@@ -56,7 +56,7 @@ video {
   transform: translate(-50%, -50%);
 }
 
-.inputStyle {
+/* .inputStyle {
   width: 43px !important;
   height: 43px;
   border-radius: 7px;
@@ -70,4 +70,4 @@ video {
 .containerStyle {
   display: flex;
   justify-content: center;
-}
+} */

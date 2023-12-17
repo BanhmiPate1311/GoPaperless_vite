@@ -251,7 +251,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
 
   return (
     <Dialog
-      keepMounted={false}
+      // keepMounted={false}
       TransitionComponent={Transition}
       open={!!open}
       onClose={onClose}

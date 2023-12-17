@@ -343,7 +343,8 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                   color: "signingtextBlue.main",
                 }}
               >
-                Qualified electronic signature
+                {/* Qualified electronic signature */}
+                {t("validation.sigValidTitle")}
               </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ py: 2, px: 0 }}>

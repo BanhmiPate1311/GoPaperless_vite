@@ -235,11 +235,14 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                   justifyContent: "space-between",
                   alignItems: "center",
                 },
-                height: "36px",
+                height: "25px",
               }}
             >
               <ErrorIcon />
-              <Typography variant="h6" sx={{ width: "90%", flexShrink: 0 }}>
+              <Typography
+                variant="h2"
+                sx={{ width: "90%", flexShrink: 0, pl: "10px" }}
+              >
                 {t("validation.sigErrors")}
               </Typography>
             </AccordionSummary>

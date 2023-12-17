@@ -52,7 +52,16 @@
     "valid": "Valid",
     "version": "Version",
     "workflow": "WorkFlow",
-    "workflowName": "WorkFlow Name"
+    "workflowName": "WorkFlow Name",
+    "general": "General",
+    "details": "Details",
+    "field name": "Field Name",
+    "screen": "Screen",
+    "left": "Left",
+    "top": "Top",
+    "width": "Width",
+    "height": "Height",
+    "save": "Save"
   },
   "batch": {
     "collapse": "Collapse all",
@@ -159,7 +168,12 @@
     "upload1": "Keep Original",
     "upload2": "Crop",
     "usb1": "By signing, i agree to the transfer of my name and personal identification code to the service provide.",
-    "usb2": "Enter PIN for signing"
+    "usb2": "Enter PIN for signing",
+
+    "modal1_title": "Edit Signature Field",
+    "modal1_1": "Authenticate signer via OTP",
+    "modal1_2": "OTP authentication (SMS)",
+    "modal1_3": "Do not show this dialog automatically when a signature field is dropped"
   },
   "signing": {
     "contact_information": "Contact Information",
@@ -169,7 +183,7 @@
     "indeterminate signatures": "Indeterminate signatures",
     "invalid signatures": "Invalid signatures",
     "participant_information": "Participant Information",
-    "personalCode": "Personal Code",
+    "personal_code": "Citizen identification Code",
     "phoneNumber": "Phone Number",
     "search_criteria": "Search Criteria",
     "select_certificate": "Select certificate",
@@ -177,10 +191,12 @@
     "signature_valid": "Signature is valid",
     "signing_method": "Signing method",
     "wait_my_signature": "Waiting for my signature",
-    "wait_signature": "Waiting for signature"
+    "wait_signature": "Waiting for signature",
+    "passport": "Passport Code",
+    "identity_card": "Identity card Code"
   },
   "signingForm": {
-    "step2": "Select Remote Signing Service Provider",
+    "step1": "Select Remote Signing Service Provider",
     "step3": "",
     "title1": "Signing with Smart-ID creates a qualified electronic signature which has equivalent legal effect of a handwritten signature.",
     "title2": "By choosing the certificate, I agree to the transfer of my name and personal identification code to the service provider.",

@@ -217,7 +217,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
   }, [progress]);
   return (
     <Dialog
-      keepMounted={false}
+      // keepMounted={false}
       TransitionComponent={Transition}
       open={!!open}
       onClose={onClose}
