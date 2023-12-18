@@ -18,15 +18,27 @@ export const Step3_eid = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (code.length < 9) {
-      onDisableSubmit(true);
-    } else {
-      onDisableSubmit(false);
+    switch (criteria) {
+      case "CITIZEN-IDENTITY-CARD":
+        if (code.length === 12) {
+          onDisableSubmit(false);
+        } else {
+          onDisableSubmit(true);
+        }
+        break;
+      default:
+        if (code.length === 9) {
+          onDisableSubmit(false);
+        } else {
+          onDisableSubmit(true);
+        }
+        break;
     }
-  }, [code, onDisableSubmit]);
+  }, [code, onDisableSubmit, criteria]);
 
   const handleChange1 = (event) => {
     // console.log("event: ", event.target.value);
+    setCode("");
     setCriteria(event.target.value);
   };
 
@@ -43,35 +55,36 @@ export const Step3_eid = ({
 
   return (
     <Stack sx={{ minWidth: 400, height: "100%" }}>
-      <Box mb={4} width={"100%"}>
-        <FormControl fullWidth size="small">
-          <Typography variant="h6" color="#1F2937" fontWeight={600}>
-            {t("signing.search_criteria")}
-          </Typography>
-          <Select
-            labelId="demo-simple-select1-label"
-            id="demo-simple-select"
-            value={criteria}
-            onChange={handleChange1}
-            sx={{
-              "& .MuiListItemSecondaryAction-root": {
-                right: "30px",
-                display: "flex",
-              },
-              backgroundColor: "signingWFBackground.main",
-            }}
-          >
-            {data?.map((item) => (
-              <MenuItem key={item.id} value={item.name}>
-                {item.remark}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+      <Typography variant="h6" fontWeight={500} mb="15px">
+        {t("signingForm.title3")}
+      </Typography>
+      <FormControl fullWidth size="small" sx={{ mb: "15px" }}>
+        <Typography variant="h6" color="#1F2937" fontWeight={600} mb={"10px"}>
+          {t("signing.search_criteria")}
+        </Typography>
+        <Select
+          labelId="demo-simple-select1-label"
+          id="demo-simple-select"
+          value={criteria}
+          onChange={handleChange1}
+          sx={{
+            "& .MuiListItemSecondaryAction-root": {
+              right: "30px",
+              display: "flex",
+            },
+            backgroundColor: "signingWFBackground.main",
+          }}
+        >
+          {data?.map((item) => (
+            <MenuItem key={item.id} value={item.name}>
+              {item.remark}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
       <Box width={"100%"} flexGrow={1}>
-        <Typography variant="h6" color="#1F2937" fontWeight={600}>
+        <Typography variant="h6" color="#1F2937" fontWeight={600} mb={"10px"}>
           {createTitle()}
         </Typography>
         <TextField
@@ -88,6 +101,8 @@ export const Step3_eid = ({
             sx: {
               backgroundColor: "signingWFBackground.main",
             },
+            maxLength: criteria === "CITIZEN-IDENTITY-CARD" ? 12 : 9,
+            type: criteria === "PASSPORT-ID" ? "text" : "number",
           }}
         />
       </Box>

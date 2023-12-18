@@ -32,6 +32,10 @@ import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import { Step1, Step2_smartid, Step3_eid } from ".";
+import { ReactComponent as EidIcon } from "@/assets/images/svg/e-id.svg";
+import { ReactComponent as MobileIdIcon } from "@/assets/images/svg/mobile-id.svg";
+import { ReactComponent as SmartIdIcon } from "@/assets/images/svg/smart-id.svg";
+import { ReactComponent as UsbIcon } from "@/assets/images/svg/usb-token.svg";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -54,13 +58,7 @@ export const SigningForm2 = ({
 
   let lang = getLang();
 
-  // console.log("lang: ", lang);
-
   const isPending = usePending();
-
-  // const sdk = useRef(null);
-
-  // console.log("dataApi: ", dataApi.current);
 
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [assurance, setAssurance] = useState("");
@@ -86,6 +84,41 @@ export const SigningForm2 = ({
     : ["mobile", "smartid", "usbtoken", "electronic_id"];
 
   const providerName = convertSignOptionsToProvider(signingOptions);
+  const mapProvider = useMemo(() => {
+    return signingOptions
+      .map((option) => {
+        switch (option) {
+          case "mobile":
+            return {
+              label: "Mobile-ID",
+              icon: <MobileIdIcon />,
+              value: "MOBILE_ID_SIGNING",
+            };
+          case "smartid":
+            return {
+              label: "Smart-ID",
+              icon: <SmartIdIcon />,
+              value: "SMART_ID_SIGNING",
+            };
+          case "usbtoken":
+            return {
+              label: "USB-Token",
+              icon: <UsbIcon />,
+              value: "USB_TOKEN_SIGNING",
+            };
+          case "electronic_id":
+            return {
+              label: "Electronic video base Identification",
+              icon: <EidIcon />,
+              value: "ELECTRONIC_ID",
+            };
+          default:
+            // Handle unknown signing option
+            return null;
+        }
+      })
+      .filter(Boolean); // Remove null values from the array
+  }, [providerName]);
 
   const filterConnector = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.values(item)[0].join(","))
@@ -224,6 +257,19 @@ export const SigningForm2 = ({
         sdk.current = null;
       }
     );
+  };
+
+  const handleBack = () => {
+    switch (activeStep) {
+      case 2:
+        setProvider("");
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        break;
+      case 3:
+        setProvider("");
+        setActiveStep((prevActiveStep) => prevActiveStep - 2);
+        break;
+    }
   };
 
   const handleNext = (step = 1) => {
@@ -366,20 +412,20 @@ export const SigningForm2 = ({
         onClose();
         handleShowEidModal();
         break;
-      case 4:
-        // smart id get certchain
-        dataApi.current = {
-          ...dataApi.current,
-          requestID: uuidv4(),
-          relyingParty: smartIdCertificate?.data?.relyingParty,
-          codeEnable: smartIdCertificate?.data?.codeEnable,
-          certChain: smartIdCertificate?.data?.listCertificate[certSelected],
-        };
-        setDataSigning(dataApi.current);
-        // handleNext(1);
-        onClose();
-        handleShowModal2();
-        break;
+      // case 4:
+      //   // smart id get certchain
+      //   dataApi.current = {
+      //     ...dataApi.current,
+      //     requestID: uuidv4(),
+      //     relyingParty: smartIdCertificate?.data?.relyingParty,
+      //     codeEnable: smartIdCertificate?.data?.codeEnable,
+      //     certChain: smartIdCertificate?.data?.listCertificate[certSelected],
+      //   };
+      //   setDataSigning(dataApi.current);
+      //   // handleNext(1);
+      //   onClose();
+      //   handleShowModal2();
+      //   break;
       // case 5:
       // usb token get certChain
       //   dataApi.current = {
@@ -410,7 +456,7 @@ export const SigningForm2 = ({
       setProvider={setProvider}
       connectorName={connectorName}
       setConnectorName={setConnectorName}
-      providerName={providerName}
+      mapProvider={mapProvider}
       connectorList={connectorList?.data}
       filterConnector={filterConnector}
       onDisableSubmit={handleDisableSubmit}
@@ -488,7 +534,7 @@ export const SigningForm2 = ({
 
   return (
     <Dialog
-      // keepMounted
+      // keepMounted={false}
       TransitionComponent={Transition}
       open={!!open}
       onClose={onClose}
@@ -561,9 +607,15 @@ export const SigningForm2 = ({
         <Button
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
-          onClick={handleCancelClick}
+          onClick={
+            activeStep === 2 || activeStep === 3
+              ? handleBack
+              : handleCancelClick
+          }
         >
-          {t("0-common.cancel")}
+          {activeStep === 2 || activeStep === 3
+            ? t("0-common.back")
+            : t("0-common.cancel")}
         </Button>
         <Button
           variant="contained"

@@ -13,26 +13,28 @@ export const PhoneInputField2 = ({
   // copyNumbersOnly = true,
 }) => {
   return (
-    <Box>
-      <PhoneInput
-        country={"vn"}
-        placeholder={label}
-        enableSearch={true}
-        specialLabel={label}
-        value={phoneNumber}
-        onChange={(phone, country) => handlePhoneNumber(phone, country)}
-        onKeyDown={enterToSubmit}
-        onBlur={(phone, country) => {
-          if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
-        }}
-        onFocus={(phone, country) => {
-          if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
-        }}
-        inputStyle={{ height: "40px", opacity: disabled ? "0.5" : "1" }}
-        disabled={disabled}
-        copyNumbersOnly={false}
-      />
-    </Box>
+    <PhoneInput
+      country={"vn"}
+      placeholder={label}
+      enableSearch={true}
+      specialLabel={label}
+      value={phoneNumber}
+      onChange={(phone, country) => handlePhoneNumber(phone, country)}
+      onKeyDown={enterToSubmit}
+      onBlur={(phone, country) => {
+        if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
+      }}
+      onFocus={(phone, country) => {
+        if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
+      }}
+      inputStyle={{
+        height: "40px",
+        width: "100%",
+        opacity: disabled ? "0.5" : "1",
+      }}
+      disabled={disabled}
+      copyNumbersOnly={false}
+    />
   );
 };
 PhoneInputField2.propTypes = {

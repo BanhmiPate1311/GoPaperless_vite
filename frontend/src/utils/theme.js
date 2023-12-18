@@ -16,7 +16,7 @@ export let theme = extendTheme({
     fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
     h6: {
       fontSize: 14,
-      // color: "#000", // Adjust the font size as needed
+      color: "#1F2937", // Adjust the font size as needed
     },
     h5: {
       fontSize: 13, // Adjust the font size as needed

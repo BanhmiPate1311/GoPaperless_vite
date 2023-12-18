@@ -1,7 +1,3 @@
-import { ReactComponent as EidIcon } from "@/assets/images/svg/e-id.svg";
-import { ReactComponent as MobileIdIcon } from "@/assets/images/svg/mobile-id.svg";
-import { ReactComponent as SmartIdIcon } from "@/assets/images/svg/smart-id.svg";
-import { ReactComponent as UsbIcon } from "@/assets/images/svg/usb-token.svg";
 import { Stack } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -19,7 +15,7 @@ export const Step1 = ({
   setProvider,
   connectorName,
   setConnectorName,
-  providerName,
+  mapProvider,
   connectorList,
   filterConnector,
   onDisableSubmit,
@@ -28,42 +24,50 @@ export const Step1 = ({
 }) => {
   const { t } = useTranslation();
   const [data2, setData2] = useState(null);
-  const mapProvider = providerName.reduce((acc, option, i) => {
-    switch (option) {
-      case "MOBILE_ID_SIGNING":
-        acc[i] = {
-          label: "Mobile-ID",
-          icon: <MobileIdIcon />,
-          value: "MOBILE_ID_SIGNING",
-        };
-        break;
-      case "SMART_ID_SIGNING":
-        acc[i] = {
-          label: "Smart-ID",
-          icon: <SmartIdIcon />,
-          value: "SMART_ID_SIGNING",
-        };
-        break;
-      case "USB_TOKEN_SIGNING":
-        acc[i] = {
-          label: "USB-Token",
-          icon: <UsbIcon />,
-          value: "USB_TOKEN_SIGNING",
-        };
-        break;
-      case "ELECTRONIC_ID":
-        acc[i] = {
-          label: "Electronic video base Identification",
-          icon: <EidIcon />,
-          value: "ELECTRONIC_ID",
-        };
-        break;
-      default:
-        // Handle unknown signing option
-        break;
-    }
-    return acc;
-  }, []);
+  const [connect, setConnect] = useState("");
+  console.log("connectorName: ", connectorName);
+  console.log("provider: ", provider);
+
+  // const mapProvider = providerName.reduce((acc, option, i) => {
+  //   switch (option) {
+  //     case "MOBILE_ID_SIGNING":
+  //       acc[i] = {
+  //         label: "Mobile-ID",
+  //         icon: <MobileIdIcon />,
+  //         value: "MOBILE_ID_SIGNING",
+  //       };
+  //       break;
+  //     case "SMART_ID_SIGNING":
+  //       acc[i] = {
+  //         label: "Smart-ID",
+  //         icon: <SmartIdIcon />,
+  //         value: "SMART_ID_SIGNING",
+  //       };
+  //       break;
+  //     case "USB_TOKEN_SIGNING":
+  //       acc[i] = {
+  //         label: "USB-Token",
+  //         icon: <UsbIcon />,
+  //         value: "USB_TOKEN_SIGNING",
+  //       };
+  //       break;
+  //     case "ELECTRONIC_ID":
+  //       acc[i] = {
+  //         label: "Electronic video base Identification",
+  //         icon: <EidIcon />,
+  //         value: "ELECTRONIC_ID",
+  //       };
+  //       break;
+  //     default:
+  //       // Handle unknown signing option
+  //       break;
+  //   }
+  //   return acc;
+  // }, []);
+  // useEffect(() => {
+  //   setProvider("");
+  //   setConnectorName("");
+  // }, []);
 
   useEffect(() => {
     if (connectorName === "") {
@@ -80,7 +84,9 @@ export const Step1 = ({
   }, [connectorName, onDisableSubmit, provider, errorPG]);
 
   const handleChange1 = (e) => {
+    // console.log(e.target.value);
     setProvider(e.target.value);
+
     setConnectorName("");
 
     const filterValue = e.target.value;
@@ -115,6 +121,7 @@ export const Step1 = ({
   };
 
   const handleChange2 = (e) => {
+    setConnect(e.target.value);
     setConnectorName(e.target.value);
     // setCert({});
   };
@@ -125,9 +132,10 @@ export const Step1 = ({
         <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
           {t("signing.signing_method")}
         </Typography>
+
         <Select
-          labelId="demo-simple-select1-label"
-          id="demo-simple-select"
+          labelId="demo-simple-select1-label-step1"
+          id="demo-simple-select-step1"
           value={provider}
           onChange={handleChange1}
           sx={{
@@ -159,9 +167,9 @@ export const Step1 = ({
           {t("signingForm.step1")}
         </Typography>
         <Select
-          labelId="demo-simple-select1-label"
-          id="demo-simple-select"
-          value={connectorName}
+          labelId="demo-simple-select1-label-step2"
+          id="demo-simple-select-step2"
+          value={connect}
           onChange={handleChange2}
           sx={{
             "& .MuiListItemSecondaryAction-root": {
@@ -205,7 +213,7 @@ Step1.propTypes = {
   setProvider: PropTypes.func,
   connectorName: PropTypes.string,
   setConnectorName: PropTypes.func,
-  providerName: PropTypes.array,
+  mapProvider: PropTypes.array,
   connectorList: PropTypes.object,
   filterConnector: PropTypes.array,
   onDisableSubmit: PropTypes.func,

@@ -40,7 +40,7 @@ canvas.step6 {
 
 video {
   position: absolute;
-  top: 46.5%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -49,7 +49,7 @@ video {
 
 .video-direction {
   position: absolute;
-  top: 75%;
+  top: 70%;
   left: 50%;
   width: 440px;
   padding: 10px 0;
@@ -71,3 +71,15 @@ video {
   display: flex;
   justify-content: center;
 } */
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

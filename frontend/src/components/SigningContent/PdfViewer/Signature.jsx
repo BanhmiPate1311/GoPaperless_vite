@@ -12,7 +12,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
-import { EidModal } from "../../EidModal";
 import { SigningForm2 } from "../../modal1";
 import { ModalSigningImage2 } from "@/components/modal2";
 import { ModalSmartid } from "@/components/modal2/ModalSmartid";
@@ -20,6 +19,7 @@ import { ModalUsb } from "@/components/modal2/ModalUsb";
 import { EidModal2 } from "@/components/modal2/ModalEid";
 import { AssuranceModal } from "@/components/modal2_assurance";
 import { SignatureSetting } from "@/components/modal_setting";
+import { ModalEid } from "@/components/modal_eid";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -568,6 +568,26 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         />
       )}
 
+      {isShowEidModal[index] && (
+        <ModalEid
+          open={isShowEidModal[index]}
+          onClose={() => handleCloseEidModal(index)}
+          workFlow={dataSigning}
+          setDataSigning={setDataSigning}
+          handleShowModalSignImage={() => handleShowModalSignImage(index)}
+        />
+      )}
+
+      {isShowModal2[index] && (
+        <AssuranceModal
+          open={isShowModal2[index]}
+          onClose={() => handleCloseModal2(index)}
+          dataSigning={dataSigning}
+          setDataSigning={setDataSigning}
+          signatureData={signatureData}
+        />
+      )}
+
       {isShowModalSignImage[index] && (
         <ModalSigningImage2
           open={isShowModalSignImage[index]}
@@ -593,30 +613,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           setDataSigning={setDataSigning}
         />
       )}
-      {isShowEidModal[index] && (
-        <EidModal
-          open={isShowEidModal[index]}
-          onClose={() => handleCloseEidModal(index)}
-          workFlow={dataSigning}
-          setDataSigning={setDataSigning}
-          handleShowModalSignImage={() => handleShowModalSignImage(index)}
-        />
-      )}
 
       {isShowEidModalSign[index] && (
         <EidModal2
           open={isShowEidModalSign[index]}
           onClose={() => handleCloseEidModalSign(index)}
-          dataSigning={dataSigning}
-          setDataSigning={setDataSigning}
-          signatureData={signatureData}
-        />
-      )}
-
-      {isShowModal2[index] && (
-        <AssuranceModal
-          open={isShowModal2[index]}
-          onClose={() => handleCloseModal2(index)}
           dataSigning={dataSigning}
           setDataSigning={setDataSigning}
           signatureData={signatureData}

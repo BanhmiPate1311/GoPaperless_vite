@@ -87,9 +87,9 @@ export const Step2_smartid = ({
     // } else {
     //   onDisableSubmit(false);
     // }
-  }, [isPhoneSelect, code]);
+  }, [isPhoneSelect, code, criteria]);
   const handleChange1 = (event) => {
-    console.log("event: ", event.target.value);
+    // console.log("event: ", event.target.value);
     setCriteria(event.target.value);
 
     if (event.target.value === "PHONE") {
@@ -114,6 +114,9 @@ export const Step2_smartid = ({
 
   return (
     <Stack sx={{ width: "100%", height: "100%" }}>
+      <Typography variant="h6" color="#1F2937" fontWeight={500} mb="15px">
+        {t("signingForm.title1")}
+      </Typography>
       <FormControl fullWidth size="small" sx={{ mb: "15px" }}>
         <Typography variant="h6" color="#1F2937" fontWeight={600} mb="10px">
           {t("signing.search_criteria")}
@@ -194,7 +197,7 @@ export const Step2_smartid = ({
               backgroundColor: "signingWFBackground.main",
             },
             maxLength: criteria === "CITIZEN-IDENTITY-CARD" ? 12 : 9,
-            type: criteria === "PASSPORT-ID" ? "text" : "tel",
+            type: criteria === "PASSPORT-ID" ? "text" : "number",
           }}
         />
       </Box>
