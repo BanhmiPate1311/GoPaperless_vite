@@ -529,6 +529,8 @@ public class ElectronicService {
                                 certResponse.setValidTo(time[1]);
                                 certResponse.setCert(certChain);
                                 certResponse.setCredentialID(credentialID);
+                                String uid = CommonFunction.getUID(info1[0].toString());
+                                certResponse.setSeal(CommonFunction.isSeal(uid));
 //                        certResponse.setCodeNumber(codeNumber);
 
                                 listCertificate.add(certResponse);

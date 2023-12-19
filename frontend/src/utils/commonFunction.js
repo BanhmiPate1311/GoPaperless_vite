@@ -260,3 +260,17 @@ export const createValidSubTitle = (value) => {
       return null;
   }
 };
+
+export const checkEseal = (cert) => {
+  const certElement = cert.name;
+
+  // const cert =
+  //   "OID.2.5.4.20=0901790767, EMAILADDRESS=huynhcuong@gmail.com, UID=CCCD:079083011315, CN=Huỳnh Cường, ST=Hồ Chí Minh, C=VN";
+  // check if cert contains "UID" and cert contains "CCCD" or "CMND"
+  return (
+    !certElement.includes("CCCD") &&
+    !certElement.includes("CMND") &&
+    !certElement.includes("HC") &&
+    !certElement.includes("BHXH")
+  );
+};

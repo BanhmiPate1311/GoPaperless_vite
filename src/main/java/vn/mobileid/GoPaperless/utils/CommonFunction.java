@@ -137,7 +137,7 @@ public class CommonFunction {
             X509Certificate cert = (X509Certificate) certFactory1.generateCertificate(in);
             info[0] = cert.getSubjectDN();
             info[0] = info[0].toString().replace("\\", "");
-            System.out.println("info[0]: " + info[0]);
+
             info[1] = cert.getIssuerDN();
             info[2] = cert.getSerialNumber().toString(16);
 //            time[0] = formatter.format(cert.getNotBefore());
@@ -159,6 +159,19 @@ public class CommonFunction {
         for (int j = 0; j < rdn.length; j++) {
             AttributeTypeAndValue[] attributeTypeAndValue = rdn[j].getTypesAndValues();
             if (attributeTypeAndValue[0].getType().toString().equals(OID_O)) {
+                return attributeTypeAndValue[0].getValue().toString();
+            }
+        }
+        return "";
+    }
+
+    public static String getUID(String dn) {
+        X500Name subject = new X500Name(dn);
+        RDN[] rdn = subject.getRDNs();
+        for (int j = 0; j < rdn.length; j++) {
+            AttributeTypeAndValue[] attributeTypeAndValue = rdn[j].getTypesAndValues();
+
+            if (attributeTypeAndValue[0].getType().toString().equals("0.9.2342.19200300.100.1.1")) {
                 return attributeTypeAndValue[0].getValue().toString();
             }
         }
@@ -409,7 +422,6 @@ public class CommonFunction {
             System.out.println("requestbody PostBackJsonCertificateObject " + response.toString());
 
 
-
             // HttpPost request = new HttpPost(url);
             // StringEntity params = new StringEntity(sJson);
             // request.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
@@ -505,7 +517,7 @@ public class CommonFunction {
         return result.toString();
     }
 
-    public static String convertToGetTimeZone(String time){
+    public static String convertToGetTimeZone(String time) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
         ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
@@ -516,7 +528,7 @@ public class CommonFunction {
         return zonedDateTimeStringArray[0];
     }
 
-    public static String convertToGetTimeZoneSmartCert(String time){
+    public static String convertToGetTimeZoneSmartCert(String time) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy");
         LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
@@ -527,7 +539,7 @@ public class CommonFunction {
         return zonedDateTimeStringArray[0];
     }
 
-    public static String convertTimeToUpDb(String time){
+    public static String convertTimeToUpDb(String time) {
 
 //        String time = "2023-08-28T10:30:48+07:00";
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
@@ -542,7 +554,7 @@ public class CommonFunction {
 
     }
 
-    public static String convertTimeSentPostBack(String inputDateString){
+    public static String convertTimeSentPostBack(String inputDateString) {
         OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         // Convert to the desired time zone (e.g., UTC+0)
@@ -567,5 +579,13 @@ public class CommonFunction {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
         return zonedDateTime.format(formatter);
+    }
+
+    public static boolean isSeal(String UID) {
+        // check UID is empty or null and UID contains CCCD, CMND, HC, BHXH
+        return (UID == null || UID.isEmpty()) || (!UID.contains("CCCD")
+                && !UID.contains("CMND")
+                && !UID.contains("HC")
+                && !UID.contains("BHXH"));
     }
 }

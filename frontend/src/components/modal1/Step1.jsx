@@ -24,9 +24,6 @@ export const Step1 = ({
 }) => {
   const { t } = useTranslation();
   const [data2, setData2] = useState(null);
-  const [connect, setConnect] = useState("");
-  console.log("connectorName: ", connectorName);
-  console.log("provider: ", provider);
 
   // const mapProvider = providerName.reduce((acc, option, i) => {
   //   switch (option) {
@@ -121,7 +118,6 @@ export const Step1 = ({
   };
 
   const handleChange2 = (e) => {
-    setConnect(e.target.value);
     setConnectorName(e.target.value);
     // setCert({});
   };
@@ -169,7 +165,7 @@ export const Step1 = ({
         <Select
           labelId="demo-simple-select1-label-step2"
           id="demo-simple-select-step2"
-          value={connect}
+          value={connectorName}
           onChange={handleChange2}
           sx={{
             "& .MuiListItemSecondaryAction-root": {

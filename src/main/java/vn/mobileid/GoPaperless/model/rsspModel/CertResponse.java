@@ -11,6 +11,7 @@ public class CertResponse {
     private String relyingParty;
     private String prefixCode;
     private boolean codeEnable;
+    private boolean isSeal;
 
     public String getSubject() {
         return subject;
@@ -92,5 +93,11 @@ public class CertResponse {
         this.codeEnable = codeEnable;
     }
 
+    public boolean isSeal() {
+        return isSeal;
+    }
 
+    public void setSeal(boolean seal) {
+        isSeal = seal;
+    }
 }

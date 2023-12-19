@@ -8,14 +8,81 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Step1 } from ".";
 
-export const AssuranceModal = ({ open, onClose }) => {
+export const AssuranceModal = ({ open, onClose, dataSigning }) => {
+  console.log("dataSigning: ", dataSigning);
   const { t } = useTranslation();
 
-  const handleSubmitClick = () => {
-    console.log("object");
+  const [activeStep, setActiveStep] = useState(1);
+  const [assurance, setAssurance] = useState("");
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [listCert, setListCert] = useState([]);
+  console.log("listCert: ", listCert);
+
+  const handleDisableSubmit = (disabled) => {
+    setIsSubmitDisabled(disabled);
   };
+
+  let { title } = useMemo(() => {
+    switch (activeStep) {
+      case 1:
+        return {
+          title: t("signing.sign_document"),
+          subtitle: t("signingForm.title4"),
+        };
+      case 3:
+        return {
+          title: t("signing.sign_document"),
+          subtitle: t("signingForm.title1"),
+        };
+      case 4:
+      case 5:
+        return {
+          title: t("modal.title1"),
+          subtitle: t("signingForm.title2"),
+        };
+      case 6:
+        return {
+          title: t("signing.sign_document"),
+          subtitle: t("signingForm.title3"),
+        };
+      default:
+        return {
+          title: t("signing.sign_document"),
+          subtitle: "",
+        };
+    }
+  }, [activeStep]);
+
+  const handleSubmitClick = () => {
+    switch (activeStep) {
+      case 1:
+        console.log("assurance: ", assurance);
+        if (assurance === "aes") {
+          setListCert(
+            dataSigning.listCertificate.filter((item) => item.seal === false)
+          );
+        } else {
+          setListCert(
+            dataSigning.listCertificate.filter((item) => item.seal === true)
+          );
+        }
+        break;
+    }
+  };
+
+  const steps = [
+    <Step1
+      key="step1"
+      assurance={assurance}
+      setAssurance={setAssurance}
+      onDisableSubmit={handleDisableSubmit}
+    />,
+  ];
+
   return (
     <Dialog
       // keepMounted={false}
@@ -56,8 +123,7 @@ export const AssuranceModal = ({ open, onClose }) => {
             paddingBottom: "5px",
           }}
         >
-          {/* {title} */}
-          title
+          {title}
         </Typography>
       </DialogTitle>
 
@@ -82,9 +148,7 @@ export const AssuranceModal = ({ open, onClose }) => {
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
             {/* {steps[activeStep]} */}
-            {/* <Box flexGrow={1}>{steps[activeStep - 1]}</Box> */}
-            content
-            {/* {unavail && <Alert severity="error">{unavail}</Alert>} */}
+            <Box flexGrow={1}>{steps[activeStep - 1]}</Box>
           </Stack>
         </DialogContentText>
       </DialogContent>
@@ -98,7 +162,7 @@ export const AssuranceModal = ({ open, onClose }) => {
         </Button>
         <Button
           variant="contained"
-          //   disabled={isPending || isSubmitDisabled}
+          disabled={isSubmitDisabled}
           //   startIcon={
           //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
           //   }
@@ -120,6 +184,7 @@ export const AssuranceModal = ({ open, onClose }) => {
 AssuranceModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
+  dataSigning: PropTypes.object,
 };
 
 export default AssuranceModal;

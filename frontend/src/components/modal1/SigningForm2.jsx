@@ -7,6 +7,7 @@ import {
   useSmartIdCertificate,
 } from "@/hook";
 import {
+  checkEseal,
   convertProviderToSignOption,
   convertSignOptionsToProvider,
   convertTypeEid,
@@ -31,7 +32,14 @@ import PropTypes from "prop-types";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
-import { Step1, Step2_smartid, Step3_eid } from ".";
+import {
+  Step1,
+  Step2_smartid,
+  Step3_eid,
+  Step4,
+  Step5_smart,
+  Step6_usb,
+} from ".";
 import { ReactComponent as EidIcon } from "@/assets/images/svg/e-id.svg";
 import { ReactComponent as MobileIdIcon } from "@/assets/images/svg/mobile-id.svg";
 import { ReactComponent as SmartIdIcon } from "@/assets/images/svg/smart-id.svg";
@@ -63,6 +71,7 @@ export const SigningForm2 = ({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [assurance, setAssurance] = useState("");
   const [provider, setProvider] = useState("");
+  console.log("provider: ", provider);
   const [connectorName, setConnectorName] = useState("");
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
@@ -71,6 +80,7 @@ export const SigningForm2 = ({
   const [criteria, setCriteria] = useState("PHONE");
   const [criteriaEid, setCriteriaEid] = useState("CITIZEN-IDENTITY-CARD");
   const [code, setCode] = useState("");
+  const [newListCert, setNewListCert] = useState([]);
   const [certSelected, setCertSelected] = useState(0);
 
   const [activeStep, setActiveStep] = useState(1);
@@ -143,7 +153,8 @@ export const SigningForm2 = ({
     mutationFn: async (data) => {
       try {
         const response = await connectWS(data);
-        // console.log("response: ", response);
+        console.log("response: ", response);
+        // console.log(checkEseal(response.signingCertificates[0]));
         return response;
       } catch (error) {
         // console.log("error: ", error);
@@ -263,10 +274,12 @@ export const SigningForm2 = ({
     switch (activeStep) {
       case 2:
         setProvider("");
+        setConnectorName("");
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
         break;
       case 3:
         setProvider("");
+        setConnectorName("");
         setActiveStep((prevActiveStep) => prevActiveStep - 2);
         break;
     }
@@ -298,7 +311,10 @@ export const SigningForm2 = ({
   }, [assurance, criteria, provider, connectorName]);
 
   const filterPrefix = prefixList?.data?.filter(
-    (item) => item.type === "PHONE-ID" || item.type === "PERSONAL-ID"
+    (item) =>
+      item.type === "PHONE-ID" ||
+      item.type === "PERSONAL-ID" ||
+      item.name === "TAX-CODE"
   );
   const filterPrefixEid = prefixList?.data?.filter(
     (item) => item.type === "PERSONAL-ID"
@@ -348,14 +364,14 @@ export const SigningForm2 = ({
                   ...dataApi.current,
                   ...data,
                 };
-                // setActiveStep(3);
+                setActiveStep(4);
                 // onStepSubmit({ ...data1, ...data });
               },
             });
 
             break;
           case "ELECTRONIC_ID":
-            console.log("connectorName: ", connectorName);
+            // console.log("connectorName: ", connectorName);
             if (connectorName === "Vietnam") {
               setActiveStep(3);
             } else {
@@ -393,9 +409,13 @@ export const SigningForm2 = ({
         smartIdCertificate.mutate(dataApi.current, {
           onSuccess: (data) => {
             console.log("data: ", data);
-            // handleNext(1); // chưa
-            handleShowModal2();
+            dataApi.current = {
+              ...dataApi.current,
+              ...data,
+            };
+            handleNext(2);
             // onClose();
+            // handleShowModal2();
           },
         });
         break;
@@ -411,6 +431,42 @@ export const SigningForm2 = ({
 
         onClose();
         handleShowEidModal();
+        break;
+      case 4:
+        switch (provider) {
+          case "SMART_ID_SIGNING":
+            if (assurance === "eseal") {
+              setNewListCert(
+                dataApi.current.listCertificate.filter(
+                  (item) => item.seal === true
+                )
+              );
+            } else {
+              setNewListCert(
+                dataApi.current.listCertificate.filter(
+                  (item) => item.seal === false
+                )
+              );
+            }
+            handleNext(1);
+            break;
+          case "USB_TOKEN_SIGNING":
+            if (assurance === "eseal") {
+              setNewListCert(
+                dataApi.current.signingCertificates.filter(
+                  (item) => checkEseal(item) === true
+                )
+              );
+            } else {
+              setNewListCert(
+                dataApi.current.signingCertificates.filter(
+                  (item) => checkEseal(item) === false
+                )
+              );
+            }
+            handleNext(2);
+            break;
+        }
         break;
       // case 4:
       //   // smart id get certchain
@@ -444,12 +500,6 @@ export const SigningForm2 = ({
   };
 
   const steps = [
-    // <Step1
-    //   key="step1"
-    //   assurance={assurance}
-    //   setAssurance={setAssurance}
-    //   onDisableSubmit={handleDisableSubmit}
-    // />,
     <Step1
       key="step1"
       provider={provider}
@@ -474,29 +524,35 @@ export const SigningForm2 = ({
       setCode={setCode}
       onDisableSubmit={handleDisableSubmit}
     />,
-    // <Step4
-    //   key="step4"
-    //   data={smartIdCertificate?.data?.listCertificate}
-    //   certSelected={certSelected}
-    //   setCertSelected={setCertSelected}
-    //   onDoubleClick={handleSubmitClick}
-    //   onDisableSubmit={handleDisableSubmit}
-    // />,
-    // <Step5_usb
-    //   key="step5"
-    //   data={dataApi.current.signingCertificates}
-    //   certSelected={certSelected}
-    //   setCertSelected={setCertSelected}
-    //   onDoubleClick={handleSubmitClick}
-    //   onDisableSubmit={handleDisableSubmit}
-    // />,
     <Step3_eid
-      key="step6"
+      key="step3"
       data={filterPrefixEid}
       criteria={criteriaEid}
       setCriteria={setCriteriaEid}
       code={code}
       setCode={setCode}
+      onDisableSubmit={handleDisableSubmit}
+    />,
+    <Step4
+      key="step4"
+      assurance={assurance}
+      setAssurance={setAssurance}
+      onDisableSubmit={handleDisableSubmit}
+    />,
+    <Step5_smart
+      key="step5"
+      data={newListCert}
+      certSelected={certSelected}
+      setCertSelected={setCertSelected}
+      onDoubleClick={handleSubmitClick}
+      onDisableSubmit={handleDisableSubmit}
+    />,
+    <Step6_usb
+      key="step5"
+      data={newListCert}
+      certSelected={certSelected}
+      setCertSelected={setCertSelected}
+      onDoubleClick={handleSubmitClick}
       onDisableSubmit={handleDisableSubmit}
     />,
   ];

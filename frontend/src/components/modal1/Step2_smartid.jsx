@@ -21,7 +21,7 @@ export const Step2_smartid = ({
   const { t } = useTranslation();
   const [isPhoneSelect, setIsPhoneSelect] = useState(true);
 
-  // console.log("code: ", code);
+  // console.log("data: ", data);
   useEffect(() => {
     // let phoneWithoutDialCode = code.slice(dialCode.current.length);
     // if (phoneWithoutDialCode.match(/^0+/)) {

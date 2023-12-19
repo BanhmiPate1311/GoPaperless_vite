@@ -24,7 +24,7 @@ const ToggleButtonStyle = styled(ToggleButton)({
   borderRadius: "10px",
 });
 
-export const Step5_usb = ({
+export const Step6_usb = ({
   data,
   certSelected,
   setCertSelected,
@@ -102,11 +102,11 @@ export const Step5_usb = ({
   );
 };
 
-Step5_usb.propTypes = {
+Step6_usb.propTypes = {
   data: PropTypes.array,
   setCertSelected: PropTypes.func,
   certSelected: PropTypes.number,
   onDoubleClick: PropTypes.func,
   onDisableSubmit: PropTypes.func,
 };
-export default Step5_usb;
+export default Step6_usb;
