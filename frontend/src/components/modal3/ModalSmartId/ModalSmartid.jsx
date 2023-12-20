@@ -1,32 +1,22 @@
-import { useSmartIdSign } from "@/hook";
-import { rsspService } from "@/services/rssp_service";
-import Alert from "@mui/material/Alert";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import CircularProgress, {
-  circularProgressClasses,
-} from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
-const mathRound = (number) => {
-  const totalTime = 300;
-  return Math.floor((number / 100) * totalTime); // Số phút là phần nguyên khi chia cho 60
-};
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import CircularProgress, {
+  circularProgressClasses,
+} from "@mui/material/CircularProgress";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useSmartIdSign } from "@/hook";
+import { rsspService } from "@/services/rssp_service";
 
 function CircularProgressWithLabel(props) {
   const formatTime = (seconds) => {
@@ -103,50 +93,37 @@ function CircularProgressWithLabel(props) {
 }
 
 export const ModalSmartid = ({ open, onClose, dataSigning }) => {
-  //   console.log("dataSigning: ", dataSigning);
   const { t } = useTranslation();
 
   const queryClient = useQueryClient();
-  const timer = useRef(null);
+
+  const [vcode, setVc] = useState(null);
+  const [progress, setProgress] = useState(100);
+
   // click on cancel
   const [signFileController, setSignFileController] = useState(
     new AbortController()
   );
+  const timer = useRef(null);
   // const [getVCController, setGetVCController] = useState(new AbortController());
-  const handleCancelSign = () => {
-    signFileController.abort();
-    // getVCController.abort();
-    setSignFileController(new AbortController());
-    // setGetVCController(new AbortController());
-    clearInterval(timer.current);
-    onClose();
-  };
-
-  // const sign = useQuery({
-  //   queryKey: ["signFile"],
-  //   queryFn: async ({ signal }) => {
-  //     try {
-  //       const response = await rsspService.signFile(dataSigning, { signal });
-  // window.parent.postMessage({ data: response.data, status: "Success" }, "*");
-  //       queryClient.invalidateQueries({ queryKey: ["getField"] });
-  //       queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
-  //       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
-  //       onClose();
-  //       return true;
-  //     } catch (error) {
-  //       // console.log("error1: ", error);
-  //       setProgress(0);
-  //       clearInterval(timer.current);
-  //       throw new Error(error.response?.data?.message || "An error occurred");
-  //     }
-  //   },
-  //   retry: 0,
-  //   staleTime: 0,
-  //   cacheTime: 5 * 60 * 1000,
-  // });
 
   const smartSign = useSmartIdSign({ signal: signFileController.signal });
-  console.log("smartSign: ", smartSign);
+
+  useEffect(() => {
+    if (progress > 0.5) {
+      timer.current = setInterval(() => {
+        setProgress((prevProgress) => prevProgress - 1 / 3);
+      }, 1000);
+
+      return () => {
+        clearInterval(timer.current);
+      };
+    }
+    if (progress <= 0.5) {
+      setProgress(0);
+      // handleCloseModal1();
+    }
+  }, [progress]);
 
   useEffect(() => {
     smartSign.mutate(dataSigning, {
@@ -167,25 +144,6 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
     getVCEnabled();
   }, []);
 
-  // const handelCancel = (e) => {
-  //   e.preventDefault();
-  //   queryClient.cancelQueries({ queryKey: ["signFile"] });
-  //   clearInterval(timer.current);
-  //   // onClose();
-  // };
-
-  // console.log("error: ", sign?.error?.message);
-
-  // const { data: getVc } = useQuery({
-  //   queryKey: ["getVc"],
-  //   queryFn: () => {
-  //     return rsspService.getVc(dataSigning);
-  //   },
-  //   staleTime: 0,
-  //   cacheTime: 5 * 60 * 1000,
-  // });
-  const [vcode, setVc] = useState(null);
-  console.log("vcode: ", vcode);
   const getVCEnabled = async () => {
     const response = await rsspService.getVc({
       requestID: dataSigning.requestID,
@@ -195,49 +153,41 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
     // setVCEnabled(false);
   };
 
-  // console.log("getVc: ", getVc?.data);
+  const handleCancelSign = () => {
+    signFileController.abort();
+    // getVCController.abort();
+    setSignFileController(new AbortController());
+    // setGetVCController(new AbortController());
+    clearInterval(timer.current);
+    onClose();
+  };
 
-  const [progress, setProgress] = useState(100);
-  // console.log("progress: ", progress);
-
-  useEffect(() => {
-    if (progress > 0.5) {
-      timer.current = setInterval(() => {
-        setProgress((prevProgress) => prevProgress - 1 / 3);
-      }, 1000);
-
-      return () => {
-        clearInterval(timer.current);
-      };
-    }
-    if (progress <= 0.5) {
-      setProgress(0);
-      // handleCloseModal1();
-    }
-  }, [progress]);
   return (
     <Dialog
       // keepMounted={false}
-      TransitionComponent={Transition}
+      // TransitionComponent={Transition}
       open={!!open}
       onClose={onClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
-      sx={{
-        "& .MuiDialog-container": {
-          "& .MuiPaper-root": {
-            width: "100%",
-            maxWidth: "470px", // Set your width here
-            borderRadius: "10px",
-          },
+      PaperProps={{
+        sx: {
+          width: "500px",
+          maxWidth: "500px", // Set your width here
+          height: "700px",
+          borderRadius: "10px",
         },
       }}
     >
       <DialogTitle
         component="div"
         id="scroll-dialog-title"
-        sx={{ backgroundColor: "dialogBackground.main", paddingBottom: "0px" }}
+        sx={{
+          backgroundColor: "dialogBackground.main",
+          p: "10px 20px",
+          height: "51px",
+        }}
       >
         <Typography
           variant="h6"
@@ -250,75 +200,66 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
             borderColor: "signingtextBlue.main",
             borderRadius: "5px",
             paddingBottom: "5px",
-            marginBottom: "10px",
           }}
         >
           {/* {title} */}
           {t("signing.sign_document")}
         </Typography>
-        {/* {subtitle && (
-      <Typography variant="h5" width={"100%"}>
-        {subtitle}
-      </Typography>
-    )} */}
       </DialogTitle>
-      {/* <IconButton
-        aria-label="close"
-        onClick={onClose}
+
+      <DialogContent
         sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: (theme) => theme.palette.grey[500],
+          backgroundColor: "dialogBackground.main",
+          height: "100%",
+          // py: "10px",
+          borderBottom: "1px solid",
+          borderColor: "borderColor.main",
+          p: "0 20px 10px",
         }}
       >
-        <CloseIcon />
-      </IconButton> */}
-      {/* <Box sx={{ px: "24px" }}>
-    <Divider />
-  </Box> */}
-      <DialogContent sx={{ backgroundColor: "dialogBackground.main", py: 0 }}>
         <DialogContentText
           component="div"
           id="scroll-dialog-description"
-          //   ref={descriptionElementRef}
           tabIndex={-1}
           sx={{
-            color: "signingtext1.main",
-            fontWeight: "bold",
-            // mb: 5,
+            height: "100%",
           }}
+          // className="choyoyoy"
         >
-          <Typography variant="body2">{t("modal.smartid1")}</Typography>
-          <Box p="25px" textAlign={"center"} mb={"10px"}>
-            <Typography fontSize={"48px"} fontWeight={"bold"}>
-              {vcode ? vcode : <CircularProgress />}
-            </Typography>
-            {/* <Typography>
+          <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
+            <Typography variant="body2">{t("modal.smartid1")}</Typography>
+            <Box p="25px" textAlign={"center"} mb={"10px"}>
+              <Typography fontSize={"48px"} height={"59px"} fontWeight={"bold"}>
+                {vcode ? vcode : <CircularProgress />}
+              </Typography>
+              {/* <Typography>
               {t("modal.smartid2")}{" "}
               <span style={{ fontWeight: "bold" }}>
                 {mathRound(progress)} {t("modal.smartid3")}
               </span>
             </Typography> */}
-          </Box>
-          {/* <Box sx={{ flexGrow: 1, mb: 2 }}>
+            </Box>
+            {/* <Box sx={{ flexGrow: 1, mb: 2 }}>
             <BorderLinearProgress variant="determinate" value={progress} />
           </Box> */}
-          <Typography variant="h6">{t("modal.smartid4")}</Typography>
-          <Box textAlign="center" marginTop="50px">
-            <CircularProgressWithLabel size={100} value={progress} />
-          </Box>
+            <Typography variant="h6" mb={"10px"}>
+              {t("modal.smartid4")}
+            </Typography>
+            <Box textAlign="center" my="10px">
+              <CircularProgressWithLabel size={150} value={progress} />
+            </Box>
 
-          <Stack width={"100%"} mb={2}>
-            {smartSign?.error && (
-              <Alert severity="error">
-                {smartSign?.error?.response?.data.message}
-              </Alert>
-            )}
+            <Stack width={"100%"} mb={2}>
+              {smartSign?.error && (
+                <Alert severity="error">
+                  {smartSign?.error?.response?.data.message}
+                </Alert>
+              )}
+            </Stack>
           </Stack>
         </DialogContentText>
       </DialogContent>
-      <DialogActions sx={{ px: "24px" }}>
+      <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
         <Button
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
@@ -334,7 +275,11 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
               <CircularProgress color="inherit" size="1em" />
             ) : null
           }
-          sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
+          sx={{
+            borderRadius: "10px",
+            borderColor: "borderColor.main",
+            marginLeft: "20px !important",
+          }}
           onClick={() => {
             setProgress(100);
             setVc(null);

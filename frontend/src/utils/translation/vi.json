@@ -193,12 +193,13 @@
     "wait_my_signature": "Đang chờ chữ ký của tôi",
     "wait_signature": "Đang chờ chữ ký",
     "passport": "Mã hộ chiếu",
-    "identity_card": "Mã chứng minh nhân dân"
+    "identity_card": "Mã chứng minh nhân dân",
+    "no_cert_found": "Không tìm thấy chứng thư số"
   },
   "signingForm": {
     "step1": "Chọn nhà cung cấp dịch vụ ký từ xa",
     "title1": "Việc ký bằng Smart-ID tạo ra chữ ký điện tử đủ tiêu chuẩn có hiệu lực pháp lý tương đương với chữ ký viết tay.",
-    "title2": "Bằng việc lựa chọn chứng chỉ, tôi đồng ý chuyển tên và mã số nhận dạng cá nhân của mình cho nhà cung cấp dịch vụ.",
+    "title2": "Bằng việc lựa chọn chứng thư số, tôi đồng ý chuyển tên và mã số nhận dạng cá nhân của mình cho nhà cung cấp dịch vụ.",
     "title3": "Chọn loại tài liệu",
     "title4": "Chọn mức độ đảm bảo",
     "title5": "Mức độ đảm bảo",

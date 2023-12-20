@@ -1,9 +1,14 @@
 /* eslint-disable no-unused-vars */
+import { ReactComponent as GiunIcon } from "@/assets/images/svg/congiun.svg";
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
-import { ReactComponent as GiunIcon } from "@/assets/images/svg/congiun.svg";
 import "@/assets/style/react-resizable.css";
+import { ModalSigning } from "@/components/modal2";
+import { EidModal2 } from "@/components/modal2/ModalEid";
+import { ModalUsb } from "@/components/modal2/ModalUsb";
+import { ModalEid } from "@/components/modal_eid";
+import { SignatureSetting } from "@/components/modal_setting";
 import { fpsService } from "@/services/fps_service";
 import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
@@ -13,13 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
 import { SigningForm2 } from "../../modal1";
-import { ModalSigningImage2 } from "@/components/modal2";
-import { ModalSmartid } from "@/components/modal2/ModalSmartid";
-import { ModalUsb } from "@/components/modal2/ModalUsb";
-import { EidModal2 } from "@/components/modal2/ModalEid";
-import { AssuranceModal } from "@/components/modal2_assurance";
-import { SignatureSetting } from "@/components/modal_setting";
-import { ModalEid } from "@/components/modal_eid";
+import { ModalSmartid } from "@/components/modal3";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -205,18 +204,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     const newValue = [...isShowEidModalSign];
     newValue[index] = false;
     setShowEidModalSign(newValue);
-  };
-
-  const handleShowModal2 = (index) => {
-    const newValue = [...isShowModal2];
-    newValue[index] = true;
-    setShowModal2(newValue);
-  };
-
-  const handleCloseModal2 = (index) => {
-    const newValue = [...isShowModal2];
-    newValue[index] = false;
-    setShowModal2(newValue);
   };
 
   const handleShowmodal = (index) => {
@@ -562,7 +549,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           onClose={() => handleCloseSigningForm(index)}
           // index={signatureData.page - 1}
           workFlow={workFlow}
-          handleShowModal2={() => handleShowModal2(index)}
+          handleShowModalSignImage={() => handleShowModalSignImage(index)}
           handleShowEidModal={() => handleShowEidModal(index)}
           setDataSigning={setDataSigning}
         />
@@ -578,18 +565,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         />
       )}
 
-      {isShowModal2[index] && (
-        <AssuranceModal
-          open={isShowModal2[index]}
-          onClose={() => handleCloseModal2(index)}
-          dataSigning={dataSigning}
-          setDataSigning={setDataSigning}
-          signatureData={signatureData}
-        />
-      )}
-
       {isShowModalSignImage[index] && (
-        <ModalSigningImage2
+        <ModalSigning
           open={isShowModalSignImage[index]}
           onClose={() => handleCloseModalSignImage(index)}
           signer={signer}

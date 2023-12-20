@@ -156,14 +156,19 @@ public class GatewayAPI {
         return responseEntity.getBody();
     }
 
-    public String getSignatureId(String uuid, String signatureName, String fileName) throws Exception {
+    public String getSignatureId(String signatureName, String fileName, String content, String digest) throws Exception {
         System.out.println("get signature id");
-        String getSignatureIdUrl = baseUrl + "/api/internalusage/validation/signature-id";
+        String getSignatureIdUrl = baseUrl + "/api/internalusage/validation/signature-name.json";
 
         Map<String, Object> requestData = new HashMap<>();
-        requestData.put("uuid", uuid);
         requestData.put("signature_name", signatureName);
-        requestData.put("name", fileName);
+
+        Map<String, Object> file = new HashMap<>();
+        file.put("name", fileName);
+        file.put("digest", digest);
+        file.put("content", content);
+
+        requestData.put("file", file);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData);
 
@@ -174,12 +179,13 @@ public class GatewayAPI {
 //            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
 
             ResponseEntity<String> response = restTemplate.exchange(getSignatureIdUrl, HttpMethod.POST, httpEntity, String.class);
-            String responseBody = response.getBody();
+//            String responseBody = response.getBody();
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(responseBody);
-
-            return jsonNode.get("signature_id").asText();
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode jsonNode = objectMapper.readTree(responseBody);
+//
+//            return jsonNode.get("signature_id").asText();
+            return response.getBody();
         } catch (HttpClientErrorException e) {
             HttpStatus statusCode = e.getStatusCode();
             System.out.println("HTTP Status Code: " + statusCode.value());

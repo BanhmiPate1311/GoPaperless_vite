@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
 import { useController } from "react-hook-form";
 
 const VisuallyHiddenInput = styled("input")({
@@ -21,7 +20,6 @@ export const UploadField = ({
   name,
   label,
   control,
-  setErrorFile,
   onChange: externalOnChange, // không cho user overide lại các thuộc tính này
   // onBlur: externalOnBlur,
   // ref: externalRef,
@@ -30,14 +28,9 @@ export const UploadField = ({
 }) => {
   const {
     field: { onChange },
-    fieldState: { error },
+    // fieldState: { error },
   } = useController({ name, control });
 
-  useEffect(() => {
-    if (error) {
-      setErrorFile(error?.message);
-    }
-  }, [error, setErrorFile]);
   const handleUploadImage = (e) => {
     const reader = new FileReader();
     reader.onload = () => {

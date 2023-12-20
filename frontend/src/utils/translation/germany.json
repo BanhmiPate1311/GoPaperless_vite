@@ -193,7 +193,8 @@
     "wait_my_signature": "Warte auf meine Signatur",
     "wait_signature": "Warte auf Signatur",
     "passport": "Passcode",
-    "identity_card": "Personalausweiscode"
+    "identity_card": "Personalausweiscode",
+    "no_cert_found": "Kein Zertifikat gefunden"
   },
   "signingForm": {
     "step1": "Wählen Sie Remote Signing Service Provider aus",

@@ -1,9 +1,9 @@
-import { MenuItem } from "@mui/material";
+import { MenuItem, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import PropTypes from "prop-types";
-import { SelectField } from "../form";
+import { InputField, SelectField } from "../form";
 import CheckBoxField from "../form/checkbox-field";
 import ToggleAlignment from "../form/toggle-alignment";
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,39 @@ export const AddSubtitle = ({ control }) => {
   });
   return (
     <>
-      <FormLabel component="legend">{t("signing.include_text")}</FormLabel>
+      <Box>
+        <Typography
+          variant="h6"
+          color="#1F2937"
+          fontWeight={600}
+          mb="10px"
+          height={17}
+        >
+          {t("signing.contact_information")}
+        </Typography>
+        <InputField
+          label=""
+          name="email"
+          control={control}
+          inputProps={{
+            sx: {
+              backgroundColor: "signingWFBackground.main",
+            },
+          }}
+          sx={{ m: "0 0 10px" }}
+        />
+      </Box>
+      <FormLabel
+        component="legend"
+        sx={{
+          fontSize: "14px",
+          height: 17,
+          mb: "10px",
+          color: "signingtext1.main",
+        }}
+      >
+        {t("signing.include_text")}
+      </FormLabel>
       <FormGroup sx={{ flexDirection: "row" }}>
         <Box width={"50%"}>
           <CheckBoxField
@@ -73,7 +105,15 @@ export const AddSubtitle = ({ control }) => {
               },
             }}
           />
-          <FormLabel component="legend">
+          <FormLabel
+            component="legend"
+            sx={{
+              fontSize: "14px",
+              height: 17,
+              mb: "10px",
+              color: "signingtext1.main",
+            }}
+          >
             {t("0-common.text direction")}
           </FormLabel>
           <ToggleAlignment
@@ -82,6 +122,7 @@ export const AddSubtitle = ({ control }) => {
             size="small"
             color="primary"
             exclusive
+            sx={{ height: "45px" }}
           />
         </Box>
         <Box width={"50%"}>
@@ -129,7 +170,15 @@ export const AddSubtitle = ({ control }) => {
               },
             }}
           />
-          <FormLabel component="legend">
+          <FormLabel
+            component="legend"
+            sx={{
+              fontSize: "14px",
+              height: 17,
+              mb: "10px",
+              color: "signingtext1.main",
+            }}
+          >
             {t("0-common.digits format")}
           </FormLabel>
           <SelectField
@@ -144,7 +193,7 @@ export const AddSubtitle = ({ control }) => {
 };
 
 AddSubtitle.propTypes = {
-  control: PropTypes.object.isRequired,
+  control: PropTypes.object,
 };
 
 export default AddSubtitle;

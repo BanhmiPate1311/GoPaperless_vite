@@ -10,6 +10,8 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import SvgIcon from "@mui/material/SvgIcon";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -30,6 +32,7 @@ export const Step6_usb = ({
   setCertSelected,
   onDoubleClick,
   onDisableSubmit,
+  assurance,
 }) => {
   const { t } = useTranslation();
   useEffect(() => {
@@ -55,19 +58,32 @@ export const Step6_usb = ({
       onDoubleClick={onDoubleClick}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
-        <Box width={50} height={50} mx={1}>
-          <CardIcon />
-        </Box>
+        <SvgIcon
+          component={assurance === "aes" ? CardIcon : SealIcon}
+          inheritViewBox
+          sx={{
+            width: "60px",
+            height: "60px",
+            color: "signingtextBlue.main",
+            cursor: "pointer",
+            mx: 2,
+          }}
+          // onClick={() => handleOpenSigningForm(index)}
+        />
 
         <Box flexGrow={1} textAlign="left">
-          <Typography fontWeight="bold" fontSize="14px">
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            sx={{ textTransform: "uppercase" }}
+          >
             {value.subject.commonName}
           </Typography>
-          <Typography fontSize="14px">
+          <Typography variant="h6">
             {/* {t("usb.usb9")} */}
             {t("0-common.issuer")}: {value.issuer.commonName}
           </Typography>
-          <Typography fontSize="14px">
+          <Typography variant="h6">
             {t("0-common.valid")}: {convertTime(value.validFrom).split(" ")[0]}{" "}
             {t("0-common.to")} {convertTime(value.validTo).split(" ")[0]}
           </Typography>
@@ -83,9 +99,12 @@ export const Step6_usb = ({
 
   return (
     <Box sx={{ minWidth: 400 }}>
+      <Typography variant="h6" sx={{ mb: "10px" }}>
+        {t("signingForm.title2")}
+      </Typography>
       <Box width={"100%"}>
         {data?.length === 0 ? (
-          <Alert severity="error">No Certificate found!</Alert>
+          <Alert severity="error">{t("signing.no_cert_found")}</Alert>
         ) : (
           <ToggleButtonGroup
             orientation="vertical"
@@ -108,5 +127,6 @@ Step6_usb.propTypes = {
   certSelected: PropTypes.number,
   onDoubleClick: PropTypes.func,
   onDisableSubmit: PropTypes.func,
+  assurance: PropTypes.string,
 };
 export default Step6_usb;

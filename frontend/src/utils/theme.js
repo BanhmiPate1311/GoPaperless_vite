@@ -17,6 +17,7 @@ export let theme = extendTheme({
     h6: {
       fontSize: 14,
       color: "#1F2937", // Adjust the font size as needed
+      fontWeight: 500,
     },
     h5: {
       fontSize: 13, // Adjust the font size as needed
@@ -27,10 +28,12 @@ export let theme = extendTheme({
     h3: {
       fontSize: 16, // Adjust the font size as needed
       color: "#1F2937",
+      fontWeight: 600,
     },
     h2: {
       fontSize: 10, // Adjust the font size as needed
       color: "#767676",
+      fontWeight: 500,
     },
   },
   colorSchemes: {
@@ -194,6 +197,21 @@ export let theme = extendTheme({
           "&:hover, &.active": {
             color: "#FF6464",
           },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          height: "45px",
+          fontSize: "14px",
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          height: "45px",
         },
       },
     },

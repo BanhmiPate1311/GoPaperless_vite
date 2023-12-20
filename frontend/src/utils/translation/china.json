@@ -193,7 +193,8 @@
     "wait_my_signature": "等待我的签名",
     "wait_signature": "等待签名",
     "passport": "护照代码",
-    "identity_card": "身份证号码"
+    "identity_card": "身份证号码",
+    "no_cert_found": "没有找到证书"
   },
   "signingForm": {
     "step1": "选择远程签名服务提供商",

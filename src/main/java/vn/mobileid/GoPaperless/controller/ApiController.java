@@ -146,48 +146,48 @@ public class ApiController {
         }
 
         if (participants.size() > 0) {
-            for (Participants participant : participants) {
-                if (CommonFunction.isNotNullOrEmpty(participant.getCertificate())) {
-                    String sIssue = "";
-                    String sOwner = "";
-                    String sFrom = "";
-                    String sTo = "";
-                    String sCertificate = CommonFunction.CheckTextNull(participant.getCertificate());
-                    System.out.println("signed time: " + participant.getSignedTime());
-                    participant.setSignedTime(CommonFunction.convertToGetTimeZone(participant.getSignedTime()));
-
-                    ObjectMapper oMapperParse = new ObjectMapper();
-                    CertificateJson itemParse = oMapperParse.readValue(sCertificate, CertificateJson.class);
-
-                    if (itemParse != null) {
-                        if(itemParse.signer_info != null){
-                            System.out.println("trên");
-                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.issuer);
-                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.subject);
-                            sFrom = itemParse.signer_info.certificate.valid_from;
-                            sTo = itemParse.signer_info.certificate.valid_to;
-                        } else {
-                            System.out.println("duoi");
-                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.issuer);
-                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.subject);
-                            sFrom = itemParse.signer_info_dto.certificate.valid_from;
-                            sTo = itemParse.signer_info_dto.certificate.valid_to;
-                        }
-                    }
-                    if (!"".equals(sIssue)) {
-                        sIssue = CommonFunction.getCommonNameInDN(sIssue);
-                    }
-                    if (!"".equals(sOwner)) {
-                        sOwner = CommonFunction.getCommonNameInDN(sOwner);
-                    }
-                    participant.setIssuer(sIssue);
-                    participant.setOwner(sOwner);
-                    System.out.println("sFrom: " + sFrom);
-                    System.out.println("sTo: " + sTo);
-                    participant.setValidFrom(sFrom);
-                    participant.setValidTo(sTo);
-                }
-            }
+//            for (Participants participant : participants) {
+//                if (CommonFunction.isNotNullOrEmpty(participant.getCertificate())) {
+//                    String sIssue = "";
+//                    String sOwner = "";
+//                    String sFrom = "";
+//                    String sTo = "";
+//                    String sCertificate = CommonFunction.CheckTextNull(participant.getCertificate());
+//                    System.out.println("signed time: " + participant.getSignedTime());
+//                    participant.setSignedTime(CommonFunction.convertToGetTimeZone(participant.getSignedTime()));
+//
+//                    ObjectMapper oMapperParse = new ObjectMapper();
+//                    CertificateJson itemParse = oMapperParse.readValue(sCertificate, CertificateJson.class);
+//
+//                    if (itemParse != null) {
+//                        if(itemParse.signer_info != null){
+//                            System.out.println("trên");
+//                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.issuer);
+//                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.subject);
+//                            sFrom = itemParse.signer_info.certificate.valid_from;
+//                            sTo = itemParse.signer_info.certificate.valid_to;
+//                        } else {
+//                            System.out.println("duoi");
+//                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.issuer);
+//                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.subject);
+//                            sFrom = itemParse.signer_info_dto.certificate.valid_from;
+//                            sTo = itemParse.signer_info_dto.certificate.valid_to;
+//                        }
+//                    }
+//                    if (!"".equals(sIssue)) {
+//                        sIssue = CommonFunction.getCommonNameInDN(sIssue);
+//                    }
+//                    if (!"".equals(sOwner)) {
+//                        sOwner = CommonFunction.getCommonNameInDN(sOwner);
+//                    }
+//                    participant.setIssuer(sIssue);
+//                    participant.setOwner(sOwner);
+//                    System.out.println("sFrom: " + sFrom);
+//                    System.out.println("sTo: " + sTo);
+//                    participant.setValidFrom(sFrom);
+//                    participant.setValidTo(sTo);
+//                }
+//            }
             List<Participants> participantsList = new ArrayList<>(participants);
             signingWorkflowDto.setParticipants(participantsList);
         }

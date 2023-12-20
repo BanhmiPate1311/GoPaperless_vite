@@ -1,4 +1,5 @@
 import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 import { convertTime } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
 import Alert from "@mui/material/Alert";
@@ -10,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import SvgIcon from "@mui/material/SvgIcon";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -30,6 +32,7 @@ export const Step5_smart = ({
   setCertSelected,
   onDoubleClick,
   onDisableSubmit,
+  assurance,
 }) => {
   // console.log("data: ", data);
   const { t } = useTranslation();
@@ -62,19 +65,32 @@ export const Step5_smart = ({
       // }}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
-        <Box width={50} height={50} ml={2} mr={2}>
-          <CardIcon />
-        </Box>
+        <SvgIcon
+          component={assurance === "aes" ? CardIcon : SealIcon}
+          inheritViewBox
+          sx={{
+            width: "60px",
+            height: "60px",
+            color: "signingtextBlue.main",
+            cursor: "pointer",
+            mx: 2,
+          }}
+          // onClick={() => handleOpenSigningForm(index)}
+        />
 
         <Box flexGrow={1} textAlign="left">
-          <Typography fontWeight="bold" fontSize="14px">
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            sx={{ textTransform: "uppercase" }}
+          >
             {value.subject}
           </Typography>
-          <Typography fontSize="14px">
+          <Typography variant="h6">
             {/* {t("usb.usb9")} */}
             {t("0-common.issuer")}: {value.issuer}
           </Typography>
-          <Typography fontSize="14px">
+          <Typography variant="h6">
             {t("0-common.valid")}: {convertTime(value.validFrom).split(" ")[0]}{" "}
             {t("0-common.to")} {convertTime(value.validTo).split(" ")[0]}
             {/* {t("0-common.valid")}: {value.validFrom.split(" ")[0]}{" "}
@@ -92,9 +108,12 @@ export const Step5_smart = ({
 
   return (
     <Box sx={{ minWidth: 400 }}>
+      <Typography variant="h6" sx={{ mb: "10px" }}>
+        {t("signingForm.title2")}
+      </Typography>
       <Box width={"100%"}>
         {data?.length === 0 ? (
-          <Alert severity="error">No Certificate found!</Alert>
+          <Alert severity="error">{t("signing.no_cert_found")}</Alert>
         ) : (
           <ToggleButtonGroup
             orientation="vertical"
@@ -117,5 +136,6 @@ Step5_smart.propTypes = {
   certSelected: PropTypes.number,
   onDoubleClick: PropTypes.func,
   onDisableSubmit: PropTypes.func,
+  assurance: PropTypes.string,
 };
 export default Step5_smart;

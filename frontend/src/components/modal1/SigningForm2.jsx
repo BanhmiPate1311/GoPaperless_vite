@@ -1,4 +1,8 @@
 /* eslint-disable no-unused-vars */
+import { ReactComponent as EidIcon } from "@/assets/images/svg/e-id.svg";
+import { ReactComponent as MobileIdIcon } from "@/assets/images/svg/mobile-id.svg";
+import { ReactComponent as SmartIdIcon } from "@/assets/images/svg/smart-id.svg";
+import { ReactComponent as UsbIcon } from "@/assets/images/svg/usb-token.svg";
 import ISPluginClient from "@/assets/js/checkid";
 import {
   useConnectorList,
@@ -40,10 +44,6 @@ import {
   Step5_smart,
   Step6_usb,
 } from ".";
-import { ReactComponent as EidIcon } from "@/assets/images/svg/e-id.svg";
-import { ReactComponent as MobileIdIcon } from "@/assets/images/svg/mobile-id.svg";
-import { ReactComponent as SmartIdIcon } from "@/assets/images/svg/smart-id.svg";
-import { ReactComponent as UsbIcon } from "@/assets/images/svg/usb-token.svg";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -53,7 +53,7 @@ export const SigningForm2 = ({
   open,
   onClose,
   workFlow,
-  handleShowModal2,
+  handleShowModalSignImage,
   handleShowEidModal,
   setDataSigning,
 }) => {
@@ -409,10 +409,7 @@ export const SigningForm2 = ({
         smartIdCertificate.mutate(dataApi.current, {
           onSuccess: (data) => {
             console.log("data: ", data);
-            dataApi.current = {
-              ...dataApi.current,
-              ...data,
-            };
+
             handleNext(2);
             // onClose();
             // handleShowModal2();
@@ -437,13 +434,13 @@ export const SigningForm2 = ({
           case "SMART_ID_SIGNING":
             if (assurance === "eseal") {
               setNewListCert(
-                dataApi.current.listCertificate.filter(
+                smartIdCertificate.data.listCertificate.filter(
                   (item) => item.seal === true
                 )
               );
             } else {
               setNewListCert(
-                dataApi.current.listCertificate.filter(
+                smartIdCertificate.data.listCertificate.filter(
                   (item) => item.seal === false
                 )
               );
@@ -453,13 +450,13 @@ export const SigningForm2 = ({
           case "USB_TOKEN_SIGNING":
             if (assurance === "eseal") {
               setNewListCert(
-                dataApi.current.signingCertificates.filter(
+                certificateInfor.data.signingCertificates.filter(
                   (item) => checkEseal(item) === true
                 )
               );
             } else {
               setNewListCert(
-                dataApi.current.signingCertificates.filter(
+                certificateInfor.data.signingCertificates.filter(
                   (item) => checkEseal(item) === false
                 )
               );
@@ -468,30 +465,30 @@ export const SigningForm2 = ({
             break;
         }
         break;
-      // case 4:
-      //   // smart id get certchain
-      //   dataApi.current = {
-      //     ...dataApi.current,
-      //     requestID: uuidv4(),
-      //     relyingParty: smartIdCertificate?.data?.relyingParty,
-      //     codeEnable: smartIdCertificate?.data?.codeEnable,
-      //     certChain: smartIdCertificate?.data?.listCertificate[certSelected],
-      //   };
-      //   setDataSigning(dataApi.current);
-      //   // handleNext(1);
-      //   onClose();
-      //   handleShowModal2();
-      //   break;
-      // case 5:
-      // usb token get certChain
-      //   dataApi.current = {
-      //     ...dataApi.current,
-      //     certChain: dataApi.current.signingCertificates[certSelected],
-      //   };
-      //   setDataSigning(dataApi.current);
-      //   onClose();
-      //   handleShowModal2();
-      //   break;
+      case 5:
+        // smart id get certchain
+        dataApi.current = {
+          ...dataApi.current,
+          requestID: uuidv4(),
+          relyingParty: smartIdCertificate?.data?.relyingParty,
+          codeEnable: smartIdCertificate?.data?.codeEnable,
+          certChain: newListCert[certSelected],
+        };
+        setDataSigning(dataApi.current);
+        // handleNext(1);
+        onClose();
+        handleShowModalSignImage();
+        break;
+      case 6:
+        //usb token get certChain
+        dataApi.current = {
+          ...dataApi.current,
+          certChain: newListCert[certSelected],
+        };
+        setDataSigning(dataApi.current);
+        onClose();
+        handleShowModalSignImage();
+        break;
 
       default:
         // perFormProcess(); // chỉ để test
@@ -546,6 +543,7 @@ export const SigningForm2 = ({
       setCertSelected={setCertSelected}
       onDoubleClick={handleSubmitClick}
       onDisableSubmit={handleDisableSubmit}
+      assurance={assurance}
     />,
     <Step6_usb
       key="step5"
@@ -554,6 +552,7 @@ export const SigningForm2 = ({
       setCertSelected={setCertSelected}
       onDoubleClick={handleSubmitClick}
       onDisableSubmit={handleDisableSubmit}
+      assurance={assurance}
     />,
   ];
 
@@ -696,7 +695,7 @@ export const SigningForm2 = ({
 SigningForm2.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  handleShowModal2: PropTypes.func,
+  handleShowModalSignImage: PropTypes.func,
   handleShowEidModal: PropTypes.func,
   workFlow: PropTypes.object,
   dataSigning: PropTypes.object,

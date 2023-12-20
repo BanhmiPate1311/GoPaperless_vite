@@ -752,6 +752,7 @@ public class RsspService {
         boolean codeEnable = signRequest.isCodeEnable();
         String credentialID = signRequest.getCertChain().getCredentialID();
         String certChain = signRequest.getCertChain().getCert();
+        String contactInfor = signRequest.getContactInfor();
 
         try {
             System.out.println("connectorName: " + connectorName);
@@ -819,6 +820,7 @@ public class RsspService {
             hashFileRequest.setSigningLocation(country);
             hashFileRequest.setFieldName(field_name);
             hashFileRequest.setHandSignatureImage(imageBase64);
+            hashFileRequest.setSignerContact(contactInfor);
 
             String hashList = fpsService.hashSignatureField(documentId, hashFileRequest);
 
@@ -868,15 +870,19 @@ public class RsspService {
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
             String signatureName = signNode.get("signature_name").asText();
+            String content = signNode.get("file_data").asText();
             System.out.println("signedTime: " + signedTime);
 
-            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
+            String dataResponse = gatewayAPI.getSignatureId(signatureName, fileName, content, digest);
+
+            JsonNode dataNode = objectMapper.readTree(dataResponse);
+            String signatureId = dataNode.get("signature").get("id").asText();
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
             System.out.println("signatureId: " + signatureId);
             int isSetPosition = 1;
-            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(dataResponse, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

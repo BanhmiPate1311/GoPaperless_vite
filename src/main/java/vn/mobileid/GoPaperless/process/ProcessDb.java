@@ -767,7 +767,7 @@ public class ProcessDb {
 
     public String USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(String pSIGNER_TOKEN, String pSIGNED_TYPE,
                                                           String pSIGNED_TIME,
-                                                          String pSIGNATURE_ID, String pSIGNED_ALGORITHM, String pCERTIFICATE, String pSIGNATURE_TYPE,
+                                                          String pSIGNATURE_ID, String pSIGNED_ALGORITHM, String dataResponse, String pSIGNATURE_TYPE,
                                                           String pSIGNING_OPTION, String pGRACE_PERIOD_END_TIME, String pSIGNATURE_VALUE,
                                                           int pPPL_FILE_SIGNED_ID, String pLAST_MODIFIED_BY) throws Exception {
         String convrtr = "1";
@@ -791,7 +791,7 @@ public class ProcessDb {
             }
             proc_stmt.setString("pSIGNATURE_ID", pSIGNATURE_ID);
             proc_stmt.setString("pSIGNED_ALGORITHM", pSIGNED_ALGORITHM);
-            proc_stmt.setString("pCERTIFICATE", pCERTIFICATE);
+            proc_stmt.setString("pCERTIFICATE", dataResponse);
             proc_stmt.setString("pSIGNATURE_TYPE", pSIGNATURE_TYPE);
             proc_stmt.setString("pSIGNING_OPTION", pSIGNING_OPTION);
             proc_stmt.setString("pGRACE_PERIOD_END_TIME", pGRACE_PERIOD_END_TIME);

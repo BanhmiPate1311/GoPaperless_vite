@@ -144,13 +144,13 @@ public class IsService {
             String signedTime = signNode.get("signed_time").asText();
             String signatureName = signNode.get("signature_name").asText();
 
-            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
-
-//            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
-//            String sSignature_id = requestID; // temporary
-
-            int isSetPosition = 1;
-            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+//            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
+//
+////            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
+////            String sSignature_id = requestID; // temporary
+//
+//            int isSetPosition = 1;
+//            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

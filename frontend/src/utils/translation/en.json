@@ -193,7 +193,8 @@
     "wait_my_signature": "Waiting for my signature",
     "wait_signature": "Waiting for signature",
     "passport": "Passport Code",
-    "identity_card": "Identity card Code"
+    "identity_card": "Identity card Code",
+    "no_cert_found": "No certificate found"
   },
   "signingForm": {
     "step1": "Select Remote Signing Service Provider",

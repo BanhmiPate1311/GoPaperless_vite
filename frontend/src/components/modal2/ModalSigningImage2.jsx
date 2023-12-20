@@ -171,35 +171,6 @@ export const ModalSigningImage2 = ({
     currentDatetime
   );
 
-  // useEffect(() => {
-  //   if (navigator.geolocation) {
-  //     // Geolocation is supported
-  //     let latitude = "";
-  //     let longitude = "";
-  //     navigator.geolocation.getCurrentPosition(function (position) {
-  //       console.log("Latitude is :", position.coords.latitude);
-  //       console.log("Longitude is :", position.coords.longitude);
-  //       latitude = position.coords.latitude;
-  //       longitude = position.coords.longitude;
-
-  //       // Call getWeather function inside the callback
-  //       getWeather(latitude, longitude);
-  //     });
-  //   } else {
-  //     console.error("Geolocation is not supported by this browser.");
-  //   }
-  // }, []);
-
-  // const handleShowmodal = () => {
-  //   switch (dataSigning.provider) {
-  //     case "SMART_ID_SIGNING":
-  //       handleShowModalSmartid();
-  //       break;
-  //     case "USB_TOKEN_SIGNING":
-  //       break;
-  //   }
-  // };
-
   const handleTextSubmit = (data) => {
     // console.log("data: ", data);
     setDataSigning({
@@ -358,7 +329,6 @@ export const ModalSigningImage2 = ({
             />
           </Tabs>
           <TabPanel value={value} index={0}>
-            {/* <TextSign /> */}
             <TextSignForm
               ref={textElement}
               onTextSubmit={handleTextSubmit}

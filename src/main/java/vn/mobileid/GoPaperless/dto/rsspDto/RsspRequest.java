@@ -28,6 +28,7 @@ public class RsspRequest {
     private String signingToken;
     private String hashList;
     private String relyingParty;
+    private String contactInfor;
     private boolean codeEnable;
     private List<String> signatures;
     private int workFlowId;
@@ -230,6 +231,14 @@ public class RsspRequest {
 
     public void setRelyingParty(String relyingParty) {
         this.relyingParty = relyingParty;
+    }
+
+    public String getContactInfor() {
+        return contactInfor;
+    }
+
+    public void setContactInfor(String contactInfor) {
+        this.contactInfor = contactInfor;
     }
 
     public boolean isCodeEnable() {

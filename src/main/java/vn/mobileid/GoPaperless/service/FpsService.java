@@ -279,6 +279,7 @@ public class FpsService {
         requestData.put("signature_algorithm", "RSA");
         requestData.put("signed_hash", "SHA256");
         requestData.put("certificate_chain", data.getCertificateChain());
+        requestData.put("signer_contact", data.getSignerContact());
         System.out.println("hashSignatureField Data: " + requestData);
 
 //        Gson gson = new Gson();
@@ -337,7 +338,7 @@ public class FpsService {
 
             ResponseEntity<String> response = restTemplate.exchange(signDocumentUrl, HttpMethod.POST, httpEntity, String.class);
             // Get the response body as a String
-            System.out.println("check: " + response.getBody());
+//            System.out.println("signDocument: " + response.getBody());
             return response.getBody();
         } catch (HttpClientErrorException e) {
             HttpStatus statusCode = e.getStatusCode();

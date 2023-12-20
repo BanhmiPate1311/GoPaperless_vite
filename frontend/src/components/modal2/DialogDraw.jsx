@@ -4,31 +4,19 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import PropTypes from "prop-types";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import SignatureCanvas from "react-signature-canvas";
 
-export const DialogDraw = ({
-  open,
-  handleClose,
-  name,
-  control,
-  setErrorDraw,
-}) => {
+export const DialogDraw = ({ open, handleClose, name, control }) => {
   const {
     field: { onChange },
-    fieldState: { error },
   } = useController({ name, control });
   const sigCanvasRef = useRef(null);
 
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (error) {
-      setErrorDraw(error?.message);
-    }
-  }, [error, setErrorDraw]);
   //   setErrorDraw(error?.message);
   return (
     <Dialog

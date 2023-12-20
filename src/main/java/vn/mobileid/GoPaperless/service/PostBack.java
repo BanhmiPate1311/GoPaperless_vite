@@ -24,6 +24,7 @@ public class PostBack {
     }
 
     public void postBack2(
+            String dataResponse,
             int isSetPosition,
             String signerId,
             String fileName,
@@ -144,7 +145,7 @@ public class PostBack {
                 }
                 String signedType = "NORMAL";
                 connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(signerToken,
-                        signedType, sDateSign, sSignature_id, signedHash, sJsonCertResult, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, sFileID_Last, pLAST_MODIFIED_BY);
+                        signedType, sDateSign, sSignature_id, signedHash, dataResponse, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, sFileID_Last, pLAST_MODIFIED_BY);
                 if (rsWFList != null ) {
                     if (rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
                         connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(signingToken, Difinitions.CONFIG_PPL_WORKFLOW_STATUS_COMPLETED, "");

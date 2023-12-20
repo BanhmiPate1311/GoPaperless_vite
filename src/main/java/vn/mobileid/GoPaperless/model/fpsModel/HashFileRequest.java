@@ -9,6 +9,7 @@ public class HashFileRequest {
     private String signingLocation;
     private String signatureAlgorithm;
     private String signedHash;
+    private String signerContact;
     private List<String> certificateChain;
 
     public String getFieldName() {
@@ -57,6 +58,14 @@ public class HashFileRequest {
 
     public void setSignedHash(String signedHash) {
         this.signedHash = signedHash;
+    }
+
+    public String getSignerContact() {
+        return signerContact;
+    }
+
+    public void setSignerContact(String signerContact) {
+        this.signerContact = signerContact;
     }
 
     public List<String> getCertificateChain() {

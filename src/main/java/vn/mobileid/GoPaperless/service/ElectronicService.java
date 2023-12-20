@@ -35,6 +35,7 @@ import java.util.*;
 
 @Service
 public class ElectronicService {
+
     private Gson gson = new Gson();
     final private int timeOut = 5000;
     final private String contentType = "application/json";
@@ -473,8 +474,6 @@ public class ElectronicService {
         return message;
     }
 
-
-
     public List<CertResponse> checkCertificate(CheckCertificateRequest checkCertificateRequest) throws Exception {
         SignedJWT jwt1 = (SignedJWT) JWTParser.parse(checkCertificateRequest.getJwt());
 
@@ -492,7 +491,6 @@ public class ElectronicService {
 ////            commonRepository.connectorLog(connectorLogRequest);
 //        }
 //        session = rsspService.handShake(checkCertificateRequest.getLang(), checkCertificateRequest.getConnectorNameRSSP(), checkCertificateRequest.getEnterpriseId(), checkCertificateRequest.getWorkFlowId());
-
         rsspService.getProperty(checkCertificateRequest);
 
         rsspService.login();
@@ -556,7 +554,7 @@ public class ElectronicService {
             jwtModel.setDocument_type("CITIZEN-IDENTITY-CARD");
         }
 
-        String credentialID = rsspService.credentialsIssue( jwtModel, checkCertificateRequest.getLang());
+        String credentialID = rsspService.credentialsIssue(jwtModel, checkCertificateRequest.getLang());
         System.out.println("credentialID: " + credentialID);
 
         CredentialInfo credentialinFo = rsspService.getCredentialinFo(checkCertificateRequest.getLang(), credentialID);
@@ -654,7 +652,7 @@ public class ElectronicService {
             doc.hashes = new ArrayList<>();
             doc.hashes.add(CommonFunction.base64Decode(hashList));
 
-            String sad = rsspService.authorizeOtp(lang, credentialID, 1,otpRequestID, otp);
+            String sad = rsspService.authorizeOtp(lang, credentialID, 1, otpRequestID, otp);
 
             String signAlgo = "1.2.840.113549.1.1.1";
             List<byte[]> signatures = rsspService.signHash(lang, credentialID, doc, signAlgo, sad);
@@ -665,7 +663,6 @@ public class ElectronicService {
             fpsSignRequest.setFieldName(field_name);
             fpsSignRequest.setHashValue(hashList);
             fpsSignRequest.setSignatureValue(signature);
-
 
             fpsSignRequest.setCertificateChain(listCertChain);
 
@@ -682,11 +679,11 @@ public class ElectronicService {
             String signedTime = signNode.get("signed_time").asText();
             String signatureName = signNode.get("signature_name").asText();
 
-            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
-            System.out.println("signatureId: " + signatureId);
-
-            int isSetPosition = 1;
-            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+//            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
+//            System.out.println("signatureId: " + signatureId);
+//
+//            int isSetPosition = 1;
+//            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {
@@ -694,7 +691,6 @@ public class ElectronicService {
 //            if (field_name == null || field_name.isEmpty()) {
 //                fpsService.deleteSignatue(documentId, signerId);
 //            }
-
 
             throw new Exception(e.getMessage());
         }

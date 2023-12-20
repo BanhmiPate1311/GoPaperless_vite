@@ -162,8 +162,9 @@ export const Step2_smartid = ({
             dialCode.current = country.dialCode;
           }}
           inputStyle={{
-            height: "40px",
+            height: "45px",
             width: "100%",
+            fontSize: "14px",
           }}
           copyNumbersOnly={false}
           countryCodeEditable={false}
