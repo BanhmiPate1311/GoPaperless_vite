@@ -1,23 +1,26 @@
 import {
   Box,
-  FormControl,
-  FormGroup,
   ListItemSecondaryAction,
   MenuItem,
   Select,
   Stack,
-  Typography
+  Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import FormControl from "@mui/material/FormControl";
 
 export const Step11 = ({
   onDisableSubmit,
   providerSelected,
   isFetching,
   connectorList,
+  setErrorPG,
 }) => {
   const { t } = useTranslation();
   const [isChecked1, setIsChecked1] = useState(false);
@@ -46,6 +49,7 @@ export const Step11 = ({
   }, [isChecked1, isChecked2, selectedOption]);
 
   const handleChange = (event) => {
+    setErrorPG(null);
     setSelectedOption(event.target.value);
     providerSelected.current = event.target.value;
   };
@@ -62,81 +66,60 @@ export const Step11 = ({
       <Box>
         <Typography
           variant="h6"
-          sx={{ fontWeight: 700, color: "textBold.main", mb: "16px" }}
+          sx={{ fontWeight: 700, color: "textBold.main", mb: "10px" }}
         >
           {t("electronic.step111")}
         </Typography>
 
-        <Typography fontSize="12px" mb="15px">
+        <Typography fontSize="12px" mb="10px">
           {/* Please accept our certification terms to sign the document. */}
           {t("electronic.step112")}
         </Typography>
 
         <FormGroup>
-          <label
-            style={{
-              marginBottom: "15px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "flex-start",
-            }}
-            onChange={handleCheckbox1Change}
-          >
-            <input
-              type="checkbox"
-              style={{
-                marginTop: "4px",
-                marginRight: "15px",
-                size: "14px",
-                /* Đổ màu cho ô input */
-                accentColor: "#1976D2",
-              }}
-            />
-            <div style={{ fontSize: "14px" }}>
-              {/* I have read the{" "} */}
-              {t("electronic.step113")}{" "}
-              <Link to="https://rssp.mobile-id.vn/vi/privacy" target="_blank">
-                {/* Certification Practices Statement. */}
-                {t("electronic.step114")}
-              </Link>
-            </div>
-          </label>
-
-          <label
-            className="d-flex align-items-start"
-            style={{
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "flex-start",
-            }}
-            onChange={handleCheckbox2Change}
-          >
-            <input
-              type="checkbox"
-              style={{
-                marginTop: "4px",
-                marginRight: "15px",
-                size: "14px",
-                /* Đổ màu cho ô input */
-                accentColor: "#1976D2",
-              }}
-            />
-            <div style={{ fontSize: "14px" }}>
-              {/* I agree to the{" "} */}
-              {t("electronic.step113")}{" "}
-              <Link to="https://rssp.mobile-id.vn/vi/terms" target="_blank">
-                {/* Terms and Conditions */}
-                {t("electronic.step115")}
-              </Link>{" "}
-              {/* on the Video Identification Process. */}
-              {t("electronic.step116")}
-            </div>
-          </label>
+          <FormControlLabel
+            control={
+              <Checkbox
+                size="small"
+                checked={isChecked1}
+                onChange={handleCheckbox1Change}
+              />
+            }
+            label={
+              <Typography component="span" fontSize="14px">
+                {t("electronic.step113")}{" "}
+                <Link to="https://rssp.mobile-id.vn/vi/privacy" target="_blank">
+                  {/* Certification Practices Statement. */}
+                  {t("electronic.step114")}
+                </Link>
+              </Typography>
+            }
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                size="small"
+                checked={isChecked2}
+                onChange={handleCheckbox2Change}
+              />
+            }
+            label={
+              <Typography component="span" fontSize="14px">
+                {t("electronic.step113")}{" "}
+                <Link to="https://rssp.mobile-id.vn/vi/terms" target="_blank">
+                  {/* Terms and Conditions */}
+                  {t("electronic.step115")}
+                </Link>{" "}
+                {/* on the Video Identification Process. */}
+                {t("electronic.step116")}
+              </Typography>
+            }
+          />
         </FormGroup>
       </Box>
 
       <Box sx={{ fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif" }}>
-        <FormControl fullWidth size="small" sx={{ mb: "15px" }}>
+        <FormControl fullWidth size="small">
           <Typography variant="h6" color="#1F2937" fontWeight={600} mb={"10px"}>
             {t("electronic.step117")}
           </Typography>
@@ -150,6 +133,7 @@ export const Step11 = ({
                 right: "30px",
               },
               fontFamily: "Montserrat,Nucleo,Helvetica,sans-serif",
+              backgroundColor: "signingWFBackground.main",
             }}
             disabled={!isChecked1 || !isChecked2 || isFetching}
           >
@@ -173,6 +157,7 @@ Step11.propTypes = {
   providerSelected: PropTypes.object,
   isFetching: PropTypes.bool,
   connectorList: PropTypes.array,
+  setErrorPG: PropTypes.func,
 };
 
 export default Step11;

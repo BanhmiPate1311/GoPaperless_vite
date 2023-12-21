@@ -10,3 +10,6 @@ export * from "./Step8";
 export * from "./Step9";
 export * from "./Step10";
 export * from "./Step11";
+export * from "./Step12";
+export * from "./Step13";
+export * from "./Step14";

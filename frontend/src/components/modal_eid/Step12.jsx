@@ -6,9 +6,8 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-// import { SelectField } from "../../form";
 
-export const Step4 = ({ assurance, setAssurance, onDisableSubmit }) => {
+export const Step12 = ({ assurance, setAssurance, onDisableSubmit }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -22,7 +21,6 @@ export const Step4 = ({ assurance, setAssurance, onDisableSubmit }) => {
   const handleChange = (event) => {
     setAssurance(event.target.value);
   };
-
   return (
     <Box sx={{ minWidth: 400 }}>
       <FormControl fullWidth size="small">
@@ -46,10 +44,10 @@ export const Step4 = ({ assurance, setAssurance, onDisableSubmit }) => {
   );
 };
 
-Step4.propTypes = {
+Step12.propTypes = {
   onDisableSubmit: PropTypes.func,
   assurance: PropTypes.string,
   setAssurance: PropTypes.func,
 };
 
-export default Step4;
+export default Step12;

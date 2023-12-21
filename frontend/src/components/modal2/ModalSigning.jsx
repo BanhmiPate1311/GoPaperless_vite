@@ -17,13 +17,14 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { AddSubtitle, TextSignForm } from ".";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
+import useCountry from "@/hook/use-country";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -84,7 +85,7 @@ export const ModalSigning = ({
       fileUrl: "",
       imageScrop: "",
       name: true,
-      email: dataSigning.email,
+      contactInfor: dataSigning.email,
       date: false,
       logo: false,
       reason: true,
@@ -110,6 +111,21 @@ export const ModalSigning = ({
     queryKey: ["checkHeader"],
     queryFn: () => apiService.checkHeaderFooter(signingToken),
   });
+
+  const { address } = useCountry();
+  useEffect(() => {
+    setDataSigning({
+      ...dataSigning,
+      country: signer.metaInformation?.country
+        ? signer.metaInformation?.country
+        : address,
+      countryRealtime: address,
+      signingPurpose: signer.signingPurpose
+        ? signer.signingPurpose
+        : "signature",
+      reason: signer.customReason ? signer.customReason : "Purpose: signature",
+    });
+  }, [address]);
 
   const currentDatetime = new Date();
   const options = {
@@ -143,7 +159,7 @@ export const ModalSigning = ({
           //   console.log(data64);
           setDataSigning({
             ...dataSigning,
-            contactInfor: data.email,
+            contactInfor: data.contactInfor,
             imageBase64: removeBase64Prefix(data64),
           });
           onClose();
@@ -156,7 +172,7 @@ export const ModalSigning = ({
           //   console.log(data64);
           setDataSigning({
             ...dataSigning,
-            contactInfor: data.email,
+            contactInfor: data.contactInfor,
             imageBase64: removeBase64Prefix(data64),
           });
           onClose();
@@ -169,7 +185,7 @@ export const ModalSigning = ({
           // console.log(data64);
           setDataSigning({
             ...dataSigning,
-            contactInfor: data.email,
+            contactInfor: data.contactInfor,
             imageBase64: removeBase64Prefix(data64),
           });
           onClose();

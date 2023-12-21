@@ -71,7 +71,6 @@ export const SigningForm2 = ({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [assurance, setAssurance] = useState("");
   const [provider, setProvider] = useState("");
-  console.log("provider: ", provider);
   const [connectorName, setConnectorName] = useState("");
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
@@ -430,6 +429,10 @@ export const SigningForm2 = ({
         handleShowEidModal();
         break;
       case 4:
+        dataApi.current = {
+          ...dataApi.current,
+          assurance: assurance,
+        };
         switch (provider) {
           case "SMART_ID_SIGNING":
             if (assurance === "eseal") {

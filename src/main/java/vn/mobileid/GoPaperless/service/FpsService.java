@@ -280,7 +280,7 @@ public class FpsService {
         requestData.put("signed_hash", "SHA256");
         requestData.put("certificate_chain", data.getCertificateChain());
         requestData.put("signer_contact", data.getSignerContact());
-        System.out.println("hashSignatureField Data: " + requestData);
+//        System.out.println("hashSignatureField Data: " + requestData);
 
 //        Gson gson = new Gson();
 //        System.out.println("Request Data: " + gson.toJson(requestData));

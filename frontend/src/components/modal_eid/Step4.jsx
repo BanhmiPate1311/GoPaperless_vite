@@ -24,7 +24,7 @@ export const Step4 = ({ image, personalInfomation }) => {
         marginX="auto"
         borderRadius="50%"
         overflow="hidden"
-        my="20px"
+        my="10px"
       >
         <img
           src={`data:image/png;base64,${image}`}

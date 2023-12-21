@@ -201,7 +201,7 @@ export const Step8 = ({
       </Typography>
       <Typography
         fontSize="15px"
-        mb={"15px"}
+        mb={"10px"}
         textAlign="center"
         color="signingtextBlue.main"
         height="17px"

@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import ISPluginClient from "@/assets/js/checkid";
+import { useConnectorList } from "@/hook";
 import { electronicService } from "@/services/electronic_service";
 import { getLang } from "@/utils/commonFunction";
-import { CircularProgress } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -13,6 +14,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,6 +22,9 @@ import {
   Step1,
   Step10,
   Step11,
+  Step12,
+  Step13,
+  Step14,
   Step2,
   Step3,
   Step4,
@@ -29,10 +34,14 @@ import {
   Step8,
   Step9,
 } from ".";
-import { jwtDecode } from "jwt-decode";
-import { useConnectorList } from "@/hook";
 
-export const ModalEid = ({ open, onClose, workFlow }) => {
+export const ModalEid = ({
+  open,
+  onClose,
+  workFlow,
+  setDataSigning,
+  handleShowModalSignImage,
+}) => {
   const { t } = useTranslation();
 
   const [activeStep, setActiveStep] = useState(1);
@@ -52,10 +61,17 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [processId, setProcessId] = useState(null);
   const [otp, setOtp] = useState(null);
+  const [certificateList, setCertificateList] = useState([]);
+  console.log("certificateList: ", certificateList);
+  const [newListCert, setNewListCert] = useState([]);
+  const [certificate, setCertificate] = useState(null);
+  const [assurance, setAssurance] = useState("");
+  const [certSelected, setCertSelected] = useState(null);
 
   const sdk = useRef(null);
   //   const phoneNumberRef = useRef(null);
   const emailRef = useRef(null);
+  const taxRef = useRef(null);
   const dialCode = useRef("");
   const providerSelected = useRef(null);
 
@@ -83,7 +99,7 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
 
   useEffect(() => {
     setErrorPG(null);
-    setFaceSuccess;
+    setFaceSuccess(null);
   }, [activeStep]);
 
   function disconnectWSHTML() {
@@ -432,14 +448,51 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
       const response = await electronicService.checkCertificate(data);
       console.log("response: ", response);
       setIsFetching(false);
-      if (response.data.length === 0) {
-        createCertificate();
-        // handleNext(2);
-      } else {
-        setCertificateList(response.data);
-        handleNext();
-      }
+      setCertificateList(response.data);
+      handleNext(1);
+
+      // if (response.data.length === 0) {
+      //   createCertificate();
+      // } else {
+      //   setCertificateList(response.data);
+      //   handleNext();
+      // }
       // setCertificate(response.data);
+    } catch (error) {
+      setIsFetching(false);
+      console.log("error", error);
+      setErrorPG(error.response.data.message);
+    }
+  };
+
+  const createCertificate = async () => {
+    setIsFetching(true);
+    const data = {
+      lang: lang,
+      jwt: jwt,
+      connectorName: connectorName,
+      connectorNameRSSP: providerSelected.current,
+      enterpriseId: workFlow.enterpriseId,
+      workFlowId: workFlow.workFlowId,
+    };
+    try {
+      // const response = await api.post("/elec/createCertificate", data);
+      const response = await electronicService.createCertificate(data);
+      setIsFetching(false);
+      setCertificate(response.data);
+      setDataSigning({
+        ...workFlow,
+        connectorName: "MOBILE_ID_IDENTITY",
+        email: emailRef.current,
+        phoneNumber: phoneNumber,
+        certChain: response.data,
+      });
+
+      onClose();
+      handleShowModalSignImage();
+
+      // handleNext();
+      // setActiveStep(12);
     } catch (error) {
       setIsFetching(false);
       console.log("error", error);
@@ -486,8 +539,54 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
         perFormProcess(otp);
         break;
       case 11:
-        // tạm thời chưa làm gì
         checkCertificate();
+        break;
+      case 12:
+        switch (assurance) {
+          case "aes":
+            if (
+              certificateList.length > 0 &&
+              certificateList.filter((item) => item.seal === false).length > 0
+            ) {
+              setNewListCert(
+                certificateList.filter((item) => item.seal === false)
+              );
+              handleNext(1);
+            } else {
+              createCertificate();
+            }
+            break;
+          case "eseal":
+            if (
+              certificateList.length > 0 &&
+              certificateList.filter((item) => item.seal === true).length > 0
+            ) {
+              setNewListCert(
+                certificateList.filter((item) => item.seal === true)
+              );
+              handleNext(1);
+            } else {
+              handleNext(2);
+              // createCertificate();
+            }
+            break;
+        }
+        break;
+      case 13:
+        if (certSelected) {
+          setDataSigning({
+            ...workFlow,
+            connectorName: "MOBILE_ID_IDENTITY",
+            email: emailRef.current,
+            phoneNumber: phoneNumber,
+            certChain: newListCert[certSelected],
+          });
+          onClose();
+          handleShowModalSignImage();
+          // handleNext(); // chuyển modal
+        } else {
+          createCertificate();
+        }
         break;
       // case 11:
       //   if (certificate) {
@@ -563,6 +662,26 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
       providerSelected={providerSelected}
       isFetching={isFetching}
       connectorList={connectorList?.data.SMART_ID_SIGNING}
+      setErrorPG={setErrorPG}
+    />,
+    <Step12
+      key={"step12"}
+      assurance={assurance}
+      setAssurance={setAssurance}
+      onDisableSubmit={handleDisableSubmit}
+    />,
+    <Step13
+      key={"step13"}
+      data={newListCert}
+      certSelected={certSelected}
+      setCertSelected={setCertSelected}
+      assurance={assurance}
+      onDisableSubmit={handleDisableSubmit}
+    />,
+    <Step14
+      key={"step14"}
+      tax={taxRef}
+      onDisableSubmit={handleDisableSubmit}
     />,
   ];
 
@@ -630,9 +749,6 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
           // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
-            {/* {steps[activeStep]} */}
-            {/* <Box flexGrow={1}>{steps[activeStep - 1]}</Box> */}
-
             {activeStep === steps.length + 1 ? (
               <Fragment>
                 <Typography sx={{ mt: 2, mb: 1 }}>
@@ -656,93 +772,13 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
                   <Box flexGrow={1}>{steps[activeStep - 1]}</Box>
                   {/* Hết nội dung */}
                   {!faceSuccess && errorPG && (
-                    <Alert severity="error">{errorPG}</Alert>
+                    <Alert severity="error" sx={{ mt: "10px" }}>
+                      {errorPG}
+                    </Alert>
                   )}
                   {faceSuccess && (
                     <Alert severity="success">{faceSuccess}</Alert>
                   )}
-
-                  {/* <Box sx={{ height: "38px" }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <Button
-                        color="inherit"                       
-                        onClick={
-                          activeStep === 1 ||
-                          activeStep === 2 ||
-                          activeStep === 11 ||
-                          activeStep === 12
-                            ? handleBack
-                            : onClose
-                        }
-                        sx={{
-                          mr: 2,
-                          fontFamily:
-                            "Montserrat, Nucleo, Helvetica, sans-serif",                          
-                          border: "1px solid ",
-                          borderColor: "borderColor.main",
-                          borderRadius: "10px",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {activeStep === 1 ||
-                        activeStep === 2 ||
-                        activeStep === 11 ||
-                        activeStep === 12
-                          ? t("0-common.back")
-                          : t("0-common.cancel")}
-                        
-                      </Button>
-                      
-                      {isStepOptional(activeStep) && (
-                        <Button
-                          color="inherit"
-                          onClick={handleSkip}
-                          sx={{ mr: 1 }}
-                        >
-                          Skip
-                        </Button>
-                      )}
-
-                      <Button
-                        variant="contained"
-                          disabled={
-                            isFetching ||
-                            // activeStep === 5 ||
-                            ((activeStep === 1 ||
-                              activeStep === 6 ||
-                              activeStep === 7 ||
-                              activeStep === 8 ||
-                              activeStep === 9 ||
-                              activeStep === 10 ||
-                              activeStep === 13) &&
-                              isSubmitDisabled)
-                          }
-                        startIcon={
-                          isFetching ? (
-                            <CircularProgress color="inherit" size="1em" />
-                          ) : null
-                        }
-                        sx={{
-                          borderRadius: "10px",
-                          borderColor: "borderColor.main",
-                        }}
-                        onClick={handleSubmitClick}
-                        type="button"
-                      >
-                        {errorPG
-                          ? t("0-common.retry")
-                          : activeStep === steps.length - 1
-                          ? t("0-common.submit")
-                          : t("0-common.continue")}
-                      </Button>
-                    </Box>
-                  </Box> */}
                 </Stack>
               )
             )}
@@ -772,6 +808,7 @@ export const ModalEid = ({ open, onClose, workFlow }) => {
               activeStep === 9 ||
               activeStep === 10 ||
               activeStep === 11 ||
+              activeStep === 13 ||
               activeStep === 14) &&
               isSubmitDisabled)
           }
@@ -802,6 +839,8 @@ ModalEid.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   workFlow: PropTypes.object,
+  setDataSigning: PropTypes.func,
+  handleShowModalSignImage: PropTypes.func,
 };
 
 export default ModalEid;

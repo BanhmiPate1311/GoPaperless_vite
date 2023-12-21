@@ -3,6 +3,7 @@ package vn.mobileid.GoPaperless.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
@@ -20,10 +21,18 @@ import java.util.Map;
 
 @Component
 public class GatewayAPI {
-    private String baseUrl = "https://uat-paperless-gw.mobile-id.vn";
+
+    @Value("${dev.url}")
+    private boolean devUrl;
+
     private int timeOut = 50000;
 
+    public String getBaseUrl() {
+        return devUrl ? "https://dev-paperless-gw.mobile-id.vn" : "https://uat-paperless-gw.mobile-id.vn";
+    }
+
     public byte[] previewFile(String uploadToken, String signerToken) throws MalformedURLException {
+        String baseUrl = getBaseUrl();
         String previewUrl = baseUrl + "/file/" + uploadToken + "/preview/" + signerToken;
 
         RestTemplate restTemplate = new RestTemplate();
@@ -37,7 +46,7 @@ public class GatewayAPI {
 
     public String PrepareSign(PrepareSigningRequest prepareSigningRequest) {
         System.out.println("PrepareSign");
-
+        String baseUrl = getBaseUrl();
 //        String prepareUrl = baseUrl + "/apigw/signing/" + prepareSigningRequest.getSigning_token() + "/prepare.json?access_token=" + prepareSigningRequest.getSigner_token();
         // convert String to base64
         String prepareUrl = baseUrl + "/api/internalusage/signing/" + prepareSigningRequest.getSigning_token() + "/prepare.json?access_token=" + prepareSigningRequest.getSigner_token();
@@ -88,6 +97,7 @@ public class GatewayAPI {
     }
 
     public String sign(String signingToken, String SignerToken, String signerId, String signature) {
+        String baseUrl = getBaseUrl();
         String prepareUrl = baseUrl + "/api/internalusage/signing/" + signingToken + "/sign?access_token=" + SignerToken;
         // convert String to base64
         System.out.println("signerId: " + signerId);
@@ -119,7 +129,7 @@ public class GatewayAPI {
     }
 
     public byte[] getFileFromUploadToken(String uploadToken) {
-
+        String baseUrl = getBaseUrl();
         String getFileUrl = baseUrl + "/api/internalusage/open/" + uploadToken;
 
         RestTemplate restTemplate = new RestTemplate();
@@ -132,6 +142,7 @@ public class GatewayAPI {
     }
 
     public byte[] getLastFile(String signingToken, String signerToken) {
+        String baseUrl = getBaseUrl();
         String getLastFileUrl = baseUrl + "/api/internalusage/signing/" + signingToken + "/download";
 
         //{{url}}/apigw/signing/{{signing_token}}/download?access_token={{signer_token}}
@@ -146,6 +157,7 @@ public class GatewayAPI {
     }
 
     public String ValidView(ValidationResquest validationResquest) {
+        String baseUrl = getBaseUrl();
         String getValidViewUrl = baseUrl + "/api/internalusage/validation/" + validationResquest.getUploadToken() + "/view.json";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
@@ -158,6 +170,7 @@ public class GatewayAPI {
 
     public String getSignatureId(String signatureName, String fileName, String content, String digest) throws Exception {
         System.out.println("get signature id");
+        String baseUrl = getBaseUrl();
         String getSignatureIdUrl = baseUrl + "/api/internalusage/validation/signature-name.json";
 
         Map<String, Object> requestData = new HashMap<>();

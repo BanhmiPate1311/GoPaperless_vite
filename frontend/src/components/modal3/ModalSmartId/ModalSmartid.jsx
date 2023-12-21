@@ -245,11 +245,11 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
             <Typography variant="h6" mb={"10px"}>
               {t("modal.smartid4")}
             </Typography>
-            <Box textAlign="center" my="10px">
+            <Box textAlign="center" my="10px" flexGrow={1}>
               <CircularProgressWithLabel size={150} value={progress} />
             </Box>
 
-            <Stack width={"100%"} mb={2}>
+            <Stack width={"100%"}>
               {smartSign?.error && (
                 <Alert severity="error">
                   {smartSign?.error?.response?.data.message}

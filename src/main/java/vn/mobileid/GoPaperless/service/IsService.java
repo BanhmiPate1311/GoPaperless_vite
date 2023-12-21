@@ -45,6 +45,7 @@ public class IsService {
         String signingPurpose = data.getSigningPurpose();
         String country = !Objects.equals(data.getCountry(), "") ? data.getCountry() : data.getCountryRealtime();
         String imageBase64 = data.getImageBase64();
+        String contactInfor = data.getContactInfor();
 
         try {
             Participants rsParticipant = new Participants();
@@ -66,6 +67,7 @@ public class IsService {
             hashFileRequest.setSigningLocation(country);
             hashFileRequest.setFieldName(fieldName);
             hashFileRequest.setHandSignatureImage(imageBase64);
+            hashFileRequest.setSignerContact(contactInfor);
 
             String hashList = fpsService.hashSignatureField(documentId, hashFileRequest);
             System.out.println("hash file xong:");
@@ -143,14 +145,18 @@ public class IsService {
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
             String signatureName = signNode.get("signature_name").asText();
+            String content = signNode.get("file_data").asText();
 
-//            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
-//
-////            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
-////            String sSignature_id = requestID; // temporary
-//
-//            int isSetPosition = 1;
-//            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            String dataResponse = gatewayAPI.getSignatureId(signatureName, fileName, content, digest);
+
+            JsonNode dataNode = objectMapper.readTree(dataResponse);
+            String signatureId = dataNode.get("signature").get("id").asText();
+
+//            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
+//            String sSignature_id = requestID; // temporary
+
+            int isSetPosition = 1;
+            postBack.postBack2(dataResponse, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

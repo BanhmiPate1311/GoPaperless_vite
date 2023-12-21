@@ -35,28 +35,22 @@ export const PasswordField = ({
     //   />
     // </FormControl>
 
-    <Box
-      //   component="form"
-      width={"60%"}
-      mx={"auto"}
-    >
-      <TextField
-        fullWidth
-        error={!!error}
-        size="small"
-        id="pinNumber"
-        // label="Password"
-        type="search"
-        // autoComplete="current-password"
-        onChange={(event) => {
-          onChange(event);
-          externalOnChange?.(event);
-        }}
-        inputRef={ref}
-        helperText={error?.message}
-        {...rest}
-      />
-    </Box>
+    <TextField
+      fullWidth
+      error={!!error}
+      size="small"
+      id="pinNumber"
+      // label="Password"
+      type="search"
+      // autoComplete="current-password"
+      onChange={(event) => {
+        onChange(event);
+        externalOnChange?.(event);
+      }}
+      inputRef={ref}
+      helperText={error?.message}
+      {...rest}
+    />
   );
 };
 

@@ -38,7 +38,7 @@ export const AddSubtitle = ({ control }) => {
         </Typography>
         <InputField
           label=""
-          name="email"
+          name="contactInfor"
           control={control}
           inputProps={{
             sx: {

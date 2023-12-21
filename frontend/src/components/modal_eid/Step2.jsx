@@ -44,7 +44,7 @@ export const Step2 = ({ onDisableSubmit }) => {
             <Checkbox
               size="small"
               sx={{
-                paddingTop: "0",
+                // paddingTop: "0",
                 color: "#26293F",
                 "&.Mui-checked": {
                   color: "#0d6efd",
@@ -77,7 +77,7 @@ export const Step2 = ({ onDisableSubmit }) => {
             <Checkbox
               size="small"
               sx={{
-                paddingTop: "0",
+                // paddingTop: "0",
                 color: "#26293F",
                 "&.Mui-checked": {
                   color: "#0d6efd",

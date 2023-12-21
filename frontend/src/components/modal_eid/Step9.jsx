@@ -49,10 +49,6 @@ export const Step9 = ({ onDisableSubmit, setErrorPG, emailRef }) => {
       <Box
         sx={{
           mt: 1,
-          display: "flex",
-          flexWrap: "wrap",
-          fontFamily: "Montserrat, Nucleo, Helvetica, sans-serif",
-          justifyContent: "center",
         }}
         autoComplete="off"
       >
