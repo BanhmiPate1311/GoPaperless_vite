@@ -549,12 +549,15 @@ public class ElectronicService {
         SignedJWT jwt1 = (SignedJWT) JWTParser.parse(checkCertificateRequest.getJwt());
         Gson gson = new Gson();
         JwtModel jwtModel = gson.fromJson(jwt1.getPayload().toString(), JwtModel.class);
+        String assurance = checkCertificateRequest.getAssurance();
+//        System.out.println("assurance: " + assurance);
+        String taxCode = checkCertificateRequest.getTaxCode();
         System.out.println("type: " + jwtModel.getDocument_type());
         if (jwtModel.getDocument_type().equals("CITIZENCARD")) {
             jwtModel.setDocument_type("CITIZEN-IDENTITY-CARD");
         }
 
-        String credentialID = rsspService.credentialsIssue(jwtModel, checkCertificateRequest.getLang());
+        String credentialID = rsspService.credentialsIssue(jwtModel, checkCertificateRequest.getLang(), assurance, taxCode);
         System.out.println("credentialID: " + credentialID);
 
         CredentialInfo credentialinFo = rsspService.getCredentialinFo(checkCertificateRequest.getLang(), credentialID);
@@ -608,6 +611,7 @@ public class ElectronicService {
         String imageBase64 = authorizeOTPRequest.getImageBase64();
         String otpRequestID = authorizeOTPRequest.getRequestID();
         String otp = authorizeOTPRequest.getOtp();
+        String assurance = authorizeOTPRequest.getAssurance();
 
         try {
             boolean error = false;
@@ -678,12 +682,16 @@ public class ElectronicService {
             String signedHash = signNode.get("signed_hash").asText();
             String signedTime = signNode.get("signed_time").asText();
             String signatureName = signNode.get("signature_name").asText();
+            String content = signNode.get("file_data").asText();
 
-//            String signatureId = gatewayAPI.getSignatureId(uuid, signatureName, fileName);
-//            System.out.println("signatureId: " + signatureId);
-//
-//            int isSetPosition = 1;
-//            postBack.postBack2(isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            String dataResponse = gatewayAPI.getSignatureId(signatureName, fileName, content, digest);
+
+            JsonNode dataNode = objectMapper.readTree(dataResponse);
+            String signatureId = dataNode.get("signature").get("id").asText();
+
+            String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
+            int isSetPosition = 1;
+            postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

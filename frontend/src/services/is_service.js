@@ -35,6 +35,7 @@ export const isService = {
       codeNumber: data.certChain.subject.serialNumber,
       signingOption: data.signingOption,
       enterpriseId: data.enterpriseId,
+      assurance: data.assurance,
     };
     return api.post("/is/packFile", request);
   },

@@ -19,6 +19,7 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
     private String fieldName;
     private int lastFileId;
     private int documentId;
+    private String assurance;
 
     public String getCredentialID() {
         return credentialID;
@@ -162,5 +163,13 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
 
     public void setImageBase64(String imageBase64) {
         this.imageBase64 = imageBase64;
+    }
+
+    public String getAssurance() {
+        return assurance;
+    }
+
+    public void setAssurance(String assurance) {
+        this.assurance = assurance;
     }
 }

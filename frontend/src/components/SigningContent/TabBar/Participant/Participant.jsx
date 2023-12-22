@@ -27,7 +27,11 @@ export const Participant = ({ participantsList, signType }) => {
 
   return (
     <Box>
-      <Stack sx={{ p: 2 }} direction="row" justifyContent="space-between">
+      <Stack
+        sx={{ px: "20px", height: "50px" }}
+        direction="row"
+        justifyContent="space-between"
+      >
         <Stack direction="row" spacing={1} alignItems="center">
           {/* {signType === "Signature" ? <ParticipantIcon /> : <SealIcon />} */}
           <ParticipantIcon />
@@ -49,11 +53,11 @@ export const Participant = ({ participantsList, signType }) => {
           </Avatar>
         </Stack>
         {participantsList.length !== 0 && (
-          <Box>
+          <Stack direction="row" justifyContent={"center"}>
             <IconButton onClick={handleOpen}>
               <SettingIcon />
             </IconButton>
-          </Box>
+          </Stack>
         )}
       </Stack>
       {participantsList.length === 0 ? (

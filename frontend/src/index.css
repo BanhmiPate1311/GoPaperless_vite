@@ -56,11 +56,10 @@ video {
   transform: translate(-50%, -50%);
 }
 
-/* .inputStyle {
+.inputStyle {
   width: 43px !important;
   height: 43px;
   border-radius: 7px;
-  border: 0px;
   margin-left: 8px;
   margin-right: 8px;
   font-size: 20px;
@@ -70,7 +69,7 @@ video {
 .containerStyle {
   display: flex;
   justify-content: center;
-} */
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import CircularProgress, {
   circularProgressClasses,
 } from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,6 @@ function CircularProgressWithLabel(props) {
 
     return formattedTime;
   };
-
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
       <CircularProgress
@@ -30,7 +29,6 @@ function CircularProgressWithLabel(props) {
           color: (theme) =>
             theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
         }}
-        size={40}
         thickness={4}
         {...props}
         value={100}
@@ -84,35 +82,31 @@ CircularProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const Step8 = ({
+export const Step2 = ({
   setOtp,
+  phoneNumber,
   onDisableSubmit,
-  processOTPResend,
+  resendCredentialOTP,
   setErrorPG,
-  perFormProcess,
+  authorizeOTP,
   isFetching,
 }) => {
   const { t } = useTranslation();
+
+  const maskedPhoneNumber = () => {
+    const hiddenPart = phoneNumber
+      .substring(phoneNumber.length - 7, phoneNumber.length - 2)
+      .replace(/\d/g, "*");
+    return (
+      "+" +
+      phoneNumber.slice(0, phoneNumber.length - 7) +
+      hiddenPart +
+      phoneNumber.slice(-2)
+    );
+  };
   const [progress, setProgress] = useState(100);
   const [isFirst, setIsFirst] = useState(true);
   const [otp1, setOtp1] = useState("");
-
-  const containerStyle = {
-    display: "flex",
-    justifyContent: "center",
-  };
-
-  const inputStyle = {
-    width: "43px",
-    height: "43px",
-    borderRadius: "7px",
-    marginLeft: "8px",
-    marginRight: "8px",
-    /* background: #dddddd; */
-    fontSize: "20px",
-    border: "1px solid #3b82f6",
-    disabled: true,
-  };
 
   useEffect(() => {
     if (progress > 0.5) {
@@ -146,15 +140,12 @@ export const Step8 = ({
       onDisableSubmit(false);
       if (isFirst) {
         setIsFirst(false);
-        perFormProcess(formattedData);
+        authorizeOTP(formattedData);
       }
     } else {
       onDisableSubmit(true);
     }
   };
-
-  // const [result, setResult] = useState();
-  // console.log("result: ", result);
   const handleOnChange = (res) => {
     setOtp1(res);
     console.log("res: ", res.length);
@@ -163,7 +154,7 @@ export const Step8 = ({
       onDisableSubmit(false);
       if (isFirst) {
         setIsFirst(false);
-        perFormProcess(res);
+        authorizeOTP(res);
       }
     } else {
       onDisableSubmit(true);
@@ -180,64 +171,70 @@ export const Step8 = ({
       setProgress(100);
       setErrorPG(null);
       setIsFirst(true);
-      // AuthInputRef.current?.clear();
+      //   AuthInputRef.current?.clear();
       setOtp1("");
-      processOTPResend();
+      resendCredentialOTP();
       setEnResend(false);
       setTimeout(() => {
         setEnResend(true);
       }, 180000);
     }
   };
+
+  const containerStyle = {
+    display: "flex",
+    justifyContent: "center",
+  };
+
+  const inputStyle = {
+    width: "43px",
+    height: "43px",
+    borderRadius: "7px",
+    marginLeft: "8px",
+    marginRight: "8px",
+    /* background: #dddddd; */
+    fontSize: "20px",
+    border: "1px solid #3b82f6",
+    disabled: true,
+  };
+
   return (
     <Box>
-      <Typography variant="h6" sx={{ fontWeight: 700, color: "textBold.main" }}>
-        {/* Enter The Code That Was Sent To Your Phone */}
+      <Typography variant="h6" sx={{ fontWeight: 600, color: "textBold.main" }}>
+        {/* Enter the code that was sent to your phone */}
         {t("electronic.step81")}
       </Typography>
-      <Typography
-        fontSize="15px"
-        my={3}
-        textAlign="center"
-        color="signingtextBlue.main"
-      >
-        {/* Enter The Code That Was Sent To Your Phone */}
-        {t("electronic.step81")}
+
+      <Typography variant="h6">
+        {/* A verification code has been sent to your phone: {maskedPhoneNumber()} */}
+        {t("electronic.step144")}{" "}
+        <span style={{ fontWeight: "bold" }}>{maskedPhoneNumber()}</span>
       </Typography>
-      {/* <Typography
-        color="#1976D2"
-        marginTop="26px"
-        marginBottom="10px"
-        textAlign="center"
-      >
-        {t("electronic.step83")}
-      </Typography> */}
-      {/* <Box className="container">
-        <AuthCode
-          ref={AuthInputRef}
-          containerClassName="phoneContainer"
-          inputClassName="phoneinputverified"
-          onChange={handleOnChange}
-        />
-      </Box> */}
+
+      <Typography fontSize="14px" color="#1976D2" my="10px" textAlign="center">
+        {/* Enter The Code That Was Sent To Your Phone */}
+        {t("electronic.step143")}
+      </Typography>
       <OtpInput
         value={otp1}
         onChange={handleOnChange}
         numInputs={6}
         //   renderSeparator={<span>-</span>}
         renderInput={(props) => <input disabled={isFetching} {...props} />}
+        // inputStyle="inputStyle"
+        // containerStyle="containerStyle"
         inputStyle={inputStyle}
         containerStyle={containerStyle}
         inputType="tel"
         shouldAutoFocus={true}
         onPaste={handlePaste}
       />
-      <Box textAlign="center" mt={3}>
-        <CircularProgressWithLabel size={100} value={progress} />
+      <Box textAlign="center" my="10px">
+        <CircularProgressWithLabel size={150} value={progress} />
       </Box>
-      <Typography fontSize="14px" textAlign="center" mt={3}>
+      <Typography fontSize="14px" textAlign="center" mb="10px">
         {/* Verification process might take up to 5 minitues. */}
-        {t("electronic.step84")}
+        {t("electronic.step144")}
       </Typography>
       <Box
         textAlign="center"
@@ -245,26 +242,28 @@ export const Step8 = ({
         sx={{
           cursor: enResend ? "pointer" : "not-allowed",
           color: enResend ? "#1976D2" : "#26293f",
+          textDecoration: "underline",
         }}
-        // onClick={processOTPResend}
         onClick={handleResend}
         // className="buttontet"
         disabled={!enResend}
       >
-        {t("electronic.step85")}
+        {/* Resend OTP */}
+        {t("electronic.step145")}
       </Box>
     </Box>
   );
 };
 
-Step8.propTypes = {
-  otp: PropTypes.string,
+Step2.propTypes = {
   setOtp: PropTypes.func,
+  phoneNumber: PropTypes.string,
   onDisableSubmit: PropTypes.func,
-  processOTPResend: PropTypes.func,
+  resendCredentialOTP: PropTypes.func,
+  handleCloseModal1: PropTypes.func,
   setErrorPG: PropTypes.func,
-  perFormProcess: PropTypes.func,
+  authorizeOTP: PropTypes.func,
   isFetching: PropTypes.bool,
 };
 
-export default Step8;
+export default Step2;

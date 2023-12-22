@@ -41,6 +41,7 @@ export const Signing = () => {
           const parsedAnnotation = JSON.parse(participant.annotation); // Parse annotation
           const parsedMetaInformation = JSON.parse(participant.metaInformation);
           const parsedSigningOptions = JSON.parse(participant.signingOptions);
+          const parsedCertificate = JSON.parse(participant.certificate);
 
           // Return the participant with transformed data
           return {
@@ -48,6 +49,7 @@ export const Signing = () => {
             annotation: parsedAnnotation,
             metaInformation: parsedMetaInformation,
             signingOptions: parsedSigningOptions?.signing_options,
+            certificate: parsedCertificate,
           };
         }
       );

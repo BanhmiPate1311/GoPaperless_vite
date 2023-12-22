@@ -32,6 +32,7 @@ public class RsspRequest {
     private boolean codeEnable;
     private List<String> signatures;
     private int workFlowId;
+    private String assurance;
 
     public CertChain getCertChain() {
         return certChain;
@@ -263,5 +264,13 @@ public class RsspRequest {
 
     public void setWorkFlowId(int workFlowId) {
         this.workFlowId = workFlowId;
+    }
+
+    public String getAssurance() {
+        return assurance;
+    }
+
+    public void setAssurance(String assurance) {
+        this.assurance = assurance;
     }
 }

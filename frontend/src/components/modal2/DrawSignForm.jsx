@@ -139,9 +139,8 @@ const DrawSignForm = forwardRef(
             sx={{
               display: "flex",
               width: "100%",
-              // alignItems: "center",
+              alignItems: "center",
               height: "150px",
-              // padding: "2rem 0",
             }}
             // ref={sigCanvasRef}
           >

@@ -14,6 +14,8 @@ export const Signatures = ({ signedInfo }) => {
   // console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
 
+  const newSignedInfo = signedInfo.map((item) => item.value);
+  console.log("newSignedInfo: ", newSignedInfo);
   const signType = "Signature";
 
   const valueSign = [

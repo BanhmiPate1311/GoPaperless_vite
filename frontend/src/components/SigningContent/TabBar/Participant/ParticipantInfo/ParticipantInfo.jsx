@@ -46,6 +46,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
             alignItems: "center",
           },
           height: "25px",
+          px: "20px",
         }}
       >
         <Typography variant="h2" color="textBlack.main">
@@ -71,59 +72,64 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
           const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
-            <Box key={index}>
-              <Stack
-                direction={"row"}
-                spacing={1}
-                backgroundColor={check ? "signerBackGround.main" : ""}
-                color={check ? "signingtextBlue.main" : ""}
-                sx={{
-                  px: 2,
-                }}
-                alignItems={"center"}
-                borderTop="1px solid"
-                borderBottom={
-                  index === participantsList.length - 1 ? "1px solid" : ""
-                }
-                borderColor="borderColor.main"
-                height="50px"
-              >
-                {/* {check ? (
+            <Stack
+              key={index}
+              direction={"row"}
+              spacing={1}
+              backgroundColor={check ? "signerBackGround.main" : ""}
+              color={check ? "signingtextBlue.main" : ""}
+              sx={{
+                px: "20px",
+              }}
+              alignItems={"center"}
+              borderTop="1px solid"
+              borderBottom={
+                index === participantsList.length - 1 ? "1px solid" : ""
+              }
+              borderColor="borderColor.main"
+              height="50px"
+            >
+              {/* {check ? (
                   <SignerSelected />
                 ) : (
                   <WaitingSig width={24} height={24} />
                 )} */}
-                {status === 2 ? (
-                  <Signed_Icon />
-                ) : check ? (
-                  <SignerSelected />
-                ) : (
-                  <WaitingSig width={24} height={24} />
-                )}
-                <Box flexGrow={1}>
-                  <Typography variant="h3" color="textBlack.main">
-                    {participant.lastName} {participant.firstName}
-                  </Typography>
-                  <Typography variant="h2" color="signingtext2.main">
-                    {status === 2
-                      ? participant.signerId
-                        ? t("signing.signature_valid")
-                        : t("validation.sealValidTitle2")
-                      : status === 1
-                      ? t("signing.wait_my_signature")
-                      : t("signing.wait_signature")}
-                  </Typography>
-                </Box>
-                <IconButton onClick={() => toggleDrawer(index)}>
-                  <ShowDetailIcon />
-                </IconButton>
-                <SigningDetail
-                  open={isOpen[index]}
-                  participant={participant}
-                  handleClose={() => toggleDrawer(index)}
-                />
-              </Stack>
-            </Box>
+              {status === 2 ? (
+                <Signed_Icon />
+              ) : check ? (
+                <SignerSelected />
+              ) : (
+                <WaitingSig width={24} height={24} />
+              )}
+              <Box flexGrow={1}>
+                <Typography
+                  variant="h6"
+                  color={check ? "signingtextBlue.main" : "textBlack.main"}
+                >
+                  {participant.lastName} {participant.firstName}
+                </Typography>
+                <Typography
+                  variant="h2"
+                  color={check ? "signingtextBlue.main" : "signingtext2.main"}
+                >
+                  {status === 2
+                    ? participant.signedType === "NORMAL"
+                      ? t("signing.signature_valid")
+                      : t("validation.sealValidTitle2")
+                    : status === 1
+                    ? t("signing.wait_my_signature")
+                    : t("signing.wait_signature")}
+                </Typography>
+              </Box>
+              <IconButton onClick={() => toggleDrawer(index)}>
+                <ShowDetailIcon />
+              </IconButton>
+              <SigningDetail
+                open={isOpen[index]}
+                participant={participant}
+                handleClose={() => toggleDrawer(index)}
+              />
+            </Stack>
           );
         })}
       </AccordionDetails>

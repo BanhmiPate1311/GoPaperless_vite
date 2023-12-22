@@ -153,26 +153,6 @@ export const TextSignForm = forwardRef(
             }}
           ></Box>
         </Stack>
-        {/* <Typography variant="h6" my={"10px"}>
-          {t("signing.contact_information")}
-        </Typography>
-        <Box mb={1}>
-          <InputField
-            label=""
-            name="email"
-            type="email"
-            control={control}
-            inputProps={{
-              sx: {
-                backgroundColor: "signingWFBackground.main",
-              },
-            }}
-            sx={{ m: "0 0 10px" }}
-          />
-        </Box>
-        <Box>
-          <AddSubtitle control={control} signer={signer} />
-        </Box> */}
       </Box>
     );
   }

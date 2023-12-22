@@ -95,7 +95,6 @@ public class ProcessDb {
     }
 
 
-
     public void USP_GW_PPL_WORKFLOW_GET_FIRST_FILE(FirstFile response, String pSIGNING_TOKEN) throws Exception {
         CallableStatement proc_stmt = null;
         Connection conns = null;
@@ -383,7 +382,7 @@ public class ProcessDb {
         }
     }
 
-    public ConnectorName getIdentierConnector(String sConnectorName ) throws Exception {
+    public ConnectorName getIdentierConnector(String sConnectorName) throws Exception {
 
         ConnectorName connectorName = new ConnectorName();
         List<ConnectorName> connectorNameList = LoadParamSystem.getConnectorStart(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME);

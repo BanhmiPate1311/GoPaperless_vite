@@ -546,7 +546,7 @@ public class RsspService {
         }
     }
 
-    public String credentialsIssue(JwtModel jwt, String lang) throws Exception {
+    public String credentialsIssue(JwtModel jwt, String lang, String assurance, String taxCode) throws Exception {
         System.out.println("____________credentials/issue____________");
         String credentialsIssueUrl = property.getBaseUrl() + "credentials/issue";
 
@@ -560,9 +560,9 @@ public class RsspService {
         requestData.put("user", jwt.getDocument_number());
         requestData.put("userType", jwt.getDocument_type());
         requestData.put("authorizeCode", "");
-        requestData.put("certificateProfile", "T2PSB21D");
-        requestData.put("signingProfileValue", 0);
-        requestData.put("SCAL", 1);
+        requestData.put("certificateProfile", "PER1D");
+//        requestData.put("signingProfileValue", 0);
+//        requestData.put("SCAL", 1);
         requestData.put("authMode", "EXPLICIT/OTP-SMS");
         requestData.put("multisign", 1);
         requestData.put("requestID", "");
@@ -580,8 +580,17 @@ public class RsspService {
 
 
         Map<String, Object> identification = new HashMap<>();
-        identification.put("type", "CITIZEN-IDENTITY-CARD");
-        identification.put("value", jwt.getDocument_number());
+        if(assurance.equals("aes")) {
+            System.out.println("assurance: " + assurance);
+            identification.put("type", "CITIZEN-IDENTITY-CARD");
+            identification.put("value", jwt.getDocument_number());
+        } else {
+            System.out.println("assurance: " + assurance);
+            identification.put("type", "TAX-CODE");
+            identification.put("value", taxCode);
+        }
+//        identification.put("type", "CITIZEN-IDENTITY-CARD");
+//        identification.put("value", jwt.getDocument_number());
         List<Map<String, Object>> identifications = new ArrayList<>();
         identifications.add(identification);
 
@@ -605,7 +614,7 @@ public class RsspService {
 
             if (jsonNode.get("error").asInt() == 3005 || jsonNode.get("error").asInt() == 3006) {
                 login();
-                return credentialsIssue(jwt, lang);
+                return credentialsIssue(jwt, lang, assurance, taxCode);
             } else if (jsonNode.get("error").asInt() != 0) {
                 System.out.println("Err Code: " + jsonNode.get("error").asInt());
                 System.out.println("Err Desscription: " + jsonNode.get("errorDescription").asText());
@@ -753,6 +762,7 @@ public class RsspService {
         String credentialID = signRequest.getCertChain().getCredentialID();
         String certChain = signRequest.getCertChain().getCert();
         String contactInfor = signRequest.getContactInfor();
+        String assurance = signRequest.getAssurance();
 
         try {
             System.out.println("connectorName: " + connectorName);
@@ -881,8 +891,9 @@ public class RsspService {
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
             System.out.println("signatureId: " + signatureId);
+            String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(dataResponse, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(dataResponse,signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

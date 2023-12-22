@@ -50,6 +50,7 @@ function a11yProps(index) {
 
 // eslint-disable-next-line react/prop-types
 export const TabBar = ({ workFlow, signedInfo }) => {
+  console.log("workFlow: ", workFlow);
   console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
   const [value, setValue] = useState(0);
@@ -59,11 +60,10 @@ export const TabBar = ({ workFlow, signedInfo }) => {
   // );
 
   //1: signature, 3: seal
-  const eSealList = signedInfo?.filter(
-    (sig) => sig.ppl_file_attr_type_id === 1
-  );
+  const sigList1 = signedInfo?.filter((sig) => sig.ppl_file_attr_type_id === 1);
+  console.log("sigList1: ", sigList1);
 
-  const eSealList2 = signedInfo?.filter(
+  const eSealList1 = signedInfo?.filter(
     (sig) => sig.ppl_file_attr_type_id === 3
   );
 
@@ -97,7 +97,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
           ".Mui-selected": {
             backgroundColor: "signingBackground.main",
             borderRadius: "10px",
-            color: "signingtext1.main",
+            color: "textBlack.main",
           },
           ".MuiTab-root ": {
             textTransform: "none",
@@ -168,16 +168,10 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Signatures signedInfo={eSealList} />
+        <Signatures signedInfo={sigList1} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        {/* <Participant
-          participantsList={eSealList}
-          eSealList2={eSealList2}
-          signType="eSeal"
-        /> */}
-        <Seals signedInfo={eSealList2} />
-        {/* <Signatures signedInfo={eSealList2} /> */}
+        <Seals signedInfo={eSealList1} />
       </TabPanel>
     </Box>
   );

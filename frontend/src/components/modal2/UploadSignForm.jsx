@@ -152,7 +152,9 @@ const UploadSignForm = forwardRef(
             }}
             // ref={sigFileRef}
           >
-            <Box
+            <Stack
+              justifyContent={"center"}
+              alignItems={"center"}
               sx={{
                 marginLeft: "auto",
                 marginRight: "auto",
@@ -170,14 +172,14 @@ const UploadSignForm = forwardRef(
                   component="img"
                   sx={{
                     // height: "100%",
-                    // maxWidth: "70%",
+                    maxWidth: "70%",
                     maxHeight: "100%",
                   }}
                   alt="The house from the offer."
                   src={watch("imageScrop")}
                 />
               ) : null}
-            </Box>
+            </Stack>
             <ContentRight
               direction={direction}
               subtitle={subtitle}

@@ -474,6 +474,8 @@ export const ModalEid = ({
       connectorNameRSSP: providerSelected.current,
       enterpriseId: workFlow.enterpriseId,
       workFlowId: workFlow.workFlowId,
+      assurance: assurance,
+      taxCode: taxRef.current,
     };
     try {
       // const response = await api.post("/elec/createCertificate", data);
@@ -573,7 +575,8 @@ export const ModalEid = ({
         }
         break;
       case 13:
-        if (certSelected) {
+        console.log("certSelected: ", certSelected);
+        if (certSelected !== null) {
           setDataSigning({
             ...workFlow,
             connectorName: "MOBILE_ID_IDENTITY",
@@ -588,22 +591,13 @@ export const ModalEid = ({
           createCertificate();
         }
         break;
-      // case 11:
-      //   if (certificate) {
-      //     setDataSigning({
-      //       ...workFlow,
-      //       connectorName: "MOBILE_ID_IDENTITY",
-      //       email: emailRef.current,
-      //       phoneNumber: phoneNumberRef.current,
-      //       certChain: certificate,
-      //     });
-      //     onClose();
-      //     handleShowModalSignImage();
-      //     // handleNext(); // chuyển modal
-      //   } else {
-      //     createCertificate();
-      //   }
-      //   break;
+      case 14:
+        setDataSigning({
+          ...workFlow,
+          connectorName: "MOBILE_ID_IDENTITY",
+        });
+        createCertificate();
+        break;
       default:
         handleNext();
     }

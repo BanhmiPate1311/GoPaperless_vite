@@ -5,7 +5,7 @@ import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.
 import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
 import "@/assets/style/react-resizable.css";
 import { ModalSigning } from "@/components/modal2";
-import { EidModal2 } from "@/components/modal2/ModalEid";
+import { ModalEidSign, ModalSmartid, ModalUsb } from "@/components/modal3";
 import { ModalEid } from "@/components/modal_eid";
 import { SignatureSetting } from "@/components/modal_setting";
 import { fpsService } from "@/services/fps_service";
@@ -17,7 +17,6 @@ import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
 import { SigningForm2 } from "../../modal1";
-import { ModalSmartid, ModalUsb } from "@/components/modal3";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -591,7 +590,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       )}
 
       {isShowEidModalSign[index] && (
-        <EidModal2
+        <ModalEidSign
           open={isShowEidModalSign[index]}
           onClose={() => handleCloseEidModalSign(index)}
           dataSigning={dataSigning}

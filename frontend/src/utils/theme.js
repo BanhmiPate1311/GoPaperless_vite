@@ -65,7 +65,7 @@ export let theme = extendTheme({
           main: "#F3F5F8",
         },
         signerBackGround: {
-          main: "#A6D1FF",
+          main: "#DBEAFE",
         },
         // grey 300
         borderColor: {

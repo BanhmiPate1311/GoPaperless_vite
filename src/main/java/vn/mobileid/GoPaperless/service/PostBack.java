@@ -25,6 +25,7 @@ public class PostBack {
 
     public void postBack2(
             String dataResponse,
+            String signedType,
             int isSetPosition,
             String signerId,
             String fileName,
@@ -143,7 +144,7 @@ public class PostBack {
                             sSigner, sStatus, sFileSigner, digest, sSignature_id, sCountryCode);
 
                 }
-                String signedType = "NORMAL";
+//                String signedType = "NORMAL";
                 connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(signerToken,
                         signedType, sDateSign, sSignature_id, signedHash, dataResponse, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, sFileID_Last, pLAST_MODIFIED_BY);
                 if (rsWFList != null ) {

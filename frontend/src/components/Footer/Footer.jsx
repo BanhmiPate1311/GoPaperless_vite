@@ -33,13 +33,22 @@ export const Footer = ({ headerFooter }) => {
       }}
     >
       <Stack direction="row" spacing={1}>
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          color={check ? metaData.footerTextColor : "#FFF"}
+        >
           {t("0-common.version")} {check ? metaData.version : "1.20231116"}
         </Typography>
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          color={check ? metaData.footerTextColor : "#FFF"}
+        >
           {t("0-common.copyright")} {new Date().getFullYear()} ©
         </Typography>
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          color={check ? metaData.footerTextColor : "#FFF"}
+        >
           {check
             ? metaData.companyName
             : "Mobile-ID Technologies and Service Joint Stock company"}
@@ -52,7 +61,10 @@ export const Footer = ({ headerFooter }) => {
             fontSize: "15px",
           }}
         />
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          color={check ? metaData.footerTextColor : "#FFF"}
+        >
           {check ? metaData.email : "info@mobile-id.vn"}
         </Typography>
         <SvgIcon sx={{ fontSize: "15px" }}>
@@ -80,7 +92,10 @@ export const Footer = ({ headerFooter }) => {
             </g>
           </svg>
         </SvgIcon>
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          color={check ? metaData.footerTextColor : "#FFF"}
+        >
           {check ? metaData.phone : "+84978377152"}
         </Typography>
       </Stack>

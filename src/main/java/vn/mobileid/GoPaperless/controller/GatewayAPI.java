@@ -162,8 +162,7 @@ public class GatewayAPI {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
-        ResponseEntity<String> responseEntity = null;
-        responseEntity = restTemplate.exchange(getValidViewUrl, HttpMethod.GET, null, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(getValidViewUrl, HttpMethod.GET, null, String.class);
 
         return responseEntity.getBody();
     }
@@ -186,6 +185,7 @@ public class GatewayAPI {
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData);
 
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
         try {
 //            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);

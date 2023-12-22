@@ -4,6 +4,8 @@ public class CheckCertificateRequest extends ElectronicBaseRequest{
     private String jwt;
     private String credentialID;
     private String connectorNameRSSP;
+    private String assurance;
+    private String taxCode;
 
     public String getJwt() {
         return jwt;
@@ -27,5 +29,21 @@ public class CheckCertificateRequest extends ElectronicBaseRequest{
 
     public void setConnectorNameRSSP(String connectorNameRSSP) {
         this.connectorNameRSSP = connectorNameRSSP;
+    }
+
+    public String getAssurance() {
+        return assurance;
+    }
+
+    public void setAssurance(String assurance) {
+        this.assurance = assurance;
+    }
+
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(String taxCode) {
+        this.taxCode = taxCode;
     }
 }

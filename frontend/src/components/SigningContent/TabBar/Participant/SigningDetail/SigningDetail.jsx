@@ -1,15 +1,9 @@
-import { ReactComponent as LockIcon } from "@/assets/images/svg/lock_icon.svg";
-import { ReactComponent as PencilIcon } from "@/assets/images/svg/pencil_icon.svg";
-import { ReactComponent as PencilSigningIcon } from "@/assets/images/svg/pencil_signing.svg";
+import { ReactComponent as PencilIcon } from "@/assets/images/svg/pencil_wait.svg";
 import { ReactComponent as PersonIcon } from "@/assets/images/svg/person_icon.svg";
+import { ReactComponent as SigValidIcon } from "@/assets/images/svg/sig_valid.svg";
 import { useCommonHook } from "@/hook";
-import {
-  checkSignerStatus,
-  checkSignerWorkFlow,
-  convertTime,
-} from "@/utils/commonFunction";
+import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Divider } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -71,30 +65,30 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
         subtitle: participant.customReason ? participant.customReason : null,
       },
     ].filter((item) => item.subtitle !== null),
-    certificated: [
-      {
-        title: t("0-common.Signing Time"),
-        subtitle: participant.signedTime
-          ? convertTime(participant.signedTime)
-          : null,
-      },
-      {
-        title: t("0-common.Certificate issuer"),
-        subtitle: participant.issuer ? participant.issuer : null,
-      },
-      {
-        title: t("0-common.Certificate Owner"),
-        subtitle: participant.owner ? participant.owner : null,
-      },
-      {
-        title: t("0-common.Certificate validity period"),
-        subtitle: participant.validFrom
-          ? convertTime(participant.validFrom) +
-            " - " +
-            convertTime(participant.validTo)
-          : null,
-      },
-    ].filter((item) => item.subtitle !== null),
+    // certificated: [
+    //   {
+    //     title: t("0-common.Signing Time"),
+    //     subtitle: participant.signedTime
+    //       ? convertTime(participant.signedTime)
+    //       : null,
+    //   },
+    //   {
+    //     title: t("0-common.Certificate issuer"),
+    //     subtitle: participant.issuer ? participant.issuer : null,
+    //   },
+    //   {
+    //     title: t("0-common.Certificate Owner"),
+    //     subtitle: participant.owner ? participant.owner : null,
+    //   },
+    //   {
+    //     title: t("0-common.Certificate validity period"),
+    //     subtitle: participant.validFrom
+    //       ? convertTime(participant.validFrom) +
+    //         " - " +
+    //         convertTime(participant.validTo)
+    //       : null,
+    //   },
+    // ].filter((item) => item.subtitle !== null),
   };
 
   // const participantInfo = [
@@ -173,9 +167,10 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
         <Stack
           direction="row"
           alignItems={"center"}
+          height={60}
           sx={{
             position: "sticky",
-            top: 0,
+            top: 10,
             zIndex: 1,
             p: 2,
             backgroundColor: "#fff",
@@ -192,14 +187,8 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
               >
                 {participant.lastName} {participant.firstName}
               </Typography>
-              <Typography variant="h2" color={"signingtext2.main"}>
-                {participant.email}
-              </Typography>
             </Box>
           </Stack>
-          {/* <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton> */}
         </Stack>
 
         {participantInfo.info.length > 0 && (
@@ -214,7 +203,10 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
               sx={{
+                mt: "10px",
+                px: "20px",
                 backgroundColor: "accordingBackGround.main",
+                height: "25px",
                 minHeight: "unset !important",
                 "& .MuiAccordionSummary-content": {
                   alignItems: "center",
@@ -229,15 +221,17 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                     sx={{ fontSize: 16 }}
                     viewBox={"0 0 16 16"}
                   >
-                    <PencilSigningIcon />
+                    <SigValidIcon />
                   </SvgIcon>
-                  {/* <PencilSigningIcon /> */}
+                  {/* <SigValidIcon /> */}
                   <Typography
                     variant="h2"
-                    sx={{
-                      // color: check ? "textSuccess.main" : "signingtext1.main",
-                      color: "success.main",
-                    }}
+                    sx={
+                      {
+                        // color: check ? "textSuccess.main" : "signingtext1.main",
+                        // color: "success.main",
+                      }
+                    }
                   >
                     {t("signing.signature_valid")}
                   </Typography>
@@ -249,14 +243,12 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                     sx={{ fontSize: 16, color: "primary.main" }}
                     viewBox={"0 0 16 16"}
                   >
-                    <PencilSigningIcon />
+                    <PencilIcon />
                   </SvgIcon>
                   <Typography
                     variant="h2"
                     sx={{
-                      color: check
-                        ? "signingtextBlue.main"
-                        : "signingtext1.main",
+                      color: "signingtext1.main",
                     }}
                   >
                     {t("signing.wait_my_signature")}
@@ -278,38 +270,35 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                 </>
               )}
             </AccordionSummary>
-            <AccordionDetails sx={{ py: 2, px: 0 }}>
+            <AccordionDetails sx={{ p: 0 }}>
               {participantInfo.info.map((item, index) => (
-                <Box key={index} px={2}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: "signingtext1.main",
-                      fontWeight: 600,
-                      // mb: 1,
-                    }}
-                  >
-                    {item.title}
-                  </Typography>
+                <Stack
+                  key={index}
+                  px="20px"
+                  height={55}
+                  justifyContent={"center"}
+                >
+                  <Typography variant="h6">{item.title}</Typography>
                   <Typography
                     variant="h6"
                     sx={{
                       color: "signingtext2.main",
+                      fontWeight: 400,
                     }}
                   >
                     {item.subtitle}
                   </Typography>
-                  {index !== participantInfo.info.length - 1 && (
+                  {/* {index !== participantInfo.info.length - 1 && (
                     <Divider sx={{ my: 1 }} />
-                  )}
+                  )} */}
                   {/* <Divider sx={{ my: 1 }} /> */}
-                </Box>
+                </Stack>
               ))}
             </AccordionDetails>
           </Accordion>
         )}
 
-        {participantInfo.certificated.length > 0 && (
+        {/* {participantInfo.certificated.length > 0 && (
           <Accordion
             expanded={expanded === "certificated"}
             onChange={handleChangeShow("certificated")}
@@ -336,14 +325,12 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
               >
                 <LockIcon />
               </SvgIcon>
-              {/* <PencilSigningIcon /> */}
               <Typography
                 variant="h5"
                 sx={{
                   color: "signingtextBlue.main",
                 }}
               >
-                {/* Qualified electronic signature */}
                 {t("validation.sigValidTitle")}
               </Typography>
             </AccordionSummary>
@@ -355,7 +342,6 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                     sx={{
                       color: "signingtext1.main",
                       fontWeight: 600,
-                      // mb: 1,
                     }}
                   >
                     {item.title}
@@ -369,14 +355,11 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                     {item.subtitle}
                   </Typography>
                   <Divider sx={{ my: 1 }} />
-                  {/* {index !== participantInfo.certificated.length - 1 && (
-                    <Divider sx={{ my: 1 }} />
-                  )} */}
                 </Box>
               ))}
             </AccordionDetails>
           </Accordion>
-        )}
+        )} */}
       </Box>
     </Drawer>
   );
