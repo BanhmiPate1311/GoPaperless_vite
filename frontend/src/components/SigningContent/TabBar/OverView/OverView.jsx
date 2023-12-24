@@ -22,19 +22,14 @@ export const OverView = ({ workFlow }) => {
   // console.log("headerFooter: ", headerFooter?.data);
   return (
     <Box>
-      <Box sx={{ p: 2 }}>
-        <Stack
-          sx={{ fontWeight: "550" }}
-          direction="row"
-          spacing={1}
-          alignItems="center"
-        >
+      <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
+        <Stack direction="row" spacing={1} alignItems="center">
           <OverviewIcon />
           <Typography sx={{ fontWeight: "550" }} variant="h3">
             {t("0-common.overview")}
           </Typography>
         </Stack>
-      </Box>
+      </Stack>
 
       <Divider sx={{ color: "borderColor.main" }} />
       <Stack sx={{ px: 2, py: 1 }} spacing={1}>

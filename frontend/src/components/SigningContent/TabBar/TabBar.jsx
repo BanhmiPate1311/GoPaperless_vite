@@ -60,12 +60,25 @@ export const TabBar = ({ workFlow, signedInfo }) => {
   // );
 
   //1: signature, 3: seal
-  const sigList1 = signedInfo?.filter((sig) => sig.ppl_file_attr_type_id === 1);
-  console.log("sigList1: ", sigList1);
+  const sigList1 = signedInfo?.map((sig) => {
+    if (sig.ppl_file_attr_type_id === 1) {
+      return sig.value;
+    }
+  });
 
-  const eSealList1 = signedInfo?.filter(
-    (sig) => sig.ppl_file_attr_type_id === 3
-  );
+  const sigList2 = workFlow.participants
+    .filter((sig) => sig.signedType === "NORMAL")
+    .map((sig) => sig.certificate);
+
+  const eSealList1 = signedInfo?.filter((sig) => {
+    if (sig.ppl_file_attr_type_id === 3) {
+      return sig.value;
+    }
+  });
+
+  const eSealList2 = workFlow.participants
+    .filter((sig) => sig.signedType === "ESEAL")
+    .map((sig) => sig.certificate);
 
   // console.log("eSealList2: ", eSealList2);
 
@@ -94,7 +107,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
           borderLeft: 1,
           borderColor: "divider",
           width: "120px",
-          ".Mui-selected": {
+          "& .Mui-selected": {
             backgroundColor: "signingBackground.main",
             borderRadius: "10px",
             color: "textBlack.main",
@@ -168,10 +181,10 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Signatures signedInfo={sigList1} />
+        <Signatures sigList1={sigList1} sigList2={sigList2} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Seals signedInfo={eSealList1} />
+        <Seals eSealList1={eSealList1} eSealList2={eSealList2} />
       </TabPanel>
     </Box>
   );

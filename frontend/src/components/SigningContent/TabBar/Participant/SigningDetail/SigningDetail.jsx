@@ -172,7 +172,7 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
             position: "sticky",
             top: 10,
             zIndex: 1,
-            p: 2,
+            p: "20px",
             backgroundColor: "#fff",
           }}
         >

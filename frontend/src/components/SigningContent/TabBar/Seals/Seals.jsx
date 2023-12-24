@@ -10,20 +10,18 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "../Signatures/SignaturesInfo";
 
-export const Seals = ({ signedInfo }) => {
+export const Seals = ({ eSealList1, eSealList2 }) => {
+  const signedInfo = [...eSealList1, ...eSealList2];
   console.log("Seals: ", signedInfo);
   const { t } = useTranslation();
 
-  const signType = "Signature";
+  const signType = "eseal";
 
   const valueSign = [
     {
-      name: t("validation.sigValidTitle"),
+      name: t("validation.sealValidTitle"),
       value: signedInfo.filter((sig) => {
-        return (
-          sig.value?.warnings === undefined &&
-          sig.value.signature.is_valid === true
-        );
+        return sig.warnings === undefined && sig.signature.is_valid === true;
       }),
       icon: (
         <Stack
@@ -37,12 +35,12 @@ export const Seals = ({ signedInfo }) => {
           <ValidIcon sx={{ color: "#3B82F6", fontSize: "18px" }} />
         </Stack>
       ),
-      title: t("signing.signature_valid"),
+      title: t("validation.sealValidTitle2"),
     },
     {
       name: t("validation.indeterminateTitle"),
       value: signedInfo.filter((sig) => {
-        return sig.value?.warnings && sig.value.signature.is_valid === true;
+        return sig.warnings && sig.signature.is_valid === true;
       }),
       icon: (
         <Stack
@@ -56,14 +54,14 @@ export const Seals = ({ signedInfo }) => {
           <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} />
         </Stack>
       ),
-      title: t("signing.indeterminate signatures"),
+      title: t("validation.indeterminateSeal"),
     },
     {
-      name: t("validation.invalidSig"),
+      name: t("validation.invalidSeal"),
       value: signedInfo.filter((sig) => {
-        // console.log("invalid: ", sig.value.signature.is_valid);
+        // console.log("invalid: ", sig.signature.is_valid);
 
-        return sig.value.signature.is_valid === false;
+        return sig.signature.is_valid === false;
       }),
       icon: (
         <Stack
@@ -76,7 +74,7 @@ export const Seals = ({ signedInfo }) => {
           <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} />
         </Stack>
       ),
-      title: t("signing.invalid signatures"),
+      title: t("validation.invalidSeal"),
     },
   ];
 
@@ -85,7 +83,7 @@ export const Seals = ({ signedInfo }) => {
 
   return (
     <Box>
-      <Box sx={{ p: 2 }}>
+      <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <SealIcon />
           <Typography variant="h3" sx={{ fontWeight: "550" }}>
@@ -102,7 +100,7 @@ export const Seals = ({ signedInfo }) => {
             {signedInfo.length}
           </Avatar>
         </Stack>
-      </Box>
+      </Stack>
 
       {/* <Divider sx={{ color: "borderColor.main" }} /> */}
       {newSign.length === 0 ? (
@@ -137,7 +135,8 @@ export const Seals = ({ signedInfo }) => {
 };
 
 Seals.propTypes = {
-  signedInfo: PropTypes.array,
+  eSealList1: PropTypes.array,
+  eSealList2: PropTypes.array,
 };
 
 export default Seals;

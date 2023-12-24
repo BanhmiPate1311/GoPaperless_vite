@@ -39,6 +39,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
             alignItems: "center",
           },
           height: "25px",
+          px: "20px",
         }}
       >
         <Typography variant="h2">{sign.title}</Typography>
@@ -55,50 +56,47 @@ export const SignaturesInfo = ({ sign, signType }) => {
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0, width: "100%" }}>
         {sign.value.map((signvalue, index) => {
-          // console.log("signvalue: ", signvalue);
+          console.log("signvalue: ", signvalue);
           // const status = checkSignerStatus(participant, signerToken);
           // const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
-            <Box key={index} width="100%" height="50px">
-              <Stack
-                direction={"row"}
-                spacing={1}
-                backgroundColor="signingWFBackground.main"
-                // color={check ? "signingtextBlue.main" : ""}
-                sx={{
-                  px: 2,
-                }}
-                alignItems={"center"}
-                borderTop="1px solid"
-                borderBottom={
-                  index === sign.value.length - 1 ? "1px solid" : ""
-                }
-                borderColor="borderColor.main"
-                width="100%"
-                height={"100%"}
-              >
-                {sign.icon}
-                <Box flexGrow={1}>
-                  <Typography variant="h6">
-                    {signvalue.value.signature.certificate.subject.common_name}
-                  </Typography>
-                  <Typography variant="h2">{sign.name}</Typography>
-                </Box>
-                <IconButton onClick={() => toggleDrawer(index)}>
-                  <ShowDetailIcon />
-                </IconButton>
-                {isOpen[index] && (
-                  <SignatureDetail
-                    open={isOpen[index]}
-                    signDetail={signvalue}
-                    sign={sign}
-                    signType={signType}
-                    handleClose={() => toggleDrawer(index)}
-                  />
-                )}
-              </Stack>
-            </Box>
+            <Stack
+              key={index}
+              direction={"row"}
+              spacing={1}
+              backgroundColor="signingWFBackground.main"
+              // color={check ? "signingtextBlue.main" : ""}
+              sx={{
+                px: "20px",
+              }}
+              alignItems={"center"}
+              borderTop="1px solid"
+              borderBottom={index === sign.value.length - 1 ? "1px solid" : ""}
+              borderColor="borderColor.main"
+              width="100%"
+              height="50px"
+            >
+              {sign.icon}
+              <Box flexGrow={1}>
+                <Typography variant="h6">
+                  {signvalue.signature.certificate.subject.common_name}
+                </Typography>
+                <Typography variant="h2">{sign.name}</Typography>
+              </Box>
+              <IconButton onClick={() => toggleDrawer(index)}>
+                <ShowDetailIcon />
+              </IconButton>
+              {isOpen[index] && (
+                <SignatureDetail
+                  open={isOpen[index]}
+                  signDetail={signvalue}
+                  sign={sign}
+                  signType={signType}
+                  handleClose={() => toggleDrawer(index)}
+                />
+              )}
+            </Stack>
           );
         })}
       </AccordionDetails>

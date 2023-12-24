@@ -10,22 +10,20 @@ import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "./SignaturesInfo";
 import imageNotFound from "@/assets/images/noSignature.png";
 
-export const Signatures = ({ signedInfo }) => {
-  // console.log("signedInfo: ", signedInfo);
+export const Signatures = ({ sigList1, sigList2 }) => {
+  const signedInfo = [...sigList1, ...sigList2];
+  console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
 
-  const newSignedInfo = signedInfo.map((item) => item.value);
-  console.log("newSignedInfo: ", newSignedInfo);
+  // const newSignedInfo = signedInfo.map((item) => item.value);
+  // console.log("newSignedInfo: ", newSignedInfo);
   const signType = "Signature";
 
   const valueSign = [
     {
       name: t("validation.sigValidTitle"),
       value: signedInfo.filter((sig) => {
-        return (
-          sig.value?.warnings === undefined &&
-          sig.value.signature.is_valid === true
-        );
+        return sig.warnings === undefined && sig.signature.is_valid === true;
       }),
       icon: (
         <Stack
@@ -44,7 +42,7 @@ export const Signatures = ({ signedInfo }) => {
     {
       name: t("validation.indeterminateTitle"),
       value: signedInfo.filter((sig) => {
-        return sig.value?.warnings && sig.value.signature.is_valid === true;
+        return sig.warnings && sig.signature.is_valid === true;
       }),
       icon: (
         <Stack
@@ -63,9 +61,9 @@ export const Signatures = ({ signedInfo }) => {
     {
       name: t("validation.invalidSig"),
       value: signedInfo.filter((sig) => {
-        // console.log("invalid: ", sig.value.signature.is_valid);
+        // console.log("invalid: ", sig.signature.is_valid);
 
-        return sig.value.signature.is_valid === false;
+        return sig.signature.is_valid === false;
       }),
       icon: (
         <Stack
@@ -87,7 +85,7 @@ export const Signatures = ({ signedInfo }) => {
 
   return (
     <Box>
-      <Box sx={{ p: 2 }}>
+      <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <SignatureIcon />
           <Typography variant="h3" sx={{ fontWeight: "550" }}>
@@ -104,7 +102,7 @@ export const Signatures = ({ signedInfo }) => {
             {signedInfo.length}
           </Avatar>
         </Stack>
-      </Box>
+      </Stack>
 
       {/* <Divider sx={{ color: "borderColor.main" }} /> */}
       {newSign.length === 0 ? (
@@ -139,7 +137,8 @@ export const Signatures = ({ signedInfo }) => {
 };
 
 Signatures.propTypes = {
-  signedInfo: PropTypes.array,
+  sigList1: PropTypes.array,
+  sigList2: PropTypes.array,
 };
 
 export default Signatures;

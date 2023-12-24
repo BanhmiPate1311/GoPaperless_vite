@@ -18,20 +18,18 @@ import { useTranslation } from "react-i18next";
 export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
   const { t } = useTranslation();
   console.log("signature: ", signDetail);
-  const name = signDetail.value.signature.certificate.subject.common_name;
-  const warnings = signDetail.value.warnings ? signDetail.value.warnings : [];
-  const errors = signDetail.value.errors ? signDetail.value.errors : [];
+  const name = signDetail.signature.certificate.subject.common_name;
+  const warnings = signDetail.warnings ? signDetail.warnings : [];
+  const errors = signDetail.errors ? signDetail.errors : [];
 
-  const commonName = signDetail?.value?.signature?.certificate?.issuer
-    ?.common_name
-    ? signDetail?.value?.signature?.certificate?.issuer?.common_name
+  const commonName = signDetail.signature?.certificate?.issuer?.common_name
+    ? signDetail.signature?.certificate?.issuer?.common_name
     : "";
-  const organization = signDetail?.value?.signature?.certificate?.issuer
-    ?.organization
-    ? ", " + signDetail?.value?.signature?.certificate?.issuer?.organization
+  const organization = signDetail.signature?.certificate?.issuer?.organization
+    ? ", " + signDetail.signature?.certificate?.issuer?.organization
     : "";
-  const country = signDetail?.value?.signature?.certificate?.issuer?.country
-    ? ", " + signDetail?.value?.signature?.certificate?.issuer?.country
+  const country = signDetail.signature?.certificate?.issuer?.country
+    ? ", " + signDetail.signature?.certificate?.issuer?.country
     : "";
 
   //   const signTitle = signType + " is valid";
@@ -49,8 +47,8 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
     certificated: [
       {
         title: t("0-common.Signing Time"),
-        subtitle: signDetail.value.signature.signing_time
-          ? convertTime(signDetail.value.signature.signing_time)
+        subtitle: signDetail.signature.signing_time
+          ? convertTime(signDetail.signature.signing_time)
           : null,
       },
       {
@@ -59,16 +57,16 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
       },
       {
         title: t("0-common.Certificate Owner"),
-        subtitle: signDetail.value.signature.certificate.subject.common_name
-          ? signDetail.value.signature.certificate.subject.common_name
+        subtitle: signDetail.signature.certificate.subject.common_name
+          ? signDetail.signature.certificate.subject.common_name
           : null,
       },
       {
         title: t("0-common.Certificate validity period"),
         subtitle:
-          convertTime(signDetail.value.signature.certificate.valid_from) +
+          convertTime(signDetail.signature.certificate.valid_from) +
           " - " +
-          convertTime(signDetail.value.signature.certificate.valid_to),
+          convertTime(signDetail.signature.certificate.valid_to),
       },
     ].filter((item) => item.subtitle !== null),
   };
@@ -86,25 +84,27 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
         },
       }}
     >
-      <Box width="350px">
-        <Stack
-          direction="row"
-          alignItems={"center"}
-          sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1,
-            p: 2.5,
-            backgroundColor: "#fff",
-            height: "60px",
-          }}
-          spacing={1}
-        >
-          <SignatureIcon />
-          <Typography variant="h3" sx={{ fontWeight: "700" }}>
-            {name}
-          </Typography>
-        </Stack>
+      <Box width="350px" mt="10px">
+        <Box px="20px">
+          <Stack
+            direction="row"
+            alignItems={"center"}
+            height={60}
+            sx={{
+              position: "sticky",
+              top: 10,
+              zIndex: 1,
+              p: 2,
+              backgroundColor: "#fff",
+            }}
+            gap={1}
+          >
+            <SignatureIcon />
+            <Typography variant="h3" sx={{ fontWeight: "700" }}>
+              {name}
+            </Typography>
+          </Stack>
+        </Box>
         <Divider />
         <Stack
           direction="row"
@@ -145,19 +145,18 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
             </Box>
           </Stack>
         </Stack>
-        <Divider />
+        {/* <Divider sx={{ borderColor: "borderColor.main" }} /> */}
         {warnings.length > 0 && (
           <Accordion
             disableGutters
             expanded={expanded === "warnings"}
             onChange={handleChangeShow("warnings")}
-            sx={{
-              boxShadow: "none",
-              borderBottom: "1px solid #ccc",
-              margin: 0,
-            }}
-
-            // className="content-signature"
+            elevation={0}
+            // sx={{
+            //   boxShadow: "none",
+            //   borderBottom: "1px solid #ccc",
+            //   margin: 0,
+            // }}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -167,17 +166,15 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                 backgroundColor: "accordingBackGround.main",
                 minHeight: "unset !important",
                 "& .MuiAccordionSummary-content": {
-                  justifyContent: "space-between",
+                  // justifyContent: "space-between",
                   alignItems: "center",
                 },
                 height: "25px",
+                px: "20px",
               }}
             >
               <WarningIcon2 />
-              <Typography
-                variant="h2"
-                sx={{ width: "90%", flexShrink: 0, pl: "10px" }}
-              >
+              <Typography variant="h2" sx={{ pl: "20px" }}>
                 {t("validation.sigWarnings")}
               </Typography>
             </AccordionSummary>
@@ -187,9 +184,9 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                   <AccordionDetails
                     sx={{
                       fontSize: "14px",
-                      padding: "15px 24px",
-                      width: "100%",
-                      py: 1,
+                      padding: "11px 20px",
+                      // px: "20px",
+                      // width: "100%",
                       // borderBottom: "1px solid #ccc",
                     }}
                   >
@@ -198,7 +195,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                   {i !== warnings.length - 1 && (
                     <Divider
                       sx={{
-                        width: "calc(100% - 24px)",
+                        width: "calc(100% - 20px)",
                         marginLeft: "auto",
                         height: "2px",
                         // bgcolor: "blueviolet",
@@ -214,15 +211,9 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
         {errors.length > 0 && (
           <Accordion
             disableGutters
-            expanded={expanded === "errors"}
-            onChange={handleChangeShow("errors")}
-            sx={{
-              boxShadow: "none",
-              borderBottom: "1px solid #ccc",
-              margin: 0,
-            }}
-
-            // className="content-signature"
+            expanded={expanded === "warnings"}
+            onChange={handleChangeShow("warnings")}
+            elevation={0}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -232,17 +223,15 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                 backgroundColor: "accordingBackGround.main",
                 minHeight: "unset !important",
                 "& .MuiAccordionSummary-content": {
-                  justifyContent: "space-between",
+                  // justifyContent: "space-between",
                   alignItems: "center",
                 },
                 height: "25px",
+                px: "20px",
               }}
             >
               <ErrorIcon />
-              <Typography
-                variant="h2"
-                sx={{ width: "90%", flexShrink: 0, pl: "10px" }}
-              >
+              <Typography variant="h2" sx={{ pl: "20px" }}>
                 {t("validation.sigErrors")}
               </Typography>
             </AccordionSummary>
@@ -252,9 +241,9 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                   <AccordionDetails
                     sx={{
                       fontSize: "14px",
-                      padding: "15px 24px",
-                      width: "100%",
-                      py: 1,
+                      padding: "11px 20px",
+                      // width: "100%",
+                      // py: 1,
                     }}
                   >
                     {val.message}
@@ -262,7 +251,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                   {i !== errors.length - 1 && (
                     <Divider
                       sx={{
-                        width: "calc(100% - 24px)",
+                        width: "calc(100% - 20px)",
                         marginLeft: "auto",
                         height: "2px",
                         // bgcolor: "blueviolet",
@@ -274,24 +263,24 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
             })}
           </Accordion>
         )}
-
-        <Box p={2}>
+        <Divider sx={{ borderColor: "borderColor.main" }} />
+        <Box px="20px">
           {signArray.certificated.map((step, index) => (
-            <Box key={index}>
+            <Box key={index} py="10px">
               <Typography variant="h6" fontWeight={"bold"}>
                 {step.title}
               </Typography>
               <Typography variant="h6" color="signingtext2.main">
                 {step.subtitle}
               </Typography>
-              <Divider
+              {/* <Divider
                 sx={{
                   // width: "calc(100% - 24px)",
                   my: 2,
                   height: "2px",
                   // bgcolor: "blueviolet",
                 }}
-              />
+              /> */}
             </Box>
           ))}
         </Box>
