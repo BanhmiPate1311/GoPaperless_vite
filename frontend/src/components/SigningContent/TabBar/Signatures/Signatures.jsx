@@ -12,7 +12,7 @@ import imageNotFound from "@/assets/images/noSignature.png";
 
 export const Signatures = ({ sigList1, sigList2 }) => {
   const signedInfo = [...sigList1, ...sigList2];
-  console.log("signedInfo: ", signedInfo);
+  // console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
 
   // const newSignedInfo = signedInfo.map((item) => item.value);
@@ -81,7 +81,7 @@ export const Signatures = ({ sigList1, sigList2 }) => {
   ];
 
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
-  console.log("newSign: ", newSign);
+  // console.log("newSign: ", newSign);
 
   return (
     <Box>

@@ -370,6 +370,9 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                     handleSubmit(handleFormSubmit)();
                   }
                 }}
+                onChange={() => {
+                  console.log("change");
+                }}
               />
             </Box>
             <Stack width={"100%"}>

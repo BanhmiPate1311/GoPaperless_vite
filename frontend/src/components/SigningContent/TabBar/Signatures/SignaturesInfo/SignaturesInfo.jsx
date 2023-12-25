@@ -56,7 +56,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0, width: "100%" }}>
         {sign.value.map((signvalue, index) => {
-          console.log("signvalue: ", signvalue);
+          // console.log("signvalue: ", signvalue);
           // const status = checkSignerStatus(participant, signerToken);
           // const check = checkSignerWorkFlow(participant, signerToken);
 

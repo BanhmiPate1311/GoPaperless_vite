@@ -60,21 +60,26 @@ export const TabBar = ({ workFlow, signedInfo }) => {
   // );
 
   //1: signature, 3: seal
-  const sigList1 = signedInfo?.map((sig) => {
-    if (sig.ppl_file_attr_type_id === 1) {
-      return sig.value;
-    }
-  });
+  const sigList1 = signedInfo
+    ?.map((sig) => {
+      if (sig.ppl_file_attr_type_id === 1) {
+        return sig.value;
+      }
+    })
+    .filter((value) => value !== undefined);
+  // console.log("sigList1: ", sigList1);
 
   const sigList2 = workFlow.participants
     .filter((sig) => sig.signedType === "NORMAL")
     .map((sig) => sig.certificate);
 
-  const eSealList1 = signedInfo?.filter((sig) => {
-    if (sig.ppl_file_attr_type_id === 3) {
-      return sig.value;
-    }
-  });
+  const eSealList1 = signedInfo
+    ?.map((sig) => {
+      if (sig.ppl_file_attr_type_id === 3) {
+        return sig.value;
+      }
+    })
+    .filter((value) => value !== undefined);
 
   const eSealList2 = workFlow.participants
     .filter((sig) => sig.signedType === "ESEAL")
@@ -110,7 +115,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
           "& .Mui-selected": {
             backgroundColor: "signingBackground.main",
             borderRadius: "10px",
-            color: "textBlack.main",
+            color: "signingtext1.main",
           },
           ".MuiTab-root ": {
             textTransform: "none",

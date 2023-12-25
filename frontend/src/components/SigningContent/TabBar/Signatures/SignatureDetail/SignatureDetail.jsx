@@ -137,10 +137,11 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                 textTransform="uppercase"
                 variant="h3"
               >
-                {sign.name}
+                {sign.title}
               </Typography>
               <Typography variant="h2">
                 {t("validation.signSubTitle")}
+                {/* {sign.name} */}
               </Typography>
             </Box>
           </Stack>

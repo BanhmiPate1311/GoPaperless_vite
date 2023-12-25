@@ -248,7 +248,7 @@
     "sigTime": "Signing time",
     "sigTimestamp": "Qualified timestamp",
     "sigType": "Certificate type",
-    "sigValidTitle": "Qualified Electronic Signature",
+    "sigValidTitle": "Advanced Electronic Signature",
     "sigValidTitle2": "Signature is valid",
     "sigWarnings": "Signature warnings",
     "tab1": "Overview",
