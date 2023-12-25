@@ -212,8 +212,8 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
         {errors.length > 0 && (
           <Accordion
             disableGutters
-            expanded={expanded === "warnings"}
-            onChange={handleChangeShow("warnings")}
+            expanded={expanded === "error"}
+            onChange={handleChangeShow("error")}
             elevation={0}
           >
             <AccordionSummary
