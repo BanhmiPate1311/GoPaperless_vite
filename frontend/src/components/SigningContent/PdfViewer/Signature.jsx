@@ -22,7 +22,7 @@ import { SigningForm2 } from "../../modal1";
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("page: ", page);
   // console.log("index: ", index);
-  // console.log("signatureData: ", signatureData);
+  console.log("signatureData: ", signatureData);
   const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
 
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
@@ -31,6 +31,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowModalUsb, setShowModalUsb] = useState([false]);
   const [isShowEidModal, setShowEidModal] = useState([false]);
   const [isShowEidModalSign, setShowEidModalSign] = useState([false]);
+  const [isShowSignatureDetail, setShowSignatureDetail] = useState([false]);
 
   const [isShowModal2, setShowModal2] = useState([false]);
 
@@ -262,7 +263,10 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         },
       };
     },
-    canDrag: signerId === signatureData.field_name && !isSetPos,
+    canDrag:
+      signerId === signatureData.field_name &&
+      !isSetPos &&
+      signatureData.verification === undefined,
 
     end: (item, monitor) => {
       setShowTopbar(true);
@@ -372,6 +376,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             top: signatureData.dimension?.y + "%",
             left: signatureData.dimension?.x + "%",
             zIndex: 100,
+            opacity: signatureData.verification === undefined ? 1 : 0.5,
           }}
           // minConstraints={[
           //   signatureData.dimension?.width * (pdfPage.width / 100),
@@ -466,10 +471,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              // opacity: 0.7,
+
               border: "2px dashed",
               borderColor:
-                signatureData.signed || signerId !== signatureData.field_name
+                signatureData.verification ||
+                signerId !== signatureData.field_name
                   ? "black"
                   : "#EAB308",
             }}
@@ -480,7 +486,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               setShowTopbar(false);
             }}
             onClick={(e) => {
-              if (signatureData.signed || signerId !== signatureData.field_name)
+              if (
+                // signatureData.verification ||
+                // signerId !== signatureData.field_name
+                signatureData.verification
+              )
                 return;
               if (
                 e.target.id === "drag" ||
@@ -513,7 +523,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                   color: "#545454",
                   // cursor: "pointer",
                 }}
-                onClick={() => handleOpenSigningForm(index)}
+                // onClick={() => handleOpenSigningForm(index)}
               />
             </Box>
           </Box>

@@ -87,6 +87,7 @@ export const SigningForm2 = ({
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
+  // console.log("check seal: ", checkEseal());
 
   const signingOptions = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.keys(item)[0])

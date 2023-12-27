@@ -886,7 +886,7 @@ public class RsspService {
             String dataResponse = gatewayAPI.getSignatureId(signatureName, fileName, content, digest);
 
             JsonNode dataNode = objectMapper.readTree(dataResponse);
-            String signatureId = dataNode.get("signature").get("id").asText();
+            String signatureId = dataNode.get("id").asText();
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary

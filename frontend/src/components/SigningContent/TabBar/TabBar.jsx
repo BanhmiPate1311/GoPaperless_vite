@@ -103,7 +103,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
     >
       <Tabs
         orientation="vertical"
-        variant="scrollable"
+        // variant="scrollable"
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"

@@ -39,7 +39,7 @@ export const PdfViewer = ({ workFlow }) => {
   }, [workFlow]);
 
   // eslint-disable-next-line no-unused-vars
-  const { data: getField } = useQuery({
+  const { data: signatures } = useQuery({
     queryKey: ["getField"],
     queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
     select: (data) => {
@@ -50,40 +50,44 @@ export const PdfViewer = ({ workFlow }) => {
         .map((item) => {
           // eslint-disable-next-line no-unused-vars
           const { verification, ...repairedSignature } = item;
-          return { ...repairedSignature, workFlowId: workFlow.workFlowId };
+          return {
+            verification,
+            ...repairedSignature,
+            workFlowId: workFlow.workFlowId,
+          };
         });
       return signatures;
     },
   });
 
-  // console.log("getField: ", getField);
+  console.log("getField: ", signatures);
 
-  const { data: signatures } = useQuery({
-    queryKey: ["verifySignatures"],
-    queryFn: () =>
-      fpsService.getVerification({ documentId: workFlow.documentId }),
-    select: (data) => {
-      // console.log("data: ", data);
-      const newData = [...data.data];
-      let newresult = [...getField];
-      if (newData.length === 0) return newresult;
-      newData.forEach((signatureVeriInfo) => {
-        let signatureIndex = newresult.findIndex(
-          (signature) => signature.field_name === signatureVeriInfo.field_name
-        );
+  // const { data: signatures } = useQuery({
+  //   queryKey: ["verifySignatures"],
+  //   queryFn: () =>
+  //     fpsService.getVerification({ documentId: workFlow.documentId }),
+  //   select: (data) => {
+  //     // console.log("data: ", data);
+  //     const newData = [...data.data];
+  //     let fieldResult = [...getField];
+  //     if (newData.length === 0) return fieldResult;
+  //     newData.forEach((signatureVeriInfo) => {
+  //       let signatureIndex = fieldResult.findIndex(
+  //         (signature) => signature.field_name === signatureVeriInfo.field_name
+  //       );
 
-        if (signatureIndex === -1) return;
-        newresult[signatureIndex] = {
-          ...newresult[signatureIndex],
-          ...signatureVeriInfo,
-          signed: true,
-        };
-        // queryClient.setQueryData(["getField"], []);
-      });
-      return newresult;
-    },
-    retry: false,
-  });
+  //       if (signatureIndex === -1) return;
+  //       fieldResult[signatureIndex] = {
+  //         ...fieldResult[signatureIndex],
+  //         ...signatureVeriInfo,
+  //         signed: true,
+  //       };
+  //       // queryClient.setQueryData(["getField"], []);
+  //     });
+  //     return fieldResult;
+  //   },
+  //   retry: false,
+  // });
   // console.log("signatures: ", signatures);
 
   // queryClient.setQueryData(["signatures"], signatures);

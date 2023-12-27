@@ -371,7 +371,8 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                   }
                 }}
                 onChange={() => {
-                  console.log("change");
+                  setErrorApi(null);
+                  // console.log("change");
                 }}
               />
             </Box>

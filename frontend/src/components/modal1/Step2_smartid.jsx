@@ -109,6 +109,8 @@ export const Step2_smartid = ({
         return t("signing.passport");
       case "PERSONAL-ID":
         return t("signing.identity_card");
+      case "TAX-CODE":
+        return t("signing.tax_code");
     }
   };
 

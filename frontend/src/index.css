@@ -56,6 +56,8 @@ video {
   transform: translate(-50%, -50%);
 }
 
+/* authorize code input */
+
 .inputStyle {
   width: 43px !important;
   height: 43px;
@@ -71,6 +73,10 @@ video {
   justify-content: center;
 }
 
+/* end of authorize code input */
+
+/* disable arrow input number */
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -82,3 +88,5 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* end of disable arrow input number */

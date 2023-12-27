@@ -194,7 +194,8 @@
     "wait_signature": "Đang chờ chữ ký",
     "passport": "Mã hộ chiếu",
     "identity_card": "Mã chứng minh nhân dân",
-    "no_cert_found": "Không tìm thấy chứng thư số"
+    "no_cert_found": "Không tìm thấy chứng thư số",
+    "tax_code": "Mã số thuế"
   },
   "signingForm": {
     "step1": "Chọn nhà cung cấp dịch vụ ký từ xa",
@@ -237,6 +238,8 @@
     "sealValidTitle": "Con dấu điện tử tiên tiến",
     "sealValidTitle2": "Con dấu hợp lệ",
     "sealScope": "Phạm vi con dấu",
+    "sealWarnings": "Cảnh báo con dấu",
+    "sealErrors": "Lỗi con dấu",
     "sigErrors": "Lỗi chữ ký",
     "sigFormat": "Định dạng chữ ký",
     "sigIssuer": "Nhà phát hành chứng thư số",

@@ -54,8 +54,8 @@ export const SignatureDetail = ({
     certificated: [
       {
         title: t("0-common.Signing Time"),
-        subtitle: signDetail.signingTime
-          ? convertTime(signDetail.signingTime)
+        subtitle: signDetail.signing_time
+          ? convertTime(signDetail.signing_time)
           : null,
       },
       {
@@ -83,9 +83,9 @@ export const SignatureDetail = ({
       {
         title: t("0-common.Certificate validity period"),
         subtitle:
-          convertTime(signDetail.certificate.validFrom) +
+          convertTime(signDetail.certificate.valid_from) +
           " - " +
-          convertTime(signDetail.certificate.validTo),
+          convertTime(signDetail.certificate.valid_to),
       },
     ].filter((item) => item.subtitle !== null),
   };
@@ -195,7 +195,9 @@ export const SignatureDetail = ({
             >
               <WarningIcon2 />
               <Typography variant="h2" sx={{ pl: "20px" }}>
-                {t("validation.sigWarnings")}
+                {signType === "Signature"
+                  ? t("validation.sigWarnings")
+                  : t("validation.sealWarnings")}
               </Typography>
             </AccordionSummary>
             {warnings.map((val, i) => {
@@ -252,7 +254,9 @@ export const SignatureDetail = ({
             >
               <ErrorIcon />
               <Typography variant="h2" sx={{ pl: "20px" }}>
-                {t("validation.sigErrors")}
+                {signType === "Signature"
+                  ? t("validation.sigErrors")
+                  : t("validation.sealErrors")}
               </Typography>
             </AccordionSummary>
             {errors.map((val, i) => {

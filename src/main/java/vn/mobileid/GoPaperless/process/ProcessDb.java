@@ -301,7 +301,7 @@ public class ProcessDb {
                 pplFileDetail.setPpl_file_id(rs.getInt("PPL_FILE_ID"));
                 pplFileDetail.setPpl_file_attr_type_id(rs.getInt("PPL_FILE_ATTR_TYPE_ID"));
 //                pplFileDetail.setValue(rs.getString("VALUE"));
-                pplFileDetail.setValue(objectMapper.readValue(Constants.JSON_VALUE, SignatureValidation.class));
+                pplFileDetail.setValue(objectMapper.readValue(rs.getString("VALUE"), SignatureValidation.class));
                 pplFileDetail.setHmac(rs.getString("HMAC"));
                 pplFileDetail.setCreated_by(rs.getString("CREATED_BY"));
                 pplFileDetail.setCreated_at(rs.getDate("CREATED_AT"));

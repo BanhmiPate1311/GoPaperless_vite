@@ -687,7 +687,7 @@ public class ElectronicService {
             String dataResponse = gatewayAPI.getSignatureId(signatureName, fileName, content, digest);
 
             JsonNode dataNode = objectMapper.readTree(dataResponse);
-            String signatureId = dataNode.get("signature").get("id").asText();
+            String signatureId = dataNode.get("id").asText();
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
