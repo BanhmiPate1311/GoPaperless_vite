@@ -1,12 +1,14 @@
 package vn.mobileid.GoPaperless.model.apiModel;
 
+import vn.mobileid.GoPaperless.dto.apiDto.SignatureValidation;
+
 import java.sql.Date;
 
 public class PplFileDetail {
     private int id;
     private int ppl_file_id;
     private int ppl_file_attr_type_id;
-    private String value;
+    private SignatureValidation value;
     private String hmac;
     private String created_by;
     private Date created_at;
@@ -37,11 +39,11 @@ public class PplFileDetail {
         this.ppl_file_attr_type_id = ppl_file_attr_type_id;
     }
 
-    public String getValue() {
+    public SignatureValidation getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(SignatureValidation value) {
         this.value = value;
     }
 

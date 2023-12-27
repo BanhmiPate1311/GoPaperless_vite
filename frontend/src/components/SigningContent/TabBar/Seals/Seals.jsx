@@ -12,6 +12,7 @@ import { SignaturesInfo } from "../Signatures/SignaturesInfo";
 
 export const Seals = ({ eSealList1, eSealList2 }) => {
   const signedInfo = [...eSealList1, ...eSealList2];
+  // const signedInfo = [...eSealList1];
   console.log("Seals: ", signedInfo);
   const { t } = useTranslation();
 
@@ -21,7 +22,7 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
     {
       name: t("validation.sealValidTitle"),
       value: signedInfo.filter((sig) => {
-        return sig.warnings === undefined && sig.signature.is_valid === true;
+        return sig.indication === "TOTAL_PASSED" && sig.is_valid === true;
       }),
       icon: (
         <Stack
@@ -40,7 +41,7 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
     {
       name: t("validation.indeterminateTitle"),
       value: signedInfo.filter((sig) => {
-        return sig.warnings && sig.signature.is_valid === true;
+        return sig.indication === "INDETERMINATE";
       }),
       icon: (
         <Stack
@@ -61,7 +62,10 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
       value: signedInfo.filter((sig) => {
         // console.log("invalid: ", sig.signature.is_valid);
 
-        return sig.signature.is_valid === false;
+        return (
+          sig.indication !== "INDETERMINATE" &&
+          sig.indication !== "TOTAL_PASSED"
+        );
       }),
       icon: (
         <Stack

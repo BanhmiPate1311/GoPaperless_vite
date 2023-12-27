@@ -15,21 +15,28 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
+export const SignatureDetail = ({
+  open,
+  signDetail,
+  sign,
+  handleClose,
+  signType,
+}) => {
+  console.log("signType: ", signType);
   const { t } = useTranslation();
   console.log("signature: ", signDetail);
-  const name = signDetail.signature.certificate.subject.common_name;
-  const warnings = signDetail.warnings ? signDetail.warnings : [];
-  const errors = signDetail.errors ? signDetail.errors : [];
+  const name = signDetail.certificate.subject.CN[0];
+  const warnings = signDetail.warnings;
+  const errors = signDetail.errors;
 
-  const commonName = signDetail.signature?.certificate?.issuer?.common_name
-    ? signDetail.signature?.certificate?.issuer?.common_name
+  const commonName = signDetail.certificate?.issuer?.CN[0]
+    ? signDetail?.certificate?.issuer?.CN[0]
     : "";
-  const organization = signDetail.signature?.certificate?.issuer?.organization
-    ? ", " + signDetail.signature?.certificate?.issuer?.organization
+  const organization = signDetail.certificate?.issuer?.O[0]
+    ? ", " + signDetail.certificate?.issuer?.O[0]
     : "";
-  const country = signDetail.signature?.certificate?.issuer?.country
-    ? ", " + signDetail.signature?.certificate?.issuer?.country
+  const country = signDetail.certificate?.issuer?.C[0]
+    ? ", " + signDetail.certificate?.issuer?.C[0]
     : "";
 
   //   const signTitle = signType + " is valid";
@@ -47,26 +54,38 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
     certificated: [
       {
         title: t("0-common.Signing Time"),
-        subtitle: signDetail.signature.signing_time
-          ? convertTime(signDetail.signature.signing_time)
+        subtitle: signDetail.signingTime
+          ? convertTime(signDetail.signingTime)
           : null,
+      },
+      {
+        title:
+          signType === "Signature"
+            ? t("validation.sigFormat")
+            : t("validation.sealFormat"),
+        subtitle: signDetail.format,
+      },
+      {
+        title:
+          signType === "Signature"
+            ? t("validation.sigScope")
+            : t("validation.sealScope"),
+        subtitle: signDetail.scope.name,
+      },
+      {
+        title: t("0-common.Certificate Owner"),
+        subtitle: commonName ? commonName : null,
       },
       {
         title: t("0-common.Certificate issuer"),
         subtitle: commonName + organization + country,
       },
       {
-        title: t("0-common.Certificate Owner"),
-        subtitle: signDetail.signature.certificate.subject.common_name
-          ? signDetail.signature.certificate.subject.common_name
-          : null,
-      },
-      {
         title: t("0-common.Certificate validity period"),
         subtitle:
-          convertTime(signDetail.signature.certificate.valid_from) +
+          convertTime(signDetail.certificate.validFrom) +
           " - " +
-          convertTime(signDetail.signature.certificate.valid_to),
+          convertTime(signDetail.certificate.validTo),
       },
     ].filter((item) => item.subtitle !== null),
   };
@@ -191,7 +210,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                       // borderBottom: "1px solid #ccc",
                     }}
                   >
-                    {val.message}
+                    {val.value}
                   </AccordionDetails>
                   {i !== warnings.length - 1 && (
                     <Divider
@@ -247,7 +266,7 @@ export const SignatureDetail = ({ open, signDetail, sign, handleClose }) => {
                       // py: 1,
                     }}
                   >
-                    {val.message}
+                    {val.value}
                   </AccordionDetails>
                   {i !== errors.length - 1 && (
                     <Divider

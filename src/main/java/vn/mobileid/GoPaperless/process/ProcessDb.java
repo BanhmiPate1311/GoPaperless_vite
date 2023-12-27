@@ -1,7 +1,13 @@
 package vn.mobileid.GoPaperless.process;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import vn.mobileid.GoPaperless.dto.apiDto.Constants;
+import vn.mobileid.GoPaperless.dto.apiDto.SignatureValidation;
 import vn.mobileid.GoPaperless.model.apiModel.*;
 import vn.mobileid.GoPaperless.utils.CommonFunction;
 import vn.mobileid.GoPaperless.utils.Difinitions;
@@ -275,6 +281,8 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         ResultSet rs = null;
 
+        ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+
         try {
             System.out.println("pPPL_FILE_ID: " + pPPL_FILE_ID);
             conns = OpenDatabase();
@@ -292,7 +300,8 @@ public class ProcessDb {
                 pplFileDetail.setId(rs.getInt("ID"));
                 pplFileDetail.setPpl_file_id(rs.getInt("PPL_FILE_ID"));
                 pplFileDetail.setPpl_file_attr_type_id(rs.getInt("PPL_FILE_ATTR_TYPE_ID"));
-                pplFileDetail.setValue(rs.getString("VALUE"));
+//                pplFileDetail.setValue(rs.getString("VALUE"));
+                pplFileDetail.setValue(objectMapper.readValue(Constants.JSON_VALUE, SignatureValidation.class));
                 pplFileDetail.setHmac(rs.getString("HMAC"));
                 pplFileDetail.setCreated_by(rs.getString("CREATED_BY"));
                 pplFileDetail.setCreated_at(rs.getDate("CREATED_AT"));
@@ -837,47 +846,47 @@ public class ProcessDb {
         return convrtr;
     }
 
-    public String USP_GW_PPL_FILE_DETAIL_GET_FROM_UPLOAD_TOKEN(String pUPLOAD_TOKEN, List<PplFileDetail> listPplFileDetail) throws Exception {
-        String convrtr = "1";
-        Connection conns = null;
-        CallableStatement proc_stmt = null;
-        ResultSet rs = null;
-
-        try {
-            System.out.println("pUPLOAD_TOKEN: " + pUPLOAD_TOKEN);
-            conns = OpenDatabase();
-            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_FILE_DETAIL_GET_FROM_UPLOAD_TOKEN(?,?) }");
-            proc_stmt.setString("pUPLOAD_TOKEN", pUPLOAD_TOKEN);
-            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
-
-            proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
-
-            rs = proc_stmt.executeQuery();
-            while (rs.next()) {
-                PplFileDetail pplFileDetail = new PplFileDetail();
-                pplFileDetail.setId(rs.getInt("ID"));
-                pplFileDetail.setPpl_file_id(rs.getInt("PPL_FILE_ID"));
-                pplFileDetail.setPpl_file_attr_type_id(rs.getInt("PPL_FILE_ATTR_TYPE_ID"));
-                pplFileDetail.setValue(rs.getString("VALUE"));
-                pplFileDetail.setHmac(rs.getString("HMAC"));
-                pplFileDetail.setCreated_by(rs.getString("CREATED_BY"));
-                pplFileDetail.setCreated_at(rs.getDate("CREATED_AT"));
-                pplFileDetail.setLast_modified_by(rs.getString("LAST_MODIFIED_BY"));
-                pplFileDetail.setLast_modified_at(rs.getDate("LAST_MODIFIED_AT"));
-                listPplFileDetail.add(pplFileDetail);
-            }
-            return convrtr;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        } finally {
-            if (proc_stmt != null) {
-                proc_stmt.close();
-            }
-            Connection[] temp_connection = new Connection[]{conns};
-            CloseDatabase(temp_connection);
-        }
-    }
+//    public String USP_GW_PPL_FILE_DETAIL_GET_FROM_UPLOAD_TOKEN(String pUPLOAD_TOKEN, List<PplFileDetail> listPplFileDetail) throws Exception {
+//        String convrtr = "1";
+//        Connection conns = null;
+//        CallableStatement proc_stmt = null;
+//        ResultSet rs = null;
+//
+//        try {
+//            System.out.println("pUPLOAD_TOKEN: " + pUPLOAD_TOKEN);
+//            conns = OpenDatabase();
+//            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_FILE_DETAIL_GET_FROM_UPLOAD_TOKEN(?,?) }");
+//            proc_stmt.setString("pUPLOAD_TOKEN", pUPLOAD_TOKEN);
+//            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+//
+//            proc_stmt.execute();
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+//
+//            rs = proc_stmt.executeQuery();
+//            while (rs.next()) {
+//                PplFileDetail pplFileDetail = new PplFileDetail();
+//                pplFileDetail.setId(rs.getInt("ID"));
+//                pplFileDetail.setPpl_file_id(rs.getInt("PPL_FILE_ID"));
+//                pplFileDetail.setPpl_file_attr_type_id(rs.getInt("PPL_FILE_ATTR_TYPE_ID"));
+//                pplFileDetail.setValue(rs.getString("VALUE"));
+//                pplFileDetail.setHmac(rs.getString("HMAC"));
+//                pplFileDetail.setCreated_by(rs.getString("CREATED_BY"));
+//                pplFileDetail.setCreated_at(rs.getDate("CREATED_AT"));
+//                pplFileDetail.setLast_modified_by(rs.getString("LAST_MODIFIED_BY"));
+//                pplFileDetail.setLast_modified_at(rs.getDate("LAST_MODIFIED_AT"));
+//                listPplFileDetail.add(pplFileDetail);
+//            }
+//            return convrtr;
+//        } catch (Exception e) {
+//            throw new Exception(e.getMessage());
+//        } finally {
+//            if (proc_stmt != null) {
+//                proc_stmt.close();
+//            }
+//            Connection[] temp_connection = new Connection[]{conns};
+//            CloseDatabase(temp_connection);
+//        }
+//    }
 
     public String USP_GW_PPL_FILE_VALIDATION_UPDATE_POSTBACK_STATUS(int pFILE_VALIDATION_ID, int pPOSTBACK_STATUS, String pLAST_MODIFIED_BY) throws Exception {
         String convrtr = "1";

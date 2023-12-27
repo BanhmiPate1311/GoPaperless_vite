@@ -13,7 +13,7 @@ import { useState } from "react";
 import { SignatureDetail } from "../SignatureDetail";
 
 export const SignaturesInfo = ({ sign, signType }) => {
-  // console.log("sign: ", sign);
+  console.log("sign: ", sign);
   const [isOpen, setIsOpen] = useState([false]);
   // console.log("isOpen: ", isOpen);
   // let name = sign.name + " " + signType;
@@ -80,7 +80,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
               {sign.icon}
               <Box flexGrow={1}>
                 <Typography variant="h6">
-                  {signvalue.signature.certificate.subject.common_name}
+                  {signvalue.certificate.subject.CN[0]}
                 </Typography>
                 <Typography variant="h2">{sign.name}</Typography>
               </Box>

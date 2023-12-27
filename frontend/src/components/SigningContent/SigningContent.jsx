@@ -22,17 +22,17 @@ export const SigningContent = ({ workFlow }) => {
     queryKey: ["getSignedInfo"],
     queryFn: () => apiService.getSignedInfo(workFlow),
 
-    select: (data) => {
-      const newData = [...data.data];
-      const transformer = newData.map((item) => {
-        const parsedValue = JSON.parse(item.value);
-        return {
-          ...item,
-          value: parsedValue,
-        };
-      });
-      return transformer;
-    },
+    // select: (data) => {
+    //   const newData = [...data.data];
+    //   const transformer = newData.map((item) => {
+    //     const parsedValue = JSON.parse(item.value);
+    //     return {
+    //       ...item,
+    //       value: parsedValue,
+    //     };
+    //   });
+    //   return transformer;
+    // },
 
     enabled: Object.keys(workFlow).length > 0,
   });

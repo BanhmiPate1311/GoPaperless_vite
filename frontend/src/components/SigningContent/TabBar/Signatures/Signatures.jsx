@@ -12,7 +12,8 @@ import imageNotFound from "@/assets/images/noSignature.png";
 
 export const Signatures = ({ sigList1, sigList2 }) => {
   const signedInfo = [...sigList1, ...sigList2];
-  // console.log("signedInfo: ", signedInfo);
+  // const signedInfo = [...sigList1];
+  console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
 
   // const newSignedInfo = signedInfo.map((item) => item.value);
@@ -23,7 +24,7 @@ export const Signatures = ({ sigList1, sigList2 }) => {
     {
       name: t("validation.sigValidTitle"),
       value: signedInfo.filter((sig) => {
-        return sig.warnings === undefined && sig.signature.is_valid === true;
+        return sig.indication === "TOTAL_PASSED" && sig.is_valid === true;
       }),
       icon: (
         <Stack
@@ -42,7 +43,7 @@ export const Signatures = ({ sigList1, sigList2 }) => {
     {
       name: t("validation.indeterminateTitle"),
       value: signedInfo.filter((sig) => {
-        return sig.warnings && sig.signature.is_valid === true;
+        return sig.indication === "INDETERMINATE";
       }),
       icon: (
         <Stack
@@ -63,7 +64,10 @@ export const Signatures = ({ sigList1, sigList2 }) => {
       value: signedInfo.filter((sig) => {
         // console.log("invalid: ", sig.signature.is_valid);
 
-        return sig.signature.is_valid === false;
+        return (
+          sig.indication !== "INDETERMINATE" &&
+          sig.indication !== "TOTAL_PASSED"
+        );
       }),
       icon: (
         <Stack

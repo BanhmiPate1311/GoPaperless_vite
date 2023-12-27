@@ -210,6 +210,8 @@ public class ApiController {
         List<PplFileDetail> listPplFileDetail = new ArrayList<>();
         connect.USP_GW_PPL_FILE_DETAIL_GET(request.getFileId(), listPplFileDetail);
 
+
+
         return new ResponseEntity<>(listPplFileDetail, HttpStatus.OK);
     }
 
