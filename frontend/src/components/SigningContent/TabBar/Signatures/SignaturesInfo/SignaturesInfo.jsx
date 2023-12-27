@@ -75,7 +75,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
               borderBottom={index === sign.value.length - 1 ? "1px solid" : ""}
               borderColor="borderColor.main"
               width="100%"
-              height="50px"
+              // height="50px"
             >
               {sign.icon}
               <Box flexGrow={1}>

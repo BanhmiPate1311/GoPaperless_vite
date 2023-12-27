@@ -11,8 +11,8 @@ import { SignaturesInfo } from "./SignaturesInfo";
 import imageNotFound from "@/assets/images/noSignature.png";
 
 export const Signatures = ({ sigList1, sigList2 }) => {
-  const signedInfo = [...sigList1, ...sigList2];
-  // const signedInfo = [...sigList1];
+  // const signedInfo = [...sigList1, ...sigList2];
+  const signedInfo = [...sigList1];
   console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
 
