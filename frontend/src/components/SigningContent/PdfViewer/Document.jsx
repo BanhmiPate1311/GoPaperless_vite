@@ -243,9 +243,9 @@ export const Document = ({ props, workFlow, signatures }) => {
       }
     });
   };
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const pdfRange = [];
-  const cursor = [];
+  // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  // const pdfRange = [];
+  // const cursor = [];
   // useEffect(() => {
   //   // nghe sự kiện bên trong file pdf
   //   pdfRange[props.pageIndex] = document.getElementById(

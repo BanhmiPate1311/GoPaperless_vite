@@ -194,7 +194,8 @@
     "wait_signature": "Allkirja ootamine",
     "passport": "Passi kood",
     "identity_card": "Isikutunnistuse kood",
-    "no_cert_found": "Sertifikaadi ei leitud"
+    "no_cert_found": "Sertifikaadi ei leitud",
+    "tax_code": "Maksukood"
   },
   "signingForm": {
     "step1": "Valige Remote Signing Service Provider",
@@ -237,6 +238,8 @@
     "sealValidTitle": "Täiustatud elektrooniline pitser",
     "sealValidTitle2": "Pitser on kehtiv",
     "sealScope": "Tihendi ulatus",
+    "sealWarnings": "Plommi hoiatused",
+    "sealErrors": "Tihendi vead",
     "sigErrors": "Allkirja vead",
     "sigFormat": "Allkirja formaat",
     "sigIssuer": "Sertifikaadi väljaandja",

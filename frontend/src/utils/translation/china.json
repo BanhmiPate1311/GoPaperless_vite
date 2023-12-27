@@ -194,7 +194,8 @@
     "wait_signature": "等待签名",
     "passport": "护照代码",
     "identity_card": "身份证号码",
-    "no_cert_found": "没有找到证书"
+    "no_cert_found": "没有找到证书",
+    "tax_code": "税法"
   },
   "signingForm": {
     "step1": "选择远程签名服务提供商",
@@ -237,6 +238,8 @@
     "sealValidTitle": "高级电子印章",
     "sealValidTitle2": "印章有效",
     "sealScope": "密封范围",
+    "sealWarnings": "密封警告",
+    "sealErrors": "密封错误",
     "sigErrors": "签名错误",
     "sigFormat": "签名格式",
     "sigIssuer": "证书颁发者",

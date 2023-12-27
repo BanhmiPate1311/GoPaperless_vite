@@ -27,14 +27,14 @@ public class SignatureValidation {
     @JsonProperty("is_valid")
     private boolean valid;
     private String value;
-    private String signingPurpose;
-    private String signingReason;
-    private String signingTime;
+    private String signing_purpose;
+    private String signing_reason;
+    private String signing_time;
     private String type;
-    private String validTo;
+    private String valid_to;
     private String format;
-    private String gracePeriodEndTime;
-    private String timestampTime;
+    private String grace_period_end_time;
+    private String timestamp_time;
     private Scope scope;
     private Metadata metadata;
     private Certificate certificate;

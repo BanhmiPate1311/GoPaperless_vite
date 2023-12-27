@@ -44,7 +44,7 @@ export const PasswordField = ({
       type="search"
       // autoComplete="current-password"
       onChange={(event) => {
-        console.log("object");
+        // console.log("object");
         onChange(event);
         externalOnChange?.(event);
       }}

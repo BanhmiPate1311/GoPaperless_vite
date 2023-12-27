@@ -194,7 +194,8 @@
     "wait_signature": "Waiting for signature",
     "passport": "Passport Code",
     "identity_card": "Identity card Code",
-    "no_cert_found": "No certificate found"
+    "no_cert_found": "No certificate found",
+    "tax_code": "Tax Code"
   },
   "signingForm": {
     "step1": "Select Remote Signing Service Provider",
@@ -238,6 +239,8 @@
     "sealValidTitle": "Advanced Electronic Seal",
     "sealValidTitle2": "Seal is valid",
     "sealScope": "Seal scope",
+    "sealWarnings": "Seal warnings",
+    "sealErrors": "Seal errors",
     "sigErrors": "Signature errors",
     "sigFormat": "Signature format",
     "sigIssuer": "Certificate issuer",

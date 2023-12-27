@@ -194,7 +194,8 @@
     "wait_signature": "Warte auf Signatur",
     "passport": "Passcode",
     "identity_card": "Personalausweiscode",
-    "no_cert_found": "Kein Zertifikat gefunden"
+    "no_cert_found": "Kein Zertifikat gefunden",
+    "tax_code": "Steuer-Code"
   },
   "signingForm": {
     "step1": "Wählen Sie Remote Signing Service Provider aus",
@@ -237,6 +238,8 @@
     "sealValidTitle": "Fortschrittliches elektronisches Siegel",
     "sealValidTitle2": "Siegel ist gültig",
     "sealScope": "Geltungsbereich versiegeln",
+    "sealWarnings": "Siegelwarnungen",
+    "sealErrors": "Siegelfehler",
     "sigErrors": "Signaturfehler",
     "sigFormat": "Signaturformat",
     "sigIssuer": "Zertifikatsaussteller",
