@@ -16,13 +16,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 import { ResizableBox } from "react-resizable";
+import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+  // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("index: ", index);
-  console.log("signatureData: ", signatureData);
+  // console.log("signatureData: ", signatureData);
   const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
 
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
@@ -36,6 +38,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowModal2, setShowModal2] = useState([false]);
 
   const [showTopbar, setShowTopbar] = useState(false);
+  const [isShowSigDetail, setIsShowSigDetail] = useState([false]);
 
   // const [isOpenSigningForm, setOpenSigningForm] = useState(false);
   // const [isShowModalSignImage, setShowModalSignImage] = useState(false);
@@ -50,11 +53,38 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
 
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
+  // const { data: signedInfo } = useQuery({
+  //   queryKey: ["getSignedInfo"],
+  //   queryFn: () => apiService.getSignedInfo(workFlow),
+
+  //   enabled: Object.keys(workFlow).length > 0,
+  // });
+  // console.log("signedInfo: ", signedInfo);
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
   const signerId = signer.signerId;
   const [isSetPos, setIsSetPos] = useState(false);
   // console.log("isSetPos: ", isSetPos);
+
+  const [sigDetail, setSigDetail] = useState([]);
+  console.log("sigDetail: ", sigDetail);
+
+  useEffect(() => {
+    const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
+    const newSig1 = sigInfor
+      .filter((item) => item.value.field_name === signatureData.field_name)
+      .map((item) => item.value);
+
+    const newSig2 = workFlow.participants
+      .filter(
+        (item) =>
+          item.certificate &&
+          item.certificate.field_name === signatureData.field_name
+      )
+      .map((item) => item.certificate);
+
+    setSigDetail(...newSig1, ...newSig2);
+  }, [signatureData]);
 
   const maxPosibleResizeWidth =
     (pdfPage.width * (100 - signatureData.dimension?.x)) / 100;
@@ -119,6 +149,12 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
     },
   });
+
+  const toggleSigDetail = (index) => {
+    const newIsOpen = [...isShowSigDetail];
+    newIsOpen[index] = !newIsOpen[index];
+    setIsShowSigDetail(newIsOpen);
+  };
 
   const handleOpenModalSetting = (index) => {
     const newValue = [...isOpenModalSetting];
@@ -236,7 +272,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // };
 
   const handleRemoveSignature = async () => {
-    if (isSetPos || signerId !== signatureData.field_name) return;
+    console.log("remove");
+    // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
     // setSignature(null);
   };
@@ -264,7 +301,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       };
     },
     canDrag:
-      signerId === signatureData.field_name &&
+      signerId + "_" + signatureData.suffix === signatureData.field_name &&
       !isSetPos &&
       signatureData.verification === undefined,
 
@@ -286,7 +323,10 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           top: -15,
           right: 0,
           zIndex: 10,
-          display: signerId === signatureData.field_name ? "flex" : "none",
+          display:
+            signerId + "_" + signatureData.suffix === signatureData.field_name
+              ? "flex"
+              : "none",
           // width: "100%",
           backgroundColor: "#D9DFE4",
         }}
@@ -376,7 +416,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             top: signatureData.dimension?.y + "%",
             left: signatureData.dimension?.x + "%",
             zIndex: 100,
-            opacity: signatureData.verification === undefined ? 1 : 0.5,
+            opacity: signatureData.verification === undefined ? 1 : 0,
           }}
           // minConstraints={[
           //   signatureData.dimension?.width * (pdfPage.width / 100),
@@ -387,24 +427,28 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           //   signatureData.dimension?.height * (pdfPage.height / 100),
           // ]}
           minConstraints={[
-            isSetPos || signerId !== signatureData.field_name
+            isSetPos ||
+            signerId + "_" + signatureData.suffix !== signatureData.field_name
               ? signatureData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? (pdfPage.width * 20) / 100
               : 200,
-            isSetPos || signerId !== signatureData.field_name
+            isSetPos ||
+            signerId + "_" + signatureData.suffix !== signatureData.field_name
               ? signatureData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? (pdfPage.height * 5) / 100
               : 50,
           ]}
           maxConstraints={[
-            isSetPos || signerId !== signatureData.field_name
+            isSetPos ||
+            signerId + "_" + signatureData.suffix !== signatureData.field_name
               ? signatureData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? maxPosibleResizeWidth
               : 200,
-            isSetPos || signerId !== signatureData.field_name
+            isSetPos ||
+            signerId + "_" + signatureData.suffix !== signatureData.field_name
               ? signatureData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? maxPosibleResizeHeight
@@ -461,7 +505,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             id="drag"
             sx={{
               backgroundColor:
-                signatureData.signed || signerId !== signatureData.field_name
+                signatureData.verification ||
+                signerId + "_" + signatureData.suffix !==
+                  signatureData.field_name
                   ? "rgba(217, 223, 228, 0.7)"
                   : "rgba(254, 240, 138, 0.7)",
               height: "100%",
@@ -475,7 +521,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               border: "2px dashed",
               borderColor:
                 signatureData.verification ||
-                signerId !== signatureData.field_name
+                signerId + "_" + signatureData.suffix !==
+                  signatureData.field_name
                   ? "black"
                   : "#EAB308",
             }}
@@ -486,13 +533,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               setShowTopbar(false);
             }}
             onClick={(e) => {
-              if (
-                // signatureData.verification ||
-                // signerId !== signatureData.field_name
-                signatureData.verification
-              )
+              if (signatureData.verification) {
+                console.log("show signature verification");
+                toggleSigDetail(index);
+              } else if (
+                signerId + "_" + signatureData.suffix !==
+                signatureData.field_name
+              ) {
                 return;
-              if (
+              } else if (
                 e.target.id === "drag" ||
                 e.target.parentElement?.id === "drag" ||
                 e.target.id === "click-duoc"
@@ -560,6 +609,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           handleShowModalSignImage={() => handleShowModalSignImage(index)}
           handleShowEidModal={() => handleShowEidModal(index)}
           setDataSigning={setDataSigning}
+          signatureData={signatureData}
         />
       )}
 
@@ -606,6 +656,14 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           dataSigning={dataSigning}
           setDataSigning={setDataSigning}
           signatureData={signatureData}
+        />
+      )}
+
+      {isShowSigDetail[index] && (
+        <SigDetail
+          open={isShowSigDetail[index]}
+          signDetail={sigDetail}
+          handleClose={() => toggleSigDetail(index)}
         />
       )}
     </>

@@ -17,6 +17,7 @@ import { convertEidType } from "@/utils/commonFunction";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
+  console.log("dataSigning: ", dataSigning);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 

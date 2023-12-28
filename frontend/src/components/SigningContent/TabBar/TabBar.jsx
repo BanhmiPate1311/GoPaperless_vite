@@ -50,8 +50,8 @@ function a11yProps(index) {
 
 // eslint-disable-next-line react/prop-types
 export const TabBar = ({ workFlow, signedInfo }) => {
-  console.log("workFlow: ", workFlow);
-  console.log("signedInfo: ", signedInfo);
+  // console.log("workFlow: ", workFlow);
+  // console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
   const [value, setValue] = useState(0);
 

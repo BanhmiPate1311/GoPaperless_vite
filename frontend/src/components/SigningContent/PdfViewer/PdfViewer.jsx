@@ -32,6 +32,8 @@ export const PdfViewer = ({ workFlow }) => {
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
+  // const [increment, setIncrement] = useState(0);
+  // console.log("increment: ", increment);
 
   let isSetPos = checkIsPosition(workFlow);
   useEffect(() => {
@@ -43,12 +45,10 @@ export const PdfViewer = ({ workFlow }) => {
     queryKey: ["getField"],
     queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
     select: (data) => {
-      // console.log("workFlow: ", workFlow);
       const newData = { ...data.data };
-      let signatures = Object.values(newData)
+      const newSignatures = Object.values(newData)
         .flat()
         .map((item) => {
-          // eslint-disable-next-line no-unused-vars
           const { verification, ...repairedSignature } = item;
           return {
             verification,
@@ -56,11 +56,12 @@ export const PdfViewer = ({ workFlow }) => {
             workFlowId: workFlow.workFlowId,
           };
         });
-      return signatures;
+      // setIncrement(newSignatures.length + 1); // Set the state when data is available
+      return newSignatures;
     },
   });
 
-  console.log("getField: ", signatures);
+  // console.log("getField: ", signatures);
 
   // const { data: signatures } = useQuery({
   //   queryKey: ["verifySignatures"],
@@ -219,7 +220,7 @@ export const PdfViewer = ({ workFlow }) => {
     const newSignature = {
       type: value,
       // field_name: String(item).toUpperCase() + uuidv4(),
-      field_name: signerId,
+      field_name: signerId + "_" + Number(signatures.length + 1),
       page: signInfo.page,
       dimension: {
         x: signInfo.x,
@@ -227,6 +228,7 @@ export const PdfViewer = ({ workFlow }) => {
         width: 22,
         height: 5,
       },
+      suffix: Number(signatures.length + 1),
       visible_enabled: true,
       workFlowId: workFlow.workFlowId,
       // signerToken: workFlow.signerToken,
@@ -236,6 +238,7 @@ export const PdfViewer = ({ workFlow }) => {
       body: newSignature,
       field: newSignature.type.toLowerCase(),
     });
+    // setIncrement(increment + 1);
   };
 
   const renderPage = (props) => {

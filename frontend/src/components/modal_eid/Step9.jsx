@@ -62,8 +62,12 @@ export const Step9 = ({ onDisableSubmit, setErrorPG, emailRef }) => {
           autoComplete="new-password"
           InputLabelProps={{ shrink: true }} // shrink here
           inputProps={{
-            style: {
+            // style: {
+            //   fontSize: "14px",
+            // },
+            sx: {
               fontSize: "14px",
+              backgroundColor: "signingWFBackground.main",
             },
             // maxLength: "16",
           }}

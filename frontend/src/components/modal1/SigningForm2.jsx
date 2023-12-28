@@ -56,6 +56,7 @@ export const SigningForm2 = ({
   handleShowModalSignImage,
   handleShowEidModal,
   setDataSigning,
+  signatureData,
 }) => {
   // console.log("workFlow: ", workFlow);
   // console.log("index: ", index);
@@ -143,7 +144,7 @@ export const SigningForm2 = ({
     enterpriseId: workFlow.enterpriseId,
     signerId: signer.signerId,
     language: lang,
-    fieldName: signer.signerId,
+    fieldName: signatureData.field_name,
     lastFileUuid: workFlow.lastFileUuid,
     email: signer?.email,
   });
@@ -157,7 +158,7 @@ export const SigningForm2 = ({
         // console.log(checkEseal(response.signingCertificates[0]));
         return response;
       } catch (error) {
-        // console.log("error: ", error);
+        console.log("error: ", error);
 
         throw new Error(error);
       }
@@ -293,7 +294,7 @@ export const SigningForm2 = ({
   // console.log("prefixList: ", prefixList);
 
   const connectorList = useConnectorList(providerName);
-  // console.log("connectorList: ", connectorList.data);
+  console.log("connectorList: ", connectorList.data);
 
   const smartIdCertificate = useSmartIdCertificate();
 
@@ -357,7 +358,7 @@ export const SigningForm2 = ({
             dllUsb = connectorList.data.USB_TOKEN_SIGNING.filter(
               (item) => item.connectorName === connectorName
             )[0].identifier;
-
+            console.log("dllUsb: ", dllUsb);
             certificateInfor.mutate(dllUsb, {
               onSuccess: (data) => {
                 dataApi.current = {
@@ -704,5 +705,6 @@ SigningForm2.propTypes = {
   workFlow: PropTypes.object,
   dataSigning: PropTypes.object,
   setDataSigning: PropTypes.func,
+  signatureData: PropTypes.object,
 };
 export default SigningForm2;

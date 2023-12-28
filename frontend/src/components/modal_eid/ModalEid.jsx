@@ -488,6 +488,7 @@ export const ModalEid = ({
         email: emailRef.current,
         phoneNumber: phoneNumber,
         certChain: response.data,
+        assurance: assurance,
       });
 
       onClose();
@@ -582,6 +583,7 @@ export const ModalEid = ({
             connectorName: "MOBILE_ID_IDENTITY",
             email: emailRef.current,
             phoneNumber: phoneNumber,
+            assurance: assurance,
             certChain: newListCert[certSelected],
           });
           onClose();
