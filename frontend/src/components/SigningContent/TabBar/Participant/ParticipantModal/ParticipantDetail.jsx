@@ -82,8 +82,12 @@ export const ParticipantDetail = ({ open, data, title, handleClose }) => {
           ref={descriptionElementRef}
           tabIndex={-1}
         >
-          <Box width={"100%"} pt={2}>
-            <Typography variant="h6" fontWeight={600}>
+          <Box width={"100%"} sx={{ paddingTop: "10px" }}>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{ paddingBottom: "10px" }}
+            >
               {t("0-common.signer")}
             </Typography>
             <Box
@@ -96,7 +100,11 @@ export const ParticipantDetail = ({ open, data, title, handleClose }) => {
             >
               {data.lastName} {data.firstName}
             </Box>
-            <Typography variant="h6" fontWeight={600}>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{ paddingBottom: "10px" }}
+            >
               {t("0-common.name")}
             </Typography>
             <Box
@@ -109,7 +117,11 @@ export const ParticipantDetail = ({ open, data, title, handleClose }) => {
             >
               {data.firstName}
             </Box>
-            <Typography variant="h6" fontWeight={600}>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{ paddingBottom: "10px" }}
+            >
               {t("0-common.email")}
             </Typography>
             <Box

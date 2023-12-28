@@ -99,6 +99,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         display: "flex",
         height: "100%",
         borderRadius: "5px",
+        boxShadow: "0px 1px 3px 0px rgba(0, 0, 0, 0.20)",
       }}
     >
       <Tabs
@@ -112,8 +113,9 @@ export const TabBar = ({ workFlow, signedInfo }) => {
           borderLeft: 1,
           borderColor: "divider",
           width: "120px",
+
           "& .MuiButtonBase-root.Mui-selected": {
-            backgroundColor: "signingBackground.main",
+            backgroundColor: "tabBackground.main",
             borderRadius: "10px",
             color: "signingtext1.main",
           },

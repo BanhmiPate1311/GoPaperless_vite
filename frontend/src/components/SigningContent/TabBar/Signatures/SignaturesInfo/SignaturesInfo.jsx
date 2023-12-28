@@ -68,7 +68,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
               backgroundColor="signingWFBackground.main"
               // color={check ? "signingtextBlue.main" : ""}
               sx={{
-                px: "20px",
+                p: "10px 20px",
               }}
               alignItems={"center"}
               borderTop="1px solid"
@@ -79,7 +79,10 @@ export const SignaturesInfo = ({ sign, signType }) => {
             >
               {sign.icon}
               <Box flexGrow={1}>
-                <Typography variant="h6">
+                <Typography
+                  variant="h6"
+                  sx={{ fontSize: "16px", lineHeight: "normal" }}
+                >
                   {signvalue.certificate.subject.CN[0]}
                 </Typography>
                 <Typography variant="h2">{sign.name}</Typography>

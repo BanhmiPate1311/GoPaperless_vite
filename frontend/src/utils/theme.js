@@ -9,7 +9,7 @@ export let theme = extendTheme({
   GoPaperless: {
     headerHeight: "55px",
     footerBarHeight: "55px",
-    appBarHeight: "48px",
+    appBarHeight: "62px",
     containerMaxWidth: "1920px",
   },
   typography: {
@@ -18,6 +18,7 @@ export let theme = extendTheme({
       fontSize: 14,
       color: "#1F2937", // Adjust the font size as needed
       fontWeight: 500,
+     
     },
     h5: {
       fontSize: 13, // Adjust the font size as needed
@@ -53,6 +54,10 @@ export let theme = extendTheme({
         signingBackground: {
           main: "#F3F5F8",
         },
+        tabBackground: {
+          light: "#E8EBF0",
+          main: "#E8EBF0",
+        },
         //white
         signingWFBackground: {
           main: "#FFF",
@@ -82,6 +87,7 @@ export let theme = extendTheme({
           light: "#1F2937",
           main: "#1F2937",
         },
+
         //lighter
         signingtext2: {
           light: "#767676 ",

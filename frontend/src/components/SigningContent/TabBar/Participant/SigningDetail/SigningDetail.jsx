@@ -12,6 +12,8 @@ import Drawer from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -176,7 +178,13 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
             backgroundColor: "#fff",
           }}
         >
-          <Stack direction={"row"} alignItems={"center"} gap={1} flexGrow={1}>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            // justifyContent={"space-between"}
+            gap={1}
+            flexGrow={1}
+          >
             <PersonIcon />
             <Box>
               <Typography
@@ -187,7 +195,21 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
               >
                 {participant.lastName} {participant.firstName}
               </Typography>
+              {/* <Typography fontWeight="550" variant="h2" color="#9E9C9C">
+                {participant.email}
+              </Typography> */}
             </Box>
+            {/* <Button
+              onClick={handleClose}
+              sx={{
+                minWidth: "32px",
+                maxWidth: "32px",
+                height: "32px",
+                backgroundColor: "#F3F5F8",
+              }}
+            >
+              <CloseIcon sx={{ color: "#7A7A8C" }} />
+            </Button> */}
           </Stack>
         </Stack>
 
@@ -233,7 +255,9 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
                       }
                     }
                   >
-                    {t("signing.signature_valid")}
+                    {participant.signedType === "NORMAL"
+                      ? t("signing.signature_valid")
+                      : t("validation.sealValidTitle2")}
                   </Typography>
                 </>
               ) : status === 1 ? (

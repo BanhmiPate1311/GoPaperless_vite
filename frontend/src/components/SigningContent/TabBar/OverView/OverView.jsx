@@ -67,7 +67,7 @@ export const OverView = ({ workFlow }) => {
               >
                 {headerFooter?.data?.name}
               </Typography>
-              <Typography variant="h2" sx={{ color: "signingtext2.main" }}>
+              <Typography variant="h2" sx={{ fontWeight: "600" }}>
                 {headerFooter?.data?.notificationEmail}
               </Typography>
             </Stack>

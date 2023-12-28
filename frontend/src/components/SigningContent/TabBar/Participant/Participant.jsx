@@ -54,7 +54,13 @@ export const Participant = ({ participantsList, signType }) => {
         </Stack>
         {participantsList.length !== 0 && (
           <Stack direction="row" justifyContent={"center"}>
-            <IconButton onClick={handleOpen}>
+            <IconButton
+              onClick={handleOpen}
+              sx={{
+                height: "34px",
+                margin: "auto 0",
+              }}
+            >
               <SettingIcon />
             </IconButton>
           </Stack>
