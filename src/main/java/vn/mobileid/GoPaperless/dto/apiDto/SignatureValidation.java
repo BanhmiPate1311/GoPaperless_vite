@@ -17,6 +17,7 @@ public class SignatureValidation {
     private String indication;
     private String subIndication;
     private String algorithm;
+    private String field_name;
     private String id;
     @JsonProperty("is_archived")
     private boolean archived;
@@ -56,8 +57,8 @@ public class SignatureValidation {
         private String name;
         private Map<String, List<String>> subject;
         private Map<String, List<String>> issuer;
-        private String validFrom;
-        private String validTo;
+        private String valid_from;
+        private String valid_to;
         private String value;
     }
 

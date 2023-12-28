@@ -1,3 +1,4 @@
+import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
 import Error from "@mui/icons-material/Error";
@@ -8,7 +9,6 @@ import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "./SignaturesInfo";
-import imageNotFound from "@/assets/images/noSignature.png";
 
 export const Signatures = ({ sigList1, sigList2 }) => {
   const signedInfo = [...sigList1, ...sigList2];

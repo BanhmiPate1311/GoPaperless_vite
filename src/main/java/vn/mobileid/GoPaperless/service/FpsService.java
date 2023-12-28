@@ -152,6 +152,7 @@ public class FpsService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
+        requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
         requestData.put("visible_enabled", data.getVisibleEnabled());
         System.out.println("requestData: " + requestData);

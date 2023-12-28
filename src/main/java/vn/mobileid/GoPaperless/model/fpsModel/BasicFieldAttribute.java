@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class BasicFieldAttribute {
     private String fieldName;
     private int page;
+    private int suffix;
     private String type;
     private String embedded;
     private String processStatus;
