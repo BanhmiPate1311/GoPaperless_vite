@@ -144,16 +144,21 @@
         </dependency>
 
 <!--        parse dg infor ò citizen card -->
-        <dependency>
-            <groupId>jmrtd-0.7.18</groupId>
-            <artifactId>jmrtd-0.7.18</artifactId>
-            <version>0.7.18</version>
-        </dependency>
-        <dependency>
-            <groupId>scuba-smartcards-0.0.19</groupId>
-            <artifactId>scuba-smartcards-0.0.19</artifactId>
-            <version>0.0.19</version>
-        </dependency>
+       <!-- https://mvnrepository.com/artifact/org.jmrtd/jmrtd -->
+<dependency>
+    <groupId>org.jmrtd</groupId>
+    <artifactId>jmrtd</artifactId>
+    <version>0.7.18</version>
+    <type>jar</type>
+</dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.sf.scuba/scuba-smartcards -->
+<dependency>
+    <groupId>net.sf.scuba</groupId>
+    <artifactId>scuba-smartcards</artifactId>
+    <version>0.0.19</version>
+</dependency>
+
 
         <!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
         <dependency>

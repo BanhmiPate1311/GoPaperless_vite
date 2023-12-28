@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "../Signatures/SignaturesInfo";
 
 export const Seals = ({ eSealList1, eSealList2 }) => {
-  const signedInfo = [...eSealList1, ...eSealList2];
-  // const signedInfo = [...eSealList1];
+  // const signedInfo = [...eSealList1, ...eSealList2];
+  const signedInfo = [...eSealList1];
   console.log("Seals: ", signedInfo);
   const { t } = useTranslation();
 

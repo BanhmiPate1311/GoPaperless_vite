@@ -83,12 +83,25 @@ export const Signing = () => {
           >
             <Toolbar
               variant="dense"
-              sx={{ backgroundColor: "signingWFBackground.main", gap: 1 }}
+              sx={{
+                backgroundColor: "signingWFBackground.main",
+                gap: 2,
+                height: (theme) => theme.GoPaperless.appBarHeight,
+                padding: "13px 0",
+              }}
             >
-              <Chip label="PDF" size="small" color="primary" />
+              <Chip
+                label="PDF"
+                size="small"
+                sx={{
+                  backgroundColor: "#4F4E4E",
+                  color: "white",
+                  fontWeight: "500",
+                }}
+              />
               <Typography
                 color="signingtext1.main"
-                variant="h6"
+                variant="h3"
                 component="div"
                 sx={{ flexGrow: 1, textTransform: "uppercase" }}
               >
@@ -101,9 +114,26 @@ export const Signing = () => {
                 component="a"
                 color={checkWorkFlowStatus ? "primary" : undefined}
                 disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+                  height: "36px",
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "borderColor.light",
+                  color: "signingWFBackground.main",
+                  gap: "10px",
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                  },
+                }}
                 // href="#basic-chip"
                 href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}
-                icon={<SaveAltIcon fontSize="small" />}
+                icon={
+                  <SaveAltIcon fontSize="small" color="borderColor.light" />
+                }
                 clickable
               />
             </Toolbar>

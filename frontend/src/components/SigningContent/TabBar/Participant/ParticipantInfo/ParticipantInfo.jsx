@@ -79,7 +79,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
               backgroundColor={check ? "signerBackGround.main" : ""}
               color={check ? "signingtextBlue.main" : ""}
               sx={{
-                px: "20px",
+                p: "10px 20px",
               }}
               alignItems={"center"}
               borderTop="1px solid"
@@ -87,7 +87,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                 index === participantsList.length - 1 ? "1px solid" : ""
               }
               borderColor="borderColor.main"
-              height="50px"
+              // height="50px"
             >
               {/* {check ? (
                   <SignerSelected />
@@ -105,6 +105,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                 <Typography
                   variant="h6"
                   color={check ? "signingtextBlue.main" : "textBlack.main"}
+                  fontSize={16}
                 >
                   {participant.lastName} {participant.firstName}
                 </Typography>
