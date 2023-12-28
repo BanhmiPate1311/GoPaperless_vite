@@ -11,9 +11,10 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { SignatureDetail } from "../SignatureDetail";
+import { convertTime } from "@/utils/commonFunction";
 
 export const SignaturesInfo = ({ sign, signType }) => {
-  console.log("sign: ", sign);
+  // console.log("sign: ", sign);
   const [isOpen, setIsOpen] = useState([false]);
   // console.log("isOpen: ", isOpen);
   // let name = sign.name + " " + signType;
@@ -86,6 +87,11 @@ export const SignaturesInfo = ({ sign, signType }) => {
                   {signvalue.certificate.subject.CN[0]}
                 </Typography>
                 <Typography variant="h2">{sign.name}</Typography>
+                {signvalue.indication === "TOTAL_PASSED" && (
+                  <Typography variant="h2">
+                    {convertTime(signvalue.signing_time)}
+                  </Typography>
+                )}
               </Box>
               <IconButton onClick={() => toggleDrawer(index)}>
                 <ShowDetailIcon />

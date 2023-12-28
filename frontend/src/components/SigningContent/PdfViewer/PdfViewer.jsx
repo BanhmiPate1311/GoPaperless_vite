@@ -169,7 +169,8 @@ export const PdfViewer = ({ workFlow }) => {
     if (
       isSetPos ||
       checkSignerStatus(signer, signerToken) === 2 ||
-      event.target.className !== "rpv-core__text-layer"
+      (event.target.className !== "rpv-core__text-layer" &&
+        event.target.className !== "rpv-core__text-layer-text")
     )
       return;
     const rect = event.currentTarget.getBoundingClientRect();

@@ -11,9 +11,9 @@ import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "../Signatures/SignaturesInfo";
 
 export const Seals = ({ eSealList1, eSealList2 }) => {
-  // const signedInfo = [...eSealList1, ...eSealList2];
-  const signedInfo = [...eSealList1];
-  console.log("Seals: ", signedInfo);
+  const signedInfo = [...eSealList1, ...eSealList2];
+  // const signedInfo = [...eSealList1];
+  // console.log("Seals: ", signedInfo);
   const { t } = useTranslation();
 
   const signType = "eseal";
@@ -83,7 +83,7 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
   ];
 
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
-  console.log("newSign: ", newSign);
+  // console.log("newSign: ", newSign);
 
   return (
     <Box>

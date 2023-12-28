@@ -67,7 +67,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("isSetPos: ", isSetPos);
 
   const [sigDetail, setSigDetail] = useState([]);
-  console.log("sigDetail: ", sigDetail);
+  // console.log("sigDetail: ", sigDetail);
 
   useEffect(() => {
     const sigInfor = queryClient.getQueryData(["getSignedInfo"]);

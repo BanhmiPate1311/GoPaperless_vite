@@ -12,8 +12,6 @@ import Drawer from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -195,9 +193,9 @@ export const SigningDetail = ({ open, participant, handleClose }) => {
               >
                 {participant.lastName} {participant.firstName}
               </Typography>
-              {/* <Typography fontWeight="550" variant="h2" color="#9E9C9C">
+              <Typography fontWeight="550" variant="h2" color="#9E9C9C">
                 {participant.email}
-              </Typography> */}
+              </Typography>
             </Box>
             {/* <Button
               onClick={handleClose}
