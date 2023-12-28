@@ -26,7 +26,7 @@ export const Participant = ({ participantsList, signType }) => {
   };
 
   return (
-    <Box>
+    <Box sx={{ height: "100%" }}>
       <Stack
         sx={{ px: "20px", height: "50px" }}
         direction="row"

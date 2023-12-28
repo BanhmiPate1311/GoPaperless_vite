@@ -156,7 +156,7 @@ export const Step2_smartid = ({
         <PhoneInput
           country={"vn"}
           // placeholder={label}
-          // enableSearch={true}
+          enableSearch={true}
           specialLabel={""}
           value={code}
           onChange={(phone, country) => {

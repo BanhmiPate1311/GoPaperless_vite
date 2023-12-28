@@ -8,7 +8,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
@@ -33,7 +32,13 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
   };
 
   return (
-    <Accordion disableGutters elevation={0} expanded={expand}>
+    <Accordion
+      disableGutters
+      elevation={0}
+      expanded={expand}
+      className="cuong"
+      sx={{ maxHeight: "100%" }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon onClick={() => setExpand(!expand)} />}
         aria-controls="panel1bh-content"
@@ -54,7 +59,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
             ? t("0-common.participants")
             : t("0-common.seals")}
         </Typography>
-        <Avatar
+        {/* <Avatar
           sx={{
             bgcolor: "signingtextBlue.main",
             width: 16,
@@ -63,7 +68,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
           }}
         >
           {participantsList.length}
-        </Avatar>
+        </Avatar> */}
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0 }}>
         {participantsList.map((participant, index) => {
