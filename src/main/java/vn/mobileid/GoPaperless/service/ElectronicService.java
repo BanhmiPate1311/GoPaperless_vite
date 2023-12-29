@@ -689,6 +689,7 @@ public class ElectronicService {
             JsonNode dataNode = objectMapper.readTree(dataResponse);
             String signatureId = dataNode.get("id").asText();
 
+            System.out.println("assurance: " + assurance);
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
             postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);

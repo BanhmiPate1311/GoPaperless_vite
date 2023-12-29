@@ -231,7 +231,7 @@ export default class ISPluginClient {
           lang: lang,
           data: {
             mrzEnabled,
-            cardAbsenceEnabled: true,
+            // cardAbsenceEnabled: true,
             imageEnabled,
             dataGroupEnabled,
             optionalDetailsEnabled,

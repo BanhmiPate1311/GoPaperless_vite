@@ -238,7 +238,7 @@ export const Step2 = ({
       </Typography>
       <Box
         textAlign="center"
-        marginTop="15px"
+        // marginTop="15px"
         sx={{
           cursor: enResend ? "pointer" : "not-allowed",
           color: enResend ? "#1976D2" : "#26293f",

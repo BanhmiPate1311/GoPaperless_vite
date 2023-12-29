@@ -39,7 +39,7 @@ export const Step9 = ({ onDisableSubmit, setErrorPG, emailRef }) => {
       <Typography
         variant="h6"
         textAlign={"center"}
-        mb={"15px"}
+        mb={"10px"}
         sx={{ color: "signingtextBlue.main" }}
       >
         {/* Phone Verification */}

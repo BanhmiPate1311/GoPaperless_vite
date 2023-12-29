@@ -27,18 +27,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
     setIsOpen(newIsOpen);
   };
   return (
-    <Accordion
-      disableGutters
-      elevation={0}
-      expanded={expand}
-      sx={{
-        height: "calc(100% - 50px)",
-        "> .MuiCollapse-vertical": {
-          height: "calc(100% - 25px)",
-          overflow: "auto",
-        },
-      }}
-    >
+    <Accordion disableGutters elevation={0} expanded={expand}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon onClick={() => setExpand(!expand)} />}
         aria-controls="panel1bh-content"
