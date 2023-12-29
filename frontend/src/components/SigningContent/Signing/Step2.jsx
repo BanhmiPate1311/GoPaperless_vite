@@ -9,13 +9,13 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import MenuItem from "@mui/material/MenuItem";
+import { useMutation } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { forwardRef, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { SelectField } from "../../form";
 import CheckIdSoft from "./CheckIdSoft";
-import { useMutation } from "@tanstack/react-query";
 
 export const Step2 = forwardRef(
   ({ onStepSubmit, providerName, connectorList, filterConnector }, ref) => {
@@ -191,7 +191,7 @@ export const Step2 = forwardRef(
             disconnectWSHTML();
           },
           function (cmd, id, error, data) {
-            console.log("id: ", id);
+            // console.log("id: ", id);
             //RECEIVE
             // console.log("cmd: ", cmd);
             // console.log("error: ", error);

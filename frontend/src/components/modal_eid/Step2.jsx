@@ -32,13 +32,13 @@ export const Step2 = ({ onDisableSubmit }) => {
       <Typography
         variant="h6"
         sx={{ fontWeight: 700, color: "textBold.main" }}
-        mb="15px"
+        mb="10px"
       >
         {/* Please accept provider’s terms of service. */}
         {t("electronic.step21")}
       </Typography>
 
-      <FormGroup sx={{ height: "41px", mb: "15px" }}>
+      <FormGroup sx={{ height: "41px", mb: "10px" }}>
         <FormControlLabel
           control={
             <Checkbox

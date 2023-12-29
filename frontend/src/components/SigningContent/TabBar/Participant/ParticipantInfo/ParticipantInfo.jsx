@@ -36,8 +36,13 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
       disableGutters
       elevation={0}
       expanded={expand}
-      className="cuong"
-      sx={{ maxHeight: "100%" }}
+      sx={{
+        height: "calc(100% - 50px)",
+        "> .MuiCollapse-vertical": {
+          height: "calc(100% - 25px)",
+          overflow: "auto",
+        },
+      }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon onClick={() => setExpand(!expand)} />}
