@@ -265,5 +265,23 @@
     "val3": "với OID 1.3.6.1.4.1.54720.1.1",
     "validSeal": "Con dấu hợp lệ",
     "validSig": "Chữ ký hợp lệ"
+  },
+  "cookie": {
+    "cookieSetting1": "Trung tâm tuỳ chọn quyền riêng tư",
+    "cookieSetting2": "Khi bạn truy cập bất kỳ trang web nào, nó có thể lưu trữ hoặc truy xuất thông tin trên trình duyệt của bạn, chủ yếu ở dạng cookie. Thông tin này có thể là về bạn, sở thích của bạn hoặc thiết bị của bạn và chủ yếu được sử dụng để khiến trang web hoạt động như bạn mong đợi. Thông tin thường không trực tiếp nhận dạng bạn nhưng có thể mang lại cho bạn trải nghiệm web được cá nhân hóa hơn. Vì chúng tôi tôn trọng quyền riêng tư của bạn nên bạn có thể chọn không cho phép một số loại cookie. Nhấp vào các tiêu đề danh mục khác nhau để hiểu hơn và thay đổi cài đặt mặc định của chúng tôi. Tuy nhiên, việc chặn một số loại cookie có thể ảnh hưởng đến trải nghiệm của bạn về trang web và các dịch vụ mà chúng tôi có thể cung cấp.",
+    "cookieSetting3": "Chính sách cookie",
+    "cookieSetting4": "Quản lý tùy chọn",
+    "cookieSetting5": "Cookie rất cần thiết",
+    "cookieSetting6": "Luôn hoạt động",
+    "cookieSetting7": "Những cookie này cần thiết để trang web hoạt động và không thể tắt trong hệ thống của chúng tôi. Chúng rất cần thiết cho việc cung cấp dịch vụ của chúng tôi, đảm bảo chất lượng và tính sẵn có của dịch vụ cũng như cải thiện trải nghiệm của bạn bằng cách cung cấp dịch vụ được cá nhân hóa hơn. Bạn có thể đặt trình duyệt của bạn chặn những cookie này nhưng một số phần của trang web có thể không hoạt động. Những cookie này không lưu trữ bất kỳ thông tin nhận dạng cá nhân nào.",
+    "cookieSetting8": "Hiệu suất Cookie",
+    "cookieSetting9": "Những cookie này cho phép chúng tôi thu thập số liệu thống kê và biết cách người dùng sử dụng trang web của chúng tôi trong khi họ truy cập. Chúng giúp chúng tôi cải thiện hiệu suất trang web, chẩn đoán mọi lỗi hoặc sự cố cũng như nâng cao trải nghiệm người dùng. Tất cả thông tin mà các cookie này thu thập là tổng hợp và do đó, ẩn danh. Nếu bạn không cho phép những cookie này, chúng tôi sẽ không biết bạn đã sử dụng trang web của chúng tôi khi nào và như thế nào và sẽ không thể theo dõi hiệu suất của nó.",
+    "cookieSetting10": "Chức năng Cookie",
+    "cookieSetting11": "Những cookie này cho phép trang web cung cấp chức năng nâng cao và cá nhân hóa. Những cookie này ghi nhớ các lựa chọn của bạn, ví dụ: ngôn ngữ, tùy chọn giá trị ưa thích, v.v. Chúng có thể được thiết lập bởi chúng tôi hoặc bởi các nhà cung cấp bên thứ ba có dịch vụ mà chúng tôi đã thêm vào trang của chúng tôi. Nếu bạn không cho phép những cookie này, một số hoặc tất cả các dịch vụ này có thể không hoạt động bình thường.",
+    "cookieSetting12": "Mục tiêu cookie",
+    "cookieSetting13": "Những cookie này có thể được các đối tác quảng cáo của chúng tôi thiết lập thông qua trang web của chúng tôi. Các công ty đó có thể sử dụng chúng để xây dựng hồ sơ sở thích của bạn và hiển thị cho bạn các quảng cáo có liên quan trên các trang web khác. Cookie nhắm mục tiêu không nhận dạng bạn trực tiếp mà sử dụng số nhận dạng duy nhất cho bạn trình duyệt và thiết bị internet. Nếu bạn không cho phép những cookie này, bạn sẽ gặp ít quảng cáo được nhắm mục tiêu hơn.",
+    "cookieSetting14": "Từ chối tất cả",
+    "cookieSetting15": "Xác nhận lựa chọn của tôi",
+    "cookieSetting16": "Cho phép tất cả"
   }
 }

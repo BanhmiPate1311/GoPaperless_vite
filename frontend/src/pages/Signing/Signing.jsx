@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { NotFound } from "../NotFound";
+import { Cookie } from "@/components/cookie";
 
 export const Signing = () => {
   const { t } = useTranslation();
@@ -154,6 +155,7 @@ export const Signing = () => {
         >
           {workFlow.data && <SigningContent workFlow={workFlow.data} />}
         </Container>
+        <Cookie />
       </Stack>
     );
   }

@@ -39,7 +39,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
       sx={{
         height: "calc(100% - 50px)",
         "> .MuiCollapse-vertical": {
-          height: "calc(100% - 25px)",
+          maxHeight: "calc(100% - 25px)",
           overflow: "auto",
         },
       }}
