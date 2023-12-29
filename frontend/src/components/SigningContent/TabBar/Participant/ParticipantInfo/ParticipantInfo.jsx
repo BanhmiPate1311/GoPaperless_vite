@@ -39,7 +39,11 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
       sx={{
         height: "calc(100% - 50px)",
         "> .MuiCollapse-vertical": {
+<<<<<<< HEAD
           maxHeight: "calc(100% - 25px)",
+=======
+          maxHeight: "calc(100% - 25px) !important",
+>>>>>>> eb4985ad1468359870034f45ef3b6418f0ac991a
           overflow: "auto",
         },
       }}
@@ -116,6 +120,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                   variant="h6"
                   color={check ? "signingtextBlue.main" : "textBlack.main"}
                   fontSize={16}
+                  lineHeight="normal"
                 >
                   {participant.lastName} {participant.firstName}
                 </Typography>

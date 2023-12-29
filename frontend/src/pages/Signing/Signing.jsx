@@ -99,6 +99,9 @@ export const Signing = () => {
                   color: "white",
                   fontWeight: "500",
                 }}
+                onClick={() => {
+                  console.log("click click click");
+                }}
               />
               <Typography
                 color="signingtext1.main"
@@ -120,7 +123,7 @@ export const Signing = () => {
                   height: "36px",
                   fontWeight: "500",
                   borderRadius: "25px",
-                  backgroundColor: "borderColor.light",
+                  // backgroundColor: "borderColor.light",
                   color: "signingWFBackground.main",
                   gap: "10px",
                   "& span": {

@@ -13,7 +13,7 @@ import { SignaturesInfo } from "./SignaturesInfo";
 export const Signatures = ({ sigList1, sigList2 }) => {
   const signedInfo = [...sigList1, ...sigList2];
   // const signedInfo = [...sigList1];
-  // console.log("signedInfo: ", signedInfo);
+  console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
 
   // const newSignedInfo = signedInfo.map((item) => item.value);

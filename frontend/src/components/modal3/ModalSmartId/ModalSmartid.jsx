@@ -227,7 +227,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
-            <Typography variant="body2">{t("modal.smartid1")}</Typography>
+            <Typography variant="h6">{t("modal.smartid1")}</Typography>
             <Box p="25px" textAlign={"center"} mb={"10px"}>
               <Typography fontSize={"48px"} height={"59px"} fontWeight={"bold"}>
                 {vcode ? vcode : <CircularProgress />}

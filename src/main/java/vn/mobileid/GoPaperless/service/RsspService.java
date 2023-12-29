@@ -551,6 +551,7 @@ public class RsspService {
         String credentialsIssueUrl = property.getBaseUrl() + "credentials/issue";
 
         System.out.println("type: " + jwt.getDocument_type());
+        System.out.println("stateOrProvince: " + jwt.getCity_province());
         String authHeader = bearer;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -890,7 +891,7 @@ public class RsspService {
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
-            System.out.println("signatureId: " + signatureId);
+            System.out.println("assurance: " + assurance);
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
             postBack.postBack2(dataResponse,signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
