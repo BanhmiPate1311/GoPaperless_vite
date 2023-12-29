@@ -81,7 +81,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
     .filter((sig) => sig.signedType === "ESEAL")
     .map((sig) => sig.certificate);
 
-  console.log("eSealList2: ", eSealList2);
+  // console.log("eSealList2: ", eSealList2);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
