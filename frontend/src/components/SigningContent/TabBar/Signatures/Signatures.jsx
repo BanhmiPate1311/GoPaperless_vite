@@ -88,7 +88,7 @@ export const Signatures = ({ sigList1, sigList2 }) => {
   // console.log("newSign: ", newSign);
 
   return (
-    <Box>
+    <Box sx={{ height: "100%" }}>
       <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <SignatureIcon />

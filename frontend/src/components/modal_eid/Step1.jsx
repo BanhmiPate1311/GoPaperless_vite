@@ -19,7 +19,7 @@ export const Step1 = ({ isIdentifyRegistered }) => {
         {t("electronic.step11")}
       </Typography>
 
-      <Typography variant="h6" my="15px">
+      <Typography variant="h6" my="10px">
         {/* Make sure you have the following before starting: */}
         {t("electronic.step12")}
       </Typography>

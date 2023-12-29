@@ -23,14 +23,10 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
-      style={{ flexGrow: 1 }}
+      style={{ flexGrow: 1, height: "100%" }}
       {...other}
     >
-      {value === index && (
-        <Box>
-          <Box>{children}</Box>
-        </Box>
-      )}
+      {value === index && <Box height="100%">{children}</Box>}
     </div>
   );
 }

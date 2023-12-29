@@ -84,7 +84,7 @@ export const SigningForm2 = ({
   const [certSelected, setCertSelected] = useState(0);
 
   const [activeStep, setActiveStep] = useState(1);
-  // console.log("activeStep: ", activeStep);
+  console.log("activeStep: ", activeStep);
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
@@ -283,6 +283,23 @@ export const SigningForm2 = ({
         setConnectorName("");
         setActiveStep((prevActiveStep) => prevActiveStep - 2);
         break;
+      case 4:
+        switch (provider) {
+          case "SMART_ID_SIGNING":
+            setCriteria("PHONE");
+            setCode("84");
+            setActiveStep(2);
+            break;
+          case "USB_TOKEN_SIGNING":
+            setProvider("");
+            setConnectorName("");
+            setActiveStep(1);
+            break;
+        }
+        break;
+      case 5:
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        break;
     }
   };
 
@@ -294,7 +311,7 @@ export const SigningForm2 = ({
   // console.log("prefixList: ", prefixList);
 
   const connectorList = useConnectorList(providerName);
-  console.log("connectorList: ", connectorList.data);
+  // console.log("connectorList: ", connectorList.data);
 
   const smartIdCertificate = useSmartIdCertificate();
 
@@ -409,7 +426,7 @@ export const SigningForm2 = ({
         };
         smartIdCertificate.mutate(dataApi.current, {
           onSuccess: (data) => {
-            console.log("data: ", data);
+            // console.log("data: ", data);
 
             handleNext(2);
             // onClose();
@@ -668,12 +685,18 @@ export const SigningForm2 = ({
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={
-            activeStep === 2 || activeStep === 3
+            activeStep === 2 ||
+            activeStep === 3 ||
+            activeStep === 4 ||
+            activeStep === 5
               ? handleBack
               : handleCancelClick
           }
         >
-          {activeStep === 2 || activeStep === 3
+          {activeStep === 2 ||
+          activeStep === 3 ||
+          activeStep === 4 ||
+          activeStep === 5
             ? t("0-common.back")
             : t("0-common.cancel")}
         </Button>

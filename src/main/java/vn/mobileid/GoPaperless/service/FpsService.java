@@ -177,7 +177,7 @@ public class FpsService {
 
             return response.getBody();
         } catch (HttpClientErrorException e) {
-            System.out.println("Error  đây: ");
+            System.out.println("Error : ");
             HttpStatus statusCode = e.getStatusCode();
             System.out.println("HTTP Status Code: " + statusCode.value());
             if (statusCode.value() == 401) {
