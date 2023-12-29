@@ -282,7 +282,7 @@ export const Step6 = ({
       <Typography
         variant="h6"
         marginBottom="10px"
-        marginTop="6px"
+        marginTop="10px"
         textAlign={"center"}
       >
         {/* Please do not close this page. After your identity is verified, next

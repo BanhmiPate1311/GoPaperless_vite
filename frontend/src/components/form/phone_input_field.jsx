@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
@@ -28,12 +27,13 @@ export const PhoneInputField2 = ({
         if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
       }}
       inputStyle={{
-        height: "40px",
+        height: "45px",
         width: "100%",
         opacity: disabled ? "0.5" : "1",
       }}
       disabled={disabled}
       copyNumbersOnly={false}
+      countryCodeEditable={false}
     />
   );
 };

@@ -251,7 +251,11 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
           onClick={handleSubmitClick}
           type="button"
         >
-          {errorPG ? t("0-common.retry") : t("0-common.submit")}
+          {errorPG
+            ? t("0-common.retry")
+            : activeStep === 2
+            ? t("0-common.submit")
+            : t("0-common.continue")}
         </Button>
       </DialogActions>
     </Dialog>
