@@ -26,6 +26,8 @@ import vn.mobileid.GoPaperless.utils.LoadParamSystem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -309,6 +311,7 @@ public class ApiController {
             return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
         }
         String fileName = lastFile.getLastPplFileName().replace(".pdf", "");
+        System.out.println("fileName: " + fileName);
 
         InputStream response = fpsService.getImagePdf(lastFile.getDocumentId());
         if (response != null) {
@@ -316,7 +319,9 @@ public class ApiController {
             // length để browser hiểu
             HttpHeaders headers = new HttpHeaders();
 //                headers.add("Content-Disposition", "attachment; filename=" + "file.pdf");
-            headers.add("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
+            String encodedFileName = URLEncoder.encode(fileName + ".pdf", StandardCharsets.UTF_8.toString());
+            headers.add("Content-Disposition", "attachment; filename=" + encodedFileName);
+//            headers.add("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
             // jrbFile.getFileName());
             InputStreamResource inputStreamResource = new InputStreamResource(response);
             return ResponseEntity.ok()
