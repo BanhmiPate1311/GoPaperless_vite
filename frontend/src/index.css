@@ -92,16 +92,5 @@ input[type="number"] {
 /* end of disable arrow input number */
 
 /* Drawer */
-.EZDrawer .EZDrawer__checkbox:checked~.EZDrawer__container {
-  width: 480px !important;
-}
-@media screen and (max-width: 576px) {
-  .EZDrawer .EZDrawer__checkbox:checked~.EZDrawer__container {
-      width: unset !important;
-  }
-  .content-cookie {
-      height: 450px;
-  }
 
-}
 /* Drawer */

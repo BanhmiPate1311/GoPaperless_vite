@@ -4,8 +4,7 @@ import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import cookie from "@/assets/images/cookie/cookie_fill.png";
 import { styled } from "@mui/material/styles";
-import Drawer from "react-modern-drawer";
-import "react-modern-drawer/dist/index.css";
+import Drawer from "@mui/material/Drawer";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
@@ -14,7 +13,6 @@ import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import lolo_mobileid from "@/assets/images/cookie/Mobileid.png";
 import { Link } from "react-router-dom";
-import { Close } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
 export const Cookie = () => {
@@ -138,10 +136,9 @@ export const Cookie = () => {
           open={isOpen}
           onClose={toggleDrawer}
           direction="left"
-          // style={{ width: '480px' }}
           className="drawer-container"
         >
-          <Box>
+          <Box sx={{ width: "480px", height: "auto" }}>
             <Box
               className="header-cookie"
               sx={{
@@ -190,7 +187,14 @@ export const Cookie = () => {
                 </Button>
               </Box>
             </Box>
-            <Box className="content-cookie" id="cookieSetting">
+            <Box
+              id=""
+              sx={{
+                height: "calc(100vh - 200px)",
+                overflow: "auto",
+                margin: "0 10px 0 25px",
+              }}
+            >
               <Box>
                 <Typography
                   variant="h4"
