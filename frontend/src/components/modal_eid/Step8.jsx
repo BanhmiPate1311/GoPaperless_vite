@@ -156,7 +156,7 @@ export const Step8 = ({
   // console.log("result: ", result);
   const handleOnChange = (res) => {
     setOtp1(res);
-    console.log("res: ", res.length);
+    // console.log("res: ", res.length);
     if (res.length === 6) {
       setOtp(res);
       onDisableSubmit(false);

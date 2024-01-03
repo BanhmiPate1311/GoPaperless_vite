@@ -135,10 +135,10 @@ public class ElectronicService {
                 }
             }
         }
-        System.out.println("PadesConstants.BASE_URL" + PadesConstants.BASE_URL);
-        System.out.println("PadesConstants.ACCESSKEY" + PadesConstants.ACCESSKEY);
-        System.out.println("PadesConstants.SECRETKEY" + PadesConstants.SECRETKEY);
-        System.out.println("PadesConstants.BASIC_TOKEN" + PadesConstants.BASIC_TOKEN);
+        System.out.println("PadesConstants.BASE_URL: " + PadesConstants.BASE_URL);
+        System.out.println("PadesConstants.ACCESSKEY: " + PadesConstants.ACCESSKEY);
+        System.out.println("PadesConstants.SECRETKEY: " + PadesConstants.SECRETKEY);
+        System.out.println("PadesConstants.BASIC_TOKEN: " + PadesConstants.BASIC_TOKEN);
 
         String tokenUrl = PadesConstants.BASE_URL + "/v2/e-identity/general/token/get";
         System.out.println("tokenUrl" + tokenUrl);

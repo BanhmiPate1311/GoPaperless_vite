@@ -148,7 +148,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
     const response = await rsspService.getVc({
       requestID: dataSigning.requestID,
     });
-    console.log("response: ", response.data);
+    // console.log("response: ", response.data);
     setVc(response.data);
     // setVCEnabled(false);
   };

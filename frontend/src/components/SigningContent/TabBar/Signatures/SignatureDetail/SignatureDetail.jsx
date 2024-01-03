@@ -23,9 +23,9 @@ export const SignatureDetail = ({
   handleClose,
   signType,
 }) => {
-  console.log("signType: ", signType);
+  // console.log("signType: ", signType);
   const { t } = useTranslation();
-  console.log("signature: ", signDetail);
+  // console.log("signature: ", signDetail);
   const name = signDetail.certificate.subject.CN[0];
   const warnings = signDetail.warnings;
   const errors = signDetail.errors;

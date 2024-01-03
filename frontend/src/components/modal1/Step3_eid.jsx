@@ -14,6 +14,7 @@ export const Step3_eid = ({
   code,
   setCode,
   onDisableSubmit,
+  handleSubmit,
 }) => {
   const { t } = useTranslation();
 
@@ -96,6 +97,12 @@ export const Step3_eid = ({
           onChange={(event) => {
             setCode(event.target.value);
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
           sx={{ my: 0 }}
           inputProps={{
             sx: {
@@ -123,5 +130,6 @@ Step3_eid.propTypes = {
   code: PropTypes.string,
   setCode: PropTypes.func,
   onDisableSubmit: PropTypes.func,
+  handleSubmit: PropTypes.func,
 };
 export default Step3_eid;

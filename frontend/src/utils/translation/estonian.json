@@ -61,7 +61,12 @@
     "top": "Üles",
     "width": "Laius",
     "height": "Kõrgus",
-    "save": "Salvesta"
+    "save": "Salvesta",
+    "credentialID": "Mandaat ID",
+    "subject": "Teema",
+    "subjectDN": "SubjectDN",
+    "valid_from": "Kehtib alates",
+    "valid_to": "Kehtib kuni"
   },
   "batch": {
     "collapse": "Ahenda kõik",
@@ -173,7 +178,9 @@
     "modal1_title": "Redigeeri allkirjavälja",
     "modal1_1": "Autentige allkirjastaja OTP kaudu",
     "modal1_2": "OTP autentimine (SMS)",
-    "modal1_3": "Ära näita seda dialoogi automaatselt, kui allkirjaväli kukub"
+    "modal1_3": "Ära näita seda dialoogi automaatselt, kui allkirjaväli kukub",
+
+    "modal5_title": "Sertifikaadi teave"
   },
   "signing": {
     "contact_information": "Kontakti info",

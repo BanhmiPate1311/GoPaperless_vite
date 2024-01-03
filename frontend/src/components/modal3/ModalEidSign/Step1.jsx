@@ -46,12 +46,10 @@ export const Step1 = ({ phoneNumber }) => {
           InputLabelProps={{ shrink: true }}
           InputProps={{
             readOnly: true,
+            sx: {
+              backgroundColor: "signingWFBackground.main",
+            },
           }}
-          // inputProps={{
-          //   style: {
-          //     color: "#1976D2",
-          //   },
-          // }}
         />
       </Box>
     </Box>

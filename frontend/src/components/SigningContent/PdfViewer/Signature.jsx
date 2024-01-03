@@ -104,11 +104,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       // queryClient.invalidateQueries({ queryKey: ["getField"] });
       // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
       queryClient.setQueryData(["getField"], (prev) => {
-        console.log("prev: ", prev);
+        // console.log("prev: ", prev);
         const index = prev.data.signature.findIndex(
           (item) => item.field_name === variable.body.field_name
         );
-        console.log("index: ", index);
+        // console.log("index: ", index);
         if (index !== -1) {
           return {
             ...prev,

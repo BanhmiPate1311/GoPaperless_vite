@@ -62,7 +62,7 @@ export const ModalEid = ({
   const [processId, setProcessId] = useState(null);
   const [otp, setOtp] = useState(null);
   const [certificateList, setCertificateList] = useState([]);
-  console.log("certificateList: ", certificateList);
+  // console.log("certificateList: ", certificateList);
   const [newListCert, setNewListCert] = useState([]);
   const [certificate, setCertificate] = useState(null);
   const [assurance, setAssurance] = useState("");
@@ -393,7 +393,6 @@ export const ModalEid = ({
               setActiveStep(11);
             }
           } else {
-            console.log("Nhảy một bước tiến: ");
             // handleNext(1); // Nhảy một bước tiến nếu không phải step 7
             setActiveStep(11);
           }
@@ -446,7 +445,7 @@ export const ModalEid = ({
     try {
       // const response = await api.post("/elec/checkCertificate", data);
       const response = await electronicService.checkCertificate(data);
-      console.log("response: ", response);
+      // console.log("response: ", response);
       setIsFetching(false);
       setCertificateList(response.data);
       handleNext(1);
@@ -627,6 +626,8 @@ export const ModalEid = ({
       phoneNumber={phoneNumber}
       setPhoneNumber={setPhoneNumber}
       dialCode={dialCode}
+      handleSubmit={handleSubmitClick}
+      isSubmitDisabled={isSubmitDisabled}
     />,
     <Step8
       key={"step8"}
@@ -641,6 +642,8 @@ export const ModalEid = ({
       onDisableSubmit={handleDisableSubmit}
       emailRef={emailRef}
       setErrorPG={setErrorPG}
+      handleSubmit={handleSubmitClick}
+      isSubmitDisabled={isSubmitDisabled}
     />,
     <Step10
       key={"step10"}
@@ -678,6 +681,8 @@ export const ModalEid = ({
       key={"step14"}
       tax={taxRef}
       onDisableSubmit={handleDisableSubmit}
+      handleSubmit={handleSubmitClick}
+      isSubmitDisabled={isSubmitDisabled}
     />,
   ];
 

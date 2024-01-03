@@ -61,7 +61,12 @@
     "top": "Bên trên",
     "width": "Chiều rộng",
     "height": "Chiều cao",
-    "save": "Lưu"
+    "save": "Lưu",
+    "credentialID": "ID thông tin xác thực",
+    "subject": "Chủ thể",
+    "subjectDN": "Chủ thể DN",
+    "valid_from": "Có hiệu lực từ",
+    "valid_to": "Có hiệu lực đến"
   },
   "batch": {
     "collapse": "Thu gọn tất cả",
@@ -173,7 +178,9 @@
     "modal1_title": "Chỉnh sửa trường chữ ký",
     "modal1_1": "Xác thực người ký qua OTP",
     "modal1_2": "Xác thực OTP (SMS)",
-    "modal1_3": "Không tự động hiển thị hộp thoại này khi trường chữ ký bị xóa"
+    "modal1_3": "Không tự động hiển thị hộp thoại này khi trường chữ ký bị xóa",
+
+    "modal5_title": "Thông tin chứng thư số"
   },
   "signing": {
     "contact_information": "Thông tin liên lạc",

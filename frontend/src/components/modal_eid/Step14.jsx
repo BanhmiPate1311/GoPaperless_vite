@@ -4,7 +4,12 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
-export const Step14 = ({ tax, onDisableSubmit }) => {
+export const Step14 = ({
+  tax,
+  onDisableSubmit,
+  handleSubmit,
+  isSubmitDisabled,
+}) => {
   const { t } = useTranslation();
 
   const handleTax = (e) => {
@@ -52,6 +57,11 @@ export const Step14 = ({ tax, onDisableSubmit }) => {
             maxLength: 10,
           }}
           onChange={handleTax}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !isSubmitDisabled) {
+              handleSubmit();
+            }
+          }}
         />
       </Box>
     </Box>
@@ -61,6 +71,8 @@ export const Step14 = ({ tax, onDisableSubmit }) => {
 Step14.propTypes = {
   tax: PropTypes.object,
   onDisableSubmit: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  isSubmitDisabled: PropTypes.bool,
 };
 
 export default Step14;

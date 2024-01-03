@@ -21,7 +21,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
   const { t } = useTranslation();
 
   const signType = signDetail.is_seal === true ? "eseal" : "Signature";
-  console.log("signDetail: ", signDetail);
+  // console.log("signDetail: ", signDetail);
 
   const name = signDetail.certificate.subject.CN[0];
   // const warnings = signDetail.warnings;

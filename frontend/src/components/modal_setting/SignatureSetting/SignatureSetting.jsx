@@ -83,7 +83,7 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
 
   // const [listAssurance, setListAssurance] = useState([]);
   const [value, setValue] = useState(0);
-  console.log("value: ", value);
+  // console.log("value: ", value);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

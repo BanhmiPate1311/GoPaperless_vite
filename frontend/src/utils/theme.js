@@ -18,7 +18,6 @@ export let theme = extendTheme({
       fontSize: 14,
       color: "#1F2937", // Adjust the font size as needed
       fontWeight: 500,
-     
     },
     h5: {
       fontSize: 13, // Adjust the font size as needed

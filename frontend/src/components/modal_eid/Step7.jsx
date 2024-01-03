@@ -10,6 +10,8 @@ export const Step7 = ({
   phoneNumber,
   setPhoneNumber,
   dialCode,
+  handleSubmit,
+  isSubmitDisabled,
 }) => {
   const { t } = useTranslation();
 
@@ -78,6 +80,8 @@ export const Step7 = ({
           phoneNumber={phoneNumber}
           setPhoneNumber={setPhoneNumber}
           handlePhoneNumber={handlePhoneNumber}
+          enterToSubmit={handleSubmit}
+          isSubmitDisabled={isSubmitDisabled}
         />
       </Box>
     </Box>
@@ -89,6 +93,8 @@ Step7.propTypes = {
   phoneNumber: PropTypes.string,
   setPhoneNumber: PropTypes.func,
   dialCode: PropTypes.object,
+  handleSubmit: PropTypes.func,
+  isSubmitDisabled: PropTypes.bool,
 };
 
 export default Step7;

@@ -61,7 +61,12 @@
     "top": "Top",
     "width": "Width",
     "height": "Height",
-    "save": "Save"
+    "save": "Save",
+    "credentialID": "CredentialID",
+    "subject": "Subject",
+    "subjectDN": "SubjectDN",
+    "valid_from": "Valid From",
+    "valid_to": "Valid To"
   },
   "batch": {
     "collapse": "Collapse all",
@@ -173,7 +178,9 @@
     "modal1_title": "Edit Signature Field",
     "modal1_1": "Authenticate signer via OTP",
     "modal1_2": "OTP authentication (SMS)",
-    "modal1_3": "Do not show this dialog automatically when a signature field is dropped"
+    "modal1_3": "Do not show this dialog automatically when a signature field is dropped",
+
+    "modal5_title": "Certificate Information"
   },
   "signing": {
     "contact_information": "Contact Information",

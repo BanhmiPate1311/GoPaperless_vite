@@ -16,14 +16,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const ShowSignature = ({ sig, sign, signType, index }) => {
-  console.log("index: ", index);
+  // console.log("index: ", index);
   const { t } = useTranslation();
 
   const signTitle = signType + " is valid";
   const subTitle = "Electronic " + signType;
 
   const [isOpen, setIsOpen] = useState([false]);
-  console.log("isOpen: ", isOpen);
+  // console.log("isOpen: ", isOpen);
   const toggleDrawer = (index) => {
     const newIsOpen = [...isOpen];
     newIsOpen[index] = !newIsOpen[index];
