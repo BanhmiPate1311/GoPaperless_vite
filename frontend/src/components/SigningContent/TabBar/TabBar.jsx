@@ -109,6 +109,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
           borderLeft: 1,
           borderColor: "divider",
           width: "120px",
+          minWidth: "120px",
 
           "& .MuiButtonBase-root.Mui-selected": {
             backgroundColor: "tabBackground.main",

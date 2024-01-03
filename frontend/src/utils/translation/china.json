@@ -61,7 +61,12 @@
     "top": "顶部",
     "width": "宽度",
     "height": "高度",
-    "save": "节省"
+    "save": "节省",
+    "credentialID": "凭证ID",
+    "subject": "主题",
+    "subjectDN": "主题DN",
+    "valid_from": "有效期自",
+    "valid_to": "有效"
   },
   "batch": {
     "collapse": "全 部 收 縮",
@@ -173,7 +178,9 @@
     "modal1_title": "编辑签名字段",
     "modal1_1": "通过 OTP 验证签名者身份",
     "modal1_2": "OTP 身份验证（短信",
-    "modal1_3": "删除签名字段时不自动显示此对话框"
+    "modal1_3": "删除签名字段时不自动显示此对话框",
+
+    "modal5_title": "证书信息"
   },
   "signing": {
     "contact_information": "联系信息",

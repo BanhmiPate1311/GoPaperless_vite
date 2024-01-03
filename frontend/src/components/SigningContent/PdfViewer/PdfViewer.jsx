@@ -210,13 +210,13 @@ export const PdfViewer = ({ workFlow }) => {
     handleClose();
     // console.log("signInfo: ", signInfo);
 
-    if (
-      signatures &&
-      signatures.findIndex((item) => item.field_name === signerId) !== -1
-    ) {
-      // handleClose();
-      return alert("Signature Duplicated");
-    }
+    // if (
+    //   signatures &&
+    //   signatures.findIndex((item) => item.field_name === signerId) !== -1
+    // ) {
+    //   // handleClose();
+    //   return alert("Signature Duplicated");
+    // }
 
     const newSignature = {
       type: value,

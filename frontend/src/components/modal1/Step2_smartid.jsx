@@ -12,11 +12,13 @@ export const Step2_smartid = ({
   data,
   dialCode,
   errorApi,
+  setErrorApi,
   criteria,
   setCriteria,
   code,
   setCode,
   onDisableSubmit,
+  handleSubmit,
 }) => {
   const { t } = useTranslation();
   const [isPhoneSelect, setIsPhoneSelect] = useState(true);
@@ -90,6 +92,7 @@ export const Step2_smartid = ({
   }, [isPhoneSelect, code, criteria]);
   const handleChange1 = (event) => {
     // console.log("event: ", event.target.value);
+    setErrorApi(null);
     setCriteria(event.target.value);
 
     if (event.target.value === "PHONE") {
@@ -160,8 +163,15 @@ export const Step2_smartid = ({
           specialLabel={""}
           value={code}
           onChange={(phone, country) => {
+            setErrorApi(null);
             setCode(phone);
             dialCode.current = country.dialCode;
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
           }}
           inputStyle={{
             height: "45px",
@@ -192,7 +202,14 @@ export const Step2_smartid = ({
           // name={name}
           value={code}
           onChange={(event) => {
+            setErrorApi(null);
             setCode(event.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
           }}
           sx={{ my: 0 }}
           inputProps={{
@@ -223,6 +240,8 @@ Step2_smartid.propTypes = {
   code: PropTypes.string,
   setCode: PropTypes.func,
   onDisableSubmit: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  setErrorApi: PropTypes.func,
 };
 
 export default Step2_smartid;

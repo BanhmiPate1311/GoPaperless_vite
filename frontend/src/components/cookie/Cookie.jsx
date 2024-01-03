@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import lolo_mobileid from "@/assets/images/cookie/Mobileid.png";
+import cookie from "@/assets/images/cookie/cookie_fill.png";
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+import CloseIcon from "@mui/icons-material/Close";
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Switch from "@mui/material/Switch";
-import cookie from "@/assets/images/cookie/cookie_fill.png";
-import { styled } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
-import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
-import MuiAccordion from "@mui/material/Accordion";
-import MuiAccordionSummary from "@mui/material/AccordionSummary";
-import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import lolo_mobileid from "@/assets/images/cookie/Mobileid.png";
 import { Link } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
 
 export const Cookie = () => {
   const [isOpen, setIsOpen] = React.useState(false);

@@ -3,7 +3,13 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-export const Step9 = ({ onDisableSubmit, setErrorPG, emailRef }) => {
+export const Step9 = ({
+  onDisableSubmit,
+  setErrorPG,
+  emailRef,
+  handleSubmit,
+  isSubmitDisabled,
+}) => {
   const { t } = useTranslation();
 
   function isValidEmail(email) {
@@ -72,6 +78,11 @@ export const Step9 = ({ onDisableSubmit, setErrorPG, emailRef }) => {
             // maxLength: "16",
           }}
           onChange={handleEmail}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !isSubmitDisabled) {
+              handleSubmit();
+            }
+          }}
         />
       </Box>
     </Box>
@@ -82,6 +93,8 @@ Step9.propTypes = {
   onDisableSubmit: PropTypes.func,
   setErrorPG: PropTypes.func,
   emailRef: PropTypes.object,
+  handleSubmit: PropTypes.func,
+  isSubmitDisabled: PropTypes.bool,
 };
 
 export default Step9;

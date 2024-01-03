@@ -221,7 +221,7 @@ const SigningForm = ({
   };
 
   const handleStep6Submit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     const codeNumber = data.criteria + ":" + data.personalCode;
     dataApi.current = {
       ...dataApi.current,

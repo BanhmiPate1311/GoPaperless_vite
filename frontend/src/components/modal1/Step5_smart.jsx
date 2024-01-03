@@ -10,8 +10,9 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ModalCertInfor } from ".";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -34,8 +35,11 @@ export const Step5_smart = ({
   onDisableSubmit,
   assurance,
 }) => {
-  // console.log("data: ", data);
+  console.log("data: ", data);
   const { t } = useTranslation();
+
+  const [isShowCertInfor, setShowCertInfor] = useState([false]);
+
   useEffect(() => {
     if (certSelected === null) {
       onDisableSubmit(true);
@@ -56,7 +60,12 @@ export const Step5_smart = ({
       value={index}
       aria-label="list"
       key={index}
-      onDoubleClick={onDoubleClick}
+      onDoubleClick={(e) => {
+        e.preventDefault();
+        if (!isShowCertInfor[index]) {
+          onDoubleClick(index);
+        }
+      }}
       // onMouseDown={(e) => {
       //   if (e.detail === 2) {
       //     e.preventDefault();
@@ -75,7 +84,9 @@ export const Step5_smart = ({
             cursor: "pointer",
             mx: 2,
           }}
-          // onClick={() => handleOpenSigningForm(index)}
+          onClick={() => {
+            handleShowCertInfor(index);
+          }}
         />
 
         <Box flexGrow={1} textAlign="left">
@@ -98,8 +109,25 @@ export const Step5_smart = ({
           </Typography>
         </Box>
       </Stack>
+      <ModalCertInfor
+        open={isShowCertInfor[index]}
+        onClose={() => handleCloseCertInfor(index)}
+        data={value}
+      />
     </ToggleButtonStyle>
   ));
+
+  const handleShowCertInfor = (index) => {
+    const newValue = [...isShowCertInfor];
+    newValue[index] = true;
+    setShowCertInfor(newValue);
+  };
+
+  const handleCloseCertInfor = (index) => {
+    const newValue = [...isShowCertInfor];
+    newValue[index] = false;
+    setShowCertInfor(newValue);
+  };
 
   const handleChange = (event, nextView) => {
     // console.log("nextView: ", nextView);

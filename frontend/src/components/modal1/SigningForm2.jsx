@@ -76,6 +76,7 @@ export const SigningForm2 = ({
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
   const [errorPG, setErrorPG] = useState(null);
+  const [errorApi, setErrorApi] = useState(null);
   const [unavail, setUnavail] = useState(null);
   const [criteria, setCriteria] = useState("PHONE");
   const [criteriaEid, setCriteriaEid] = useState("CITIZEN-IDENTITY-CARD");
@@ -84,7 +85,7 @@ export const SigningForm2 = ({
   const [certSelected, setCertSelected] = useState(0);
 
   const [activeStep, setActiveStep] = useState(1);
-  console.log("activeStep: ", activeStep);
+  // console.log("activeStep: ", activeStep);
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
@@ -432,6 +433,10 @@ export const SigningForm2 = ({
             // onClose();
             // handleShowModal2();
           },
+          onError: (error) => {
+            console.log("error: ", error);
+            setErrorApi(error.response.data.message);
+          },
         });
         break;
       case 3:
@@ -536,12 +541,14 @@ export const SigningForm2 = ({
       key="step2"
       data={filterPrefix}
       dialCode={dialCode}
-      errorApi={smartIdCertificate?.error?.response?.data?.message}
+      errorApi={errorApi}
+      setErrorApi={setErrorApi}
       criteria={criteria}
       setCriteria={setCriteria}
       code={code}
       setCode={setCode}
       onDisableSubmit={handleDisableSubmit}
+      handleSubmit={handleSubmitClick}
     />,
     <Step3_eid
       key="step3"
@@ -551,6 +558,7 @@ export const SigningForm2 = ({
       code={code}
       setCode={setCode}
       onDisableSubmit={handleDisableSubmit}
+      handleSubmit={handleSubmitClick}
     />,
     <Step4
       key="step4"

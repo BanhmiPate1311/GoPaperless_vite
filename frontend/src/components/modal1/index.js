@@ -5,3 +5,4 @@ export * from "./Step3_eid";
 export * from "./Step4";
 export * from "./Step5_smart";
 export * from "./Step6_usb";
+export * from "./ModalCertInfor";

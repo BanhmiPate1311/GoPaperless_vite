@@ -61,7 +61,12 @@
     "top": "Spitze",
     "width": "Breite",
     "height": "Höhe",
-    "save": "Speichern"
+    "save": "Speichern",
+    "credentialID": "Anmeldeinformations-ID",
+    "subject": "Thema",
+    "subjectDN": "BetreffDN",
+    "valid_from": "Gültig ab",
+    "valid_to": "Gültig bis"
   },
   "batch": {
     "collapse": "Alles kollabieren",
@@ -173,7 +178,9 @@
     "modal1_title": "Signaturfeld bearbeiten",
     "modal1_1": "Authentifizieren Sie den Unterzeichner über OTP",
     "modal1_2": "OTP-Authentifizierung (SMS)",
-    "modal1_3": "Dieses Dialogfeld nicht automatisch anzeigen, wenn ein Signaturfeld gelöscht wird"
+    "modal1_3": "Dieses Dialogfeld nicht automatisch anzeigen, wenn ein Signaturfeld gelöscht wird",
+
+    "modal5_title": "Zertifikatsinformationen"
   },
   "signing": {
     "contact_information": "Kontaktinformation",

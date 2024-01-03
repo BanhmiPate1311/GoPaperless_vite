@@ -9,6 +9,7 @@ export const PhoneInputField2 = ({
   handlePhoneNumber,
   enterToSubmit,
   disabled = false,
+  isSubmitDisabled = false,
   // copyNumbersOnly = true,
 }) => {
   return (
@@ -19,7 +20,11 @@ export const PhoneInputField2 = ({
       specialLabel={label}
       value={phoneNumber}
       onChange={(phone, country) => handlePhoneNumber(phone, country)}
-      onKeyDown={enterToSubmit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !isSubmitDisabled) {
+          enterToSubmit();
+        }
+      }}
       onBlur={(phone, country) => {
         if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
       }}
@@ -45,5 +50,6 @@ PhoneInputField2.propTypes = {
   enterToSubmit: PropTypes.func,
   disabled: PropTypes.bool,
   copyNumbersOnly: PropTypes.bool,
+  isSubmitDisabled: PropTypes.bool,
 };
 export default PhoneInputField2;

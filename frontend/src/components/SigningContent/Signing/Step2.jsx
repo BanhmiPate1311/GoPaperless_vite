@@ -19,8 +19,8 @@ import CheckIdSoft from "./CheckIdSoft";
 
 export const Step2 = forwardRef(
   ({ onStepSubmit, providerName, connectorList, filterConnector }, ref) => {
-    console.log("filterConnector: ", filterConnector);
-    console.log("connectorList: ", connectorList);
+    // console.log("filterConnector: ", filterConnector);
+    // console.log("connectorList: ", connectorList);
     const schema = yup.object().shape({
       provider: yup.string().required("Please Select Signing Method"),
       connector: yup
@@ -101,7 +101,7 @@ export const Step2 = forwardRef(
       setValue("connector", "");
       const filterValue = e.target.value;
       const filterProvider = connectorList?.[filterValue];
-      console.log("filteredData: ", filterProvider);
+      // console.log("filteredData: ", filterProvider);
 
       if (filterProvider) {
         const filterData = filterProvider.filter((item) =>
@@ -202,7 +202,7 @@ export const Step2 = forwardRef(
     };
 
     const getCertificate = (dllUsb, resolve, reject) => {
-      console.log("sdk.current: ", sdk.current);
+      // console.log("sdk.current: ", sdk.current);
       sdk.current.getTokenCertificate(
         60,
         JSON.parse(dllUsb),
