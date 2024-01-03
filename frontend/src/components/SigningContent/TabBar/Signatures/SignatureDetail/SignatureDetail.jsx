@@ -1,4 +1,5 @@
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 import { ReactComponent as WarningIcon2 } from "@/assets/images/svg/warning2_icon.svg";
 import { ReactComponent as ErrorIcon } from "@/assets/images/svg/error_icon.svg";
 import { convertTime } from "@/utils/commonFunction";
@@ -118,7 +119,8 @@ export const SignatureDetail = ({
             }}
             gap={1}
           >
-            <SignatureIcon />
+            {signType == "eseal" ? <SealIcon /> : <SignatureIcon />}
+
             <Typography variant="h3" sx={{ fontWeight: "700" }}>
               {name}
             </Typography>
