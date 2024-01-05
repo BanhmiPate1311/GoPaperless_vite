@@ -72,6 +72,7 @@ export const SigningForm2 = ({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [assurance, setAssurance] = useState("");
   const [provider, setProvider] = useState("");
+  console.log("provider: ", provider);
   const [connectorName, setConnectorName] = useState("");
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
@@ -120,7 +121,7 @@ export const SigningForm2 = ({
             };
           case "electronic_id":
             return {
-              label: "Electronic video base Identification",
+              label: "Electronic video based Identification",
               icon: <EidIcon />,
               value: "ELECTRONIC_ID",
             };
@@ -155,7 +156,7 @@ export const SigningForm2 = ({
     mutationFn: async (data) => {
       try {
         const response = await connectWS(data);
-        console.log("response: ", response);
+        // console.log("response: ", response);
         // console.log(checkEseal(response.signingCertificates[0]));
         return response;
       } catch (error) {
@@ -277,12 +278,14 @@ export const SigningForm2 = ({
       case 2:
         setProvider("");
         setConnectorName("");
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        setCriteria("PHONE");
+        setCode("84");
+        setActiveStep(1);
         break;
       case 3:
-        setProvider("");
-        setConnectorName("");
-        setActiveStep((prevActiveStep) => prevActiveStep - 2);
+        // setProvider("");
+        // setConnectorName("");
+        setActiveStep(1);
         break;
       case 4:
         switch (provider) {
@@ -300,6 +303,9 @@ export const SigningForm2 = ({
         break;
       case 5:
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        break;
+      case 6:
+        setActiveStep(4);
         break;
     }
   };
@@ -366,7 +372,8 @@ export const SigningForm2 = ({
         switch (provider) {
           case "SMART_ID_SIGNING":
             if (connectorName === "SMART_ID_MOBILE_ID") {
-              handleNext(1);
+              // handleNext(1);
+              setActiveStep(2);
             } else {
               // toast.warn("Functionality is under development!");
               setUnavail(t("signingForm.title6"));
@@ -429,7 +436,8 @@ export const SigningForm2 = ({
           onSuccess: (data) => {
             // console.log("data: ", data);
 
-            handleNext(2);
+            // handleNext(2);
+            setActiveStep(4);
             // onClose();
             // handleShowModal2();
           },
@@ -472,23 +480,33 @@ export const SigningForm2 = ({
                 )
               );
             }
-            handleNext(1);
+            // handleNext(1);
+            setActiveStep(5);
             break;
           case "USB_TOKEN_SIGNING":
             if (assurance === "eseal") {
               setNewListCert(
-                certificateInfor.data.signingCertificates.filter(
-                  (item) => checkEseal(item) === true
-                )
+                certificateInfor.data.signingCertificates.filter((item) => {
+                  const validToDate = new Date(item.validTo);
+                  const currentDateTime = new Date();
+                  return (
+                    checkEseal(item) === true && validToDate > currentDateTime
+                  );
+                })
               );
             } else {
               setNewListCert(
-                certificateInfor.data.signingCertificates.filter(
-                  (item) => checkEseal(item) === false
-                )
+                certificateInfor.data.signingCertificates.filter((item) => {
+                  const validToDate = new Date(item.validTo);
+                  const currentDateTime = new Date();
+                  return (
+                    checkEseal(item) === false && validToDate > currentDateTime
+                  );
+                })
               );
             }
-            handleNext(2);
+            // handleNext(2);
+            setActiveStep(6);
             break;
         }
         break;
@@ -574,6 +592,7 @@ export const SigningForm2 = ({
       onDoubleClick={handleSubmitClick}
       onDisableSubmit={handleDisableSubmit}
       assurance={assurance}
+      provider={provider}
     />,
     <Step6_usb
       key="step5"
@@ -583,6 +602,7 @@ export const SigningForm2 = ({
       onDoubleClick={handleSubmitClick}
       onDisableSubmit={handleDisableSubmit}
       assurance={assurance}
+      provider={provider}
     />,
   ];
 
@@ -696,7 +716,8 @@ export const SigningForm2 = ({
             activeStep === 2 ||
             activeStep === 3 ||
             activeStep === 4 ||
-            activeStep === 5
+            activeStep === 5 ||
+            activeStep === 6
               ? handleBack
               : handleCancelClick
           }
@@ -704,7 +725,8 @@ export const SigningForm2 = ({
           {activeStep === 2 ||
           activeStep === 3 ||
           activeStep === 4 ||
-          activeStep === 5
+          activeStep === 5 ||
+          activeStep === 6
             ? t("0-common.back")
             : t("0-common.cancel")}
         </Button>

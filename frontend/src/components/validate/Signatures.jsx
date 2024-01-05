@@ -1,18 +1,13 @@
+import imageNotFound from "@/assets/images/noSignature.png";
+import { ReactComponent as IconChipWhite } from "@/assets/images/svg/icon_Chip_White.svg";
 import { Error } from "@mui/icons-material";
 import { Box, Divider, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { ReactComponent as IconChipWhite } from "@/assets/images/svg/icon_Chip_White.svg";
-import imageNotFound from "@/assets/images/noSignature.png";
 import { SignDetail } from ".";
 
 export const Signatures = ({ validFile, signType }) => {
   const { t } = useTranslation();
-  const [expanded, setExpanded] = useState("panel");
-
-  const handleChangeShow = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : true);
-  };
 
   const valueSign = [
     {
@@ -86,7 +81,9 @@ export const Signatures = ({ validFile, signType }) => {
             />
           </Box>
           <Typography textAlign="center" variant="h5" fontWeight="bold">
-            {t("validation.signatureNotFound")}
+            {signType === "Signature"
+              ? t("validation.signatureNotFound")
+              : t("validation.sealNotFound")}
           </Typography>
         </Box>
       ) : (
@@ -102,5 +99,8 @@ export const Signatures = ({ validFile, signType }) => {
     </>
   );
 };
-
+Signatures.propTypes = {
+  validFile: PropTypes.array,
+  signType: PropTypes.string,
+};
 export default Signatures;

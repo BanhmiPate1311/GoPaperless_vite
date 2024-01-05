@@ -246,18 +246,23 @@ export const Step8 = ({
       <Box
         textAlign="center"
         marginTop="15px"
-        sx={{
-          cursor: enResend ? "pointer" : "not-allowed",
-          color: enResend ? "#1976D2" : "#26293f",
-          textDecoration: "underline",
-        }}
         // onClick={processOTPResend}
         onClick={handleResend}
         // className="buttontet"
         disabled={!enResend}
         height={"18px"}
       >
-        {t("electronic.step85")}
+        <Typography
+          className="hover-underline-animation"
+          variant="h6"
+          sx={{
+            cursor: enResend ? "pointer" : "not-allowed",
+            color: enResend ? "#1976D2" : "#26293f",
+            // textDecoration: "underline",
+          }}
+        >
+          {t("electronic.step85")}
+        </Typography>
       </Box>
     </Box>
   );

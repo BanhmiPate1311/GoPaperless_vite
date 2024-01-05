@@ -163,7 +163,7 @@ export const ModalEid = ({
     try {
       const response = await electronicService.checkIdentity(data);
       if (response.data) {
-        // console.log("response.data: ", response.data);
+        console.log("checkIdentity: ", response.data);
         setSubject(response.data);
       }
       if (response.data.status === 0) {
@@ -344,7 +344,15 @@ export const ModalEid = ({
       // const response = await api.post("/elec/updateSubject", data);
       const response = await electronicService.updateSubject(data);
       setProcessId(response.data);
-      handleNext();
+      switch (activeStep) {
+        case 7:
+          setActiveStep(8);
+          break;
+        case 9:
+          setActiveStep(10);
+          break;
+      }
+      // handleNext();
     } catch (error) {
       console.error("Lỗi khi gọi API updateSubject:", error);
       switch (activeStep) {
@@ -423,7 +431,15 @@ export const ModalEid = ({
       // const response = await api.post("/elec/processOTPResend", data);
       const response = await electronicService.processOTPResend(data);
       if (response.data.status === 0) {
-        handleNext();
+        switch (activeStep) {
+          case 8:
+            setActiveStep(9);
+            break;
+          case 10:
+            setActiveStep(11);
+            break;
+        }
+        // handleNext();
       } else {
         setErrorPG(response.data.message);
       }
@@ -448,7 +464,8 @@ export const ModalEid = ({
       // console.log("response: ", response);
       setIsFetching(false);
       setCertificateList(response.data);
-      handleNext(1);
+      // handleNext(1);
+      setActiveStep(12);
 
       // if (response.data.length === 0) {
       //   createCertificate();
@@ -507,9 +524,11 @@ export const ModalEid = ({
     switch (activeStep) {
       case 1:
         if (isIdentifyRegistered) {
-          handleNext(3);
+          // handleNext(3);
+          setActiveStep(4);
         } else {
-          handleNext(1);
+          // handleNext(1);
+          setActiveStep(2);
         }
         break;
       case 3:
@@ -553,7 +572,8 @@ export const ModalEid = ({
               setNewListCert(
                 certificateList.filter((item) => item.seal === false)
               );
-              handleNext(1);
+              // handleNext(1);
+              setActiveStep(13);
             } else {
               createCertificate();
             }
@@ -566,9 +586,11 @@ export const ModalEid = ({
               setNewListCert(
                 certificateList.filter((item) => item.seal === true)
               );
-              handleNext(1);
+              // handleNext(1);
+              setActiveStep(13);
             } else {
-              handleNext(2);
+              // handleNext(2);
+              setActiveStep(14);
               // createCertificate();
             }
             break;
@@ -676,6 +698,7 @@ export const ModalEid = ({
       setCertSelected={setCertSelected}
       assurance={assurance}
       onDisableSubmit={handleDisableSubmit}
+      provider="ELECTRONIC_ID"
     />,
     <Step14
       key={"step14"}

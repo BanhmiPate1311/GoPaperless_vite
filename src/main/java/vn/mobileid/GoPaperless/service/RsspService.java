@@ -49,17 +49,15 @@ public class RsspService {
 
     private final Property property;
 
-    private final GatewayService gatewayService;
     private final FpsService fpsService;
 
     private final VCStoringService vcStoringService;
 
-    public RsspService(ProcessDb connect, PostBack postBack, GatewayAPI gatewayAPI, Property property, GatewayService gatewayService, FpsService fpsService, VCStoringService vcStoringService) {
+    public RsspService(ProcessDb connect, PostBack postBack, GatewayAPI gatewayAPI, Property property, FpsService fpsService, VCStoringService vcStoringService) {
         this.connect = connect;
         this.postBack = postBack;
         this.gatewayAPI = gatewayAPI;
         this.property = property;
-        this.gatewayService = gatewayService;
         this.fpsService = fpsService;
         this.vcStoringService = vcStoringService;
     }

@@ -123,7 +123,7 @@ public class PostBack {
             try {
 //                Date date = inputFormat.parse(signedTime);
 //                String sDateSign = outputFormat.format(date);
-                String TimePostback = CommonFunction.convertTimeSentPostBack(signedTime);
+//                String TimePostback = CommonFunction.convertTimeSentPostBack(signedTime);
                 String sDateSign = CommonFunction.convertTimeToUpDb(signedTime);
                 System.out.println("sDateSign: " + sDateSign);
                 // call again to get the latest status
@@ -140,14 +140,14 @@ public class PostBack {
                 String sJsonCertResult = CommonFunction.JsonCertificateObject(certEncode, serialNumber, sDateSign, signingOption, sAction, signingToken,
                         sSigner, sStatus, sFileSigner, digest, sSignature_id, sCountryCode);
                 if (!"".equals(rsWFList.getPostBackUrl()) && rsWFList.getPostBackUrl() != null) {
-                    CommonFunction.PostBackJsonCertificateObject(rsWFList.getPostBackUrl(), certEncode, serialNumber, TimePostback, signingOption, sAction, signingToken,
+                    CommonFunction.PostBackJsonCertificateObject(rsWFList.getPostBackUrl(), certEncode, serialNumber, signedTime, signingOption, sAction, signingToken,
                             sSigner, sStatus, sFileSigner, digest, sSignature_id, sCountryCode);
 
                 }
 //                String signedType = "NORMAL";
                 connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(signerToken,
                         signedType, sDateSign, sSignature_id, signedHash, dataResponse, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, sFileID_Last, pLAST_MODIFIED_BY);
-                if (rsWFList != null ) {
+                if (rsWFList != null) {
                     if (rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
                         connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(signingToken, Difinitions.CONFIG_PPL_WORKFLOW_STATUS_COMPLETED, "");
                         if (!"".equals(rsWFList.getPostBackUrl())) {

@@ -8,10 +8,12 @@ import Stack from "@mui/material/Stack";
 import SvgIcon from "@mui/material/SvgIcon";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ModalCertInfor } from ".";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -33,8 +35,13 @@ export const Step6_usb = ({
   onDoubleClick,
   onDisableSubmit,
   assurance,
+  provider,
 }) => {
+  // console.log("provider: ", provider);
   const { t } = useTranslation();
+
+  const [isShowCertInfor, setShowCertInfor] = useState([false]);
+
   useEffect(() => {
     if (certSelected === null) {
       onDisableSubmit(true);
@@ -55,21 +62,33 @@ export const Step6_usb = ({
       value={index}
       aria-label="list"
       key={index}
-      onDoubleClick={onDoubleClick}
+      onDoubleClick={(e) => {
+        e.preventDefault();
+        if (!isShowCertInfor[index]) {
+          onDoubleClick(index);
+        }
+      }}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
-        <SvgIcon
-          component={assurance === "aes" ? CardIcon : SealIcon}
-          inheritViewBox
-          sx={{
-            width: "60px",
-            height: "60px",
-            color: "signingtextBlue.main",
-            cursor: "pointer",
-            mx: 2,
-          }}
-          // onClick={() => handleOpenSigningForm(index)}
-        />
+        <Tooltip title={t("signing.cert_tooltip")} followCursor>
+          <Box height="60px" width="60px" mx={2}>
+            <SvgIcon
+              component={assurance === "aes" ? CardIcon : SealIcon}
+              inheritViewBox
+              sx={{
+                width: "100%",
+                height: "100%",
+                color: "signingtextBlue.main",
+                cursor: "pointer",
+                // mx: 2,
+              }}
+              // onClick={() => handleOpenSigningForm(index)}
+              onClick={() => {
+                handleShowCertInfor(index);
+              }}
+            />
+          </Box>
+        </Tooltip>
 
         <Box flexGrow={1} textAlign="left">
           <Typography
@@ -89,8 +108,26 @@ export const Step6_usb = ({
           </Typography>
         </Box>
       </Stack>
+      <ModalCertInfor
+        open={isShowCertInfor[index]}
+        onClose={() => handleCloseCertInfor(index)}
+        data={value}
+        provider={provider}
+      />
     </ToggleButtonStyle>
   ));
+
+  const handleShowCertInfor = (index) => {
+    const newValue = [...isShowCertInfor];
+    newValue[index] = true;
+    setShowCertInfor(newValue);
+  };
+
+  const handleCloseCertInfor = (index) => {
+    const newValue = [...isShowCertInfor];
+    newValue[index] = false;
+    setShowCertInfor(newValue);
+  };
 
   const handleChange = (event, nextView) => {
     // console.log("nextView: ", nextView);
@@ -128,5 +165,6 @@ Step6_usb.propTypes = {
   onDoubleClick: PropTypes.func,
   onDisableSubmit: PropTypes.func,
   assurance: PropTypes.string,
+  provider: PropTypes.string,
 };
 export default Step6_usb;

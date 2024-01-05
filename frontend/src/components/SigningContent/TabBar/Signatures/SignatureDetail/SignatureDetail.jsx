@@ -25,18 +25,18 @@ export const SignatureDetail = ({
 }) => {
   // console.log("signType: ", signType);
   const { t } = useTranslation();
-  // console.log("signature: ", signDetail);
+  console.log("signature: ", signDetail);
   const name = signDetail.certificate.subject.CN[0];
   const warnings = signDetail.warnings;
   const errors = signDetail.errors;
 
-  const commonName = signDetail.certificate?.issuer?.CN[0]
+  const commonName = signDetail.certificate?.issuer?.CN?.[0]
     ? signDetail?.certificate?.issuer?.CN[0]
     : "";
-  const organization = signDetail.certificate?.issuer?.O[0]
+  const organization = signDetail.certificate?.issuer?.O?.[0]
     ? ", " + signDetail.certificate?.issuer?.O[0]
     : "";
-  const country = signDetail.certificate?.issuer?.C[0]
+  const country = signDetail.certificate?.issuer?.C?.[0]
     ? ", " + signDetail.certificate?.issuer?.C[0]
     : "";
 
@@ -119,7 +119,9 @@ export const SignatureDetail = ({
             }}
             gap={1}
           >
-            {signType == "eseal" ? <SealIcon /> : <SignatureIcon />}
+            <Box width="25px" height="25px">
+              {signType == "eseal" ? <SealIcon /> : <SignatureIcon />}
+            </Box>
 
             <Typography variant="h3" sx={{ fontWeight: "700" }}>
               {name}

@@ -1,9 +1,11 @@
+import { convertTime } from "@/utils/commonFunction";
 import { CheckCircleOutline, Error } from "@mui/icons-material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import { Alert, Box, Divider, Stack, Tooltip, Typography } from "@mui/material";
+import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
 export const Overview = ({ validFile }) => {
@@ -38,7 +40,7 @@ export const Overview = ({ validFile }) => {
             background: "rgb(232, 235, 240)",
           }}
         >
-          {validFile.total_signatures === 0 && validFile.total_seals === 0 ? (
+          {validFile?.total_signatures === 0 && validFile?.total_seals === 0 ? (
             <Stack direction="row" alignItems="center" gap="10px">
               <CheckCircleOutline
                 sx={{ fontSize: "1.5rem", color: "#9E9C9C" }}
@@ -49,22 +51,22 @@ export const Overview = ({ validFile }) => {
             </Stack>
           ) : (
             <Box sx={{ display: "flex", gap: "10px" }}>
-              {statusToIcon[validFile.status_code] || (
+              {statusToIcon[validFile?.status_code] || (
                 <CheckCircleIcon
                   sx={{ fontSize: "1.5rem", color: "#228B22" }}
                 />
               )}
               {/* {validFile.valid && ( */}
               <Box sx={{ display: "block" }}>
-                <Typography variant="h6">{validFile.status}</Typography>
+                <Typography variant="h6">{validFile?.status}</Typography>
                 <Box sx={{ display: "flex" }}>
                   <PeopleOutlinedIcon
                     fontSize="small"
                     sx={{ fill: "#9E9C9C", marginRight: "2px" }}
                   />
                   <Typography variant="h5">
-                    {validFile.total_valid_signatures} /{" "}
-                    {validFile.total_signatures} {t("validation.overview1")}
+                    {validFile?.total_valid_signatures} /{" "}
+                    {validFile?.total_signatures} {t("validation.overview1")}
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex" }}>
@@ -73,7 +75,7 @@ export const Overview = ({ validFile }) => {
                     sx={{ fill: "#9E9C9C", marginRight: "2px" }}
                   />
                   <Typography variant="h5">
-                    {validFile.total_valid_seal} / {validFile.total_seals}{" "}
+                    {validFile?.total_valid_seal} / {validFile?.total_seals}{" "}
                     {t("validation.overview2")}
                   </Typography>
                 </Box>
@@ -89,7 +91,7 @@ export const Overview = ({ validFile }) => {
           {t("validation.overview3")}
         </Typography>
         <Typography variant="h5" sx={{ pb: 2 }}>
-          {validFile.validation_time}
+          {convertTime(validFile?.validation_time)}
         </Typography>
         <Alert
           severity="error"
@@ -122,5 +124,7 @@ export const Overview = ({ validFile }) => {
     </Box>
   );
 };
-
+Overview.propTypes = {
+  validFile: PropTypes.object,
+};
 export default Overview;

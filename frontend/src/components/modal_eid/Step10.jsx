@@ -233,17 +233,22 @@ export const Step10 = ({
       <Box
         textAlign="center"
         marginTop="15px"
-        sx={{
-          cursor: enResend ? "pointer" : "not-allowed",
-          color: enResend ? "#1976D2" : "#26293f",
-          textDecoration: "underline",
-        }}
         // onClick={processOTPResend}
         onClick={handleResend}
         // className="buttontet"
         disabled={!enResend}
       >
-        {t("electronic.step105")}
+        <Typography
+          className="hover-underline-animation"
+          variant="h6"
+          sx={{
+            cursor: enResend ? "pointer" : "not-allowed",
+            color: enResend ? "#1976D2" : "#26293f",
+            // textDecoration: "underline",
+          }}
+        >
+          {t("electronic.step105")}
+        </Typography>
       </Box>
     </Box>
   );

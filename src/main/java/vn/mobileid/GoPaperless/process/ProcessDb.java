@@ -2,8 +2,6 @@ package vn.mobileid.GoPaperless.process;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.mobileid.GoPaperless.dto.apiDto.Constants;
@@ -299,6 +297,51 @@ public class ProcessDb {
                 PplFileDetail pplFileDetail = new PplFileDetail();
                 pplFileDetail.setId(rs.getInt("ID"));
                 pplFileDetail.setPpl_file_id(rs.getInt("PPL_FILE_ID"));
+                pplFileDetail.setPpl_file_attr_type_id(rs.getInt("PPL_FILE_ATTR_TYPE_ID"));
+//                pplFileDetail.setValue(rs.getString("VALUE"));
+                pplFileDetail.setValue(objectMapper.readValue(rs.getString("VALUE"), SignatureValidation.class));
+                pplFileDetail.setHmac(rs.getString("HMAC"));
+                pplFileDetail.setCreated_by(rs.getString("CREATED_BY"));
+                pplFileDetail.setCreated_at(rs.getDate("CREATED_AT"));
+                pplFileDetail.setLast_modified_by(rs.getString("LAST_MODIFIED_BY"));
+                pplFileDetail.setLast_modified_at(rs.getDate("LAST_MODIFIED_AT"));
+                listPplFileDetail.add(pplFileDetail);
+            }
+//            return convrtr;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[]{conns};
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public void USP_GW_PPL_FILE_VALIDATION_DETAIL_GET_FROM_UPLOAD_TOKEN(String pUPLOAD_TOKEN, List<PplFileDetail> listPplFileDetail) throws Exception {
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        ResultSet rs = null;
+
+        ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+
+        try {
+            System.out.println("pUPLOAD_TOKEN: " + pUPLOAD_TOKEN);
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_FILE_VALIDATION_DETAIL_GET_FROM_UPLOAD_TOKEN(?,?) }");
+            proc_stmt.setString("pUPLOAD_TOKEN", pUPLOAD_TOKEN);
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+
+            proc_stmt.execute();
+            proc_stmt.getString("pRESPONSE_CODE");
+//            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+            rs = proc_stmt.executeQuery();
+            while (rs.next()) {
+                PplFileDetail pplFileDetail = new PplFileDetail();
+                pplFileDetail.setId(rs.getInt("ID"));
+                pplFileDetail.setPpl_file_id(rs.getInt("PPL_FILE_VALIDATION_ID"));
                 pplFileDetail.setPpl_file_attr_type_id(rs.getInt("PPL_FILE_ATTR_TYPE_ID"));
 //                pplFileDetail.setValue(rs.getString("VALUE"));
                 pplFileDetail.setValue(objectMapper.readValue(rs.getString("VALUE"), SignatureValidation.class));

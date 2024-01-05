@@ -36,6 +36,9 @@ export const PhoneInputField2 = ({
         width: "100%",
         opacity: disabled ? "0.5" : "1",
       }}
+      inputProps={{
+        maxLength: 16,
+      }}
       disabled={disabled}
       copyNumbersOnly={false}
       countryCodeEditable={false}

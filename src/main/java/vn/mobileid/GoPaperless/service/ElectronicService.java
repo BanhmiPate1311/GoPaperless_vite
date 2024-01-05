@@ -611,6 +611,7 @@ public class ElectronicService {
         String imageBase64 = authorizeOTPRequest.getImageBase64();
         String otpRequestID = authorizeOTPRequest.getRequestID();
         String otp = authorizeOTPRequest.getOtp();
+        String contactInfor = authorizeOTPRequest.getContactInfor();
         String assurance = authorizeOTPRequest.getAssurance();
 
         try {
@@ -647,6 +648,7 @@ public class ElectronicService {
             hashFileRequest.setSigningLocation(country);
             hashFileRequest.setFieldName(field_name);
             hashFileRequest.setHandSignatureImage(imageBase64);
+            hashFileRequest.setSignerContact(contactInfor);
 
             String hashList = fpsService.hashSignatureField(documentId, hashFileRequest);
 

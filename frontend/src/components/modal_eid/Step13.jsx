@@ -15,6 +15,8 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ModalCertInfor } from "../modal1";
+import Tooltip from "@mui/material/Tooltip";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -36,9 +38,12 @@ export const Step13 = ({
   onDoubleClick,
   onDisableSubmit,
   assurance,
+  provider,
 }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState("certs");
+
+  const [isShowCertInfor, setShowCertInfor] = useState([false]);
 
   const handleChangeRadio = (event) => {
     setValue(event.target.value);
@@ -72,18 +77,24 @@ export const Step13 = ({
       onDoubleClick={onDoubleClick}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
-        <SvgIcon
-          component={assurance === "aes" ? CardIcon : SealIcon}
-          inheritViewBox
-          sx={{
-            width: "60px",
-            height: "60px",
-            color: "signingtextBlue.main",
-            cursor: "pointer",
-            mx: 2,
-          }}
-          // onClick={() => handleOpenSigningForm(index)}
-        />
+        <Tooltip title={t("signing.cert_tooltip")} followCursor>
+          <Box height="60px" width="60px" mx={2}>
+            <SvgIcon
+              component={assurance === "aes" ? CardIcon : SealIcon}
+              inheritViewBox
+              sx={{
+                width: "100%",
+                height: "100%",
+                color: "signingtextBlue.main",
+                cursor: "pointer",
+                // mx: 2,
+              }}
+              onClick={() => {
+                handleShowCertInfor(index);
+              }}
+            />
+          </Box>
+        </Tooltip>
 
         <Box flexGrow={1} textAlign="left">
           <Typography
@@ -105,8 +116,27 @@ export const Step13 = ({
           </Typography>
         </Box>
       </Stack>
+      <ModalCertInfor
+        open={isShowCertInfor[index]}
+        onClose={() => handleCloseCertInfor(index)}
+        data={value}
+        provider={provider}
+      />
     </ToggleButtonStyle>
   ));
+
+  const handleShowCertInfor = (index) => {
+    const newValue = [...isShowCertInfor];
+    newValue[index] = true;
+    setShowCertInfor(newValue);
+  };
+
+  const handleCloseCertInfor = (index) => {
+    const newValue = [...isShowCertInfor];
+    newValue[index] = false;
+    setShowCertInfor(newValue);
+  };
+
   return (
     <Box>
       <Typography
@@ -192,6 +222,7 @@ Step13.propTypes = {
   onDisableSubmit: PropTypes.func,
   assurance: PropTypes.string,
   setCertificate: PropTypes.func,
+  provider: PropTypes.string,
 };
 
 export default Step13;

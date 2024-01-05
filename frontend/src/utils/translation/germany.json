@@ -202,7 +202,9 @@
     "passport": "Passcode",
     "identity_card": "Personalausweiscode",
     "no_cert_found": "Kein Zertifikat gefunden",
-    "tax_code": "Steuer-Code"
+    "tax_code": "Steuer-Code",
+    "common_name": "Gemeinsamen Namen",
+    "cert_tooltip": "Details zum Zertifikat"
   },
   "signingForm": {
     "step1": "Wählen Sie Remote Signing Service Provider aus",

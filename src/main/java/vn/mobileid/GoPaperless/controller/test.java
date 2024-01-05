@@ -35,11 +35,11 @@ public class test {
 //        System.out.println(zonedDateTimeStringWithoutTimeZone);
 
         //convert "Wed Jul 12 14:18:39 ICT 2023" to ZonedDateTime
-        String time = "Wed Jul 12 14:18:39 ICT 2023";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy");
-        LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
-        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-        System.out.println(zonedDateTime.toString());
+//        String time = "Wed Jul 12 14:18:39 ICT 2023";
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy");
+//        LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
+//        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+//        System.out.println(zonedDateTime.toString());
 
 //        RestTemplate restTemplate = new RestTemplate();
 //        String getImageBase64Url = "https://fps.mobile-id.vn/fps/v1/documents/" + 2165 + "/base64";
@@ -65,19 +65,19 @@ public class test {
 //        }
 
         // convert  "2023-08-28T10:30:48+07:00" to "2023-08-28 10:30:48.0"
-//        String inputDateString = "2023-08-28T10:30:48+07:00";
-//
-//        // Parse the input date string
-//        OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-//
-//        // Convert to the desired time zone (e.g., UTC+0)
-//        OffsetDateTime adjustedDateTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC);
-//
-//        // Format the adjusted OffsetDateTime to the desired output format
-//        String outputDateString = adjustedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
-//
-//        System.out.println("Original Date String: " + inputDateString);
-//        System.out.println("Formatted Date String: " + outputDateString);
+        String time = "2023-08-28T10:30:48+07:00";
+        // Parse the input string
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(time);
+
+        // Define the desired output format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+
+        // Format the OffsetDateTime using the formatter
+        String output = offsetDateTime.format(formatter);
+
+        // Print the result
+        System.out.println(output);
+
 
     }
 }

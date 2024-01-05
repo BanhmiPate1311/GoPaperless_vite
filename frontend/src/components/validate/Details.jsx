@@ -2,6 +2,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export const Details = ({ validFile, notSign }) => {
   const { t } = useTranslation();
@@ -23,14 +24,16 @@ export const Details = ({ validFile, notSign }) => {
           <Typography variant="h5" fontWeight="bold">
             {t("validation.reportId")}
           </Typography>
-          <Typography variant="h5">{validFile.validation_report_id}</Typography>
+          <Typography variant="h5">
+            {validFile?.validation_report_id}
+          </Typography>
         </Box>
         <Box sx={{ pb: 2, overflowWrap: "break-word" }}>
           <Typography variant="h5" fontWeight="bold">
             {t("validation.documentHash")}
           </Typography>
           <Typography variant="h5">
-            {validFile.validated_document_hash}
+            {validFile?.validated_document_hash}
           </Typography>
         </Box>
         {!notSign && (
@@ -89,5 +92,8 @@ export const Details = ({ validFile, notSign }) => {
     </Box>
   );
 };
-
+Details.propTypes = {
+  validFile: PropTypes.object,
+  notSign: PropTypes.bool,
+};
 export default Details;

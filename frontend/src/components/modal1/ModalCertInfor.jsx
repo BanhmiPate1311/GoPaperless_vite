@@ -18,26 +18,62 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Grow ref={ref} {...props} />;
 });
 
-export const ModalCertInfor = ({ open, onClose, data }) => {
-  console.log("data: ", data);
+export const ModalCertInfor = ({ open, onClose, data, provider }) => {
+  //   console.log("data: ", data);
   const { t } = useTranslation();
 
+  // const credentailID = () => {
+  //   switch (provider) {
+  //     case "USB_TOKEN_SIGNING":
+  //       return data.id;
+  //     default:
+  //       return data.credentialID;
+  //   }
+  // };
+
+  const issuer = () => {
+    switch (provider) {
+      case "USB_TOKEN_SIGNING":
+        return data.issuer.commonName;
+      default:
+        return data.issuer;
+    }
+  };
+
+  const subject = () => {
+    switch (provider) {
+      case "USB_TOKEN_SIGNING":
+        return data.subject.commonName;
+      default:
+        return data.subject;
+    }
+  };
+
+  const subjectDN = () => {
+    switch (provider) {
+      case "USB_TOKEN_SIGNING":
+        return data.name;
+      default:
+        return data.subjectDN;
+    }
+  };
+
   const certificate = [
-    {
-      title: t("0-common.credentialID"),
-      value: data.credentialID ? data.credentialID : null,
-    },
+    // {
+    //   title: t("0-common.credentialID"),
+    //   value: credentailID(),
+    // },
     {
       title: t("0-common.issuer"),
-      value: data.issuer ? data.issuer : null,
+      value: issuer(),
     },
     {
-      title: t("0-common.subject"),
-      value: data.subject ? data.subject : null,
+      title: t("signing.common_name"),
+      value: subject(),
     },
     {
       title: t("0-common.subjectDN"),
-      value: data.subjectDN ? data.subjectDN : null,
+      value: subjectDN(),
     },
     {
       title: t("0-common.valid_from"),
@@ -172,6 +208,7 @@ ModalCertInfor.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   data: PropTypes.object,
+  provider: PropTypes.string,
 };
 
 export default ModalCertInfor;

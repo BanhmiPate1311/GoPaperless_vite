@@ -555,17 +555,26 @@ public class CommonFunction {
     }
 
     public static String convertTimeSentPostBack(String inputDateString) {
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+//        OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+//
+//        // Convert to the desired time zone (e.g., UTC+0)
+//        OffsetDateTime adjustedDateTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC);
+//
+//        // Format the adjusted OffsetDateTime to the desired output format
+//        String outputDateString = adjustedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
 
-        // Convert to the desired time zone (e.g., UTC+0)
-        OffsetDateTime adjustedDateTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.UTC);
+        // Parse the input string
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputDateString);
 
-        // Format the adjusted OffsetDateTime to the desired output format
-        String outputDateString = adjustedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+        // Define the desired output format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+
+        // Format the OffsetDateTime using the formatter
+        String output = offsetDateTime.format(formatter);
 
         System.out.println("Original Date String: " + inputDateString);
-        System.out.println("Formatted Date String: " + outputDateString);
-        return outputDateString;
+        System.out.println("Formatted Date String: " + output);
+        return output;
     }
 
     public static String convertToISO8601(Date date) {
