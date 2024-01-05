@@ -1,5 +1,6 @@
 import { ReactComponent as ErrorIcon } from "@/assets/images/svg/error_icon.svg";
 import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
 import { ReactComponent as WarningIcon2 } from "@/assets/images/svg/warning2_icon.svg";
 import { convertTime } from "@/utils/commonFunction";
@@ -21,19 +22,19 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
   const { t } = useTranslation();
 
   const signType = signDetail.is_seal === true ? "eseal" : "Signature";
-  // console.log("signDetail: ", signDetail);
+  console.log("signDetail: ", signDetail);
 
   const name = signDetail.certificate.subject.CN[0];
   // const warnings = signDetail.warnings;
   // const errors = signDetail.errors;
 
-  const commonName = signDetail.certificate?.issuer?.CN[0]
+  const commonName = signDetail.certificate?.issuer?.CN?.[0]
     ? signDetail?.certificate?.issuer?.CN[0]
     : "";
-  const organization = signDetail.certificate?.issuer?.O[0]
+  const organization = signDetail.certificate?.issuer?.O?.[0]
     ? ", " + signDetail.certificate?.issuer?.O[0]
     : "";
-  const country = signDetail.certificate?.issuer?.C[0]
+  const country = signDetail.certificate?.issuer?.C?.[0]
     ? ", " + signDetail.certificate?.issuer?.C[0]
     : "";
 
@@ -190,7 +191,9 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
             }}
             gap={1}
           >
-            <SignatureIcon />
+            <Box width="25px" height="25px">
+              {signDetail.is_seal === true ? <SealIcon /> : <SignatureIcon />}
+            </Box>
             <Typography variant="h3" sx={{ fontWeight: "700" }}>
               {name}
             </Typography>

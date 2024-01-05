@@ -17,6 +17,7 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
     private String type;
     private String certChain;
     private String fieldName;
+    private String contactInfor;
     private int lastFileId;
     private int documentId;
     private String assurance;
@@ -147,6 +148,14 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getContactInfor() {
+        return contactInfor;
+    }
+
+    public void setContactInfor(String contactInfor) {
+        this.contactInfor = contactInfor;
     }
 
     public String getCountryRealtime() {

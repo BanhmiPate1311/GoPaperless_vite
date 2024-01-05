@@ -1,3 +1,4 @@
+import { createValidName } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
@@ -5,11 +6,12 @@ import {
   AccordionSummary,
   Typography,
 } from "@mui/material";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import ShowSignature from "./ShowSignature";
-import { createValidName } from "@/utils/commonFunction";
 
 export const SignDetail = ({ sign, signType }) => {
+  // console.log("sign: ", sign);
   let name = sign.name + " " + signType;
   const [expanded, setExpanded] = useState("panel");
 
@@ -59,5 +61,8 @@ export const SignDetail = ({ sign, signType }) => {
     </Accordion>
   );
 };
-
+SignDetail.propTypes = {
+  sign: PropTypes.object,
+  signType: PropTypes.string,
+};
 export default SignDetail;

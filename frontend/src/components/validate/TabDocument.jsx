@@ -1,17 +1,18 @@
-import { createValidLabel } from "@/utils/commonFunction";
+import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
-import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
-import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
+import SvgIcon from "@mui/material/SvgIcon";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Details from "./Details";
 import Overview from "./Overview";
 import Signatures from "./Signatures";
 
 function TabPanel(props) {
-  const { children, value, index, quantity, status, ...other } = props;
+  const { children, value, index, ...other } = props;
 
   return (
     <div
@@ -24,7 +25,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box>
-          <Typography component="div">{children}</Typography>
+          <Box>{children}</Box>
         </Box>
       )}
     </div>
@@ -45,36 +46,43 @@ function a11yProps(index) {
 }
 
 export const TabDocument = ({ validFile }) => {
-  const filteredObject = Object.keys(validFile).reduce((result, key) => {
-    // Kiểm tra nếu giá trị của key không phải là mảng rỗng thì thêm vào object kết quả
-    if (
-      !Array.isArray(validFile[key]) ||
-      validFile[key].length > 0 ||
-      key === "signatures"
-    ) {
-      result[key] = validFile[key];
-    }
-    return result;
-  }, {});
+  console.log("validFile: ", validFile);
+  const [sigList, setSigList] = useState([]);
+  const [eSealList, setESealList] = useState([]);
+  const { t } = useTranslation();
 
-  const tabName = Object.keys(filteredObject).filter(
-    (tab) =>
-      tab === "overview" ||
-      tab === "signatures" ||
-      tab === "seals" ||
-      tab === "details"
-  );
+  // const sigList = fileDetail
+  //   ?.map((sig) => {
+  //     if (sig.ppl_file_attr_type_id === 1) {
+  //       return sig.value;
+  //     }
+  //   })
+  //   .filter((value) => value !== undefined);
+
+  useEffect(() => {
+    if (Object.keys(validFile).length > 0) {
+      setSigList(validFile.signatures);
+      setESealList(validFile.seals);
+    }
+  }, [validFile]);
+
+  // const sigList = validFile.signatures;
+  console.log("sigList: ", sigList);
+
+  // const eSealList = fileDetail
+  //   ?.map((sig) => {
+  //     if (sig.ppl_file_attr_type_id === 3) {
+  //       return sig.value;
+  //     }
+  //   })
+  //   .filter((value) => value !== undefined);
+  // const eSealList = validFile.seals;
+  console.log("sigList: ", eSealList);
 
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const [expanded, setExpanded] = useState("panel");
-
-  const handleChangeShow = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : true);
   };
 
   useEffect(() => {
@@ -94,20 +102,6 @@ export const TabDocument = ({ validFile }) => {
     };
   }, []);
 
-  const createValidIcon = (value) => {
-    switch (value) {
-      case "overview":
-        return <InsertDriveFileOutlinedIcon />;
-      case "signatures":
-        return <GroupOutlinedIcon />;
-      case "seals":
-        return <WorkspacePremiumIcon />;
-      case "details":
-        return <DescriptionOutlinedIcon />;
-      default:
-        return "Unknown Tab";
-    }
-  };
   return (
     <Box
       sx={{
@@ -142,19 +136,46 @@ export const TabDocument = ({ validFile }) => {
           },
         }}
       >
-        {tabName.map((val, index) => {
-          return (
-            <Tab
-              key={index}
-              sx={{ textTransform: "capitalize", fontFamily: "Montserrat" }}
-              icon={createValidIcon(val)}
-              // label="with Mobile-ID"
-              // label={createValidLabel(val)}
-              label={createValidLabel(val)}
-              {...a11yProps(index)}
-            />
-          );
-        })}
+        <Tab
+          label={t("0-common.overview")}
+          icon={
+            <SvgIcon color="inherit">
+              <OverviewIcon />
+            </SvgIcon>
+          }
+          sx={{ fontSize: "12px" }}
+          {...a11yProps(0)}
+        />
+        <Tab
+          label={t("0-common.signatures")}
+          icon={
+            <SvgIcon color="inherit">
+              <SignatureIcon />
+            </SvgIcon>
+          }
+          sx={{ fontSize: "12px" }}
+          {...a11yProps(2)}
+        />
+        <Tab
+          label={t("0-common.seals")}
+          icon={
+            <SvgIcon color="inherit">
+              <SealIcon />
+            </SvgIcon>
+          }
+          sx={{ fontSize: "12px" }}
+          {...a11yProps(3)}
+        />
+        <Tab
+          label={t("0-common.details")}
+          icon={
+            <SvgIcon color="inherit">
+              <DescriptionOutlinedIcon />
+            </SvgIcon>
+          }
+          sx={{ fontSize: "12px" }}
+          {...a11yProps(3)}
+        />
         {/* <Tab
           icon={<InsertDriveFileOutlinedIcon />}
           label="Overview"
@@ -179,33 +200,24 @@ export const TabDocument = ({ validFile }) => {
         component="div"
         sx={{ display: "flex", flexDirection: "column", width: "100%" }}
       >
-        {tabName[value] === "overview" && (
-          <TabPanel value={value} index={value}>
-            <Overview validFile={validFile.overview} />
-          </TabPanel>
-        )}
-        {tabName[value] === "signatures" && (
-          <TabPanel value={value} index={value}>
-            <Signatures validFile={validFile.signatures} signType="Signature" />
-          </TabPanel>
-        )}
+        <TabPanel value={value} index={0}>
+          <Overview validFile={validFile.overview} />
+        </TabPanel>
 
-        {tabName[value] === "seals" && (
-          <TabPanel value={value} index={value}>
-            <Signatures validFile={validFile.seals} signType="Seal" />
-          </TabPanel>
-        )}
-        {tabName[value] === "details" && (
-          <TabPanel value={value} index={value}>
-            <Details
-              validFile={validFile.details}
-              notSign={
-                validFile.signatures.length === 0 &&
-                validFile.seals.length === 0
-              }
-            />
-          </TabPanel>
-        )}
+        <TabPanel value={value} index={1}>
+          <Signatures validFile={sigList} signType="Signature" />
+        </TabPanel>
+
+        <TabPanel value={value} index={2}>
+          <Signatures validFile={eSealList} signType="Seal" />
+        </TabPanel>
+
+        <TabPanel value={value} index={3}>
+          <Details
+            validFile={validFile.details}
+            notSign={sigList.length === 0 && eSealList.length === 0}
+          />
+        </TabPanel>
       </Box>
     </Box>
   );

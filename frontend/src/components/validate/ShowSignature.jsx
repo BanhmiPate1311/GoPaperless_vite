@@ -1,5 +1,11 @@
-import { ReactComponent as DocumentDetail } from "@/assets/images/validation/detail_document.svg";
-import { createValidSubTitle, createValidTitle } from "@/utils/commonFunction";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
+import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import {
+  convertTime,
+  createValidSubTitle,
+  createValidTitle,
+} from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
@@ -12,12 +18,28 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const ShowSignature = ({ sig, sign, signType, index }) => {
   // console.log("index: ", index);
   const { t } = useTranslation();
+
+  const name = sig.certificate.subject.CN[0];
+  const warnings = sig.warnings;
+  const errors = sig.errors;
+
+  const commonName = sig.certificate?.issuer?.CN?.[0]
+    ? sig?.certificate?.issuer?.CN[0]
+    : "";
+  const organization = sig.certificate?.issuer?.O?.[0]
+    ? ", " + sig.certificate?.issuer?.O[0]
+    : "";
+  const country = sig.certificate?.issuer?.C?.[0]
+    ? ", " + sig.certificate?.issuer?.C[0]
+    : "";
 
   const signTitle = signType + " is valid";
   const subTitle = "Electronic " + signType;
@@ -29,9 +51,9 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
     newIsOpen[index] = !newIsOpen[index];
     setIsOpen(newIsOpen);
   };
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  // const handleClose = () => {
+  //   setIsOpen(false);
+  // };
 
   const signature = {
     signing: [
@@ -41,44 +63,45 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
       },
       {
         title: t("validation.sigTime"),
-        subtitle: sig.signing_time ? sig.signing_time : null,
+        subtitle: sig.signing_time ? convertTime(sig.signing_time) : null,
       },
       {
         title: t("validation.sigTimestamp"),
-        subtitle: sig.qualified_timestamp ? sig.qualified_timestamp : null,
+        subtitle: sig.timestamp_time ? sig.timestamp_time : null,
       },
       {
         title: t("validation.sigFormat"),
-        subtitle: sig.signature_format ? sig.signature_format : null,
+        subtitle: sig.format ? sig.format : null,
       },
       {
         title: t("validation.sigScope"),
-        subtitle: sig.signature_scope ? sig.signature_scope : null,
+        subtitle: sig.scope.name ? sig.scope.name : null,
       },
     ].filter((item) => item.subtitle !== null),
     certificated: [
       {
         title: t("validation.sigOwner"),
-        subtitle: sig.certificate_owner ? sig.certificate_owner : null,
+        subtitle: commonName ? commonName : null,
       },
       {
         title: t("validation.sigIssuer"),
-        subtitle: sig.certificate_issuer ? sig.certificate_issuer : null,
+        subtitle: commonName + organization + country,
       },
       {
         title: t("validation.sigPeriod"),
-        subtitle: sig.certificate_validity_period
-          ? sig.certificate_validity_period
-          : null,
+        subtitle:
+          convertTime(sig.certificate.valid_from) +
+          " - " +
+          convertTime(sig.certificate.valid_to),
       },
       {
         title: t("validation.sigType"),
-        subtitle: sig.certificate_type ? sig.certificate_type : null,
+        subtitle: sig.type ? sig.type : null,
       },
     ].filter((item) => item.subtitle !== null),
   };
 
-  const [expanded, setExpanded] = useState("panel");
+  const [expanded, setExpanded] = useState("warnings");
 
   const handleChangeShow = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : true);
@@ -104,7 +127,7 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
   // event.stopPropagation() ngăn chặn sự kiện click này được truyền lên AccordionSummary và Accordion, giúp Switch được xử lý độc lập với AccordionSummary và Accordion.
   return (
     <div>
-      <div onClick={() => toggleDrawer(index)}>
+      <Box onClick={() => toggleDrawer(index)}>
         <Box
           sx={{
             display: "block",
@@ -140,21 +163,28 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
               </Stack>
               <Box width="100%">
                 <Typography variant="h5" fontWeight="bold">
-                  {sig.certificate_owner}
+                  {sig.certificate.subject.CN[0]}
                 </Typography>
                 <Box>
                   <Typography variant="h5">{sign.title}</Typography>
-                  {sign.name === "valid" && (
+                  {/* {sign.name === "valid" && (
                     <Typography variant="h5">{sig.signing_time}</Typography>
+                  )} */}
+                  {sig.indication === "TOTAL_PASSED" && (
+                    <Typography variant="h2">
+                      {convertTime(sig.signing_time)}
+                    </Typography>
                   )}
                 </Box>
               </Box>
             </Box>
-            {/* <img src="/logo_signing/detail_document.svg" alt=""></img> */}
-            <DocumentDetail />
+
+            <IconButton>
+              <ShowDetailIcon />
+            </IconButton>
           </Box>
         </Box>
-      </div>
+      </Box>
 
       <Drawer
         open={isOpen[index]}
@@ -179,30 +209,19 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
               backgroundColor: "#fff",
             }}
           >
-            <Box p={3}>
-              {/* <Title sx={{ textTransform: "uppercase" }}>
-                  xuân khánh pham
-                </Title> */}
+            <Stack direction="row" alignItems={"center"} p={3} gap={1}>
+              <Box width="25px" height="25px">
+                {signType == "eseal" ? <SealIcon /> : <SignatureIcon />}
+              </Box>
               <Typography
                 variant="h5"
                 fontSize="18px"
                 fontWeight="550"
                 textTransform="uppercase"
               >
-                {sig.certificate_owner}
+                {name}
               </Typography>
-
-              {/* <Typography>38003160158</Typography> */}
-            </Box>
-            {/* <Box className="col-2 d-flex">
-              <button
-                className=" border-0 bg-transparent close"
-                aria-label="Close"
-                onClick={handleClose}
-              >
-                <CloseIcon />
-              </button>
-            </Box> */}
+            </Stack>
           </Box>
 
           <Box mb={3}>
@@ -257,10 +276,10 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
               </Box>
             </Box>
 
-            {sig.errors.length > 0 && (
+            {warnings.length > 0 && (
               <Accordion
-                expanded={expanded === "panel"}
-                onChange={handleChangeShow("panel")}
+                expanded={expanded === "warnings"}
+                onChange={handleChangeShow("warnings")}
                 sx={{ boxShadow: "none", borderBottom: "1px solid #ccc" }}
                 style={{ margin: 0 }}
                 // className="content-signature"
@@ -279,10 +298,12 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
                   }}
                 >
                   <Typography variant="h6" sx={{ width: "90%", flexShrink: 0 }}>
-                    {t("validation.sigErrors")}
+                    {signType === "Signature"
+                      ? t("validation.sigWarnings")
+                      : t("validation.sealWarnings")}
                   </Typography>
                 </AccordionSummary>
-                {sig.errors.map((val, i) => {
+                {warnings.map((val, i) => {
                   return (
                     <Box key={i}>
                       <AccordionDetails
@@ -293,7 +314,61 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
                           // borderBottom: "1px solid #ccc",
                         }}
                       >
-                        {val}
+                        {val.value}
+                      </AccordionDetails>
+                      <Divider
+                        sx={{
+                          width: "calc(100% - 24px)",
+                          marginLeft: "auto",
+                          height: "2px",
+                          // bgcolor: "blueviolet",
+                        }}
+                      />
+                    </Box>
+                  );
+                })}
+              </Accordion>
+            )}
+
+            {errors.length > 0 && (
+              <Accordion
+                expanded={expanded === "errors"}
+                onChange={handleChangeShow("errors")}
+                sx={{ boxShadow: "none", borderBottom: "1px solid #ccc" }}
+                style={{ margin: 0 }}
+                // className="content-signature"
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
+                  sx={{
+                    background: "rgb(232, 235, 240)",
+                    boxShadow: "none",
+                    minHeight: "unset !important",
+                    display: "flex",
+                    alignItems: "center",
+                    paddingLeft: "24px",
+                  }}
+                >
+                  <Typography variant="h6" sx={{ width: "90%", flexShrink: 0 }}>
+                    {signType === "Signature"
+                      ? t("validation.sigErrors")
+                      : t("validation.sealErrors")}
+                  </Typography>
+                </AccordionSummary>
+                {errors.map((val, i) => {
+                  return (
+                    <Box key={i}>
+                      <AccordionDetails
+                        sx={{
+                          fontSize: "13px",
+                          padding: "15px 24px",
+                          width: "100%",
+                          // borderBottom: "1px solid #ccc",
+                        }}
+                      >
+                        {val.value}
                       </AccordionDetails>
                       <Divider
                         sx={{
@@ -335,5 +410,10 @@ export const ShowSignature = ({ sig, sign, signType, index }) => {
     </div>
   );
 };
-
+ShowSignature.propTypes = {
+  sign: PropTypes.object,
+  signType: PropTypes.string,
+  sig: PropTypes.object,
+  index: PropTypes.number,
+};
 export default ShowSignature;

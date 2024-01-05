@@ -18,7 +18,7 @@ export const TextSignForm = forwardRef(
     },
     ref
   ) => {
-    console.log("dataSigning: ", dataSigning);
+    // console.log("dataSigning: ", dataSigning);
     // const sigTextRef = useRef(null);
 
     const nameValue =

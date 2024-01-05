@@ -1,33 +1,48 @@
 package vn.mobileid.GoPaperless.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import vn.mobileid.GoPaperless.controller.GatewayAPI;
+import vn.mobileid.GoPaperless.dto.apiDto.ValidView;
+import vn.mobileid.GoPaperless.model.apiModel.PplFileDetail;
 import vn.mobileid.GoPaperless.model.gwModal.ValidPostBackRequest;
 import vn.mobileid.GoPaperless.model.gwModal.ValidationResquest;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class ValidationService {
     private final GatewayAPI gatewayAPI;
-    private final GatewayService getwayService;
 
     private final ProcessDb connect;
 
-    public ValidationService(GatewayAPI gatewayAPI, GatewayService getwayService, ProcessDb connect) {
+    public ValidationService(GatewayAPI gatewayAPI, ProcessDb connect) {
         this.gatewayAPI = gatewayAPI;
-        this.getwayService = getwayService;
         this.connect = connect;
     }
 
-    public String getView(ValidationResquest validationResquest) {
-        return getwayService.ValidView(validationResquest);
+    public String getView(ValidationResquest validationResquest) throws IOException {
+        return gatewayAPI.ValidView(validationResquest);
+//        InputStream inputStream = getClass().getResourceAsStream("/static/json/view.json");
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        return objectMapper.readValue(inputStream, ValidView.class);
+    }
+
+    public List<PplFileDetail> getFileDetail(ValidationResquest validationResquest) throws Exception {
+        List<PplFileDetail> listPplFileDetail = new ArrayList<>();
+        connect.USP_GW_PPL_FILE_VALIDATION_DETAIL_GET_FROM_UPLOAD_TOKEN(validationResquest.getUploadToken(), listPplFileDetail);
+        return listPplFileDetail;
     }
 
     public String postback(ValidPostBackRequest validPostBackRequest) throws Exception {

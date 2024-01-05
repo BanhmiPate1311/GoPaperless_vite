@@ -17,7 +17,7 @@ import { convertEidType } from "@/utils/commonFunction";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
-  // console.log("dataSigning: ", dataSigning);
+  console.log("dataSigning: ", dataSigning);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -67,7 +67,8 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       setRequestID(response.data);
       setIsFetching(false);
       if (activeStep === 1) {
-        handleNext();
+        // handleNext();
+        setActiveStep(2);
       }
     } catch (error) {
       setIsFetching(false);
@@ -104,6 +105,7 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       signingPurpose: dataSigning.signingPurpose,
       imageBase64: dataSigning.imageBase64,
       assurance: dataSigning.assurance,
+      contactInfor: dataSigning.contactInfor,
     };
     try {
       // const response = await api.post("/elec/authorizeOTP", data);
@@ -154,6 +156,7 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       resendCredentialOTP={credentialOTP}
       handleCloseModal1={onClose}
       setErrorPG={setErrorPG}
+      errorPG={errorPG}
       authorizeOTP={authorizeOTP}
       isFetching={isFetching}
     />,

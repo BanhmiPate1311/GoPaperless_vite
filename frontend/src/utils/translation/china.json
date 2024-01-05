@@ -202,7 +202,9 @@
     "passport": "护照代码",
     "identity_card": "身份证号码",
     "no_cert_found": "没有找到证书",
-    "tax_code": "税法"
+    "tax_code": "税法",
+    "common_name": "通用名",
+    "cert_tooltip": "证书详情"
   },
   "signingForm": {
     "step1": "选择远程签名服务提供商",

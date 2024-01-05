@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import OtpInput from "react-otp-input";
+import { Alert, Stack } from "@mui/material";
 
 function CircularProgressWithLabel(props) {
   const formatTime = (seconds) => {
@@ -88,6 +89,7 @@ export const Step2 = ({
   onDisableSubmit,
   resendCredentialOTP,
   setErrorPG,
+  errorPG,
   authorizeOTP,
   isFetching,
 }) => {
@@ -147,6 +149,7 @@ export const Step2 = ({
     }
   };
   const handleOnChange = (res) => {
+    setErrorPG(null);
     setOtp1(res);
     // console.log("res: ", res.length);
     if (res.length === 6) {
@@ -199,7 +202,7 @@ export const Step2 = ({
   };
 
   return (
-    <Box>
+    <Stack height="100%">
       <Typography variant="h6" sx={{ fontWeight: 600, color: "textBold.main" }}>
         {/* Enter the code that was sent to your phone */}
         {t("electronic.step81")}
@@ -237,21 +240,33 @@ export const Step2 = ({
         {t("electronic.step144")}
       </Typography>
       <Box
+        flexGrow={1}
         textAlign="center"
         // marginTop="15px"
-        sx={{
-          cursor: enResend ? "pointer" : "not-allowed",
-          color: enResend ? "#1976D2" : "#26293f",
-          textDecoration: "underline",
-        }}
+
         onClick={handleResend}
         // className="buttontet"
         disabled={!enResend}
       >
         {/* Resend OTP */}
-        {t("electronic.step145")}
+        <Typography
+          className="hover-underline-animation"
+          variant="h6"
+          sx={{
+            cursor: enResend ? "pointer" : "not-allowed",
+            color: enResend ? "#1976D2" : "#26293f",
+            // textDecoration: "underline",
+          }}
+        >
+          {t("electronic.step145")}
+        </Typography>
       </Box>
-    </Box>
+      {errorPG && (
+        <Box width={"100%"}>
+          <Alert severity="error">{errorPG}</Alert>
+        </Box>
+      )}
+    </Stack>
   );
 };
 
@@ -264,6 +279,7 @@ Step2.propTypes = {
   setErrorPG: PropTypes.func,
   authorizeOTP: PropTypes.func,
   isFetching: PropTypes.bool,
+  errorPG: PropTypes.string,
 };
 
 export default Step2;

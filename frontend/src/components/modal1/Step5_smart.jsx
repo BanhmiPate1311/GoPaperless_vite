@@ -8,6 +8,7 @@ import Stack from "@mui/material/Stack";
 import SvgIcon from "@mui/material/SvgIcon";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -34,8 +35,9 @@ export const Step5_smart = ({
   onDoubleClick,
   onDisableSubmit,
   assurance,
+  provider,
 }) => {
-  console.log("data: ", data);
+  // console.log("data: ", data);
   const { t } = useTranslation();
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
@@ -74,20 +76,24 @@ export const Step5_smart = ({
       // }}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
-        <SvgIcon
-          component={assurance === "aes" ? CardIcon : SealIcon}
-          inheritViewBox
-          sx={{
-            width: "60px",
-            height: "60px",
-            color: "signingtextBlue.main",
-            cursor: "pointer",
-            mx: 2,
-          }}
-          onClick={() => {
-            handleShowCertInfor(index);
-          }}
-        />
+        <Tooltip title={t("signing.cert_tooltip")} followCursor>
+          <Box height="60px" width="60px" mx={2}>
+            <SvgIcon
+              component={assurance === "aes" ? CardIcon : SealIcon}
+              inheritViewBox
+              sx={{
+                width: "100%",
+                height: "100%",
+                color: "signingtextBlue.main",
+                cursor: "pointer",
+                // mx: 2,
+              }}
+              onClick={() => {
+                handleShowCertInfor(index);
+              }}
+            />
+          </Box>
+        </Tooltip>
 
         <Box flexGrow={1} textAlign="left">
           <Typography
@@ -113,6 +119,7 @@ export const Step5_smart = ({
         open={isShowCertInfor[index]}
         onClose={() => handleCloseCertInfor(index)}
         data={value}
+        provider={provider}
       />
     </ToggleButtonStyle>
   ));
@@ -165,5 +172,6 @@ Step5_smart.propTypes = {
   onDoubleClick: PropTypes.func,
   onDisableSubmit: PropTypes.func,
   assurance: PropTypes.string,
+  provider: PropTypes.string,
 };
 export default Step5_smart;
