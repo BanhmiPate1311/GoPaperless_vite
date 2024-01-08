@@ -27,7 +27,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("signatureData: ", signatureData);
   const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
 
-  const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
+  const [isOpenSigningForm, setOpenSigningForm] = useState([true]);
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
   const [isShowModalSmartid, setShowModalSmartid] = useState([false]);
   const [isShowModalUsb, setShowModalUsb] = useState([false]);
