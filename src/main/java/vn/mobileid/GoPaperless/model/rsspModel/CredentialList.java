@@ -3,7 +3,7 @@ package vn.mobileid.GoPaperless.model.rsspModel;
 import java.util.List;
 
 public class CredentialList extends RsspResponse {
-private List<CredentialItem> certs;
+    private List<CredentialItem> certs;
 
     public List<CredentialItem> getCerts() {
         return certs;

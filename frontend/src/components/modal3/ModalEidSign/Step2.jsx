@@ -205,7 +205,7 @@ export const Step2 = ({
     <Stack height="100%">
       <Typography variant="h6" sx={{ fontWeight: 600, color: "textBold.main" }}>
         {/* Enter the code that was sent to your phone */}
-        {t("electronic.step81")}
+        {t("electronic.step143")}
       </Typography>
 
       <Typography variant="h6">

@@ -185,6 +185,10 @@ export const AddSubtitle = ({ control }) => {
             name="format"
             control={control}
             content={selectContent}
+            disabled={true}
+            sx={{
+              backgroundColor: "signingWFBackground.main",
+            }}
           />
         </Box>
       </FormGroup>

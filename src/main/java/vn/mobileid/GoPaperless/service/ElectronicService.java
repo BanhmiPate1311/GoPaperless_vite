@@ -521,6 +521,7 @@ public class ElectronicService {
                             if (intRes[0] == 0) {
                                 CertResponse certResponse = new CertResponse();
                                 certResponse.setSubjectDN(info1[0].toString());
+                                System.out.println("subjectDN: " + info1[0].toString());
                                 certResponse.setSubject(CommonFunction.getCommonnameInDN(info1[0].toString()));
                                 certResponse.setIssuer(CommonFunction.getCommonnameInDN(info1[1].toString()));
                                 certResponse.setValidFrom(time[0]);
