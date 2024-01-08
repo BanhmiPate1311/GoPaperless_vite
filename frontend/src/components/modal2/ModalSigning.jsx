@@ -1,5 +1,5 @@
 import { apiService } from "@/services/api_service";
-import { removeBase64Prefix } from "@/utils/commonFunction";
+import { blobToBase64, removeBase64Prefix } from "@/utils/commonFunction";
 import DrawIcon from "@mui/icons-material/Draw";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -25,6 +25,7 @@ import { AddSubtitle, TextSignForm } from ".";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
 import useCountry from "@/hook/use-country";
+import removeBackground from "@imgly/background-removal";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -154,42 +155,87 @@ export const ModalSigning = ({
     // console.log("data: ", data);
     switch (value) {
       case 0:
-        html2canvas(textElement.current).then((canvas) => {
+        html2canvas(textElement.current).then(async (canvas) => {
           const data64 = canvas.toDataURL();
           //   console.log(data64);
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
+          let image_src = data64;
+          const imageBlob = await removeBackground(image_src);
+
+          const url = URL.createObjectURL(imageBlob);
+          console.log("url: ", url);
+
+          blobToBase64(url).then((base64String) => {
+            console.log(base64String); // i.e: data:image/jpeg;base64,/9j/4AAQSkZJ..
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(base64String),
+            });
+            onClose();
+            handleShowmodal();
           });
-          onClose();
-          handleShowmodal();
         });
         break;
       case 1:
-        html2canvas(drawElement.current).then((canvas) => {
+        html2canvas(drawElement.current).then(async (canvas) => {
           const data64 = canvas.toDataURL();
-          //   console.log(data64);
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
+
+          let image_src = data64;
+          const imageBlob = await removeBackground(image_src);
+
+          const url = URL.createObjectURL(imageBlob);
+          console.log("url: ", url);
+
+          blobToBase64(url).then((base64String) => {
+            console.log(base64String); // i.e: data:image/jpeg;base64,/9j/4AAQSkZJ..
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(base64String),
+            });
+            onClose();
+            handleShowmodal();
           });
-          onClose();
-          handleShowmodal();
+
+          //   console.log(data64);
+          // setDataSigning({
+          //   ...dataSigning,
+          //   contactInfor: data.contactInfor,
+          //   imageBase64: removeBase64Prefix(data64),
+          // });
+          // onClose();
+          // handleShowmodal();
         });
         break;
       case 2:
-        html2canvas(fileElement.current).then((canvas) => {
+        html2canvas(fileElement.current).then(async (canvas) => {
           const data64 = canvas.toDataURL();
-          // console.log(data64);
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
+
+          let image_src = data64;
+          const imageBlob = await removeBackground(image_src);
+
+          const url = URL.createObjectURL(imageBlob);
+          console.log("url: ", url);
+
+          blobToBase64(url).then((base64String) => {
+            console.log(base64String); // i.e: data:image/jpeg;base64,/9j/4AAQSkZJ..
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(base64String),
+            });
+            onClose();
+            handleShowmodal();
           });
-          onClose();
-          handleShowmodal();
+
+          // console.log(data64);
+          // setDataSigning({
+          //   ...dataSigning,
+          //   contactInfor: data.contactInfor,
+          //   imageBase64: removeBase64Prefix(data64),
+          // });
+          // onClose();
+          // handleShowmodal();
         });
         break;
     }

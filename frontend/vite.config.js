@@ -10,7 +10,7 @@ export default defineConfig({
       "@": "/src",
     },
   },
-  base: "/view",
+  // base: "/view",
   optimizeDeps: {
     esbuildOptions: {
       // Node.js global to browser globalThis

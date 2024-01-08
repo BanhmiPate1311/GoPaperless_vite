@@ -333,3 +333,27 @@ export const removeBackground = (base64Image) => {
     };
   });
 };
+
+export const blobToBase64 = (url) => {
+  return new Promise((resolve, reject) => {
+    // do a request to the blob uri
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        // instantiate a file reader
+        const fileReader = new FileReader();
+
+        // read the file
+        fileReader.readAsDataURL(blob);
+
+        fileReader.onloadend = function () {
+          resolve(fileReader.result); // Here is the base64 string
+        };
+
+        fileReader.onerror = function (error) {
+          reject(error);
+        };
+      })
+      .catch((error) => reject(error));
+  });
+};
