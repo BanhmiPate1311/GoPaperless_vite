@@ -280,3 +280,56 @@ export const checkEseal = (cert) => {
     !bhxhRegex.test(certElement)
   );
 };
+
+export const removeBackground = (base64Image) => {
+  return new Promise((resolve, reject) => {
+    // Tạo một ảnh mới
+    var image = new Image();
+
+    // Gán dữ liệu base64 cho ảnh
+    image.src = base64Image;
+
+    // Khi ảnh đã tải hoàn tất
+    image.onload = function () {
+      // Tạo một canvas để vẽ ảnh
+      var canvas = document.createElement("canvas");
+      var context = canvas.getContext("2d");
+
+      // Đặt kích thước canvas bằng kích thước của ảnh
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      // Vẽ ảnh lên canvas
+      context.drawImage(image, 0, 0);
+
+      // Lấy dữ liệu pixel của ảnh
+      var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      var data = imageData.data;
+
+      // Xử lý dữ liệu pixel để tách nền (ví dụ: xóa các pixel có giá trị alpha thấp)
+      for (var i = 0; i < data.length; i += 4) {
+        var alpha = data[i + 3]; // Giá trị alpha của pixel
+
+        // Nếu giá trị alpha thấp, đặt tất cả các thành phần RGB thành 0 (đen)
+        if (alpha < 128) {
+          data[i] = 0;
+          data[i + 1] = 0;
+          data[i + 2] = 0;
+          data[i + 3] = 0;
+        }
+      }
+
+      // Đặt lại dữ liệu pixel đã xử lý lên canvas
+      context.putImageData(imageData, 0, 0);
+
+      // Chuyển canvas thành dữ liệu base64 mới (có thể là ảnh PNG)
+      var resultBase64 = canvas.toDataURL("image/png");
+      resolve(resultBase64);
+    };
+
+    // Xử lý lỗi nếu ảnh không tải được
+    image.onerror = function () {
+      reject(new Error("Không thể tải ảnh."));
+    };
+  });
+};

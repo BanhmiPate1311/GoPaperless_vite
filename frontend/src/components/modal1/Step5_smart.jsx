@@ -142,13 +142,15 @@ export const Step5_smart = ({
   };
 
   return (
-    <Box sx={{ minWidth: 400 }}>
+    <Stack sx={{ minWidth: 400 }} height="100%">
       <Typography variant="h6" sx={{ mb: "10px" }}>
         {t("signingForm.title2")}
       </Typography>
-      <Box width={"100%"}>
+      <Box width={"100%"} flexGrow={1}>
         {data?.length === 0 ? (
-          <Alert severity="error">{t("signing.no_cert_found")}</Alert>
+          <Stack direction="column" justifyContent="flex-end" height="100%">
+            <Alert severity="error">{t("signing.no_cert_found")}</Alert>
+          </Stack>
         ) : (
           <ToggleButtonGroup
             orientation="vertical"
@@ -161,7 +163,7 @@ export const Step5_smart = ({
           </ToggleButtonGroup>
         )}
       </Box>
-    </Box>
+    </Stack>
   );
 };
 

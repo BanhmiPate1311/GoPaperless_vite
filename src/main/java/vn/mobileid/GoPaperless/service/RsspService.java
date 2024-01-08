@@ -157,12 +157,19 @@ public class RsspService {
         requestData.put("lang", lang);
         requestData.put("profile", profile);
 
+        Map<String, Object> searchConditions = new HashMap<>();
+        searchConditions.put("certificateStatus", "GOOD");
+
+        requestData.put("searchConditions", searchConditions);
+        requestData.put("certInfoEnabled", true);
+
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
         try {
 
             ResponseEntity<CredentialList> response = restTemplate.exchange(credentialsListUrl, HttpMethod.POST, httpEntity, CredentialList.class);
+            System.out.println("response: " + response.getBody().getError());
             System.out.println("error: " + response.getBody().getError());
             System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
             System.out.println("response: " + response.getStatusCode());
@@ -921,7 +928,7 @@ public class RsspService {
                     if (endTime - startTime > 60000) {
                         return VC;
                     }
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                 }
             }
         } catch (Exception e) {
