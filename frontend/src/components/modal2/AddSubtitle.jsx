@@ -119,7 +119,7 @@ export const AddSubtitle = ({ control }) => {
                 },
               }}
             />
-            <CheckBoxField
+            {/* <CheckBoxField
               name="itver"
               control={control}
               label={t("0-common.itext version")}
@@ -129,7 +129,7 @@ export const AddSubtitle = ({ control }) => {
                   padding: "0 9px",
                 },
               }}
-            />
+            /> */}
             <CheckBoxField
               name="location"
               control={control}
