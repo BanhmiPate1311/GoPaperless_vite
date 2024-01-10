@@ -18,7 +18,7 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
     {
       icon: <Signature />,
       label: t("0-common.signature"),
-      value: "Signature",
+      value: "SIGNATURE",
     },
     {
       icon: <Initial />,

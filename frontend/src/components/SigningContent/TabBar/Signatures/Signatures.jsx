@@ -1,6 +1,9 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/validwf.svg";
+import { ReactComponent as InValidWFIcon } from "@/assets/images/svg/invalidwf.svg";
+import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningwf.svg";
 import Error from "@mui/icons-material/Error";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
@@ -9,11 +12,12 @@ import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "./SignaturesInfo";
+import SvgIcon from "@mui/material/SvgIcon";
 
 export const Signatures = ({ sigList1, sigList2 }) => {
   const signedInfo = [...sigList1, ...sigList2];
   // const signedInfo = [...sigList1];
-  console.log("signedInfo: ", signedInfo);
+  // console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
 
   // const newSignedInfo = signedInfo.map((item) => item.value);
@@ -26,18 +30,33 @@ export const Signatures = ({ sigList1, sigList2 }) => {
       value: signedInfo.filter((sig) => {
         return sig.indication === "TOTAL_PASSED" && sig.is_valid === true;
       }),
-      icon: (
-        <Stack
-          padding="7px"
-          border="1px solid transparent"
-          // bgcolor="rgb(255, 240, 226)"
-          borderRadius="50px"
-          justifyContent="center"
-          direction="row"
-        >
-          <ValidIcon sx={{ color: "#3B82F6", fontSize: "18px" }} />
-        </Stack>
-      ),
+      icon: {
+        signed: (
+          <SvgIcon sx={{ color: "#34A853", width: 26, height: 26 }}>
+            <ValidIcon />
+          </SvgIcon>
+          // <SvgIcon
+          //   viewport="0 0 16 16"
+          //   width={16}
+          //   height={16}
+          //   component={ValidIcon}
+          //   sx={{ color: "#34A853" }}
+          //   inheritViewBox
+          // />
+        ),
+        notSigned: (
+          // <SvgIcon color="inherit">
+          //   <ValidWFIcon />
+          // </SvgIcon>
+          <SvgIcon
+            viewport="0 0 16 16"
+            width={16}
+            height={16}
+            component={ValidWFIcon}
+            inheritViewBox
+          />
+        ),
+      },
       title: t("signing.signature_valid"),
     },
     {
@@ -45,18 +64,38 @@ export const Signatures = ({ sigList1, sigList2 }) => {
       value: signedInfo.filter((sig) => {
         return sig.indication === "INDETERMINATE";
       }),
-      icon: (
-        <Stack
-          padding="7px"
-          border="1px solid transparent"
-          bgcolor="rgb(255, 240, 226)"
-          borderRadius="50px"
-          justifyContent="center"
-        >
-          {/* <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} /> */}
-          <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} />
-        </Stack>
-      ),
+      icon: {
+        signed: (
+          <SvgIcon
+            viewport="0 0 16 16"
+            width={16}
+            height={16}
+            component={ValidIcon}
+            inheritViewBox
+          />
+        ),
+        notSigned: (
+          <SvgIcon
+            viewport="0 0 16 16"
+            width={16}
+            height={16}
+            component={ValidWFIcon}
+            inheritViewBox
+          />
+        ),
+      },
+      // icon: (
+      //   <Stack
+      //     padding="7px"
+      //     border="1px solid transparent"
+      //     bgcolor="rgb(255, 240, 226)"
+      //     borderRadius="50px"
+      //     justifyContent="center"
+      //   >
+      //     {/* <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} /> */}
+      //     <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} />
+      //   </Stack>
+      // ),
       title: t("signing.indeterminate signatures"),
     },
     {
@@ -69,17 +108,37 @@ export const Signatures = ({ sigList1, sigList2 }) => {
           sig.indication !== "TOTAL_PASSED"
         );
       }),
-      icon: (
-        <Stack
-          padding="7px"
-          bgcolor="rgb(255, 233, 235)"
-          borderRadius="50px"
-          justifyContent="center"
-        >
-          {/* <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} /> */}
-          <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} />
-        </Stack>
-      ),
+      icon: {
+        signed: (
+          <SvgIcon
+            viewport="0 0 16 16"
+            width={16}
+            height={16}
+            component={ValidIcon}
+            inheritViewBox
+          />
+        ),
+        notSigned: (
+          <SvgIcon
+            viewport="0 0 16 16"
+            width={16}
+            height={16}
+            component={ValidWFIcon}
+            inheritViewBox
+          />
+        ),
+      },
+      // icon: (
+      //   <Stack
+      //     padding="7px"
+      //     bgcolor="rgb(255, 233, 235)"
+      //     borderRadius="50px"
+      //     justifyContent="center"
+      //   >
+      //     {/* <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} /> */}
+      //     <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} />
+      //   </Stack>
+      // ),
       title: t("signing.invalid signatures"),
     },
   ];

@@ -1,5 +1,6 @@
+import useCountry from "@/hook/use-country";
 import { apiService } from "@/services/api_service";
-import { blobToBase64, removeBase64Prefix } from "@/utils/commonFunction";
+import { removeBase64Prefix } from "@/utils/commonFunction";
 import DrawIcon from "@mui/icons-material/Draw";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -24,8 +25,6 @@ import { useParams } from "react-router-dom";
 import { AddSubtitle, TextSignForm } from ".";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
-import useCountry from "@/hook/use-country";
-import removeBackground from "@imgly/background-removal";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -152,90 +151,54 @@ export const ModalSigning = ({
   };
 
   const handleFormSubmit = (data) => {
+    // let config = {
+    //   fetchArgs: {
+    //     mode: "no-cors",
+    //   },
+    // };
+    // setIsPending(true);
     // console.log("data: ", data);
     switch (value) {
       case 0:
-        html2canvas(textElement.current).then(async (canvas) => {
+        html2canvas(textElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
-          //   console.log(data64);
-          let image_src = data64;
-          const imageBlob = await removeBackground(image_src);
+          console.log("data64: ", data64);
 
-          const url = URL.createObjectURL(imageBlob);
-          console.log("url: ", url);
-
-          blobToBase64(url).then((base64String) => {
-            console.log(base64String); // i.e: data:image/jpeg;base64,/9j/4AAQSkZJ..
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(base64String),
-            });
-            onClose();
-            handleShowmodal();
+          setDataSigning({
+            ...dataSigning,
+            contactInfor: data.contactInfor,
+            imageBase64: removeBase64Prefix(data64),
           });
+          onClose();
+          handleShowmodal();
         });
         break;
       case 1:
-        html2canvas(drawElement.current).then(async (canvas) => {
+        html2canvas(drawElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
+          console.log("data64: ", canvas);
 
-          let image_src = data64;
-          const imageBlob = await removeBackground(image_src);
-
-          const url = URL.createObjectURL(imageBlob);
-          console.log("url: ", url);
-
-          blobToBase64(url).then((base64String) => {
-            console.log(base64String); // i.e: data:image/jpeg;base64,/9j/4AAQSkZJ..
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(base64String),
-            });
-            onClose();
-            handleShowmodal();
+          setDataSigning({
+            ...dataSigning,
+            contactInfor: data.contactInfor,
+            imageBase64: removeBase64Prefix(data64),
           });
-
-          //   console.log(data64);
-          // setDataSigning({
-          //   ...dataSigning,
-          //   contactInfor: data.contactInfor,
-          //   imageBase64: removeBase64Prefix(data64),
-          // });
-          // onClose();
-          // handleShowmodal();
+          onClose();
+          handleShowmodal();
         });
         break;
       case 2:
-        html2canvas(fileElement.current).then(async (canvas) => {
+        html2canvas(fileElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
 
-          let image_src = data64;
-          const imageBlob = await removeBackground(image_src);
-
-          const url = URL.createObjectURL(imageBlob);
-          console.log("url: ", url);
-
-          blobToBase64(url).then((base64String) => {
-            console.log(base64String); // i.e: data:image/jpeg;base64,/9j/4AAQSkZJ..
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(base64String),
-            });
-            onClose();
-            handleShowmodal();
+          console.log(data64);
+          setDataSigning({
+            ...dataSigning,
+            contactInfor: data.contactInfor,
+            imageBase64: removeBase64Prefix(data64),
           });
-
-          // console.log(data64);
-          // setDataSigning({
-          //   ...dataSigning,
-          //   contactInfor: data.contactInfor,
-          //   imageBase64: removeBase64Prefix(data64),
-          // });
-          // onClose();
-          // handleShowmodal();
+          onClose();
+          handleShowmodal();
         });
         break;
     }
@@ -411,9 +374,9 @@ export const ModalSigning = ({
         <Button
           variant="contained"
           disabled={isSubmitDisabled}
-          //   startIcon={
-          //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          //   }
+          // startIcon={
+          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
+          // }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",

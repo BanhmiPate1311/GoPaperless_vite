@@ -221,7 +221,7 @@ export const PdfViewer = ({ workFlow }) => {
     const newSignature = {
       type: value,
       // field_name: String(item).toUpperCase() + uuidv4(),
-      field_name: signerId + "_" + Number(signatures.length + 1),
+      field_name: signerId + "_" + value + "_" + Number(signatures.length + 1),
       page: signInfo.page,
       dimension: {
         x: signInfo.x,

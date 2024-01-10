@@ -335,6 +335,10 @@ export const SigningForm2 = ({
     setUnavail(null);
   }, [assurance, criteria, provider, connectorName]);
 
+  useEffect(() => {
+    setErrorApi(null);
+  }, [activeStep]);
+
   const filterPrefix = prefixList?.data?.filter(
     (item) =>
       item.type === "PHONE-ID" ||
@@ -371,7 +375,10 @@ export const SigningForm2 = ({
         };
         switch (provider) {
           case "SMART_ID_SIGNING":
-            if (connectorName === "SMART_ID_MOBILE_ID") {
+            if (
+              connectorName === "SMART_ID_MOBILE_ID" ||
+              connectorName === "SMART_ID_LCA"
+            ) {
               // handleNext(1);
               setActiveStep(2);
             } else {
