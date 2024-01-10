@@ -302,7 +302,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       };
     },
     canDrag:
-      signerId + "_" + signatureData.suffix === signatureData.field_name &&
+      signerId + "_" + signatureData.type + "_" + signatureData.suffix ===
+        signatureData.field_name &&
       !isSetPos &&
       signatureData.verification === undefined,
 
@@ -321,30 +322,19 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
       <div
         style={{
           position: "absolute",
-          top: -15,
-          right: 0,
+          padding: "5px",
+          top: -25,
+          right: -2,
           zIndex: 10,
           display:
-            signerId + "_" + signatureData.suffix === signatureData.field_name
+            signerId + "_" + signatureData.type + "_" + signatureData.suffix ===
+            signatureData.field_name
               ? "flex"
               : "none",
           // width: "100%",
           backgroundColor: "#D9DFE4",
         }}
       >
-        {/* <EditIcon
-          style={{
-            fontSize: "24px",
-            zIndex: 10,
-            color: "#6B7280",
-            cursor: "pointer",
-            opacity: 1,
-            marginLeft: "auto",
-          }}
-          onMouseDown={() => handleOpenSigningForm(index)}
-        /> */}
-        {/* <SignIcon onMouseDown={() => handleOpenSigningForm(index)} /> */}
-
         <SvgIcon
           component={SignIcon}
           inheritViewBox
@@ -380,17 +370,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           }}
           onClick={() => handleRemoveSignature(index)}
         />
-        {/* <DeleteOutlineIcon
-          onMouseDown={() => handleRemoveSignature(index)}
-          style={{
-            fontSize: "24px",
-            zIndex: 10,
-            color: "#EF4444",
-            cursor: "pointer",
-            opacity: 1,
-            display: isSetPos ? "none" : "block",
-          }}
-        /> */}
       </div>
     );
   };
@@ -429,13 +408,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           // ]}
           minConstraints={[
             isSetPos ||
-            signerId + "_" + signatureData.suffix !== signatureData.field_name
+            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
+              signatureData.field_name
               ? signatureData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? (pdfPage.width * 20) / 100
               : 200,
             isSetPos ||
-            signerId + "_" + signatureData.suffix !== signatureData.field_name
+            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
+              signatureData.field_name
               ? signatureData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? (pdfPage.height * 5) / 100
@@ -443,13 +424,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           ]}
           maxConstraints={[
             isSetPos ||
-            signerId + "_" + signatureData.suffix !== signatureData.field_name
+            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
+              signatureData.field_name
               ? signatureData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? maxPosibleResizeWidth
               : 200,
             isSetPos ||
-            signerId + "_" + signatureData.suffix !== signatureData.field_name
+            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
+              signatureData.field_name
               ? signatureData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? maxPosibleResizeHeight
@@ -483,7 +466,12 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             // );
             if (
               isSetPos ||
-              signerId + "_" + signatureData.suffix !== signatureData.field_name
+              signerId +
+                "_" +
+                signatureData.type +
+                "_" +
+                signatureData.suffix !==
+                signatureData.field_name
             )
               return;
             putSignature.mutate({
@@ -511,7 +499,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             sx={{
               backgroundColor:
                 signatureData.verification ||
-                signerId + "_" + signatureData.suffix !==
+                signerId +
+                  "_" +
+                  signatureData.type +
+                  "_" +
+                  signatureData.suffix !==
                   signatureData.field_name
                   ? "rgba(217, 223, 228, 0.7)"
                   : "rgba(254, 240, 138, 0.7)",
@@ -526,7 +518,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               border: "2px dashed",
               borderColor:
                 signatureData.verification ||
-                signerId + "_" + signatureData.suffix !==
+                signerId +
+                  "_" +
+                  signatureData.type +
+                  "_" +
+                  signatureData.suffix !==
                   signatureData.field_name
                   ? "black"
                   : "#EAB308",
@@ -542,7 +538,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                 console.log("show signature verification");
                 toggleSigDetail(index);
               } else if (
-                signerId + "_" + signatureData.suffix !==
+                signerId +
+                  "_" +
+                  signatureData.type +
+                  "_" +
+                  signatureData.suffix !==
                 signatureData.field_name
               ) {
                 return;

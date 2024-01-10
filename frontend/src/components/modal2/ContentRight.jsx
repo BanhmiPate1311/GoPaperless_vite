@@ -17,40 +17,40 @@ export const ContentRight = ({ direction, watch, subtitle }) => {
             : "right",
         // textTransform: "capitalize",
         color: "black",
-        fontWeight: "bold",
+        // fontWeight: "bold",
         wordBreak: "break-word",
       }}
     >
-      <Typography fontSize={12}>
+      <Typography fontSize={12} fontWeight="bold">
         {watch("name")
           ? (watch("label") ? t("modal.content1") + ": " : "") +
             subtitle.nameText
           : ""}
       </Typography>
-      <Typography fontSize={12}>
+      <Typography fontSize={12} fontWeight="bold">
         {watch("dn") && subtitle.dnText
           ? (watch("label") ? "DN: " : "") + subtitle.dnText
           : ""}
       </Typography>
-      <Typography fontSize={12}>
+      <Typography fontSize={12} fontWeight="bold">
         {watch("reason")
           ? (watch("label") ? t("0-common.Reason") + ": " : "") +
             subtitle.reasonText
           : ""}
       </Typography>
-      <Typography fontSize={12}>
+      <Typography fontSize={12} fontWeight="bold">
         {watch("location")
           ? (watch("label") ? t("0-common.Location") + ": " : "") +
             subtitle.locationText
           : ""}
       </Typography>
-      <Typography fontSize={12}>
+      <Typography fontSize={12} fontWeight="bold">
         {watch("date")
           ? (watch("label") ? t("0-common.date") + ": " : "") +
             subtitle.dateText
           : ""}
       </Typography>
-      <Typography fontSize={12}>
+      <Typography fontSize={12} fontWeight="bold">
         {watch("itver")
           ? (watch("label") ? t("0-common.itext version") + ": " : "") +
             subtitle.itverText

@@ -108,8 +108,9 @@ const DrawSignForm = forwardRef(
             height: "170px",
             overflow: "hidden",
             borderRadius: "6px",
-            border: "1px solid #357EEB",
+            border: "2px solid #357EEB",
             position: "relative",
+            // backgroundColor: "white",
             "&:before": watch("logo")
               ? {
                   content: '""',
@@ -140,7 +141,8 @@ const DrawSignForm = forwardRef(
               display: "flex",
               width: "100%",
               alignItems: "center",
-              height: "150px",
+              // height: "150px",
+              height: "100%",
             }}
             // ref={sigCanvasRef}
           >
@@ -177,12 +179,12 @@ const DrawSignForm = forwardRef(
               watch={watch}
             />
           </Stack>
-          <Box
+          {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",
               height: "20px",
             }}
-          ></Box>
+          ></Box> */}
         </Stack>
 
         <DialogDraw

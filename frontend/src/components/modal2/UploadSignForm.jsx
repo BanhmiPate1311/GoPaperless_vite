@@ -110,7 +110,7 @@ const UploadSignForm = forwardRef(
             height: "170px",
             overflow: "hidden",
             borderRadius: "6px",
-            border: "1px solid #357EEB",
+            border: "2px solid #357EEB",
             position: "relative",
             // backgroundColor: "white",
             // set background image
@@ -145,7 +145,8 @@ const UploadSignForm = forwardRef(
               // flexDirection: "row-reversed",
               display: "flex",
               width: "100%",
-              height: "150px",
+              // height: "150px",
+              height: "100%",
               alignItems: "center",
               minHeight: "100px",
               // padding: "2rem 0",
@@ -186,12 +187,12 @@ const UploadSignForm = forwardRef(
               watch={watch}
             />
           </Stack>
-          <Box
+          {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",
               height: "20px",
             }}
-          ></Box>
+          ></Box> */}
         </Stack>
 
         <DialogFile

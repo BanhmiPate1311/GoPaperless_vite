@@ -1,3 +1,4 @@
+import useCountry from "@/hook/use-country";
 import { apiService } from "@/services/api_service";
 import { removeBase64Prefix } from "@/utils/commonFunction";
 import DrawIcon from "@mui/icons-material/Draw";
@@ -24,7 +25,6 @@ import { useParams } from "react-router-dom";
 import { AddSubtitle, TextSignForm } from ".";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
-import useCountry from "@/hook/use-country";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -151,12 +151,19 @@ export const ModalSigning = ({
   };
 
   const handleFormSubmit = (data) => {
+    // let config = {
+    //   fetchArgs: {
+    //     mode: "no-cors",
+    //   },
+    // };
+    // setIsPending(true);
     // console.log("data: ", data);
     switch (value) {
       case 0:
         html2canvas(textElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
-          //   console.log(data64);
+          console.log("data64: ", data64);
+
           setDataSigning({
             ...dataSigning,
             contactInfor: data.contactInfor,
@@ -169,7 +176,8 @@ export const ModalSigning = ({
       case 1:
         html2canvas(drawElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
-          //   console.log(data64);
+          console.log("data64: ", canvas);
+
           setDataSigning({
             ...dataSigning,
             contactInfor: data.contactInfor,
@@ -182,7 +190,8 @@ export const ModalSigning = ({
       case 2:
         html2canvas(fileElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
-          // console.log(data64);
+
+          console.log(data64);
           setDataSigning({
             ...dataSigning,
             contactInfor: data.contactInfor,
@@ -365,9 +374,9 @@ export const ModalSigning = ({
         <Button
           variant="contained"
           disabled={isSubmitDisabled}
-          //   startIcon={
-          //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          //   }
+          // startIcon={
+          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
+          // }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",

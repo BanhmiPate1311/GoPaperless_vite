@@ -43,7 +43,7 @@ export const DialogFile = ({ open, handleClose, name, control, data }) => {
       aria-describedby="scroll-dialog-description"
     >
       {/* <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle> */}
-      <DialogContent dividers={scroll === "paper"}>
+      <DialogContent dividers={scroll === "paper"} sx={{ p: "15px 20px 0" }}>
         <DialogContentText
           component={"div"}
           id="scroll-dialog-description"
@@ -73,7 +73,7 @@ export const DialogFile = ({ open, handleClose, name, control, data }) => {
           </Box>
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
         <Button variant="outlined" onClick={keepOriginal}>
           {t("modal.upload1")}
         </Button>

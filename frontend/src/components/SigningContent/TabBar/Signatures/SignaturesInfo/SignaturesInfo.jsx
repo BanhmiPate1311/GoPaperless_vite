@@ -1,4 +1,8 @@
 import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
+import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
+import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/validwf.svg";
+import { ReactComponent as InValidWFIcon } from "@/assets/images/svg/invalidwf.svg";
+import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningwf.svg";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -57,7 +61,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0, width: "100%" }}>
         {sign.value.map((signvalue, index) => {
-          // console.log("signvalue: ", signvalue);
+          console.log("signvalue: ", signvalue);
           // const status = checkSignerStatus(participant, signerToken);
           // const check = checkSignerWorkFlow(participant, signerToken);
 
@@ -78,7 +82,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
               width="100%"
               // height="50px"
             >
-              {sign.icon}
+              {signvalue.isSigned ? sign.icon.signed : sign.icon.notSigned}
               <Box flexGrow={1}>
                 <Typography
                   variant="h6"

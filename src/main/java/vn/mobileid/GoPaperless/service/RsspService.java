@@ -157,12 +157,19 @@ public class RsspService {
         requestData.put("lang", lang);
         requestData.put("profile", profile);
 
+        Map<String, Object> searchConditions = new HashMap<>();
+        searchConditions.put("certificateStatus", "GOOD");
+
+        requestData.put("searchConditions", searchConditions);
+        requestData.put("certInfoEnabled", true);
+
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
         try {
 
             ResponseEntity<CredentialList> response = restTemplate.exchange(credentialsListUrl, HttpMethod.POST, httpEntity, CredentialList.class);
+            System.out.println("response: " + response.getBody().getError());
             System.out.println("error: " + response.getBody().getError());
             System.out.println("getErrorDescription: " + response.getBody().getErrorDescription());
             System.out.println("response: " + response.getStatusCode());
@@ -465,13 +472,23 @@ public class RsspService {
                 if ("SIGNATURE".equals(name)) {
                     property.setRelyingPartySignature(value);
                 }
-                if ("KEYSTORE_FILE_URL".equals(name)) {
-                    if (devMode) {
-                        property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
+                if(devMode){
+                    if ("SMART_ID_LCA".equals(name)) {
+                        property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
+
                     } else {
-                        property.setRelyingPartyKeyStore(value);
+                        property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
                     }
+                } else if ("KEYSTORE_FILE_URL".equals(name)) {
+                    property.setRelyingPartyKeyStore(value);
                 }
+//                if ("KEYSTORE_FILE_URL".equals(name)) {
+//                    if (devMode) {
+//                        property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
+//                    } else {
+//                        property.setRelyingPartyKeyStore(value);
+//                    }
+//                }
                 if ("KEYSTORE_PASSWORD".equals(name)) {
                     property.setRelyingPartyKeyStorePassword(value);
                 }
@@ -629,13 +646,14 @@ public class RsspService {
     }
 
     public Map<String, Object> getCertificates(RsspRequest request) throws Exception {
-        ConnectorName connectorName = connect.getIdentierConnector(request.getConnectorName());
+        ConnectorName IdentierConnector = connect.getIdentierConnector(request.getConnectorName());
+        System.out.println("connectorName: " + request.getConnectorName());
         System.out.println("getCertificates");
-        String prefixCode = connectorName.getPrefixCode();
+        String prefixCode = IdentierConnector.getPrefixCode();
         this.lang = request.getLanguage();
         boolean codeEnable = true;
 //        Property property = new Property();
-        JsonNode jsonObject = new ObjectMapper().readTree(connectorName.getIdentifier());
+        JsonNode jsonObject = new ObjectMapper().readTree(IdentierConnector.getIdentifier());
         JsonNode attributes = jsonObject.get("attributes");
 
         for (JsonNode att : attributes) {
@@ -663,12 +681,17 @@ public class RsspService {
                     property.setRelyingPartySignature(value);
                 }
                 if ("KEYSTORE_FILE_URL".equals(name)) {
-                    if (devMode) {
-                        property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
-                    } else {
+                    if(devMode){
+                        if ("SMART_ID_LCA".equals(request.getConnectorName() )) {
+                            property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
+                        } else {
+                            property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
+                        }
+                    } else  {
                         property.setRelyingPartyKeyStore(value);
                     }
                 }
+
                 if ("KEYSTORE_PASSWORD".equals(name)) {
                     property.setRelyingPartyKeyStorePassword(value);
                 }
@@ -921,7 +944,7 @@ public class RsspService {
                     if (endTime - startTime > 60000) {
                         return VC;
                     }
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                 }
             }
         } catch (Exception e) {

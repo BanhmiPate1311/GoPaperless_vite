@@ -28,7 +28,7 @@ export const Step3_eid = ({
         }
         break;
       default:
-        if (code.length === 9) {
+        if (code.length >= 9) {
           onDisableSubmit(false);
         } else {
           onDisableSubmit(true);
@@ -97,6 +97,8 @@ export const Step3_eid = ({
           onChange={(event) => {
             if (criteria === "PASSPORT-ID") {
               setCode(event.target.value);
+            } else if (criteria === "PERSONAL-ID") {
+              setCode(event.target.value.replace(/[^\d-]/g, ""));
             } else {
               setCode(event.target.value.replace(/\D/g, ""));
             }
@@ -109,11 +111,12 @@ export const Step3_eid = ({
           }}
           sx={{ my: 0, backgroundColor: "signingWFBackground.main" }}
           inputProps={{
-            sx: {
-              backgroundColor: "signingWFBackground.main",
-            },
-            maxLength: criteria === "CITIZEN-IDENTITY-CARD" ? 12 : 9,
-            // type: criteria === "PASSPORT-ID" ? "text" : "number",
+            maxLength:
+              criteria === "CITIZEN-IDENTITY-CARD"
+                ? 12
+                : criteria === "PERSONAL-ID"
+                ? 20
+                : 9,
           }}
         />
       </Box>

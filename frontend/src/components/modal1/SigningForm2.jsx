@@ -72,7 +72,7 @@ export const SigningForm2 = ({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [assurance, setAssurance] = useState("");
   const [provider, setProvider] = useState("");
-  console.log("provider: ", provider);
+  // console.log("provider: ", provider);
   const [connectorName, setConnectorName] = useState("");
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
@@ -335,6 +335,10 @@ export const SigningForm2 = ({
     setUnavail(null);
   }, [assurance, criteria, provider, connectorName]);
 
+  useEffect(() => {
+    setErrorApi(null);
+  }, [activeStep]);
+
   const filterPrefix = prefixList?.data?.filter(
     (item) =>
       item.type === "PHONE-ID" ||
@@ -371,7 +375,10 @@ export const SigningForm2 = ({
         };
         switch (provider) {
           case "SMART_ID_SIGNING":
-            if (connectorName === "SMART_ID_MOBILE_ID") {
+            if (
+              connectorName === "SMART_ID_MOBILE_ID" ||
+              connectorName === "SMART_ID_LCA"
+            ) {
               // handleNext(1);
               setActiveStep(2);
             } else {
@@ -703,7 +710,9 @@ export const SigningForm2 = ({
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
             {/* {steps[activeStep]} */}
-            <Box flexGrow={1}>{steps[activeStep - 1]}</Box>
+            <Box className="choyoyoy1" flexGrow={1}>
+              {steps[activeStep - 1]}
+            </Box>
             {unavail && <Alert severity="error">{unavail}</Alert>}
           </Stack>
         </DialogContentText>

@@ -23,7 +23,7 @@ export const Step2_smartid = ({
   const { t } = useTranslation();
   const [isPhoneSelect, setIsPhoneSelect] = useState(true);
 
-  console.log("criteria: ", criteria);
+  // console.log("criteria: ", criteria);
   useEffect(() => {
     // let phoneWithoutDialCode = code.slice(dialCode.current.length);
     // if (phoneWithoutDialCode.match(/^0+/)) {
@@ -73,7 +73,7 @@ export const Step2_smartid = ({
         }
         break;
       default:
-        if (code.length === 9) {
+        if (code.length >= 9) {
           onDisableSubmit(false);
         } else {
           onDisableSubmit(true);
@@ -205,6 +205,8 @@ export const Step2_smartid = ({
             setErrorApi(null);
             if (criteria === "PASSPORT-ID") {
               setCode(event.target.value);
+            } else if (criteria === "PERSONAL-ID") {
+              setCode(event.target.value.replace(/[^\d-]/g, ""));
             } else {
               setCode(event.target.value.replace(/\D/g, ""));
             }
@@ -217,8 +219,12 @@ export const Step2_smartid = ({
           }}
           sx={{ my: 0, backgroundColor: "signingWFBackground.main" }}
           inputProps={{
-            maxLength: criteria === "CITIZEN-IDENTITY-CARD" ? 12 : 9,
-            // type: criteria === "PASSPORT-ID" ? "text" : "number",
+            maxLength:
+              criteria === "CITIZEN-IDENTITY-CARD"
+                ? 12
+                : criteria === "PERSONAL-ID"
+                ? 20
+                : 9,
           }}
         />
       </Box>

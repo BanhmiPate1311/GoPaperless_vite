@@ -59,7 +59,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
   const sigList1 = signedInfo
     ?.map((sig) => {
       if (sig.ppl_file_attr_type_id === 1) {
-        return sig.value;
+        return { isSigned: true, ...sig.value };
       }
     })
     .filter((value) => value !== undefined);
@@ -67,19 +67,23 @@ export const TabBar = ({ workFlow, signedInfo }) => {
 
   const sigList2 = workFlow.participants
     .filter((sig) => sig.signedType === "NORMAL")
-    .map((sig) => sig.certificate);
+    .map((sig) => {
+      return { isSigned: false, ...sig.certificate };
+    });
 
   const eSealList1 = signedInfo
     ?.map((sig) => {
       if (sig.ppl_file_attr_type_id === 3) {
-        return sig.value;
+        return { isSigned: true, ...sig.value };
       }
     })
     .filter((value) => value !== undefined);
 
   const eSealList2 = workFlow.participants
     .filter((sig) => sig.signedType === "ESEAL")
-    .map((sig) => sig.certificate);
+    .map((sig) => {
+      return { isSigned: false, ...sig.certificate };
+    });
 
   // console.log("eSealList2: ", eSealList2);
 

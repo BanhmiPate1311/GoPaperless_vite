@@ -88,8 +88,9 @@ export const TextSignForm = forwardRef(
             height: "170px",
             overflow: "hidden",
             borderRadius: "6px",
-            border: "1px solid #357EEB",
+            border: "2px solid #357EEB",
             position: "relative",
+            // background: "transparent",
             "&:before": watch("logo")
               ? {
                   content: '""',
@@ -122,7 +123,8 @@ export const TextSignForm = forwardRef(
               display: "flex",
               width: "100%",
               alignItems: "center",
-              height: "150px",
+              // height: "150px",
+              height: "100%",
               // padding: "2rem 0",
             }}
             // ref={sigTextRef}
@@ -135,6 +137,7 @@ export const TextSignForm = forwardRef(
                 fontSize: "36px",
                 textAlign: "center",
                 textTransform: "capitalize",
+                fontWeight: "bold",
               }}
               className="font-moon-dance"
             >
@@ -146,12 +149,12 @@ export const TextSignForm = forwardRef(
               watch={watch}
             />
           </Stack>
-          <Box
+          {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",
               height: "20px",
             }}
-          ></Box>
+          ></Box> */}
         </Stack>
       </Box>
     );
