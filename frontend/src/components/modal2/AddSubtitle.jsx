@@ -59,142 +59,133 @@ export const AddSubtitle = ({ control }) => {
       >
         {t("signing.include_text")}
       </FormLabel>
-      <FormGroup sx={{ flexDirection: "collumn" }}>
-        <Box sx={{ display: "flex" }}>
-          <Box width={"50%"}>
-            <CheckBoxField
-              name="name"
-              control={control}
-              label={t("0-common.name")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            />
-            <CheckBoxField
-              name="date"
-              control={control}
-              label={t("0-common.date")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            />
-            <CheckBoxField
-              name="logo"
-              control={control}
-              label={t("0-common.logo")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            />
-            <CheckBoxField
-              name="reason"
-              control={control}
-              label={t("0-common.Reason")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            />
-          </Box>
-          <Box width={"50%"}>
-            <CheckBoxField
-              name="dn"
-              control={control}
-              label={t("0-common.distinguished name")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            />
-            {/* <CheckBoxField
-              name="itver"
-              control={control}
-              label={t("0-common.itext version")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            /> */}
-            <CheckBoxField
-              name="location"
-              control={control}
-              label={t("0-common.Location")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            />
-            <CheckBoxField
-              name="label"
-              control={control}
-              label={t("0-common.labels")}
-              sx={{
-                width: "100%",
-                "& .MuiCheckbox-root": {
-                  padding: "0 9px",
-                },
-              }}
-            />
-          </Box>
+      <FormGroup sx={{ flexDirection: "row" }}>
+        <Box width={"50%"}>
+          <CheckBoxField
+            name="name"
+            control={control}
+            label={t("0-common.name")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <CheckBoxField
+            name="date"
+            control={control}
+            label={t("0-common.date")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <CheckBoxField
+            name="logo"
+            control={control}
+            label={t("0-common.logo")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <CheckBoxField
+            name="reason"
+            control={control}
+            label={t("0-common.Reason")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <FormLabel
+            component="legend"
+            sx={{
+              fontSize: "14px",
+              height: 17,
+              mb: "10px",
+              color: "signingtext1.main",
+            }}
+          >
+            {t("0-common.text direction")}
+          </FormLabel>
+          <ToggleAlignment
+            name="alignment"
+            control={control}
+            size="small"
+            color="primary"
+            exclusive
+            sx={{ height: "45px" }}
+          />
         </Box>
-        <Box sx={{ display: "flex" }}>
-          <Box width={"50%"}>
-            <FormLabel
-              component="legend"
-              sx={{
-                fontSize: "14px",
-                height: 17,
-                mb: "10px",
-                color: "signingtext1.main",
-              }}
-            >
-              {t("0-common.text direction")}
-            </FormLabel>
-            <ToggleAlignment
-              name="alignment"
-              control={control}
-              size="small"
-              color="primary"
-              exclusive
-              sx={{ height: "45px" }}
-            />
-          </Box>
-          <Box width={"50%"}>
-            <FormLabel
-              component="legend"
-              sx={{
-                fontSize: "14px",
-                height: 17,
-                mb: "10px",
-                color: "signingtext1.main",
-              }}
-            >
-              {t("0-common.digits format")}
-            </FormLabel>
-            <SelectField
-              name="format"
-              control={control}
-              content={selectContent}
-              disabled={true}
-            />
-          </Box>
+        <Box width={"50%"}>
+          <CheckBoxField
+            name="dn"
+            control={control}
+            label={t("0-common.distinguished name")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <CheckBoxField
+            name="itver"
+            control={control}
+            label={t("0-common.itext version")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <CheckBoxField
+            name="location"
+            control={control}
+            label={t("0-common.Location")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <CheckBoxField
+            name="label"
+            control={control}
+            label={t("0-common.labels")}
+            sx={{
+              width: "100%",
+              "& .MuiCheckbox-root": {
+                padding: "0 9px",
+              },
+            }}
+          />
+          <FormLabel
+            component="legend"
+            sx={{
+              fontSize: "14px",
+              height: 17,
+              mb: "10px",
+              color: "signingtext1.main",
+            }}
+          >
+            {t("0-common.digits format")}
+          </FormLabel>
+          <SelectField
+            name="format"
+            control={control}
+            content={selectContent}
+          />
         </Box>
       </FormGroup>
     </>
