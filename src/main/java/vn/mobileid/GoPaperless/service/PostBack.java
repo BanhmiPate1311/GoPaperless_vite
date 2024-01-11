@@ -81,6 +81,8 @@ public class PostBack {
                 pURL, fileType, mimeType, digest, "", "", pDMS_PROPERTY, uploadToken,
                 pHMAC, pCREATED_BY, pFILE_ID);
         if ("1".equals(sInsertFile)) {
+            // test
+            sFileID_Last = pFILE_ID[0];
             String sAction = "signer_signed";
             String sSigner = CommonFunction.CheckTextNull(signerId);
             String sStatus = "ok";

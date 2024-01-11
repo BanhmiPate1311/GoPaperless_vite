@@ -1,20 +1,23 @@
 import imageNotFound from "@/assets/images/noSignature.png";
-import { ReactComponent as ValidIcon } from "@/assets/images/svg/valid.svg";
 import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/icon_Chip_White.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
-import { ReactComponent as InValidIcon } from "@/assets/images/svg/warningError.svg";
-import { ReactComponent as InValidWFIcon } from "@/assets/images/svg/warningErrorwf.svg";
-import { ReactComponent as WarningIcon } from "@/assets/images/svg/warningError.svg";
-import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningErrorwf.svg";
-import Error from "@mui/icons-material/Error";
+import { ReactComponent as ValidIcon } from "@/assets/images/svg/valid.svg";
+import {
+  ReactComponent as InValidIcon,
+  ReactComponent as WarningIcon,
+} from "@/assets/images/svg/warningError.svg";
+import {
+  ReactComponent as InValidWFIcon,
+  ReactComponent as WarningWFIcon,
+} from "@/assets/images/svg/warningErrorwf.svg";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import SvgIcon from "@mui/material/SvgIcon";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "./SignaturesInfo";
-import SvgIcon from "@mui/material/SvgIcon";
 
 export const Signatures = ({ sigList1, sigList2 }) => {
   const signedInfo = [...sigList1, ...sigList2];
@@ -37,30 +40,11 @@ export const Signatures = ({ sigList1, sigList2 }) => {
           <SvgIcon viewBox={"0 0 40 40"}>
             <ValidIcon height={40} width={40} />
           </SvgIcon>
-
-          // <SvgIcon
-          //   viewport="0 0 16 16"
-          //   width={16}
-          //   height={16}
-          //   component={ValidIcon}
-          //   sx={{ color: "#34A853" }}
-          //   inheritViewBox
-          // />
         ),
         notSigned: (
           <SvgIcon viewBox={"0 0 35 35"}>
             <ValidWFIcon height={35} width={35} />
           </SvgIcon>
-          // <SvgIcon color="inherit">
-          //   <ValidWFIcon />
-          // </SvgIcon>
-          // <SvgIcon
-          //   viewport="0 0 16 16"
-          //   width={16}
-          //   height={16}
-          //   component={ValidWFIcon}
-          //   inheritViewBox
-          // />
         ),
       },
       title: t("signing.signature_valid"),
@@ -73,27 +57,16 @@ export const Signatures = ({ sigList1, sigList2 }) => {
       icon: {
         signed: (
           <SvgIcon viewBox={"0 0 35 35"}>
-            <WarningWFIcon height={35} width={35} color="#EB6A00" />
+            <WarningIcon height={35} width={35} color="#EB6A00" />
           </SvgIcon>
         ),
         notSigned: (
           <SvgIcon viewBox={"0 0 40 40"}>
-            <WarningIcon height={40} width={40} color="#EB6A00" />
+            <WarningWFIcon height={40} width={40} color="#EB6A00" />
           </SvgIcon>
         ),
       },
-      // icon: (
-      //   <Stack
-      //     padding="7px"
-      //     border="1px solid transparent"
-      //     bgcolor="rgb(255, 240, 226)"
-      //     borderRadius="50px"
-      //     justifyContent="center"
-      //   >
-      //     {/* <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} /> */}
-      //     <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} />
-      //   </Stack>
-      // ),
+
       title: t("signing.indeterminate signatures"),
     },
     {

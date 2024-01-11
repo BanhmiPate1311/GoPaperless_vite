@@ -595,6 +595,8 @@ public class CommonFunction {
         return (UID == null || UID.isEmpty()) || (!UID.contains("CCCD")
                 && !UID.contains("CMND")
                 && !UID.contains("HC")
-                && !UID.contains("BHXH"));
+                && !UID.contains("BHXH")
+                && !UID.contains("PID")
+                && !UID.contains("PPID"));
     }
 }

@@ -33,33 +33,14 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowModalUsb, setShowModalUsb] = useState([false]);
   const [isShowEidModal, setShowEidModal] = useState([false]);
   const [isShowEidModalSign, setShowEidModalSign] = useState([false]);
-  const [isShowSignatureDetail, setShowSignatureDetail] = useState([false]);
-
-  const [isShowModal2, setShowModal2] = useState([false]);
 
   const [showTopbar, setShowTopbar] = useState(false);
   const [isShowSigDetail, setIsShowSigDetail] = useState([false]);
 
-  // const [isOpenSigningForm, setOpenSigningForm] = useState(false);
-  // const [isShowModalSignImage, setShowModalSignImage] = useState(false);
-
-  // console.log("isShowModalSignImage: ", isShowModalSignImage);
-
-  // console.log("pdfPage: ", pdfPage);
   const queryClient = useQueryClient();
   const dragRef = useRef();
   const [dataSigning, setDataSigning] = useState({});
-  // console.log("dataSigning: ", dataSigning);
 
-  // const workFlow = queryClient.getQueryData(["workflow"]);
-
-  // const { data: signedInfo } = useQuery({
-  //   queryKey: ["getSignedInfo"],
-  //   queryFn: () => apiService.getSignedInfo(workFlow),
-
-  //   enabled: Object.keys(workFlow).length > 0,
-  // });
-  // console.log("signedInfo: ", signedInfo);
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
   const signerId = signer.signerId;
@@ -73,7 +54,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
     const newSig1 = sigInfor
       .filter((item) => item.value.field_name === signatureData.field_name)
-      .map((item) => item.value);
+      .map((item) => {
+        return { isSigned: true, ...item.value };
+      });
 
     const newSig2 = workFlow.participants
       .filter(
@@ -81,7 +64,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           item.certificate &&
           item.certificate.field_name === signatureData.field_name
       )
-      .map((item) => item.certificate);
+      .map((item) => {
+        return { isSigned: false, ...item.certificate };
+      });
 
     setSigDetail(...newSig1, ...newSig2);
   }, [signatureData]);
@@ -255,22 +240,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         break;
     }
   };
-
-  // const handleOpenSigningForm = () => {
-  //   setOpenSigningForm(true);
-  // };
-
-  // const handleCloseSigningForm = () => {
-  //   setOpenSigningForm(false);
-  // };
-
-  // const handleShowModalSignImage = () => {
-  //   setShowModalSignImage(true);
-  // };
-
-  // const handleCloseModalSignImage = () => {
-  //   setShowModalSignImage(false);
-  // };
 
   const handleRemoveSignature = async () => {
     console.log("remove");
@@ -492,8 +461,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           className="mx-auto choioi"
         >
           <Box
-            // onDoubleClick={() => setShowModalSetting(true)}
-
             ref={drag(dragRef)}
             id="drag"
             sx={{

@@ -1,21 +1,23 @@
 import imageNotFound from "@/assets/images/noSignature.png";
-import { ReactComponent as ValidIcon } from "@/assets/images/svg/sealwf.svg";
-import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/seal_icon.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
-import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
-import { ReactComponent as InValidIcon } from "@/assets/images/svg/warningError.svg";
-import { ReactComponent as InValidWFIcon } from "@/assets/images/svg/warningErrorwf.svg";
-import { ReactComponent as WarningIcon } from "@/assets/images/svg/warningError.svg";
-import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningErrorwf.svg";
-import Error from "@mui/icons-material/Error";
+import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
+import { ReactComponent as ValidSealWFIcon } from "@/assets/images/svg/sealwf.svg";
+import {
+  ReactComponent as InValidIcon,
+  ReactComponent as WarningIcon,
+} from "@/assets/images/svg/warningError.svg";
+import {
+  ReactComponent as InValidWFIcon,
+  ReactComponent as WarningWFIcon,
+} from "@/assets/images/svg/warningErrorwf.svg";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import SvgIcon from "@mui/material/SvgIcon";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { SignaturesInfo } from "../Signatures/SignaturesInfo";
-import SvgIcon from "@mui/material/SvgIcon";
 
 export const Seals = ({ eSealList1, eSealList2 }) => {
   const signedInfo = [...eSealList1, ...eSealList2];
@@ -34,32 +36,13 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
       icon: {
         signed: (
           <SvgIcon viewBox={"0 0 40 40"}>
-            <ValidIcon height={40} width={40} />
+            <ValidSealWFIcon height={40} width={40} />
           </SvgIcon>
-
-          // <SvgIcon
-          //   viewport="0 0 16 16"
-          //   width={16}
-          //   height={16}
-          //   component={ValidIcon}
-          //   sx={{ color: "#34A853" }}
-          //   inheritViewBox
-          // />
         ),
         notSigned: (
           <SvgIcon viewBox={"0 0 35 35"}>
-            <ValidWFIcon height={35} width={35} />
+            <ValidSealIcon height={35} width={35} />
           </SvgIcon>
-          // <SvgIcon color="inherit">
-          //   <ValidWFIcon />
-          // </SvgIcon>
-          // <SvgIcon
-          //   viewport="0 0 16 16"
-          //   width={16}
-          //   height={16}
-          //   component={ValidWFIcon}
-          //   inheritViewBox
-          // />
         ),
       },
       title: t("validation.sealValidTitle2"),
@@ -72,12 +55,12 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
       icon: {
         signed: (
           <SvgIcon viewBox={"0 0 35 35"}>
-            <WarningWFIcon height={35} width={35} color="#EB6A00" />
+            <WarningIcon height={35} width={35} color="#EB6A00" />
           </SvgIcon>
         ),
         notSigned: (
           <SvgIcon viewBox={"0 0 40 40"}>
-            <WarningIcon height={40} width={40} color="#EB6A00" />
+            <WarningWFIcon height={40} width={40} color="#EB6A00" />
           </SvgIcon>
         ),
       },
