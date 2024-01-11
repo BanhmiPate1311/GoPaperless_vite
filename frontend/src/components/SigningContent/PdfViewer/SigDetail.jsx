@@ -1,10 +1,20 @@
 import { ReactComponent as ErrorIcon } from "@/assets/images/svg/error_icon.svg";
-import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
+import { ReactComponent as ValidSigWFIcon } from "@/assets/images/svg/icon_Chip_White.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
+import { ReactComponent as ValidSealWFIcon } from "@/assets/images/svg/sealwf.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as ValidSigIcon } from "@/assets/images/svg/valid.svg";
 import { ReactComponent as WarningIcon2 } from "@/assets/images/svg/warning2_icon.svg";
+import {
+  ReactComponent as InValidIcon,
+  ReactComponent as WarningIcon,
+} from "@/assets/images/svg/warningError.svg";
+import {
+  ReactComponent as InValidWFIcon,
+  ReactComponent as WarningWFIcon,
+} from "@/assets/images/svg/warningErrorwf.svg";
 import { convertTime } from "@/utils/commonFunction";
-import Error from "@mui/icons-material/Error";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -13,12 +23,14 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
+import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const SigDetail = ({ open, signDetail, handleClose }) => {
+  console.log("signDetail: ", signDetail);
   const { t } = useTranslation();
 
   const signType = signDetail.is_seal === true ? "eseal" : "Signature";
@@ -119,48 +131,68 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
 
   const icon = () => {
     if (signDetail.indication === "TOTAL_PASSED") {
-      return (
-        <Stack
-          padding="7px"
-          border="1px solid transparent"
-          // bgcolor="rgb(255, 240, 226)"
-          borderRadius="50px"
-          justifyContent="center"
-          direction="row"
-        >
-          <ValidIcon sx={{ color: "#3B82F6", fontSize: "18px" }} />
-        </Stack>
-      );
+      if (signDetail.isSigned) {
+        if (signDetail.is_seal) {
+          return (
+            <SvgIcon viewBox={"0 0 40 40"}>
+              <ValidSealIcon height={40} width={40} />
+            </SvgIcon>
+          );
+        } else {
+          return (
+            <SvgIcon viewBox={"0 0 40 40"}>
+              <ValidSigIcon height={40} width={40} />
+            </SvgIcon>
+          );
+        }
+      } else {
+        if (signDetail.is_seal) {
+          return (
+            <SvgIcon viewBox={"0 0 40 40"}>
+              <ValidSealWFIcon height={35} width={35} />
+            </SvgIcon>
+          );
+        } else {
+          return (
+            <SvgIcon viewBox={"0 0 40 40"}>
+              <ValidSigWFIcon height={35} width={35} />
+            </SvgIcon>
+          );
+        }
+      }
     }
     if (signDetail.indication === "INDETERMINATE") {
-      return (
-        <Stack
-          padding="7px"
-          border="1px solid transparent"
-          bgcolor="rgb(255, 240, 226)"
-          borderRadius="50px"
-          justifyContent="center"
-        >
-          {/* <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} /> */}
-          <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} />
-        </Stack>
-      );
+      if (signDetail.isSigned) {
+        return (
+          <SvgIcon viewBox={"0 0 40 40"}>
+            <WarningIcon height={40} width={40} />
+          </SvgIcon>
+        );
+      } else {
+        return (
+          <SvgIcon viewBox={"0 0 40 40"}>
+            <WarningWFIcon height={35} width={35} />
+          </SvgIcon>
+        );
+      }
     }
     if (
       signDetail.indication !== "TOTAL_PASSED" &&
       signDetail.indication !== "INDETERMINATE"
     ) {
-      return (
-        <Stack
-          padding="7px"
-          bgcolor="rgb(255, 233, 235)"
-          borderRadius="50px"
-          justifyContent="center"
-        >
-          {/* <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} /> */}
-          <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} />
-        </Stack>
-      );
+      if (signDetail.isSigned) {
+        return (
+          <SvgIcon viewBox={"0 0 40 40"}>
+            <InValidIcon height={40} width={40} />
+          </SvgIcon>
+        );
+      } else {
+        return (
+          <SvgIcon viewBox={"0 0 40 40"}>
+            <InValidWFIcon height={35} width={35} />
+          </SvgIcon>
+        );
+      }
     }
   };
 

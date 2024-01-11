@@ -1,7 +1,7 @@
-import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
-import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
-import { ReactComponent as WarningIcon2 } from "@/assets/images/svg/warning2_icon.svg";
 import { ReactComponent as ErrorIcon } from "@/assets/images/svg/error_icon.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as WarningIcon2 } from "@/assets/images/svg/warning2_icon.svg";
 import { convertTime } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -25,7 +25,7 @@ export const SignatureDetail = ({
 }) => {
   // console.log("signType: ", signType);
   const { t } = useTranslation();
-  console.log("signature: ", signDetail);
+  // console.log("signDetail: ", signDetail);
   const name = signDetail.certificate.subject.CN[0];
   const warnings = signDetail.warnings;
   const errors = signDetail.errors;
@@ -153,7 +153,8 @@ export const SignatureDetail = ({
             p="12px 16px"
             borderRadius="10px"
           >
-            {sign.icon}
+            {signDetail.isSigned ? sign.icon.signed : sign.icon.notSigned}
+            {/* {sign.icon} */}
             <Box>
               <Typography
                 fontWeight="550"

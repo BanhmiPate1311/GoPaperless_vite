@@ -269,6 +269,8 @@ export const checkEseal = (cert) => {
   const cmndRegex = /\bCMND\b/;
   const bhxhRegex = /\bBHXH\b/;
   const hcRegex = /\bHC\b/;
+  const pidRegex = /\bPID\b/;
+  const ppidRegex = /\bPPID\b/;
 
   // const cert =
   //   "OID.2.5.4.20=0901790767, EMAILADDRESS=huynhcuong@gmail.com, UID=CCCD:079083011315, CN=Huỳnh Cường, ST=Hồ Chí Minh, C=VN";
@@ -277,6 +279,8 @@ export const checkEseal = (cert) => {
     !cccdRegex.test(certElement) && // Using the regular expression test method
     !cmndRegex.test(certElement) &&
     !hcRegex.test(certElement) &&
-    !bhxhRegex.test(certElement)
+    !bhxhRegex.test(certElement) &&
+    !pidRegex.test(certElement) &&
+    !ppidRegex.test(certElement)
   );
 };
