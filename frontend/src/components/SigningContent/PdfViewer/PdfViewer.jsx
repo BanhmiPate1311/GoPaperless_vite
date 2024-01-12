@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import "@/assets/style/cursor.css";
+import { useCommonHook } from "@/hook";
 import { fpsService } from "@/services/fps_service";
 import {
   checkIsPosition,
@@ -12,12 +14,8 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { Document } from ".";
-import "@/assets/style/cursor.css";
 import { ContextMenu } from "../../ContextMenu";
-import { useCommonHook } from "@/hook";
 
 export const PdfViewer = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
@@ -117,52 +115,6 @@ export const PdfViewer = ({ workFlow }) => {
     },
   });
 
-  // const pdfRange = {
-  //   [index]: [],
-  // };
-
-  // const cursors = {
-  //   [index]: [],
-  // };
-  // const abc = useRef(0);
-  // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  // useEffect(() => {
-  //   for (let i = 0; i < cursors[index].length; i++) {
-  //     const mouseMove = (e) => {
-  //       if (
-  //         e.target instanceof SVGElement ||
-  //         e.target.className.includes("MuiListItemText-primary") ||
-  //         e.target.className.includes("MuiListItemButton-root")
-  //       ) {
-  //         cursors[index][i].style.display = "none";
-  //       } else {
-  //         pdfRange[index][i].style.cursor = "none";
-  //         setMousePosition({
-  //           x: e.clientX,
-  //           y: e.clientY,
-  //         });
-  //         cursors[index][i].style.display = "block";
-  //       }
-  //     };
-
-  //     const mouseOut = () => {
-  //       cursors[index][i].style.display = "none";
-  //     };
-
-  //     console.log("pdfRange: ", pdfRange);
-  //     pdfRange[index][i].addEventListener("mousemove", mouseMove);
-
-  //     pdfRange[index][i].addEventListener("mouseleave", mouseOut);
-
-  //     return () => {
-  //       // window.removeEventListener("mousedown", handleGlobalClickAndMouseDown);
-  //       pdfRange[index][i].removeEventListener("mousemove", mouseMove);
-  //       pdfRange[index][i].removeEventListener("mouseleave", mouseOut);
-  //     };
-  //   }
-  // }, [cursors]);MuiDialog-container MuiBox-root css-i9gxme
-
   const handleContextMenu = (page) => (event) => {
     console.log("event: ", event);
     // console.log("page: ", page);
@@ -246,48 +198,27 @@ export const PdfViewer = ({ workFlow }) => {
     // console.log("props: ", props);
 
     return (
-      <DndProvider backend={HTML5Backend}>
-        <div
-          // className="cuong2"
-          className={`cuong-page-${props.pageIndex}`}
-          // onContextMenu={(e) => handleContextMenu(e, props.pageIndex + 1)}
-          // ref={menuRef}
-          onContextMenu={handleContextMenu(props)}
-          // style={{ cursor: "context-menu" }}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-          // id="pdf-view"
-        >
-          <ContextMenu
-            contextMenu={contextMenu}
-            handleClose={handleClose}
-            handleClickMenu={handleClickMenu}
-          />
+      <div
+        // className="cuong2"
+        className={`cuong-page-${props.pageIndex}`}
+        // onContextMenu={(e) => handleContextMenu(e, props.pageIndex + 1)}
+        // ref={menuRef}
+        onContextMenu={handleContextMenu(props)}
+        // style={{ cursor: "context-menu" }}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        // id="pdf-view"
+      >
+        <ContextMenu
+          contextMenu={contextMenu}
+          handleClose={handleClose}
+          handleClickMenu={handleClickMenu}
+        />
 
-          <Document props={props} workFlow={workFlow} signatures={signatures} />
-          {/* <Tooltip
-            // open={!isSetPos}
-            PopperProps={{
-              modifiers: [
-                {
-                  name: "offset",
-                  options: {
-                    offset: [50, 0],
-                  },
-                },
-              ],
-            }}
-            title="Right Click"
-            followCursor
-          >
-            <div style={{ width: "100%", height: "100%" }}>
-              <Document props={props} />
-            </div>
-          </Tooltip> */}
-        </div>
-      </DndProvider>
+        <Document props={props} workFlow={workFlow} signatures={signatures} />
+      </div>
     );
   };
 
