@@ -86,8 +86,6 @@ export const Document = ({ props, workFlow, signatures }) => {
     return true;
   };
 
-  const dropSigRef = useRef(null);
-
   const handleDragSignature = (value) => {
     // console.log("value: ", value);
     const { field_name } = value;
@@ -195,6 +193,7 @@ export const Document = ({ props, workFlow, signatures }) => {
         height: "100%",
         position: "relative",
         cursor: isSetPos ? "auto" : `url(${mouse}), auto`,
+        overflow: "hidden",
       }}
       id={`pdf-view-${props.pageIndex}`}
     >

@@ -33,6 +33,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowModalUsb, setShowModalUsb] = useState([false]);
   const [isShowEidModal, setShowEidModal] = useState([false]);
   const [isShowEidModalSign, setShowEidModalSign] = useState([false]);
+  const [dragPosition, setDragPosition] = useState(null);
+  const [isControlled, setIsControlled] = useState(true);
 
   const [showTopbar, setShowTopbar] = useState(false);
   const [isShowSigDetail, setIsShowSigDetail] = useState([false]);
@@ -84,38 +86,38 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         field
       );
     },
-    onSuccess: (data, variable) => {
-      // console.log("variable: ", variable);
-      variable.body.type = signatureData.type;
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-      // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
-      // queryClient.setQueryData(["getField"], (prev) => {
-      //   console.log("prev: ", prev);
-      //   const index = prev.data.signature.findIndex(
-      //     (item) => item.field_name === variable.body.field_name
-      //   );
-      //   console.log("index: ", index);
-      //   if (index !== -1) {
-      //     return {
-      //       ...prev,
-      //       data: {
-      //         ...prev.data,
-      //         signature: prev.data.signature.map((item, i) => {
-      //           return i === index ? variable.body : item;
-      //         }),
-      //       },
-      //     };
-      //   } else {
-      //     return {
-      //       ...prev,
-      //       data: {
-      //         ...prev.data,
-      //         signature: [...prev.data.signature, variable.body],
-      //       },
-      //     };
-      //   }
-      // });
-    },
+    // onSuccess: (data, variable) => {
+    //   // console.log("variable: ", variable);
+    //   variable.body.type = signatureData.type;
+    //   // queryClient.invalidateQueries({ queryKey: ["getField"] });
+    //   // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
+    //   queryClient.setQueryData(["getField"], (prev) => {
+    //     // console.log("prev: ", prev);
+    //     const index = prev.data.signature.findIndex(
+    //       (item) => item.field_name === variable.body.field_name
+    //     );
+    //     console.log("index: ", index);
+    //     if (index !== -1) {
+    //       return {
+    //         ...prev,
+    //         data: {
+    //           ...prev.data,
+    //           signature: prev.data.signature.map((item, i) => {
+    //             return i === index ? { ...item, ...variable.body } : item;
+    //           }),
+    //         },
+    //       };
+    //     } else {
+    //       return {
+    //         ...prev,
+    //         data: {
+    //           ...prev.data,
+    //           signature: [...prev.data.signature, variable.body],
+    //         },
+    //       };
+    //     }
+    //   });
+    // },
   });
 
   useEffect(() => {
@@ -266,6 +268,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           // width: "100%",
           backgroundColor: "#D9DFE4",
         }}
+        className="topBar"
       >
         <SvgIcon
           component={SignIcon}
@@ -306,12 +309,140 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     );
   };
 
-  if (signatureData.page !== null && signatureData.page !== pdfPage.currentPage)
-    return null;
+  const handleDrag = (type) => {
+    // Sử dụng getElementsByClassName để lấy HTMLCollection
+    const elements = document.getElementsByClassName("rauria");
+
+    // Lặp qua các phần tử trong HTMLCollection và đặt thuộc tính style.display
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].style.display = type;
+    }
+  };
+
+  // if (signatureData.page !== null && signatureData.page !== pdfPage.currentPage)
+  //   return null;
 
   return (
     <>
-      <Draggable handle="#drag" bounds=".cuong-page-0,.cuong-page-1">
+      <Draggable
+        handle="#drag"
+        // bounds="parent"
+        onDrag={() => handleDrag("block")}
+        position={dragPosition}
+        onClick={(e) => {
+          console.log("onClick");
+        }}
+        cancel=".topBar"
+        onStart={(e) => {
+          setIsControlled(false);
+        }}
+        onStop={(e, data) => {
+          console.log("data: ", data);
+          console.log("e: ", e);
+          setIsControlled(true);
+          handleDrag("none");
+          const draggableComponent = document.querySelector(`.choioi-${index}`);
+          const targetComponents = document.querySelectorAll(".sig");
+          const containerComponent = document.getElementById(
+            `pdf-view-${pdfPage.currentPage - 1}`
+          );
+
+          // Lấy kích thước của containerComponent
+          const containerRect = containerComponent.getBoundingClientRect();
+
+          // Lấy kích thước của draggableComponent
+          const draggableRect = draggableComponent.getBoundingClientRect();
+
+          // Kiểm tra xem draggableComponent có ra khỏi phạm vi của containerComponent không
+          if (
+            draggableRect.right > containerRect.right ||
+            draggableRect.left < containerRect.left ||
+            draggableRect.bottom > containerRect.bottom ||
+            draggableRect.top < containerRect.top
+          ) {
+            console.log(
+              "draggableComponent đã ra khỏi phạm vi của containerComponent"
+            );
+            return;
+          } else {
+            console.log(
+              "draggableComponent nằm trong phạm vi của containerComponent"
+            );
+          }
+          let isOverTarget = false;
+
+          targetComponents.forEach((targetComponent) => {
+            // console.log("draggableRect: ", draggableRect);
+            const targetRect = targetComponent.getBoundingClientRect();
+
+            if (draggableComponent === targetComponent) return;
+
+            // Kiểm tra xem component có đè lên target không
+            if (
+              draggableRect.left < targetRect.right &&
+              draggableRect.right > targetRect.left &&
+              draggableRect.top < targetRect.bottom &&
+              draggableRect.bottom > targetRect.top
+            ) {
+              isOverTarget = true;
+              console.log("Draggable component is over the target component");
+            }
+          });
+
+          if (isOverTarget) {
+            // Đặt lại vị trí về ban đầu nếu đè lên một phần tử khác
+            return;
+          } else {
+            setDragPosition({ x: data.x, y: data.y });
+            // console.log("pdfPage: ", pdfPage.currentPage - 1);
+
+            // const containerComponent = document.getElementById(
+            //   `pdf-view-${pdfPage.currentPage - 1}`
+            // );
+            // console.log("containerComponent: ", containerComponent);
+            const rectComp = containerComponent.getBoundingClientRect();
+            console.log("rectComp: ", rectComp);
+
+            const rectItem = draggableComponent.getBoundingClientRect();
+            console.log("rectItem: ", rectItem);
+
+            const x =
+              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
+
+            const y =
+              (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
+
+            console.log(
+              "x: ",
+              (Math.abs(rectItem.left - rectComp.left) * 100) / pdfPage.width
+            );
+            console.log(
+              "y: ",
+              (Math.abs(rectItem.top - rectComp.top) * 100) / pdfPage.height
+            );
+
+            // putSignature.mutate({
+            //   body: {
+            //     field_name: signatureData.field_name,
+            //     page: pdfPage.currentPage,
+            //     dimension: {
+            //       x: x,
+            //       y: y,
+            //       width: signatureData.dimension?.width,
+            //       height: signatureData.dimension?.height,
+            //     },
+            //     visible_enabled: true,
+            //   },
+            //   field: signatureData.type.toLowerCase(),
+            // });
+          }
+        }}
+        disabled={
+          isSetPos ||
+          signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
+            signatureData.field_name
+        }
+      >
         {["SIGNATURE", "INITIAL"].includes(signatureData.type) && (
           <ResizableBox
             width={
@@ -330,6 +461,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               left: signatureData.dimension?.x + "%",
               zIndex: 100,
               opacity: signatureData.verification === undefined ? 1 : 0,
+              transition: isControlled ? `transform 0.3s` : `none`,
             }}
             // minConstraints={[
             //   signatureData.dimension?.width * (pdfPage.width / 100),
@@ -439,7 +571,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                 field: signatureData.type.toLowerCase(),
               });
             }}
-            className="mx-auto choioi"
+            className={`sig choioi-${index}`}
           >
             <Box
               id="drag"
@@ -480,9 +612,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               onMouseLeave={(e) => {
                 setShowTopbar(false);
               }}
-              onClick={(e) => {
-                console.log("e: ", e);
-              }}
+              // onClick={(e) => {
+              //   console.log("e: ", e);
+              // }}
               onDoubleClick={(e) => {
                 if (signatureData.verification) {
                   console.log("show signature verification");
@@ -508,10 +640,22 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             >
               <div>
                 {showTopbar && <TopBar signatureData={signatureData} />}
-                <span className="topline" style={{ display: "block" }}></span>
-                <span className="rightline" style={{ display: "block" }}></span>
-                <span className="botline" style={{ display: "block" }}></span>
-                <span className="leftline" style={{ display: "block" }}></span>
+                <span
+                  className="rauria topline"
+                  style={{ display: "none" }}
+                ></span>
+                <span
+                  className="rauria rightline"
+                  style={{ display: "none" }}
+                ></span>
+                <span
+                  className="rauria botline"
+                  style={{ display: "none" }}
+                ></span>
+                <span
+                  className="rauria leftline"
+                  style={{ display: "none" }}
+                ></span>
                 <Box
                   id="click-duoc"
                   variant="h5"
