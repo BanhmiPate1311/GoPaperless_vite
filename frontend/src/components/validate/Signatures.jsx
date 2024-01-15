@@ -1,76 +1,107 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as IconChipWhite } from "@/assets/images/svg/icon_Chip_White.svg";
+import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/valid.svg";
+import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
+import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
+import {
+  ReactComponent as InValidIcon,
+  ReactComponent as WarningIcon,
+} from "@/assets/images/svg/warningErrorwf.svg";
+import {
+  ReactComponent as InValidWFIcon,
+  ReactComponent as WarningWFIcon,
+} from "@/assets/images/svg/warningError.svg";
 import { Error } from "@mui/icons-material";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { SignDetail } from ".";
-
+import Avatar from "@mui/material/Avatar";
+import SvgIcon from "@mui/material/SvgIcon";
 export const Signatures = ({ validFile, signType }) => {
   const { t } = useTranslation();
 
   const valueSign = [
     {
-      name: "valid",
+      name: t("validation.sigValidTitle"),
       value: validFile.filter((sig) => sig.indication === "TOTAL_PASSED"),
-      icon: (
-        <Stack
-          padding="7px"
-          border="1px solid transparent"
-          // bgcolor="rgb(255, 240, 226)"
-          borderRadius="50px"
-          justifyContent="center"
-          direction="row"
-        >
-          <IconChipWhite width={17} height={17} />
-        </Stack>
-      ),
-      title:
-        signType === "Signature"
-          ? t("validation.sigValidTitle")
-          : t("validation.sealValidTitle"),
+      icon: {
+        signed: (
+          <SvgIcon viewBox={"0 0 40 40"}>
+            <ValidSealIcon height={40} width={40} />
+          </SvgIcon>
+        ),
+        notSigned: (
+          <SvgIcon viewBox={"0 0 35 35"}>
+            <ValidWFIcon height={35} width={35} />
+          </SvgIcon>
+        ),
+      },
+      title: t("signing.signature_valid"),
     },
     {
-      name: "indeterminate",
+      name: t("validation.indeterminateTitle"),
       value: validFile.filter((sig) => sig.indication === "INDETERMINATE"),
-      icon: (
-        <Stack
-          padding="7px"
-          border="1px solid transparent"
-          bgcolor="rgb(255, 240, 226)"
-          borderRadius="50px"
-          justifyContent="center"
-        >
-          <Error sx={{ color: "rgb(235, 106, 0)", fontSize: "18px" }} />
-        </Stack>
-      ),
-      title: t("validation.indeterminateTitle"),
+      icon: {
+        signed: (
+          <SvgIcon viewBox={"0 0 35 35"}>
+            <WarningIcon height={35} width={35} color="#EB6A00" />
+          </SvgIcon>
+        ),
+        notSigned: (
+          <SvgIcon viewBox={"0 0 40 40"}>
+            <WarningWFIcon height={40} width={40} color="#EB6A00" />
+          </SvgIcon>
+        ),
+      },
+      title: t("signing.indeterminate signatures"),
     },
     {
-      name: "invalid",
+      name: t("validation.invalidSig"),
       value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
-      icon: (
-        <Stack
-          padding="7px"
-          bgcolor="rgb(255, 233, 235)"
-          borderRadius="50px"
-          justifyContent="center"
-        >
-          <Error sx={{ color: "rgb(216, 81, 63)", fontSize: "18px" }} />
-        </Stack>
-      ),
-      title: t("validation.invalidTitle"),
+      icon: {
+        signed: (
+          <SvgIcon viewBox={"0 0 40 40"}>
+            <InValidIcon height={40} width={40} />
+          </SvgIcon>
+        ),
+        notSigned: (
+          <SvgIcon viewBox={"0 0 35 35"}>
+            <InValidWFIcon height={35} width={35} />
+          </SvgIcon>
+        ),
+      },
+      title: t("signing.invalid signatures"),
     },
   ];
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
 
   return (
     <>
-      <Box p={3} fontWeight={550}>
+      <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <SignatureIcon />
+          <Typography variant="h3" sx={{ fontWeight: "550" }}>
+            {t("0-common.signatures")}
+          </Typography>
+          <Avatar
+            sx={{
+              bgcolor: "signingtextBlue.main",
+              width: 16,
+              height: 16,
+              fontSize: "10px",
+            }}
+          >
+            {newSign.length}
+          </Avatar>
+        </Stack>
+      </Stack>
+      {/* <Box p={3} fontWeight={550}>
         {signType === "Signature" ? t("validation.tab2") : t("validation.tab3")}
-      </Box>
+      </Box> */}
       <Divider />
-      {validFile.length === 0 ? (
+      {newSign.length === 0 ? (
         <Box>
           <Box width={200} textAlign="center" mx="auto">
             <img
@@ -81,20 +112,13 @@ export const Signatures = ({ validFile, signType }) => {
             />
           </Box>
           <Typography textAlign="center" variant="h5" fontWeight="bold">
-            {signType === "Signature"
-              ? t("validation.signatureNotFound")
-              : t("validation.sealNotFound")}
+            {t("validation.signatureNotFound")}
           </Typography>
         </Box>
       ) : (
-        <Box>
-          <Box>
-            {newSign.length > 0 &&
-              newSign.map((val, i) => (
-                <SignDetail sign={val} signType={signType} key={i} />
-              ))}
-          </Box>
-        </Box>
+        newSign.map((val, i) => (
+          <SignDetail sign={val} signType={signType} key={i} />
+        ))
       )}
     </>
   );

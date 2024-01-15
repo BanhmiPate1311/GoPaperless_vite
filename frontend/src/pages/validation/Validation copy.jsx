@@ -19,7 +19,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import Chip from "@mui/material/Chip";
-import Container from "@mui/material/Container";
 
 const CustomButton = styled(Button)`
   text-transform: none; /* Đặt textTransform thành none để bỏ chữ in hoa */
@@ -127,7 +126,7 @@ export const Validation = () => {
           <div className="loader" />
         </div>
       )}
-      <Box sx={{ height: { md: "auto", lg: "calc(100vh - 110px)" } }}>
+      <div className="container preview-document-container isign-signing-show isign-signature-pdf ">
         <Box>
           <AppBar
             position="static"
@@ -173,7 +172,7 @@ export const Validation = () => {
                 component="div"
                 sx={{ flexGrow: 1, textTransform: "uppercase" }}
               >
-                {/* {validFile?.file?.file_name} */}
+                {validFile?.file?.file_name}
               </Typography>
 
               <Box sx={{ flexGrow: 1 }} />
@@ -276,61 +275,63 @@ export const Validation = () => {
             </Toolbar>
           </AppBar>
         </Box>
-        <Container
-          // maxWidth={(theme) => theme.GoPaperless.containerMaxWidth}
-          maxWidth={false}
-          // mt={(theme) => theme.GoPaperless.headerHeight}
-          // height={(theme) =>
-          //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
-          // }
-          sx={{
-            maxWidth: (theme) => theme.GoPaperless.containerMaxWidth,
-            height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
-          }}
-        >
-          <Container
-            disableGutters
-            maxWidth="100%"
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", lg: "row" },
-              height: { lg: "100%" }, // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha
-              pt: 2,
-              gap: 4,
-            }}
-          >
-            {/* width={{ xs: "100%", lg: "70%" }} */}
-            <Box
-              width={{ xs: "100%", lg: "calc(100% - 510px)" }}
-              height={{ xs: "500px", lg: "100%" }} // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha, ở màn hình sx sẽ cao 500px
-            >
-              <Typography
-                variant="h6"
-                fontWeight={600}
-                height={"25px"}
-                bgcolor="signingWFBackground.main"
-                pl={2}
-              >
-                {validFile?.file?.file_name}
-              </Typography>
-              <Box
-                overflow="auto"
-                height={{ xs: "500px", lg: "calc(100% - 25px)" }}
-              >
-                {Object.keys(validFile).length !== 0 && (
-                  <PDFViewer base64={validFile?.file?.content} />
-                )}
-              </Box>
-            </Box>
-            <Box
-              width={{ xs: "100%", lg: "510px" }}
-              height={{ xs: "100%", lg: "100%" }}
-            >
-              <TabDocument validFile={validFile} />
-            </Box>
-          </Container>
-        </Container>
-      </Box>
+
+        <div className="content-sign">
+          <div className="css-ufz7ne">
+            <div className="css-91kxzg">
+              <div className="css-r11a23">
+                <div className="css-thqqgj css-10ktgt9">
+                  <div className="css-h6dcj7">
+                    {Object.keys(validFile).length !== 0 && (
+                      <PDFViewer base64={validFile?.file?.content} />
+                    )}
+                  </div>
+                </div>
+                <div className="css-pmda5y css-1e61wdr css-wnj41j css-1nqdrf4 css-1r2zlre">
+                  <div style={{ opacity: 1, transform: "none" }}>
+                    <TabDocument validFile={validFile} />
+                    {/* Form */}
+                    <div className="css-10vgal8 css-19wcyhm">
+                      <div className="css-1oy1ewu">
+                        <Box
+                          sx={{
+                            overflow: "hidden",
+                            background: "rgb(232, 235, 240)",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "20px",
+                              p: 2,
+                            }}
+                          >
+                            {/* <img src={Lock} alt="lock"></img> */}
+                            <Lock style={{ width: "100px" }} />
+                            <Typography variant="h6">
+                              {t("validation.val1")}
+                              <Link
+                                to="https://gopaperless.mobile-id.vn/compliance/signature-validation-service-practice-statement-and-policy"
+                                target="_blank"
+                              >
+                                {/* Privacy Policy */}
+                                {t("validation.val2")}
+                              </Link>{" "}
+                              {t("validation.val3")}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* <CookieSetting /> */}
+        </div>
+      </div>
     </main>
   );
 };
