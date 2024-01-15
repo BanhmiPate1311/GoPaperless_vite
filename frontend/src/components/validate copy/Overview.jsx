@@ -1,6 +1,4 @@
 import { convertTime } from "@/utils/commonFunction";
-import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
-
 import { CheckCircleOutline, Error } from "@mui/icons-material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -24,22 +22,19 @@ export const Overview = ({ validFile }) => {
   };
   return (
     <Box>
-      <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <OverviewIcon />
-          <Typography sx={{ fontWeight: "550" }} variant="h3">
-            {t("validation.tab1")}
-          </Typography>
-        </Stack>
-      </Stack>
-
-      <Divider sx={{ color: "borderColor.main" }} />
-      <Box sx={{ padding: "8px 16px" }}>
+      <Box sx={{ p: 3 }}>
+        {/* <Title>Overview</Title> */}
+        <Box style={{ fontSize: "14px", fontWeight: "550" }}>
+          {t("validation.tab1")}
+        </Box>
+      </Box>
+      <Divider sx={{ borderColor: "black", borderBottomWidth: 1 }} />
+      <Box sx={{ p: 3 }}>
         <Box
           sx={{
             display: "block",
             overflow: "hidden",
-            padding: "12px 12px 12px 12px",
+            padding: "12px 12px 12px calc(30px)",
             borderRadius: "12px",
             alignItems: "center",
             background: "rgb(232, 235, 240)",
@@ -62,30 +57,22 @@ export const Overview = ({ validFile }) => {
                 />
               )}
               {/* {validFile.valid && ( */}
-              <Box
-                sx={{ display: "flex", flexDirection: "column", gap: "5px" }}
-              >
-                <Typography variant="h6" sx={{ fontWeight: "700" }}>
-                  {validFile?.status}
-                </Typography>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: "10px" }}
-                >
+              <Box sx={{ display: "block" }}>
+                <Typography variant="h6">{validFile?.status}</Typography>
+                <Box sx={{ display: "flex" }}>
                   <PeopleOutlinedIcon
                     fontSize="small"
-                    sx={{ fill: "#9E9C9C" }}
+                    sx={{ fill: "#9E9C9C", marginRight: "2px" }}
                   />
                   <Typography variant="h5">
                     {validFile?.total_valid_signatures} /{" "}
                     {validFile?.total_signatures} {t("validation.overview1")}
                   </Typography>
                 </Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: "10px" }}
-                >
+                <Box sx={{ display: "flex" }}>
                   <WorkspacePremiumIcon
                     fontSize="small"
-                    sx={{ fill: "#9E9C9C" }}
+                    sx={{ fill: "#9E9C9C", marginRight: "2px" }}
                   />
                   <Typography variant="h5">
                     {validFile?.total_valid_seal} / {validFile?.total_seals}{" "}
@@ -98,8 +85,8 @@ export const Overview = ({ validFile }) => {
           )}
         </Box>
       </Box>
-      <Divider sx={{ color: "borderColor.main" }} />
-      <Box sx={{ p: "8px 16px" }}>
+      <Divider sx={{ borderColor: "black", borderBottomWidth: 1 }} />
+      <Box sx={{ p: 3 }}>
         <Typography variant="h6" fontWeight="bold">
           {t("validation.overview3")}
         </Typography>
@@ -112,19 +99,14 @@ export const Overview = ({ validFile }) => {
           sx={{
             background: "rgb(232, 235, 240)",
             borderRadius: "12px",
-            padding: "12px 12px 12px 12px",
           }}
         >
           <Typography variant="h5">{t("validation.overview4")}</Typography>
         </Alert>
       </Box>
-      <Divider sx={{ color: "borderColor.main" }} />
-      <Box sx={{ p: "8px 16px" }}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          sx={{ marginBottom: "16px" }}
-        >
+      <Divider sx={{ borderColor: "black", borderBottomWidth: 1 }} />
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h5" fontWeight="bold">
           {t("validation.overview5")}
         </Typography>
         <Box
@@ -138,7 +120,7 @@ export const Overview = ({ validFile }) => {
           </Tooltip>
         </Box>
       </Box>
-      <Divider sx={{ color: "borderColor.main" }} />
+      <Divider sx={{ borderColor: "black", borderBottomWidth: 1 }} />
     </Box>
   );
 };
