@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import "@/assets/style/cursor.css";
 import { useCommonHook } from "@/hook";
+import { UseAddSig, UseAddTextField } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import {
   checkIsPosition,
@@ -11,14 +12,14 @@ import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
 
 export const PdfViewer = ({ workFlow }) => {
-  // console.log("workFlow: ", workFlow);
+  console.log("workFlow: ", workFlow);
   const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
@@ -33,90 +34,34 @@ export const PdfViewer = ({ workFlow }) => {
   // const [increment, setIncrement] = useState(0);
   // console.log("increment: ", increment);
 
-  let isSetPos = checkIsPosition(workFlow);
+  const isSetPosRef = useRef(checkIsPosition(workFlow));
+  const isSetPos = isSetPosRef.current;
+
   useEffect(() => {
-    isSetPos = checkIsPosition(workFlow);
+    isSetPosRef.current = checkIsPosition(workFlow);
   }, [workFlow]);
 
   // eslint-disable-next-line no-unused-vars
-  const { data: signatures } = useQuery({
+  const { data: field } = useQuery({
     queryKey: ["getField"],
     queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
-    select: (data) => {
-      const newData = { ...data.data };
-      const newSignatures = Object.values(newData)
-        .flat()
-        .map((item) => {
-          const { verification, ...repairedSignature } = item;
-          return {
-            verification,
-            ...repairedSignature,
-            workFlowId: workFlow.workFlowId,
-          };
-        });
-      // setIncrement(newSignatures.length + 1); // Set the state when data is available
-      return newSignatures;
-    },
+    // select: (data) => {
+    //   console.log("data: ", data);
+    //   const newData = { ...data };
+    //   return {
+    //     ...newData,
+    //     workFlowId: workFlow.workFlowId,
+    //   };
+    // },
   });
 
-  // console.log("getField: ", signatures);
+  console.log("getField: ", field);
 
-  // const { data: signatures } = useQuery({
-  //   queryKey: ["verifySignatures"],
-  //   queryFn: () =>
-  //     fpsService.getVerification({ documentId: workFlow.documentId }),
-  //   select: (data) => {
-  //     // console.log("data: ", data);
-  //     const newData = [...data.data];
-  //     let fieldResult = [...getField];
-  //     if (newData.length === 0) return fieldResult;
-  //     newData.forEach((signatureVeriInfo) => {
-  //       let signatureIndex = fieldResult.findIndex(
-  //         (signature) => signature.field_name === signatureVeriInfo.field_name
-  //       );
-
-  //       if (signatureIndex === -1) return;
-  //       fieldResult[signatureIndex] = {
-  //         ...fieldResult[signatureIndex],
-  //         ...signatureVeriInfo,
-  //         signed: true,
-  //       };
-  //       // queryClient.setQueryData(["getField"], []);
-  //     });
-  //     return fieldResult;
-  //   },
-  //   retry: false,
-  // });
-  // console.log("signatures: ", signatures);
-
-  // queryClient.setQueryData(["signatures"], signatures);
-
-  const addSignature = useMutation({
-    mutationFn: ({ body, field }) => {
-      // console.log("body: ", body);
-      return fpsService.addSignature(
-        { documentId: workFlow.documentId },
-        body,
-        field
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-      // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
-      // queryClient.setQueryData(["getField"], (prev) => {
-      //   return {
-      //     ...prev,
-      //     data: {
-      //       ...prev.data,
-      //       signature: [...prev.data.signature, variables.body],
-      //     },
-      //   };
-      // });
-    },
-  });
+  const addSignature = UseAddSig();
+  const addTextBox = UseAddTextField();
 
   const handleContextMenu = (page) => (event) => {
-    console.log("event: ", event);
+    // console.log("event: ", event);
     // console.log("page: ", page);
     if (
       isSetPos ||
@@ -157,10 +102,79 @@ export const PdfViewer = ({ workFlow }) => {
     setContextMenu(null);
   };
 
+  const signatureField = (value) => {
+    const newSignature = {
+      type: value,
+      field_name:
+        signerId + "_" + value + "_" + Number(field.signature.length + 1),
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 22,
+        height: 5,
+      },
+      suffix: Number(field.signature.length + 1),
+      visible_enabled: true,
+      workFlowId: workFlow.workFlowId,
+    };
+    addSignature.mutate(
+      {
+        body: newSignature,
+        field: newSignature.type.toLowerCase(),
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
+  const textField = (value) => {
+    // console.log("value: ", value);
+    const newTextField = {
+      type: "TEXTBOX",
+      field_name:
+        signerId + "_" + value + "_" + Number(field.textbox.length + 1),
+      page: signInfo.page,
+      value: signer.lastName + signer.firstName,
+      read_only: false,
+      multiline: false,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 22,
+        height: 5,
+      },
+      suffix: Number(field.textbox.length + 1),
+    };
+    addTextBox.mutate(
+      {
+        body: newTextField,
+        field: "text",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
   const handleClickMenu = (value) => () => {
-    // console.log("data: ", value);
+    console.log("data: ", value);
     handleClose();
-    // console.log("signInfo: ", signInfo);
+    switch (value) {
+      case "SIGNATURE":
+        signatureField(value);
+        break;
+      case "NAME":
+        textField(value);
+        break;
+    }
 
     // if (
     //   signatures &&
@@ -169,29 +183,6 @@ export const PdfViewer = ({ workFlow }) => {
     //   // handleClose();
     //   return alert("Signature Duplicated");
     // }
-
-    const newSignature = {
-      type: value,
-      // field_name: String(item).toUpperCase() + uuidv4(),
-      field_name: signerId + "_" + value + "_" + Number(signatures.length + 1),
-      page: signInfo.page,
-      dimension: {
-        x: signInfo.x,
-        y: signInfo.y,
-        width: 22,
-        height: 5,
-      },
-      suffix: Number(signatures.length + 1),
-      visible_enabled: true,
-      workFlowId: workFlow.workFlowId,
-      // signerToken: workFlow.signerToken,
-    };
-    // console.log("newSignature: ", newSignature);
-    addSignature.mutate({
-      body: newSignature,
-      field: newSignature.type.toLowerCase(),
-    });
-    // setIncrement(increment + 1);
   };
 
   const renderPage = (props) => {
@@ -217,7 +208,11 @@ export const PdfViewer = ({ workFlow }) => {
           handleClickMenu={handleClickMenu}
         />
 
-        <Document props={props} workFlow={workFlow} signatures={signatures} />
+        <Document
+          props={props}
+          workFlow={workFlow}
+          signatures={field.signature}
+        />
       </div>
     );
   };

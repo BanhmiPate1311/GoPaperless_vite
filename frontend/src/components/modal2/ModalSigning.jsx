@@ -162,7 +162,7 @@ export const ModalSigning = ({
       case 0:
         html2canvas(textElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
-          console.log("data64: ", data64);
+          // console.log("data64: ", data64);
 
           setDataSigning({
             ...dataSigning,
@@ -176,7 +176,7 @@ export const ModalSigning = ({
       case 1:
         html2canvas(drawElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
-          console.log("data64: ", canvas);
+          // console.log("data64: ", canvas);
 
           setDataSigning({
             ...dataSigning,
@@ -191,7 +191,7 @@ export const ModalSigning = ({
         html2canvas(fileElement.current).then((canvas) => {
           const data64 = canvas.toDataURL();
 
-          console.log(data64);
+          // console.log(data64);
           setDataSigning({
             ...dataSigning,
             contactInfor: data.contactInfor,

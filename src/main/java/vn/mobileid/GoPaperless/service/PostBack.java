@@ -82,7 +82,7 @@ public class PostBack {
                 pHMAC, pCREATED_BY, pFILE_ID);
         if ("1".equals(sInsertFile)) {
             // test
-            sFileID_Last = pFILE_ID[0];
+//            sFileID_Last = pFILE_ID[0];
             String sAction = "signer_signed";
             String sSigner = CommonFunction.CheckTextNull(signerId);
             String sStatus = "ok";
@@ -117,7 +117,8 @@ public class PostBack {
             connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(signerToken,
                     Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_SIGNED, "", isSetPosition);
             int pPPL_WORKFLOW_ID = rsWFList.getId();// sStatusWFCheck[0];
-            connect.USP_GW_PPL_WORKFLOW_FILE_ADD(pPPL_WORKFLOW_ID, pFILE_ID[0], Difinitions.CONFIG_WORKFLOW_FILE_SIGNED_FILE, "", sFileID_Last, "", "");
+            String result = connect.USP_GW_PPL_WORKFLOW_FILE_ADD(pPPL_WORKFLOW_ID, pFILE_ID[0], Difinitions.CONFIG_WORKFLOW_FILE_SIGNED_FILE, "", sFileID_Last, "", "");
+            System.out.println("result: " + result);
             System.out.println("signedTime: " + signedTime);
 //            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 //            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -148,7 +149,7 @@ public class PostBack {
                 }
 //                String signedType = "NORMAL";
                 connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(signerToken,
-                        signedType, sDateSign, sSignature_id, signedHash, dataResponse, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, sFileID_Last, pLAST_MODIFIED_BY);
+                        signedType, sDateSign, sSignature_id, signedHash, dataResponse, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, pFILE_ID[0], pLAST_MODIFIED_BY);
                 if (rsWFList != null) {
                     if (rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
                         connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(signingToken, Difinitions.CONFIG_PPL_WORKFLOW_STATUS_COMPLETED, "");

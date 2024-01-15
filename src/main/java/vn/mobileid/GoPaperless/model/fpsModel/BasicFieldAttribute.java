@@ -22,5 +22,8 @@ public class BasicFieldAttribute {
     private Dimension dimension;
     private Boolean visibleEnabled;
     private Boolean required;
+    private Boolean read_only;
+    private Boolean multiline;
     private String renamedAs;
+    private String value;
 }

@@ -18,6 +18,7 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
+import { UseUpdateSig } from "@/hook/use-fpsService";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
@@ -78,47 +79,17 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const maxPosibleResizeHeight =
     (pdfPage.height * (100 - signatureData.dimension?.y)) / 100;
 
-  const putSignature = useMutation({
-    mutationFn: ({ body, field }) => {
-      return fpsService.putSignature(
-        { documentId: workFlow.documentId },
-        body,
-        field
-      );
-    },
-    // onSuccess: (data, variable) => {
-    //   // console.log("variable: ", variable);
-    //   variable.body.type = signatureData.type;
-    //   // queryClient.invalidateQueries({ queryKey: ["getField"] });
-    //   // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
-    //   queryClient.setQueryData(["getField"], (prev) => {
-    //     // console.log("prev: ", prev);
-    //     const index = prev.data.signature.findIndex(
-    //       (item) => item.field_name === variable.body.field_name
-    //     );
-    //     console.log("index: ", index);
-    //     if (index !== -1) {
-    //       return {
-    //         ...prev,
-    //         data: {
-    //           ...prev.data,
-    //           signature: prev.data.signature.map((item, i) => {
-    //             return i === index ? { ...item, ...variable.body } : item;
-    //           }),
-    //         },
-    //       };
-    //     } else {
-    //       return {
-    //         ...prev,
-    //         data: {
-    //           ...prev.data,
-    //           signature: [...prev.data.signature, variable.body],
-    //         },
-    //       };
-    //     }
-    //   });
-    // },
-  });
+  // const putSignature = useMutation({
+  //   mutationFn: ({ body, field }) => {
+  //     return fpsService.putSignature(
+  //       { documentId: workFlow.documentId },
+  //       body,
+  //       field
+  //     );
+  //   },
+  // });
+
+  const putSignature = UseUpdateSig();
 
   useEffect(() => {
     // const metaInf1 = signer.metaInformation;
@@ -311,7 +282,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
 
   const handleDrag = (type) => {
     // Sử dụng getElementsByClassName để lấy HTMLCollection
-    const elements = document.getElementsByClassName("rauria");
+    const elements = document.getElementsByClassName(`rauria-${index}`);
 
     // Lặp qua các phần tử trong HTMLCollection và đặt thuộc tính style.display
     for (let i = 0; i < elements.length; i++) {
@@ -337,8 +308,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           setIsControlled(false);
         }}
         onStop={(e, data) => {
-          console.log("data: ", data);
-          console.log("e: ", e);
+          // console.log("data: ", data);
+          // console.log("e: ", e);
           setIsControlled(true);
           handleDrag("none");
           const draggableComponent = document.querySelector(`.choioi-${index}`);
@@ -360,14 +331,14 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             draggableRect.bottom > containerRect.bottom ||
             draggableRect.top < containerRect.top
           ) {
-            console.log(
-              "draggableComponent đã ra khỏi phạm vi của containerComponent"
-            );
+            // console.log(
+            //   "draggableComponent đã ra khỏi phạm vi của containerComponent"
+            // );
             return;
           } else {
-            console.log(
-              "draggableComponent nằm trong phạm vi của containerComponent"
-            );
+            // console.log(
+            //   "draggableComponent nằm trong phạm vi của containerComponent"
+            // );
           }
           let isOverTarget = false;
 
@@ -401,10 +372,10 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             // );
             // console.log("containerComponent: ", containerComponent);
             const rectComp = containerComponent.getBoundingClientRect();
-            console.log("rectComp: ", rectComp);
+            // console.log("rectComp: ", rectComp);
 
             const rectItem = draggableComponent.getBoundingClientRect();
-            console.log("rectItem: ", rectItem);
+            // console.log("rectItem: ", rectItem);
 
             const x =
               (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
@@ -412,29 +383,37 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
 
-            console.log(
-              "x: ",
-              (Math.abs(rectItem.left - rectComp.left) * 100) / pdfPage.width
-            );
-            console.log(
-              "y: ",
-              (Math.abs(rectItem.top - rectComp.top) * 100) / pdfPage.height
-            );
+            // console.log(
+            //   "x: ",
+            //   (Math.abs(rectItem.left - rectComp.left) * 100) / pdfPage.width
+            // );
+            // console.log(
+            //   "y: ",
+            //   (Math.abs(rectItem.top - rectComp.top) * 100) / pdfPage.height
+            // );
 
-            // putSignature.mutate({
-            //   body: {
-            //     field_name: signatureData.field_name,
-            //     page: pdfPage.currentPage,
-            //     dimension: {
-            //       x: x,
-            //       y: y,
-            //       width: signatureData.dimension?.width,
-            //       height: signatureData.dimension?.height,
-            //     },
-            //     visible_enabled: true,
-            //   },
-            //   field: signatureData.type.toLowerCase(),
-            // });
+            putSignature.mutate(
+              {
+                body: {
+                  field_name: signatureData.field_name,
+                  page: pdfPage.currentPage,
+                  dimension: {
+                    x: x,
+                    y: y,
+                    width: signatureData.dimension?.width,
+                    height: signatureData.dimension?.height,
+                  },
+                  visible_enabled: true,
+                },
+                field: signatureData.type.toLowerCase(),
+                documentId: workFlow.documentId,
+              }
+              // {
+              //   onSuccess: () => {
+              //     queryClient.invalidateQueries({ queryKey: ["getField"] });
+              //   },
+              // }
+            );
           }
         }}
         disabled={
@@ -530,7 +509,13 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               //   },
               // });
             }}
+            onClick={(e) => {
+              console.log("e: ", e);
+              return;
+            }}
             onResizeStop={(e, { size }) => {
+              console.log("e: ", e);
+              if (e.target.nodeName !== "SPAN") return;
               // fpsService.putSignature(
               //   pdfInfo,
               //   {
@@ -556,20 +541,28 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                   signatureData.field_name
               )
                 return;
-              putSignature.mutate({
-                body: {
-                  field_name: signatureData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: signatureData.dimension.x,
-                    y: signatureData.dimension.y,
-                    width: (size.width / pdfPage.width) * 100,
-                    height: (size.height / pdfPage.height) * 100,
+              putSignature.mutate(
+                {
+                  body: {
+                    field_name: signatureData.field_name,
+                    page: pdfPage.currentPage,
+                    dimension: {
+                      x: signatureData.dimension.x,
+                      y: signatureData.dimension.y,
+                      width: (size.width / pdfPage.width) * 100,
+                      height: (size.height / pdfPage.height) * 100,
+                    },
+                    visible_enabled: true,
                   },
-                  visible_enabled: true,
-                },
-                field: signatureData.type.toLowerCase(),
-              });
+                  field: signatureData.type.toLowerCase(),
+                  documentId: workFlow.documentId,
+                }
+                // {
+                //   onSuccess: () => {
+                //     queryClient.invalidateQueries({ queryKey: ["getField"] });
+                //   },
+                // }
+              );
             }}
             className={`sig choioi-${index}`}
           >
@@ -615,7 +608,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               // onClick={(e) => {
               //   console.log("e: ", e);
               // }}
-              onDoubleClick={(e) => {
+              onClick={(e) => {
+                // if (isControlled) return;
                 if (signatureData.verification) {
                   console.log("show signature verification");
                   toggleSigDetail(index);
@@ -641,19 +635,19 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               <div>
                 {showTopbar && <TopBar signatureData={signatureData} />}
                 <span
-                  className="rauria topline"
+                  className={`rauria-${index} topline`}
                   style={{ display: "none" }}
                 ></span>
                 <span
-                  className="rauria rightline"
+                  className={`rauria-${index} rightline`}
                   style={{ display: "none" }}
                 ></span>
                 <span
-                  className="rauria botline"
+                  className={`rauria-${index} botline`}
                   style={{ display: "none" }}
                 ></span>
                 <span
-                  className="rauria leftline"
+                  className={`rauria-${index} leftline`}
                   style={{ display: "none" }}
                 ></span>
                 <Box

@@ -46,7 +46,7 @@ function a11yProps(index) {
 }
 
 export const TabDocument = ({ validFile }) => {
-  console.log("validFile: ", validFile);
+  // console.log("validFile: ", validFile);
   const [sigList, setSigList] = useState([]);
   const [eSealList, setESealList] = useState([]);
   const { t } = useTranslation();
@@ -67,7 +67,7 @@ export const TabDocument = ({ validFile }) => {
   }, [validFile]);
 
   // const sigList = validFile.signatures;
-  console.log("sigList: ", sigList);
+  // console.log("sigList: ", sigList);
 
   // const eSealList = fileDetail
   //   ?.map((sig) => {
@@ -77,7 +77,7 @@ export const TabDocument = ({ validFile }) => {
   //   })
   //   .filter((value) => value !== undefined);
   // const eSealList = validFile.seals;
-  console.log("sigList: ", eSealList);
+  // console.log("sigList: ", eSealList);s
 
   const [value, setValue] = useState(0);
 

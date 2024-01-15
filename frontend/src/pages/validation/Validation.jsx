@@ -1,4 +1,3 @@
-import { ReactComponent as Lock } from "@/assets/images/validation/lock_validate.svg";
 import "@/assets/style/validation.css";
 import { PDFViewer, TabDocument } from "@/components/validate";
 import { validationService } from "@/services/validation";
@@ -15,11 +14,11 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 
 const CustomButton = styled(Button)`
   text-transform: none; /* Đặt textTransform thành none để bỏ chữ in hoa */
@@ -163,9 +162,9 @@ export const Validation = () => {
                   color: "white",
                   fontWeight: "500",
                 }}
-                onClick={() => {
-                  console.log("click click click");
-                }}
+                // onClick={() => {
+                //   console.log("click click click");
+                // }}
               />
               <Typography
                 color="signingtext1.main"
