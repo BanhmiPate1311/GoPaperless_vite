@@ -2,14 +2,10 @@ import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
 import { ReactComponent as ValidSealWFIcon } from "@/assets/images/svg/sealwf.svg";
-import {
-  ReactComponent as InValidIcon,
-  ReactComponent as WarningIcon,
-} from "@/assets/images/svg/warningError.svg";
-import {
-  ReactComponent as InValidWFIcon,
-  ReactComponent as WarningWFIcon,
-} from "@/assets/images/svg/warningErrorwf.svg";
+import { ReactComponent as WarningIcon } from "@/assets/images/svg/warningError.svg";
+import { ReactComponent as InValidIcon } from "@/assets/images/svg/error.svg";
+import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningErrorwf.svg";
+import { ReactComponent as InValidWFIcon } from "@/assets/images/svg/errorwf.svg";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -36,12 +32,12 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
       icon: {
         signed: (
           <SvgIcon viewBox={"0 0 40 40"}>
-            <ValidSealWFIcon height={40} width={40} />
+            <ValidSealIcon height={40} width={40} />
           </SvgIcon>
         ),
         notSigned: (
           <SvgIcon viewBox={"0 0 35 35"}>
-            <ValidSealIcon height={35} width={35} />
+            <ValidSealWFIcon height={35} width={35} />
           </SvgIcon>
         ),
       },
@@ -55,12 +51,12 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
       icon: {
         signed: (
           <SvgIcon viewBox={"0 0 35 35"}>
-            <WarningIcon height={35} width={35} color="#EB6A00" />
+            <WarningIcon height={35} width={35} />
           </SvgIcon>
         ),
         notSigned: (
           <SvgIcon viewBox={"0 0 40 40"}>
-            <WarningWFIcon height={40} width={40} color="#EB6A00" />
+            <WarningWFIcon height={40} width={40} />
           </SvgIcon>
         ),
       },

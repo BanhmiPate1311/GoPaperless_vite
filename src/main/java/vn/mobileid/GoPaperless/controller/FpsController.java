@@ -52,6 +52,13 @@ public class FpsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/{documentId}/{field}/addTextBox")
+    public ResponseEntity<?> addTextField(@PathVariable int documentId, @PathVariable String field, @RequestBody BasicFieldAttribute data) throws Exception {
+
+        String response = fpsService.addTextBox(documentId, field, data, true);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{documentId}/{field_name}/deleteSignatue")
     public ResponseEntity<?> deleteSignatue(@PathVariable int documentId, @PathVariable String field_name) throws Exception {
 

@@ -30,11 +30,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const SigDetail = ({ open, signDetail, handleClose }) => {
-  console.log("signDetail: ", signDetail);
+  // console.log("signDetail: ", signDetail);
   const { t } = useTranslation();
 
   const signType = signDetail.is_seal === true ? "eseal" : "Signature";
-  // console.log("signDetail: ", signDetail);
 
   const name = signDetail.certificate.subject.CN[0];
   // const warnings = signDetail.warnings;

@@ -29,20 +29,6 @@ export const Document = ({ props, workFlow, signatures }) => {
     actualWidth: props.width / props.scale,
   };
 
-  const putSignature = useMutation({
-    mutationFn: ({ body, field }) => {
-      return fpsService.putSignature(
-        { documentId: workFlow.documentId },
-        body,
-        field
-      );
-    },
-    // onSuccess: () => {
-    //   // queryClient.invalidateQueries({ queryKey: ["getField"] });
-    //   // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
-    // },
-  });
-
   const handleValidateSignature = (
     {
       updatedSignature = {
@@ -228,9 +214,7 @@ export const Document = ({ props, workFlow, signatures }) => {
           <Signature
             key={index}
             index={index}
-            page={signatureData.page}
             pdfPage={pdfPage}
-            handleValidateSignature={handleValidateSignature}
             signatureData={signatureData}
             workFlow={workFlow}
           />
