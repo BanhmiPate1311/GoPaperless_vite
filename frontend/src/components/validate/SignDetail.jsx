@@ -85,8 +85,7 @@ export const SignDetail = ({ sign, signType }) => {
               width="100%"
               // height="50px"
             >
-              {!signvalue.is_seal && sign.icon.notSigned}
-              {signvalue.is_seal && sign.icon.signed}
+              {sign.icon}
               <Box flexGrow={1}>
                 <Typography
                   variant="h6"

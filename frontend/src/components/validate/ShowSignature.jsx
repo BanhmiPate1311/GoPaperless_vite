@@ -187,8 +187,7 @@ export const ShowSignature = ({
             p="12px 16px"
             borderRadius="10px"
           >
-            {!signDetail.is_seal && sign.icon.notSigned}
-            {signDetail.is_seal && sign.icon.signed}
+            {sign.icon}
             {/* {sign.icon} */}
             <Box>
               <Typography
