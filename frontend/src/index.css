@@ -114,3 +114,43 @@ input[type="number"] {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
+
+.topline {
+  position: absolute;
+  border-top: 1px #ffb600 dotted;
+  vertical-align: middle;
+  top: -3px;
+  left: -100vh;
+  right: -100vh;
+  display: none;
+}
+
+.rightline {
+  position: absolute;
+  right: -3px;
+  border-right: 1px #ffb600 dotted;
+  display: none;
+  vertical-align: middle;
+  top: -100vh;
+  bottom: -100vh;
+}
+
+.botline {
+  position: absolute;
+  bottom: -3px;
+  border-bottom: 1px #ffb600 dotted;
+  vertical-align: middle;
+  left: -100vh;
+  right: -100vh;
+  display: none;
+}
+
+.leftline {
+  position: absolute;
+  left: -3px;
+  border-left: 1px #ffb600 dotted;
+  display: none;
+  vertical-align: middle;
+  top: -100vh;
+  bottom: -100vh;
+}

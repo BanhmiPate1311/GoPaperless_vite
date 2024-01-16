@@ -99,9 +99,9 @@ export const Signing = () => {
                   color: "white",
                   fontWeight: "500",
                 }}
-                onClick={() => {
-                  console.log("click click click");
-                }}
+                // onClick={() => {
+                //   console.log("click click click");
+                // }}
               />
               <Typography
                 color="signingtext1.main"

@@ -144,7 +144,7 @@ export const ShowSignature = ({
           <Stack
             direction="row"
             alignItems={"center"}
-            height={60}
+            // height={60}
             sx={{
               position: "sticky",
               top: 10,

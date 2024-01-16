@@ -472,7 +472,7 @@ public class RsspService {
                 if ("SIGNATURE".equals(name)) {
                     property.setRelyingPartySignature(value);
                 }
-                if(devMode){
+                if (devMode) {
                     if ("SMART_ID_LCA".equals(name)) {
                         property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
 
@@ -596,7 +596,7 @@ public class RsspService {
 
 
         Map<String, Object> identification = new HashMap<>();
-        if(assurance.equals("aes")) {
+        if (assurance.equals("aes")) {
             System.out.println("assurance: " + assurance);
             identification.put("type", "CITIZEN-IDENTITY-CARD");
             identification.put("value", jwt.getDocument_number());
@@ -681,13 +681,13 @@ public class RsspService {
                     property.setRelyingPartySignature(value);
                 }
                 if ("KEYSTORE_FILE_URL".equals(name)) {
-                    if(devMode){
-                        if ("SMART_ID_LCA".equals(request.getConnectorName() )) {
+                    if (devMode) {
+                        if ("SMART_ID_LCA".equals(request.getConnectorName())) {
                             property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
                         } else {
                             property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
                         }
-                    } else  {
+                    } else {
                         property.setRelyingPartyKeyStore(value);
                     }
                 }
@@ -915,7 +915,7 @@ public class RsspService {
             System.out.println("assurance: " + assurance);
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(dataResponse,signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

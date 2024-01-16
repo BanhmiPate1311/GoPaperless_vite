@@ -50,7 +50,7 @@ function a11yProps(index) {
 }
 
 export const TabDocument = ({ validFile }) => {
-  console.log("validFile: ", validFile);
+  // console.log("validFile: ", validFile);
   const [sigList, setSigList] = useState([]);
   const [eSealList, setESealList] = useState([]);
   const { t } = useTranslation();
