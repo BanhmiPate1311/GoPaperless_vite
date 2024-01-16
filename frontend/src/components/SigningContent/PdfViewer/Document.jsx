@@ -181,27 +181,6 @@ export const Document = ({ props, workFlow, signatures, textbox }) => {
       }}
       id={`pdf-view-${props.pageIndex}`}
     >
-      {/* <div
-        className={`cursor cursor-${props.pageIndex}`}
-        style={{
-          top: mousePosition.y,
-          left: mousePosition.x,
-          pointerEvents: "none",
-          translate: "-10px -10px",
-          position: "absolute",
-        }}
-      >
-
-        <SvgIcon
-          component={MouseIcon}
-          inheritViewBox
-          sx={{
-            width: "25px",
-            height: "25px",
-            color: "#545454",
-          }}
-        />
-      </div> */}
       {props.canvasLayer.children}
 
       {signatures?.map((signatureData, index) => {
@@ -231,33 +210,6 @@ export const Document = ({ props, workFlow, signatures, textbox }) => {
           />
         );
       })}
-
-      {/* <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          height: "100%",
-          justifyContent: "center",
-          left: 0,
-          position: "absolute",
-          top: 0,
-          width: "100%",
-          zIndex: 2,
-        }}
-      >
-        <div
-          style={{
-            color: "rgba(0, 0, 0, 0.2)",
-            fontSize: `${8 * props.scale}rem`,
-            fontWeight: "bold",
-            textTransform: "uppercase",
-            transform: "rotate(-45deg)",
-            userSelect: "none",
-          }}
-        >
-          Draft
-        </div>
-      </div> */}
 
       {props.annotationLayer.children}
       <div style={{ userSelect: "none" }}>{props.textLayer.children}</div>
