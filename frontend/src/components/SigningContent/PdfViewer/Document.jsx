@@ -1,14 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import mouse from "@/assets/images/svg/mouse-right2.svg";
-import { fpsService } from "@/services/fps_service";
 import { checkIsPosition } from "@/utils/commonFunction";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
-import { useDrop } from "react-dnd";
+import { useQueryClient } from "@tanstack/react-query";
 import Signature from "./Signature";
+import { TextBox } from ".";
 // import Signature from "./Signature";
-export const Document = ({ props, workFlow, signatures }) => {
+export const Document = ({ props, workFlow, signatures, textbox }) => {
   // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
@@ -216,6 +214,19 @@ export const Document = ({ props, workFlow, signatures }) => {
             index={index}
             pdfPage={pdfPage}
             signatureData={signatureData}
+            workFlow={workFlow}
+          />
+        );
+      })}
+
+      {textbox?.map((textData, index) => {
+        if (textData.page !== props.pageIndex + 1) return null;
+        return (
+          <TextBox
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            textData={textData}
             workFlow={workFlow}
           />
         );
