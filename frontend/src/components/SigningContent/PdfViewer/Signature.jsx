@@ -364,13 +364,10 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             // Đặt lại vị trí về ban đầu nếu đè lên một phần tử khác
             return;
           } else {
+            if (dragPosition?.x === data.x && dragPosition?.y === data.y) {
+              return;
+            }
             setDragPosition({ x: data.x, y: data.y });
-            // console.log("pdfPage: ", pdfPage.currentPage - 1);
-
-            // const containerComponent = document.getElementById(
-            //   `pdf-view-${pdfPage.currentPage - 1}`
-            // );
-            // console.log("containerComponent: ", containerComponent);
             const rectComp = containerComponent.getBoundingClientRect();
             // console.log("rectComp: ", rectComp);
 
@@ -383,15 +380,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
 
-            // console.log(
-            //   "x: ",
-            //   (Math.abs(rectItem.left - rectComp.left) * 100) / pdfPage.width
-            // );
-            // console.log(
-            //   "y: ",
-            //   (Math.abs(rectItem.top - rectComp.top) * 100) / pdfPage.height
-            // );
-
             putSignature.mutate(
               {
                 body: {
@@ -400,8 +388,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                   dimension: {
                     x: x,
                     y: y,
-                    width: signatureData.dimension?.width,
-                    height: signatureData.dimension?.height,
+                    // width: signatureData.dimension?.width,
+                    // height: signatureData.dimension?.height,
                   },
                   visible_enabled: true,
                 },
@@ -515,22 +503,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             }}
             onResizeStop={(e, { size }) => {
               console.log("e: ", e);
-              if (e.target.nodeName !== "SPAN") return;
-              // fpsService.putSignature(
-              //   pdfInfo,
-              //   {
-              //     field_name: signatureData.field_name,
-              //     page: pdfPage.currentPage,
-              //     dimension: {
-              //       x: signatureData.dimension.x,
-              //       y: signatureData.dimension.y,
-              //       width: (size.width / pdfPage.width) * 100,
-              //       height: (size.height / pdfPage.height) * 100,
-              //     },
-              //     visible_enabled: true,
-              //   },
-              //   { field: signatureData.type.toLowerCase() }
-              // );
               if (
                 isSetPos ||
                 signerId +

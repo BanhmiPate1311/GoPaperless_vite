@@ -139,7 +139,7 @@ export const PdfViewer = ({ workFlow }) => {
       field_name:
         signerId + "_" + value + "_" + Number(field.textbox.length + 1),
       page: signInfo.page,
-      value: signer.lastName + signer.firstName,
+      value: signer.lastName + " " + signer.firstName,
       read_only: false,
       multiline: false,
       dimension: {
@@ -212,6 +212,7 @@ export const PdfViewer = ({ workFlow }) => {
           props={props}
           workFlow={workFlow}
           signatures={field.signature}
+          textbox={field.textbox}
         />
       </div>
     );

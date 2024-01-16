@@ -245,13 +245,15 @@ public class FpsService {
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
         requestData.put("type", data.getType());
+        requestData.put("value", data.getValue());
+        requestData.put("multiline", data.getMultiline());
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
-        requestData.put("visible_enabled", data.getVisibleEnabled());
+//        requestData.put("visible_enabled", data.getVisibleEnabled());
         System.out.println("requestData: " + requestData);
-        List<String> list = new ArrayList<>();
-        list.add("cades signature");
-        requestData.put("level_of_assurance", list);
+//        List<String> list = new ArrayList<>();
+//        list.add("cades signature");
+//        requestData.put("level_of_assurance", list);
 
         // Convert requestData to JSON string
         ObjectMapper objectMapper = new ObjectMapper();
