@@ -13,6 +13,8 @@ import Signatures from "./Signatures";
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ReactComponent as Lock } from "@/assets/images/validation/lock_validate.svg";
+import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
+import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/valid.svg";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -223,11 +225,27 @@ export const TabDocument = ({ validFile }) => {
         </TabPanel>
 
         <TabPanel value={value} index={1}>
-          <Signatures validFile={sigList} signType="Signature" />
+          <Signatures
+            validFile={sigList}
+            signType="Signature"
+            signIcon={
+              <SvgIcon viewBox={"0 0 40 40"}>
+                <ValidWFIcon height={40} width={40} />
+              </SvgIcon>
+            }
+          />
         </TabPanel>
 
         <TabPanel value={value} index={2}>
-          <Signatures validFile={eSealList} signType="Seal" />
+          <Signatures
+            validFile={eSealList}
+            signType="Seal"
+            signIcon={
+              <SvgIcon viewBox={"0 0 40 40"}>
+                <ValidSealIcon height={40} width={40} />
+              </SvgIcon>
+            }
+          />
         </TabPanel>
 
         <TabPanel value={value} index={3}>

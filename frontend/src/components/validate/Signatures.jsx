@@ -19,59 +19,36 @@ import { useTranslation } from "react-i18next";
 import { SignDetail } from ".";
 import Avatar from "@mui/material/Avatar";
 import SvgIcon from "@mui/material/SvgIcon";
-export const Signatures = ({ validFile, signType }) => {
+export const Signatures = ({ validFile, signType, signIcon }) => {
   const { t } = useTranslation();
 
   const valueSign = [
     {
       name: t("validation.sigValidTitle"),
       value: validFile.filter((sig) => sig.indication === "TOTAL_PASSED"),
-      icon: {
-        signed: (
-          <SvgIcon viewBox={"0 0 40 40"}>
-            <ValidSealIcon height={40} width={40} />
-          </SvgIcon>
-        ),
-        notSigned: (
-          <SvgIcon viewBox={"0 0 35 35"}>
-            <ValidWFIcon height={35} width={35} />
-          </SvgIcon>
-        ),
-      },
+      icon: signIcon,
       title: t("signing.signature_valid"),
     },
     {
       name: t("validation.indeterminateTitle"),
       value: validFile.filter((sig) => sig.indication === "INDETERMINATE"),
-      icon: {
-        signed: (
-          <SvgIcon viewBox={"0 0 35 35"}>
-            <WarningIcon height={35} width={35} color="#EB6A00" />
-          </SvgIcon>
-        ),
-        notSigned: (
-          <SvgIcon viewBox={"0 0 40 40"}>
-            <WarningWFIcon height={40} width={40} color="#EB6A00" />
-          </SvgIcon>
-        ),
-      },
+      icon: (
+        <SvgIcon viewBox={"0 0 40 40"}>
+          <WarningWFIcon height={40} width={40} color="#EB6A00" />
+        </SvgIcon>
+      ),
+
       title: t("signing.indeterminate signatures"),
     },
     {
       name: t("validation.invalidSig"),
       value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
-      icon: {
-        signed: (
-          <SvgIcon viewBox={"0 0 40 40"}>
-            <InValidIcon height={40} width={40} />
-          </SvgIcon>
-        ),
-        notSigned: (
-          <SvgIcon viewBox={"0 0 35 35"}>
-            <InValidWFIcon height={35} width={35} />
-          </SvgIcon>
-        ),
-      },
+      icon: (
+        <SvgIcon viewBox={"0 0 35 35"}>
+          <InValidWFIcon height={35} width={35} />
+        </SvgIcon>
+      ),
+
       title: t("signing.invalid signatures"),
     },
   ];
