@@ -204,7 +204,20 @@ public class FpsService {
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
         requestData.put("dimension", data.getDimension());
+        if(data.getValue() != null) {
+            requestData.put("value", data.getValue());
+        }
         requestData.put("visible_enabled", data.getVisibleEnabled());
+
+//        System.out.println("x: " + data.getDimension().getX());
+//        System.out.println("y: " + data.getDimension().getY());
+//        System.out.println("width: " + data.getDimension().getWidth());
+//        System.out.println("height: " + data.getDimension().getHeight());
+//        System.out.println("putSignature: " + requestData);
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String requestDataJson = objectMapper.writeValueAsString(data);
+//        System.out.println("Request Data as JSON: " + requestDataJson);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 

@@ -1,20 +1,56 @@
+/* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
+import { UseUpdateSig } from "@/hook/use-fpsService";
+import { fpsService } from "@/services/fps_service";
+import { debounce, getSigner } from "@/utils/commonFunction";
+import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
+import TextField from "@mui/material/TextField";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
-import Box from "@mui/material/Box";
 
 export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
-  console.log("textData: ", textData);
+  // console.log("textData: ", textData);
+  const queryClient = useQueryClient();
+  const putSignature = UseUpdateSig();
+
+  const signer = getSigner(workFlow);
+  const signerId = signer.signerId;
+
   const [isControlled, setIsControlled] = useState(true);
   const [showTopbar, setShowTopbar] = useState(false);
   const [dragPosition, setDragPosition] = useState(null);
 
-  const TopBar = ({ textData }) => {
+  const maxPosibleResizeWidth =
+    (pdfPage.width * (100 - textData.dimension?.x)) / 100;
+  const maxPosibleResizeHeight =
+    (pdfPage.height * (100 - textData.dimension?.y)) / 100;
+
+  const removeSignature = useMutation({
+    mutationFn: () => {
+      return fpsService.removeSignature(
+        { documentId: workFlow.documentId },
+        textData.field_name
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getField"] });
+      // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
+    },
+  });
+
+  const handleRemoveSignature = async () => {
+    console.log("remove");
+    // if (isSetPos || signerId !== signatureData.field_name) return;
+    removeSignature.mutate();
+    // setSignature(null);
+  };
+
+  const TopBar = () => {
     // console.log("signatureData: ", signatureData);
     return (
       <div
@@ -24,23 +60,17 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           top: -25,
           right: -2,
           zIndex: 10,
-
-          // width: "100%",
+          // display:
+          // signerId + "_" + signatureData.type + "_" + signatureData.suffix ===
+          // signatureData.field_name
+          //   ? "flex"
+          //   : "none",
+          display: "flex",
           backgroundColor: "#D9DFE4",
+          gap: "5px",
         }}
         className="topBar"
       >
-        <SvgIcon
-          component={SignIcon}
-          inheritViewBox
-          sx={{
-            width: "15px",
-            height: "15px",
-            color: "#545454",
-            cursor: "pointer",
-          }}
-          //   onClick={() => handleOpenSigningForm(index)}
-        />
         <SvgIcon
           component={SettingIcon}
           inheritViewBox
@@ -49,7 +79,6 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             height: "15px",
             color: "#545454",
             cursor: "pointer",
-            mx: "5px",
           }}
           //   onClick={() => handleOpenModalSetting(index)}
         />
@@ -62,26 +91,9 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             color: "#545454",
             cursor: "pointer",
           }}
-          //   onClick={() => handleRemoveSignature(index)}
+          onClick={() => handleRemoveSignature(index)}
         />
       </div>
-    );
-  };
-
-  const onDragStart = (event) => {
-    // event.dataTransfer.setData("text", "dragging");
-    handleDrag("block");
-    // console.log("onDragStart: ", event);
-  };
-
-  const onDragEnd = (event) => {
-    // console.log("onDragEnd: ", event);
-    setIsControlled(true);
-    handleDrag("none");
-    const draggableComponent = document.querySelector(`.textbox-${index}`);
-    const targetComponents = document.querySelectorAll(".sig");
-    const containerComponent = document.getElementById(
-      `pdf-view-${pdfPage.currentPage - 1}`
     );
   };
 
@@ -95,6 +107,56 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
     }
   };
 
+  const handlePlaceHolder = (type) => {
+    switch (type) {
+      case "NAME":
+        return "Name";
+      case "EMAIL":
+        return "Email";
+      case "JOB_TITLE":
+        return "Job Title";
+      case "COMPANY":
+        return "Company";
+    }
+  };
+
+  // const handleDefaultValue = (type) => {
+  //   const signerText = workFlow?.participants?.find(
+  //     (item) =>
+  //       item.signerId + "_" + textData.type + "_" + textData.suffix ===
+  //       textData.field_name
+  //   );
+  //   switch (type) {
+  //     case "NAME":
+  //       return signerText.lastName + " " + signerText.firstName;
+  //     case "EMAIL":
+  //       return signerText.email;
+  //     case "JOB_TITLE":
+  //       return signerText.metaInformation?.position || "";
+  //     case "COMPANY":
+  //       return signerText.metaInformation?.company || "";
+  //   }
+  // };
+
+  const handleTextChange = debounce((e) =>
+    putSignature.mutate({
+      body: {
+        field_name: textData.field_name,
+        page: pdfPage.currentPage,
+        dimension: {
+          x: -1,
+          y: -1,
+          width: -1,
+          height: -1,
+        },
+        visible_enabled: true,
+        value: e.target.value,
+      },
+      field: "text",
+      documentId: workFlow.documentId,
+    })
+  );
+
   return (
     <>
       <Draggable
@@ -103,8 +165,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
         onDrag={() => handleDrag("block")}
         position={dragPosition}
         cancel=".topBar"
-        onStart={(e) => {
-          // console.log("drag");
+        onStart={(e, data) => {
+          setDragPosition({ x: data.x, y: data.y });
           setIsControlled(false);
         }}
         onStop={(e, data) => {
@@ -142,10 +204,11 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             //   "draggableComponent nằm trong phạm vi của containerComponent"
             // );
           }
-          let isOverTarget = false;
+          let isOverTarget = false; // Biến để kiểm soát việc thoát khỏi vòng lặp
 
           targetComponents.forEach((targetComponent) => {
-            // console.log("draggableRect: ", draggableRect);
+            if (isOverTarget) return; // Nếu đã thoát khỏi vòng lặp, không kiểm tra phần tử tiếp theo
+
             const targetRect = targetComponent.getBoundingClientRect();
 
             if (draggableComponent === targetComponent) return;
@@ -162,50 +225,46 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             }
           });
 
-          if (isOverTarget) {
-            // Đặt lại vị trí về ban đầu nếu đè lên một phần tử khác
+          // console.log("isOverTarget: ", isOverTarget);
+          if (
+            (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
+            isOverTarget
+          ) {
             return;
-          } else {
-            if (dragPosition?.x === data.x && dragPosition?.y === data.y) {
-              return;
-            }
-            setDragPosition({ x: data.x, y: data.y });
-            const rectComp = containerComponent.getBoundingClientRect();
-            // console.log("rectComp: ", rectComp);
-
-            const rectItem = draggableComponent.getBoundingClientRect();
-            // console.log("rectItem: ", rectItem);
-
-            const x =
-              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
-
-            const y =
-              (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
-
-            // putSignature.mutate(
-            //   {
-            //     body: {
-            //       field_name: signatureData.field_name,
-            //       page: pdfPage.currentPage,
-            //       dimension: {
-            //         x: x,
-            //         y: y,
-            //         // width: signatureData.dimension?.width,
-            //         // height: signatureData.dimension?.height,
-            //       },
-            //       visible_enabled: true,
-            //     },
-            //     field: signatureData.type.toLowerCase(),
-            //     documentId: workFlow.documentId,
-            //   }
-            // );
           }
+          setDragPosition({ x: data.x, y: data.y });
+          const rectComp = containerComponent.getBoundingClientRect();
+          // console.log("rectComp: ", rectComp);
+
+          const rectItem = draggableComponent.getBoundingClientRect();
+          // console.log("rectItem: ", rectItem);
+
+          const x =
+            (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
+
+          const y =
+            (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
+
+          putSignature.mutate({
+            body: {
+              field_name: textData.field_name,
+              page: pdfPage.currentPage,
+              dimension: {
+                x: x,
+                y: y,
+                width: -1,
+                height: -1,
+              },
+              visible_enabled: true,
+            },
+            field: "text",
+            documentId: workFlow.documentId,
+          });
         }}
-        // disabled={
-        //   isSetPos ||
-        //   signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-        //     signatureData.field_name
-        // }
+        disabled={
+          signerId + "_" + textData.type + "_" + textData.suffix !==
+          textData.field_name
+        }
       >
         <ResizableBox
           width={
@@ -226,38 +285,36 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             // opacity: textData.verification === undefined ? 1 : 0,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
-          //   minConstraints={[
-          //     isSetPos ||
-          //     signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-          //       signatureData.field_name
-          //       ? signatureData.dimension?.width * (pdfPage.width / 100)
-          //       : pdfPage
-          //       ? (pdfPage.width * 20) / 100
-          //       : 200,
-          //     isSetPos ||
-          //     signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-          //       signatureData.field_name
-          //       ? signatureData.dimension?.height * (pdfPage.height / 100)
-          //       : pdfPage
-          //       ? (pdfPage.height * 5) / 100
-          //       : 50,
-          //   ]}
-          //   maxConstraints={[
-          //     isSetPos ||
-          //     signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-          //       signatureData.field_name
-          //       ? signatureData.dimension?.width * (pdfPage.width / 100)
-          //       : pdfPage
-          //       ? maxPosibleResizeWidth
-          //       : 200,
-          //     isSetPos ||
-          //     signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-          //       signatureData.field_name
-          //       ? signatureData.dimension?.height * (pdfPage.height / 100)
-          //       : pdfPage
-          //       ? maxPosibleResizeHeight
-          //       : 200,
-          //   ]}
+          minConstraints={[
+            signerId + "_" + textData.type + "_" + textData.suffix !==
+            textData.field_name
+              ? textData.dimension?.width * (pdfPage.width / 100)
+              : pdfPage
+              ? (pdfPage.width * 20) / 100
+              : 200,
+
+            signerId + "_" + textData.type + "_" + textData.suffix !==
+            textData.field_name
+              ? textData.dimension?.height * (pdfPage.height / 100)
+              : pdfPage
+              ? (pdfPage.height * 5) / 100
+              : 50,
+          ]}
+          maxConstraints={[
+            signerId + "_" + textData.type + "_" + textData.suffix !==
+            textData.field_name
+              ? textData.dimension?.width * (pdfPage.width / 100)
+              : pdfPage
+              ? maxPosibleResizeWidth
+              : 200,
+
+            signerId + "_" + textData.type + "_" + textData.suffix !==
+            textData.field_name
+              ? textData.dimension?.height * (pdfPage.height / 100)
+              : pdfPage
+              ? maxPosibleResizeHeight
+              : 200,
+          ]}
           onResize={(e, { size }) => {
             // setShowTopbar(false);
             // setSignature({
@@ -274,51 +331,54 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           //   return;
           // }}
           onResizeStop={(e, { size }) => {
-            console.log("e: ", e);
-            // if (
-            //   isSetPos ||
-            //   signerId +
-            //     "_" +
-            //     signatureData.type +
-            //     "_" +
-            //     signatureData.suffix !==
-            //     signatureData.field_name
-            // )
-            //   return;
-            // putSignature.mutate(
-            //   {
-            //     body: {
-            //       field_name: signatureData.field_name,
-            //       page: pdfPage.currentPage,
-            //       dimension: {
-            //         x: signatureData.dimension.x,
-            //         y: signatureData.dimension.y,
-            //         width: (size.width / pdfPage.width) * 100,
-            //         height: (size.height / pdfPage.height) * 100,
-            //       },
-            //       visible_enabled: true,
-            //     },
-            //     field: signatureData.type.toLowerCase(),
-            //     documentId: workFlow.documentId,
-            //   }
-            // );
+            // console.log("e: ", e);
+            if (
+              signerId + "_" + textData.type + "_" + textData.suffix !==
+              textData.field_name
+            )
+              return;
+            putSignature.mutate({
+              body: {
+                field_name: textData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: -1,
+                  y: -1,
+                  width: (size.width / pdfPage.width) * 100,
+                  height: (size.height / pdfPage.height) * 100,
+                },
+                visible_enabled: true,
+              },
+              field: "text",
+              documentId: workFlow.documentId,
+            });
           }}
           className={`sig textbox-${index}`}
         >
           <Box
             id="drag"
             sx={{
-              backgroundColor: "rgba(254, 240, 138, 0.7)",
+              backgroundColor:
+                textData.verification ||
+                signerId + "_" + textData.type + "_" + textData.suffix !==
+                  textData.field_name
+                  ? "rgba(217, 223, 228, 0.7)"
+                  : "rgba(254, 240, 138, 0.7)",
               height: "100%",
               position: "relative",
-              padding: "10px",
+              // padding: "10px",
               // zIndex: 100,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
 
               border: "2px dashed",
-              borderColor: "#EAB308",
+              borderColor:
+                textData.verification ||
+                signerId + "_" + textData.type + "_" + textData.suffix !==
+                  textData.field_name
+                  ? "black"
+                  : "#EAB308",
             }}
             onMouseMove={(e) => {
               setShowTopbar(true);
@@ -353,25 +413,24 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             //   }
             // }}
           >
-            <div>
-              {showTopbar && <TopBar textData={textData} />}
-              <span
-                className={`textrauria-${index} topline`}
-                style={{ display: "none" }}
-              ></span>
-              <span
-                className={`textrauria-${index} rightline`}
-                style={{ display: "none" }}
-              ></span>
-              <span
-                className={`textrauria-${index} botline`}
-                style={{ display: "none" }}
-              ></span>
-              <span
-                className={`textrauria-${index} leftline`}
-                style={{ display: "none" }}
-              ></span>
-              <Box
+            {showTopbar && <TopBar textData={textData} />}
+            <span
+              className={`textrauria-${index} topline`}
+              style={{ display: "none" }}
+            ></span>
+            <span
+              className={`textrauria-${index} rightline`}
+              style={{ display: "none" }}
+            ></span>
+            <span
+              className={`textrauria-${index} botline`}
+              style={{ display: "none" }}
+            ></span>
+            <span
+              className={`textrauria-${index} leftline`}
+              style={{ display: "none" }}
+            ></span>
+            {/* <Box
                 id="click-duoc"
                 variant="h5"
                 width={"100%"}
@@ -381,8 +440,27 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
                 height="45px"
               >
                 cuongcuong
-              </Box>
-            </div>
+              </Box> */}
+            <TextField
+              fullWidth
+              size="small"
+              margin="normal"
+              // name={name}
+              // value={code}
+              defaultValue={textData.value}
+              autoComplete="off"
+              placeholder={handlePlaceHolder(textData.type)}
+              sx={{
+                my: 0,
+                "& .MuiInputBase-root": {
+                  // minHeight: "45px",
+                  // height: textData.height,
+                },
+                "& fieldset": { border: "none" },
+                // backgroundColor: "rgba(254, 240, 138, 0.7)",
+              }}
+              onChange={handleTextChange}
+            />
           </Box>
         </ResizableBox>
       </Draggable>
