@@ -176,7 +176,8 @@ export const Document = ({ props, workFlow, signatures, textbox }) => {
         width: "100%",
         height: "100%",
         position: "relative",
-        cursor: isSetPos ? "auto" : `url(${mouse}), auto`,
+        // cursor: isSetPos ? "auto" : `url(${mouse}), auto`,
+        cursor: `url(${mouse}), auto`,
         overflow: "hidden",
       }}
       id={`pdf-view-${props.pageIndex}`}

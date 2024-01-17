@@ -41,7 +41,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowSigDetail, setIsShowSigDetail] = useState([false]);
 
   const queryClient = useQueryClient();
-  const dragRef = useRef();
+  const newPos = useRef({ x: null, y: null });
+  // console.log("currentPos: ", newPos.current);
   const [dataSigning, setDataSigning] = useState({});
 
   const signer = getSigner(workFlow);
@@ -301,13 +302,16 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         onDrag={() => handleDrag("block")}
         position={dragPosition}
         cancel=".topBar"
-        onStart={(e) => {
-          // console.log("drag");
+        onStart={(e, data) => {
+          setDragPosition({ x: data.x, y: data.y });
+          newPos.current.x = data.x;
+          newPos.current.y = data.y;
           setIsControlled(false);
         }}
         onStop={(e, data) => {
           // console.log("data: ", data);
           // console.log("e: ", e);
+
           setIsControlled(true);
           handleDrag("none");
           const draggableComponent = document.querySelector(`.choioi-${index}`);
@@ -386,8 +390,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                   dimension: {
                     x: x,
                     y: y,
-                    // width: signatureData.dimension?.width,
-                    // height: signatureData.dimension?.height,
+                    width: -1,
+                    height: -1,
                   },
                   visible_enabled: true,
                 },
@@ -424,7 +428,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             top: signatureData.dimension?.y + "%",
             left: signatureData.dimension?.x + "%",
             zIndex: 100,
-            opacity: signatureData.verification === undefined ? 1 : 0,
+            opacity: signatureData.verification === undefined ? 1 : 0.1,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           // minConstraints={[
@@ -500,8 +504,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                   field_name: signatureData.field_name,
                   page: pdfPage.currentPage,
                   dimension: {
-                    x: signatureData.dimension.x,
-                    y: signatureData.dimension.y,
+                    x: -1,
+                    y: -1,
                     width: (size.width / pdfPage.width) * 100,
                     height: (size.height / pdfPage.height) * 100,
                   },
@@ -561,8 +565,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             // onClick={(e) => {
             //   console.log("e: ", e);
             // }}
-            onDoubleClick={(e) => {
-              // if (isControlled) return;
+            onClick={(e) => {
+              // if (
+              //   newPos.current.x !== dragPosition.x &&
+              //   newPos.current.y !== dragPosition.y
+              // ) {
+              //   // console.log("dung do");
+              //   return;
+              // }
+
               if (signatureData.verification) {
                 console.log("show signature verification");
                 toggleSigDetail(index);
@@ -572,7 +583,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                   signatureData.type +
                   "_" +
                   signatureData.suffix !==
-                signatureData.field_name
+                  signatureData.field_name ||
+                (newPos.current.x !== dragPosition.x &&
+                  newPos.current.y !== dragPosition.y)
               ) {
                 return;
               } else if (
@@ -608,7 +621,16 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                 variant="h5"
                 width={"100%"}
                 borderBottom="2px dotted"
-                borderColor="#EAB308"
+                borderColor={
+                  signerId +
+                    "_" +
+                    signatureData.type +
+                    "_" +
+                    signatureData.suffix !==
+                  signatureData.field_name
+                    ? "black"
+                    : "#EAB308"
+                }
                 textAlign={"center"}
                 height="45px"
               >
