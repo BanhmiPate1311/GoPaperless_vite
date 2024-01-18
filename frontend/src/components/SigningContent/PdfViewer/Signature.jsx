@@ -8,6 +8,7 @@ import { ModalSigning } from "@/components/modal2";
 import { ModalEidSign, ModalSmartid, ModalUsb } from "@/components/modal3";
 import { ModalEid } from "@/components/modal_eid";
 import { SignatureSetting } from "@/components/modal_setting";
+import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
@@ -18,10 +19,11 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
-import { UseUpdateSig } from "@/hook/use-fpsService";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+  // console.log("pdfPage: ", pdfPage);
+  // console.log("pdfPage: ", pdfPage);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("index: ", index);
@@ -34,7 +36,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const [isShowModalUsb, setShowModalUsb] = useState([false]);
   const [isShowEidModal, setShowEidModal] = useState([false]);
   const [isShowEidModalSign, setShowEidModalSign] = useState([false]);
-  const [dragPosition, setDragPosition] = useState(null);
+  const [dragPosition, setDragPosition] = useState({
+    x: (signatureData.dimension?.x * pdfPage.width) / 100,
+    y: (signatureData.dimension?.y * pdfPage.height) / 100,
+  });
+  // console.log("dragPosition: ", dragPosition);
   const [isControlled, setIsControlled] = useState(true);
 
   const [showTopbar, setShowTopbar] = useState(false);
@@ -53,6 +59,13 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
 
   const [sigDetail, setSigDetail] = useState([]);
   // console.log("sigDetail: ", sigDetail);
+
+  useEffect(() => {
+    setDragPosition({
+      x: (signatureData.dimension?.x * pdfPage.width) / 100,
+      y: (signatureData.dimension?.y * pdfPage.height) / 100,
+    });
+  }, [signatureData]);
 
   useEffect(() => {
     const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
@@ -297,7 +310,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   return (
     <>
       <Draggable
-        handle="#drag"
+        handle={`#sigDrag-${index}`}
         // bounds="parent"
         onDrag={() => handleDrag("block")}
         position={dragPosition}
@@ -314,7 +327,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
 
           setIsControlled(true);
           handleDrag("none");
-          const draggableComponent = document.querySelector(`.choioi-${index}`);
+          const draggableComponent = document.querySelector(
+            `.signature-${index}`
+          );
           const targetComponents = document.querySelectorAll(".sig");
           const containerComponent = document.getElementById(
             `pdf-view-${pdfPage.currentPage - 1}`
@@ -345,7 +360,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           let isOverTarget = false;
 
           targetComponents.forEach((targetComponent) => {
-            // console.log("draggableRect: ", draggableRect);
+            if (isOverTarget) return; // Nếu đã thoát khỏi vòng lặp, không kiểm tra phần tử tiếp theo
+
             const targetRect = targetComponent.getBoundingClientRect();
 
             if (draggableComponent === targetComponent) return;
@@ -397,12 +413,12 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                 },
                 field: signatureData.type.toLowerCase(),
                 documentId: workFlow.documentId,
+              },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
               }
-              // {
-              //   onSuccess: () => {
-              //     queryClient.invalidateQueries({ queryKey: ["getField"] });
-              //   },
-              // }
             );
           }
         }}
@@ -425,8 +441,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           }
           style={{
             position: "absolute",
-            top: signatureData.dimension?.y + "%",
-            left: signatureData.dimension?.x + "%",
+            // top: signatureData.dimension?.y + "%",
+            // left: signatureData.dimension?.x + "%",
             zIndex: 100,
             opacity: signatureData.verification === undefined ? 1 : 0.1,
             transition: isControlled ? `transform 0.3s` : `none`,
@@ -513,18 +529,18 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                 },
                 field: signatureData.type.toLowerCase(),
                 documentId: workFlow.documentId,
+              },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
               }
-              // {
-              //   onSuccess: () => {
-              //     queryClient.invalidateQueries({ queryKey: ["getField"] });
-              //   },
-              // }
             );
           }}
-          className={`sig choioi-${index}`}
+          className={`sig signature-${index}`}
         >
           <Box
-            id="drag"
+            id={`sigDrag-${index}`}
             sx={{
               backgroundColor:
                 signatureData.verification ||
@@ -566,14 +582,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             //   console.log("e: ", e);
             // }}
             onClick={(e) => {
-              // if (
-              //   newPos.current.x !== dragPosition.x &&
-              //   newPos.current.y !== dragPosition.y
-              // ) {
-              //   // console.log("dung do");
-              //   return;
-              // }
-
               if (signatureData.verification) {
                 console.log("show signature verification");
                 toggleSigDetail(index);
@@ -589,7 +597,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               ) {
                 return;
               } else if (
-                e.target.id === "drag" ||
+                e.target.id === `sigDrag-${index}` ||
                 e.target.parentElement?.id === "drag" ||
                 e.target.id === "click-duoc"
               ) {
