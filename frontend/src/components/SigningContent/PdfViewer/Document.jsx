@@ -1,14 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import mouse from "@/assets/images/svg/mouse-right2.svg";
-import { fpsService } from "@/services/fps_service";
 import { checkIsPosition } from "@/utils/commonFunction";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
-import { useDrop } from "react-dnd";
+import { useQueryClient } from "@tanstack/react-query";
 import Signature from "./Signature";
+import { Initial, TextBox } from ".";
 // import Signature from "./Signature";
-export const Document = ({ props, workFlow, signatures }) => {
+export const Document = ({ props, workFlow, signatures, textbox, initial }) => {
   // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
@@ -178,34 +176,13 @@ export const Document = ({ props, workFlow, signatures }) => {
         width: "100%",
         height: "100%",
         position: "relative",
-        cursor: isSetPos ? "auto" : `url(${mouse}), auto`,
+        // cursor: isSetPos ? "auto" : `url(${mouse}), auto`,
+        cursor: `url(${mouse}), auto`,
         overflow: "hidden",
       }}
       id={`pdf-view-${props.pageIndex}`}
     >
-      {/* <div
-        className={`cursor cursor-${props.pageIndex}`}
-        style={{
-          top: mousePosition.y,
-          left: mousePosition.x,
-          pointerEvents: "none",
-          translate: "-10px -10px",
-          position: "absolute",
-        }}
-      >
-
-        <SvgIcon
-          component={MouseIcon}
-          inheritViewBox
-          sx={{
-            width: "25px",
-            height: "25px",
-            color: "#545454",
-          }}
-        />
-      </div> */}
       {props.canvasLayer.children}
-
       {signatures?.map((signatureData, index) => {
         // console.log("signatureData: ", signatureData.page);
         // console.log("pageIndex: ", props.pageIndex + 1);
@@ -220,34 +197,31 @@ export const Document = ({ props, workFlow, signatures }) => {
           />
         );
       })}
-
-      {/* <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          height: "100%",
-          justifyContent: "center",
-          left: 0,
-          position: "absolute",
-          top: 0,
-          width: "100%",
-          zIndex: 2,
-        }}
-      >
-        <div
-          style={{
-            color: "rgba(0, 0, 0, 0.2)",
-            fontSize: `${8 * props.scale}rem`,
-            fontWeight: "bold",
-            textTransform: "uppercase",
-            transform: "rotate(-45deg)",
-            userSelect: "none",
-          }}
-        >
-          Draft
-        </div>
-      </div> */}
-
+      {textbox?.map((textData, index) => {
+        if (textData.page !== props.pageIndex + 1) return null;
+        return (
+          <TextBox
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            textData={textData}
+            workFlow={workFlow}
+          />
+        );
+      })}
+      initial
+      {initial?.map((initData, index) => {
+        if (initData.page !== props.pageIndex + 1) return null;
+        return (
+          <Initial
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            initData={initData}
+            workFlow={workFlow}
+          />
+        );
+      })}
       {props.annotationLayer.children}
       <div style={{ userSelect: "none" }}>{props.textLayer.children}</div>
     </div>

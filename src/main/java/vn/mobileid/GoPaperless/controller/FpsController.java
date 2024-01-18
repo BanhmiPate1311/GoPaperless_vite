@@ -66,6 +66,13 @@ public class FpsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{documentId}/fillForm")
+    public ResponseEntity<?> fillForm(@PathVariable int documentId, @PathVariable String field_name) throws Exception {
+
+        String response = fpsService.deleteSignatue(documentId, field_name);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/download/{documentId}")
     public ResponseEntity<?> download(@PathVariable int documentId) throws Exception {
 

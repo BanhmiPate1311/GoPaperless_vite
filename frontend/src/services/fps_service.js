@@ -24,6 +24,9 @@ export const fpsService = {
   },
 
   removeSignature: async ({ documentId }, field_name) => {
-    await api.delete(`/fps/${documentId}/${field_name}/deleteSignatue`);
+    const response = await api.delete(
+      `/fps/${documentId}/${field_name}/deleteSignatue`
+    );
+    return response.data;
   },
 };

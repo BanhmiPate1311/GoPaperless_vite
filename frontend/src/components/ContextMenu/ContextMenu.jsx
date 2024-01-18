@@ -23,7 +23,7 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
     {
       icon: <Initial />,
       label: t("0-common.initials"),
-      value: "Initial",
+      value: "INITIAL",
     },
     { icon: <Name />, label: t("0-common.name"), value: "NAME" },
     { icon: <Email />, label: t("0-common.email"), value: "EMAIL" },

@@ -204,7 +204,20 @@ public class FpsService {
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
         requestData.put("dimension", data.getDimension());
+        if(data.getValue() != null) {
+            requestData.put("value", data.getValue());
+        }
         requestData.put("visible_enabled", data.getVisibleEnabled());
+
+//        System.out.println("x: " + data.getDimension().getX());
+//        System.out.println("y: " + data.getDimension().getY());
+//        System.out.println("width: " + data.getDimension().getWidth());
+//        System.out.println("height: " + data.getDimension().getHeight());
+//        System.out.println("putSignature: " + requestData);
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String requestDataJson = objectMapper.writeValueAsString(data);
+//        System.out.println("Request Data as JSON: " + requestDataJson);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 
@@ -229,9 +242,10 @@ public class FpsService {
     }
 
     public String addTextBox(int documentId, String field, BasicFieldAttribute data, boolean drag) throws Exception {
-        System.out.println("addSignature");
-        String addSignatureUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/" + field;
+        System.out.println("addTextBox");
+        String addTextBoxUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/" + field;
 
+        System.out.println("addTextBox: " + addTextBoxUrl);
 //        RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -244,14 +258,23 @@ public class FpsService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
-        requestData.put("type", data.getType());
+        if(data.getValue() != null) {
+            requestData.put("type", data.getType());
+        }
+        if(data.getValue() != null) {
+            requestData.put("value", data.getValue());
+        }
+        if(data.getValue() != null) {
+            requestData.put("multiline", data.getMultiline());
+        }
+
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
-        requestData.put("visible_enabled", data.getVisibleEnabled());
+//        requestData.put("visible_enabled", data.getVisibleEnabled());
         System.out.println("requestData: " + requestData);
-        List<String> list = new ArrayList<>();
-        list.add("cades signature");
-        requestData.put("level_of_assurance", list);
+//        List<String> list = new ArrayList<>();
+//        list.add("cades signature");
+//        requestData.put("level_of_assurance", list);
 
         // Convert requestData to JSON string
         ObjectMapper objectMapper = new ObjectMapper();
@@ -266,7 +289,7 @@ public class FpsService {
 //            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
 //            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
 
-            ResponseEntity<String> response = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(addTextBoxUrl, HttpMethod.POST, httpEntity, String.class);
 
             return response.getBody();
         } catch (HttpClientErrorException e) {

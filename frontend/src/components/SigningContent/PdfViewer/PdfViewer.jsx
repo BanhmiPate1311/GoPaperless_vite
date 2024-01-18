@@ -19,7 +19,7 @@ import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
 
 export const PdfViewer = ({ workFlow }) => {
-  console.log("workFlow: ", workFlow);
+  // console.log("workFlow: ", workFlow);
   const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
@@ -27,6 +27,7 @@ export const PdfViewer = ({ workFlow }) => {
   const signerId = getSigner(workFlow).signerId;
 
   const signer = getSigner(workFlow);
+  // console.log("signer: ", signer);
   const { signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
@@ -35,7 +36,7 @@ export const PdfViewer = ({ workFlow }) => {
   // console.log("increment: ", increment);
 
   const isSetPosRef = useRef(checkIsPosition(workFlow));
-  const isSetPos = isSetPosRef.current;
+  // const isSetPos = isSetPosRef.current;
 
   useEffect(() => {
     isSetPosRef.current = checkIsPosition(workFlow);
@@ -55,7 +56,7 @@ export const PdfViewer = ({ workFlow }) => {
     // },
   });
 
-  console.log("getField: ", field);
+  // console.log("getField: ", field);
 
   const addSignature = UseAddSig();
   const addTextBox = UseAddTextField();
@@ -64,7 +65,6 @@ export const PdfViewer = ({ workFlow }) => {
     // console.log("event: ", event);
     // console.log("page: ", page);
     if (
-      isSetPos ||
       checkSignerStatus(signer, signerToken) === 2 ||
       (event.target.className !== "rpv-core__text-layer" &&
         event.target.className !== "rpv-core__text-layer-text")
@@ -132,14 +132,27 @@ export const PdfViewer = ({ workFlow }) => {
     );
   };
 
+  const handleValue = (value) => {
+    switch (value) {
+      case "NAME":
+        return signer.lastName + " " + signer.firstName;
+      case "EMAIL":
+        return signer.email;
+      case "JOB_TITLE":
+        return signer.metaInformation?.position || "";
+      case "COMPANY":
+        return signer.metaInformation?.company || "";
+    }
+  };
+
   const textField = (value) => {
     // console.log("value: ", value);
     const newTextField = {
-      type: "TEXTBOX",
+      type: value,
       field_name:
         signerId + "_" + value + "_" + Number(field.textbox.length + 1),
       page: signInfo.page,
-      value: signer.lastName + signer.firstName,
+      value: handleValue(value),
       read_only: false,
       multiline: false,
       dimension: {
@@ -164,6 +177,33 @@ export const PdfViewer = ({ workFlow }) => {
     );
   };
 
+  const initial = (value) => {
+    const newInitField = {
+      field_name:
+        signerId + "_" + value + "_" + Number(field.initial.length + 1),
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 22,
+        height: 5,
+      },
+      suffix: Number(field.textbox.length + 1),
+    };
+    addTextBox.mutate(
+      {
+        body: newInitField,
+        field: "initial",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
   const handleClickMenu = (value) => () => {
     console.log("data: ", value);
     handleClose();
@@ -172,7 +212,13 @@ export const PdfViewer = ({ workFlow }) => {
         signatureField(value);
         break;
       case "NAME":
+      case "EMAIL":
+      case "JOB_TITLE":
+      case "COMPANY":
         textField(value);
+        break;
+      case "INITIAL":
+        initial(value);
         break;
     }
 
@@ -211,7 +257,9 @@ export const PdfViewer = ({ workFlow }) => {
         <Document
           props={props}
           workFlow={workFlow}
-          signatures={field.signature}
+          signatures={field?.signature}
+          textbox={field?.textbox}
+          initial={field?.initial}
         />
       </div>
     );
