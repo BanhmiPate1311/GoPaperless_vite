@@ -16,6 +16,8 @@ const DrawSignForm = forwardRef(
       onDisableSubmit,
       watch,
       control,
+      showInput,
+      imgBase64,
     },
     ref
   ) => {
@@ -89,9 +91,9 @@ const DrawSignForm = forwardRef(
         // component="form"
         // ref={ref}
         // onSubmit={handleSubmit(handleFormSubmit)}
-        sx={{ minWidth: 400 }}
+        sx={showInput ? { width: "100%", height: "100%" } : { minWidth: 400 }}
       >
-        <Box mb="10px">
+        <Box mb="10px" sx={showInput ? { display: "none" } : {}}>
           <Button
             variant="outlined"
             style={{
@@ -105,10 +107,10 @@ const DrawSignForm = forwardRef(
         <Stack
           ref={ref}
           sx={{
-            height: "170px",
+            height: showInput ? "100%" : "170px",
             overflow: "hidden",
             borderRadius: "6px",
-            border: "2px solid #357EEB",
+            border: !imgBase64 ? "2px solid #357EEB" : "none",
             position: "relative",
             // backgroundColor: "white",
             "&:before": watch("logo")
@@ -122,7 +124,7 @@ const DrawSignForm = forwardRef(
                   height: "100%",
                   opacity: 0.2,
                   zIndex: 1,
-                  backgroundImage: `url(${logoValue})`,
+                  backgroundImage: !imgBase64 ? `url(${logoValue})` : "none",
                   backgroundSize: "contain",
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
@@ -131,54 +133,59 @@ const DrawSignForm = forwardRef(
               : {},
           }}
         >
-          <Stack
-            direction={
-              watch("alignment") === "auto" || watch("alignment") === "left"
-                ? "row"
-                : "row-reverse"
-            }
-            sx={{
-              display: "flex",
-              width: "100%",
-              alignItems: "center",
-              // height: "150px",
-              height: "100%",
-            }}
-            // ref={sigCanvasRef}
-          >
+          {imgBase64 && (
+            <img src={imgBase64} style={{ width: "auto", height: "100%" }} />
+          )}
+          {!imgBase64 && (
             <Stack
-              direction="row"
-              justifyContent={"center"}
-              alignItems="center"
+              direction={
+                watch("alignment") === "auto" || watch("alignment") === "left"
+                  ? "row"
+                  : "row-reverse"
+              }
               sx={{
-                marginLeft: "auto",
-                marginRight: "auto",
-                width: direction ? "50%" : "100%",
-                fontSize: "2rem",
-                textAlign: "center",
-                textTransform: "capitalize",
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                // height: "150px",
+                height: "100%",
               }}
+              // ref={sigCanvasRef}
             >
-              {/* {watch("drawUrl") || ""} */}
-              {watch("drawUrl") ? (
-                <Box
-                  component="img"
-                  sx={{
-                    // height: "100%",
-                    maxWidth: "70%",
-                  }}
-                  alt="The house from the offer."
-                  src={watch("drawUrl")}
-                />
-              ) : null}
-            </Stack>
+              <Stack
+                direction="row"
+                justifyContent={"center"}
+                alignItems="center"
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: direction ? "50%" : "100%",
+                  fontSize: "2rem",
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                }}
+              >
+                {/* {watch("drawUrl") || ""} */}
+                {watch("drawUrl") ? (
+                  <Box
+                    component="img"
+                    sx={{
+                      // height: "100%",
+                      maxWidth: "70%",
+                    }}
+                    alt="The house from the offer."
+                    src={watch("drawUrl")}
+                  />
+                ) : null}
+              </Stack>
 
-            <ContentRight
-              direction={direction}
-              subtitle={subtitle}
-              watch={watch}
-            />
-          </Stack>
+              <ContentRight
+                direction={direction}
+                subtitle={subtitle}
+                watch={watch}
+              />
+            </Stack>
+          )}
           {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",

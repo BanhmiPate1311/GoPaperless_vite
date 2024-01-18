@@ -15,6 +15,8 @@ export const TextSignForm = forwardRef(
       formattedDatetime,
       onDisableSubmit,
       control,
+      showInput,
+      imgBase64,
     },
     ref
   ) => {
@@ -67,9 +69,9 @@ export const TextSignForm = forwardRef(
         // component="form"
         // ref={ref}
         // onSubmit={handleSubmit(handleFormSubmit)}
-        sx={{ minWidth: 400 }}
+        sx={showInput ? { width: "100%", height: "100%" } : { minWidth: 400 }}
       >
-        <Box>
+        <Box sx={showInput ? { display: "none" } : {}}>
           <InputField
             label=""
             name="text"
@@ -85,10 +87,10 @@ export const TextSignForm = forwardRef(
         <Stack
           ref={ref}
           sx={{
-            height: "170px",
+            height: showInput ? "100%" : "170px",
             overflow: "hidden",
             borderRadius: "6px",
-            border: "2px solid #357EEB",
+            border: !imgBase64 ? "2px solid #357EEB" : "none",
             position: "relative",
             // background: "transparent",
             "&:before": watch("logo")
@@ -102,7 +104,7 @@ export const TextSignForm = forwardRef(
                   height: "100%",
                   opacity: 0.2,
                   zIndex: 1,
-                  backgroundImage: `url(${logoValue})`,
+                  backgroundImage: !imgBase64 ? `url(${logoValue})` : "none",
                   backgroundSize: "contain",
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
@@ -111,44 +113,49 @@ export const TextSignForm = forwardRef(
               : {},
           }}
         >
-          <Stack
-            // direction="row-reverse"
-            direction={
-              watch("alignment") === "auto" || watch("alignment") === "left"
-                ? "row"
-                : "row-reverse"
-            }
-            sx={{
-              // flexDirection: "row-reversed",
-              display: "flex",
-              width: "100%",
-              alignItems: "center",
-              // height: "150px",
-              height: "100%",
-              // padding: "2rem 0",
-            }}
-            // ref={sigTextRef}
-          >
-            <Box
+          {imgBase64 && (
+            <img src={imgBase64} style={{ width: "auto", height: "100%" }} />
+          )}
+          {!imgBase64 && (
+            <Stack
+              // direction="row-reverse"
+              direction={
+                watch("alignment") === "auto" || watch("alignment") === "left"
+                  ? "row"
+                  : "row-reverse"
+              }
               sx={{
-                marginLeft: "auto",
-                marginRight: "auto",
-                width: direction ? "50%" : "100%",
-                fontSize: "36px",
-                textAlign: "center",
-                textTransform: "capitalize",
-                fontWeight: "bold",
+                // flexDirection: "row-reversed",
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                // height: "150px",
+                height: "100%",
+                // padding: "2rem 0",
               }}
-              className="font-moon-dance"
+              // ref={sigTextRef}
             >
-              {watch("text") || ""}
-            </Box>
-            <ContentRight
-              direction={direction}
-              subtitle={subtitle}
-              watch={watch}
-            />
-          </Stack>
+              <Box
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: direction ? "50%" : "100%",
+                  fontSize: "36px",
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                  fontWeight: "bold",
+                }}
+                className="font-moon-dance"
+              >
+                {watch("text") || ""}
+              </Box>
+              <ContentRight
+                direction={direction}
+                subtitle={subtitle}
+                watch={watch}
+              />
+            </Stack>
+          )}
           {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",

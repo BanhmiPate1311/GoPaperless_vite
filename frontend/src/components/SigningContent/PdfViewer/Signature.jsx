@@ -27,7 +27,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("index: ", index);
   // console.log("signatureData: ", signatureData);
   const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
-
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
   const [isShowModalSmartid, setShowModalSmartid] = useState([false]);
@@ -510,6 +509,8 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               // });
             }}
             onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
               console.log("e: ", e);
               return;
             }}
@@ -599,16 +600,18 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                     ? "black"
                     : "#EAB308",
               }}
-              onMouseMove={(e) => {
-                setShowTopbar(true);
-              }}
-              onMouseLeave={(e) => {
-                setShowTopbar(false);
-              }}
+              // onMouseMove={(e) => {
+              //   setShowTopbar(true);
+              // }}
+              // onMouseLeave={(e) => {
+              //   setShowTopbar(false);
+              // }}
               // onClick={(e) => {
               //   console.log("e: ", e);
               // }}
-              onClick={(e) => {
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                console.log(e);
                 // if (isControlled) return;
                 if (signatureData.verification) {
                   console.log("show signature verification");
@@ -730,6 +733,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           dataSigning={dataSigning}
           setDataSigning={setDataSigning}
           handleShowmodal={() => handleShowmodal(index)}
+          signatureData={signatureData}
+          pdfPage={pdfPage}
+          isControlled={isControlled}
+          isSetPos={isSetPos}
+          index={index}
+          signerId={signerId}
+          maxPosibleResizeWidth={maxPosibleResizeWidth}
+          maxPosibleResizeHeight={maxPosibleResizeHeight}
+          workFlow={workFlow}
         />
       )}
       {isShowModalSmartid[index] && (

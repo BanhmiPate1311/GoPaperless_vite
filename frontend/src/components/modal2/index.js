@@ -5,3 +5,4 @@ export * from "./ContentRight";
 export * from "./ModalSigning";
 export * from "./TextSignForm";
 export * from "./DrawSignForm";
+export * from "./ReviewSign";
