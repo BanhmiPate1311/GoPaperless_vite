@@ -9,26 +9,39 @@ import SvgIcon from "@mui/material/SvgIcon";
 import TextField from "@mui/material/TextField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
 export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
-  // console.log("textData: ", textData);
+  // console.log("index: ", index);
+  // console.log("textData: ", textData.value);
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
 
   const signer = getSigner(workFlow);
   const signerId = signer.signerId;
 
-  const [isControlled, setIsControlled] = useState(true);
+  const [isControlled, setIsControlled] = useState(false);
+  // console.log("isControlled: ", isControlled);
   const [showTopbar, setShowTopbar] = useState(false);
-  const [dragPosition, setDragPosition] = useState(null);
+  const [dragPosition, setDragPosition] = useState({
+    x: (textData.dimension?.x * pdfPage.width) / 100,
+    y: (textData.dimension?.y * pdfPage.height) / 100,
+  });
+  // console.log("dragPosition: ", dragPosition);
 
   const maxPosibleResizeWidth =
     (pdfPage.width * (100 - textData.dimension?.x)) / 100;
   const maxPosibleResizeHeight =
     (pdfPage.height * (100 - textData.dimension?.y)) / 100;
+
+  useEffect(() => {
+    setDragPosition({
+      x: (textData.dimension?.x * pdfPage.width) / 100,
+      y: (textData.dimension?.y * pdfPage.height) / 100,
+    });
+  }, [textData]);
 
   const removeSignature = useMutation({
     mutationFn: () => {
@@ -44,7 +57,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
   });
 
   const handleRemoveSignature = async () => {
-    console.log("remove");
+    // setIsControlled(false);
     // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
     // setSignature(null);
@@ -160,7 +173,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
   return (
     <>
       <Draggable
-        handle="#drag"
+        handle={`#textDrag-${index}`}
         // bounds="parent"
         onDrag={() => handleDrag("block")}
         position={dragPosition}
@@ -245,21 +258,28 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           const y =
             (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
 
-          putSignature.mutate({
-            body: {
-              field_name: textData.field_name,
-              page: pdfPage.currentPage,
-              dimension: {
-                x: x,
-                y: y,
-                width: -1,
-                height: -1,
+          putSignature.mutate(
+            {
+              body: {
+                field_name: textData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: x,
+                  y: y,
+                  width: -1,
+                  height: -1,
+                },
+                visible_enabled: true,
               },
-              visible_enabled: true,
+              field: "text",
+              documentId: workFlow.documentId,
             },
-            field: "text",
-            documentId: workFlow.documentId,
-          });
+            {
+              onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["getField"] });
+              },
+            }
+          );
         }}
         disabled={
           signerId + "_" + textData.type + "_" + textData.suffix !==
@@ -279,8 +299,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           }
           style={{
             position: "absolute",
-            top: textData.dimension?.y + "%",
-            left: textData.dimension?.x + "%",
+            // top: textData.dimension?.y + "%",
+            // left: textData.dimension?.x + "%",
             zIndex: 100,
             // opacity: textData.verification === undefined ? 1 : 0,
             transition: isControlled ? `transform 0.3s` : `none`,
@@ -337,26 +357,33 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               textData.field_name
             )
               return;
-            putSignature.mutate({
-              body: {
-                field_name: textData.field_name,
-                page: pdfPage.currentPage,
-                dimension: {
-                  x: -1,
-                  y: -1,
-                  width: (size.width / pdfPage.width) * 100,
-                  height: (size.height / pdfPage.height) * 100,
+            putSignature.mutate(
+              {
+                body: {
+                  field_name: textData.field_name,
+                  page: pdfPage.currentPage,
+                  dimension: {
+                    x: -1,
+                    y: -1,
+                    width: (size.width / pdfPage.width) * 100,
+                    height: (size.height / pdfPage.height) * 100,
+                  },
+                  visible_enabled: true,
                 },
-                visible_enabled: true,
+                field: "text",
+                documentId: workFlow.documentId,
               },
-              field: "text",
-              documentId: workFlow.documentId,
-            });
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
+              }
+            );
           }}
           className={`sig textbox-${index}`}
         >
           <Box
-            id="drag"
+            id={`textDrag-${index}`}
             sx={{
               backgroundColor:
                 textData.verification ||
@@ -447,7 +474,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               margin="normal"
               // name={name}
               // value={code}
-              defaultValue={textData.value}
+              value={textData.value}
               autoComplete="off"
               placeholder={handlePlaceHolder(textData.type)}
               sx={{

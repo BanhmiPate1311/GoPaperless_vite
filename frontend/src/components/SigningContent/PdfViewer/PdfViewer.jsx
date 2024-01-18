@@ -177,6 +177,33 @@ export const PdfViewer = ({ workFlow }) => {
     );
   };
 
+  const initial = (value) => {
+    const newInitField = {
+      field_name:
+        signerId + "_" + value + "_" + Number(field.initial.length + 1),
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 22,
+        height: 5,
+      },
+      suffix: Number(field.textbox.length + 1),
+    };
+    addTextBox.mutate(
+      {
+        body: newInitField,
+        field: "initial",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
   const handleClickMenu = (value) => () => {
     console.log("data: ", value);
     handleClose();
@@ -189,6 +216,9 @@ export const PdfViewer = ({ workFlow }) => {
       case "JOB_TITLE":
       case "COMPANY":
         textField(value);
+        break;
+      case "INITIAL":
+        initial(value);
         break;
     }
 
@@ -229,6 +259,7 @@ export const PdfViewer = ({ workFlow }) => {
           workFlow={workFlow}
           signatures={field?.signature}
           textbox={field?.textbox}
+          initial={field?.initial}
         />
       </div>
     );

@@ -4,9 +4,9 @@ import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { checkIsPosition } from "@/utils/commonFunction";
 import { useQueryClient } from "@tanstack/react-query";
 import Signature from "./Signature";
-import { TextBox } from ".";
+import { Initial, TextBox } from ".";
 // import Signature from "./Signature";
-export const Document = ({ props, workFlow, signatures, textbox }) => {
+export const Document = ({ props, workFlow, signatures, textbox, initial }) => {
   // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
@@ -183,7 +183,6 @@ export const Document = ({ props, workFlow, signatures, textbox }) => {
       id={`pdf-view-${props.pageIndex}`}
     >
       {props.canvasLayer.children}
-
       {signatures?.map((signatureData, index) => {
         // console.log("signatureData: ", signatureData.page);
         // console.log("pageIndex: ", props.pageIndex + 1);
@@ -198,7 +197,6 @@ export const Document = ({ props, workFlow, signatures, textbox }) => {
           />
         );
       })}
-
       {textbox?.map((textData, index) => {
         if (textData.page !== props.pageIndex + 1) return null;
         return (
@@ -211,7 +209,19 @@ export const Document = ({ props, workFlow, signatures, textbox }) => {
           />
         );
       })}
-
+      initial
+      {initial?.map((initData, index) => {
+        if (initData.page !== props.pageIndex + 1) return null;
+        return (
+          <Initial
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            initData={initData}
+            workFlow={workFlow}
+          />
+        );
+      })}
       {props.annotationLayer.children}
       <div style={{ userSelect: "none" }}>{props.textLayer.children}</div>
     </div>
