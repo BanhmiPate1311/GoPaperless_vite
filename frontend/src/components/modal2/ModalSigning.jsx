@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { AddSubtitle, TextSignForm } from ".";
+import { AddSubtitle, TextSignForm, ReviewSign } from ".";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
 
@@ -72,6 +72,15 @@ export const ModalSigning = ({
   dataSigning,
   setDataSigning,
   handleShowmodal,
+  signatureData,
+  pdfPage,
+  isControlled,
+  isSetPos,
+  index,
+  signerId,
+  maxPosibleResizeWidth,
+  maxPosibleResizeHeight,
+  workFlow,
 }) => {
   const { t } = useTranslation();
 
@@ -207,6 +216,34 @@ export const ModalSigning = ({
   const handleSubmitClick = () => {
     formRef.current.requestSubmit();
   };
+  // handle resize signature
+  const [imgBase64, setImgBase64] = useState(null);
+  const [openResize, setOpenResize] = useState(false);
+  const handleOpenResize = (status) => {
+    setOpenResize(status);
+  };
+  useEffect(() => {
+    setImgBase64(null);
+  }, [
+    value,
+    watch("location"),
+    watch("drawUrl"),
+    watch("fileUrl"),
+    watch("imageScrop"),
+    watch("name"),
+    watch("contactInfor"),
+    watch("date"),
+    watch("logo"),
+    watch("reason"),
+    watch("dn"),
+    watch("itver"),
+    watch("location"),
+    watch("label"),
+    watch("alignment"),
+    watch("format"),
+    watch("text"),
+    signer,
+  ]);
   return (
     <Dialog
       // keepMounted={false}
@@ -332,6 +369,7 @@ export const ModalSigning = ({
                   onDisableSubmit={handleDisableSubmit}
                   watch={watch}
                   control={control}
+                  imgBase64={imgBase64}
                 />
                 {/* text */}
               </TabPanel>
@@ -344,6 +382,7 @@ export const ModalSigning = ({
                   onDisableSubmit={handleDisableSubmit}
                   watch={watch}
                   control={control}
+                  imgBase64={imgBase64}
                 />
                 {/* draw */}
               </TabPanel>
@@ -356,6 +395,7 @@ export const ModalSigning = ({
                   onDisableSubmit={handleDisableSubmit}
                   watch={watch}
                   control={control}
+                  imgBase64={imgBase64}
                 />
               </TabPanel>
             </AppBar>
@@ -382,12 +422,54 @@ export const ModalSigning = ({
             borderColor: "borderColor.main",
             marginLeft: "20px !important",
           }}
+          type="button"
+          onClick={() => {
+            handleOpenResize(true);
+          }}
+        >
+          {t("Review")}
+        </Button>
+        <Button
+          variant="contained"
+          disabled={isSubmitDisabled}
+          // startIcon={
+          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
+          // }
+          sx={{
+            borderRadius: "10px",
+            borderColor: "borderColor.main",
+            marginLeft: "20px !important",
+          }}
           onClick={handleSubmitClick}
           type="button"
         >
           {t("0-common.continue")}
         </Button>
       </DialogActions>
+      <ReviewSign
+        open={openResize}
+        handleOpenResize={handleOpenResize}
+        ref={textElement}
+        dataSigning={dataSigning}
+        headerFooter={headerFooter?.data}
+        formattedDatetime={formattedDatetime}
+        onDisableSubmit={handleDisableSubmit}
+        watch={watch}
+        control={control}
+        value={value}
+        // Resize & show PDF
+        signatureData={signatureData}
+        pdfPage={pdfPage}
+        isControlled={isControlled}
+        isSetPos={isSetPos}
+        index={index}
+        signerId={signerId}
+        maxPosibleResizeWidth={maxPosibleResizeWidth}
+        maxPosibleResizeHeight={maxPosibleResizeHeight}
+        workFlow={workFlow}
+        handleFormSubmit={handleFormSubmit}
+        setImgBase64={setImgBase64}
+      />
     </Dialog>
   );
 };

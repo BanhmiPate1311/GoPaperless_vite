@@ -16,6 +16,8 @@ const UploadSignForm = forwardRef(
       onDisableSubmit,
       watch,
       control,
+      showInput,
+      imgBase64,
     },
     ref
   ) => {
@@ -90,9 +92,9 @@ const UploadSignForm = forwardRef(
         // component="form"
         // ref={ref}
         // onSubmit={handleSubmit(handleFormSubmit)}
-        sx={{ minWidth: 400 }}
+        sx={showInput ? { width: "100%", height: "100%" } : { minWidth: 400 }}
       >
-        <Box mb="10px">
+        <Box mb="10px" sx={showInput ? { display: "none" } : {}}>
           <UploadField
             variant="outlined"
             name="fileUrl"
@@ -107,10 +109,10 @@ const UploadSignForm = forwardRef(
         <Stack
           ref={ref}
           sx={{
-            height: "170px",
+            height: showInput ? "100%" : "170px",
             overflow: "hidden",
             borderRadius: "6px",
-            border: "2px solid #357EEB",
+            border: !imgBase64 ? "2px solid #357EEB" : "none",
             position: "relative",
             // backgroundColor: "white",
             // set background image
@@ -125,7 +127,7 @@ const UploadSignForm = forwardRef(
                   height: "100%",
                   opacity: 0.2,
                   zIndex: 1,
-                  backgroundImage: `url(${logoValue})`,
+                  backgroundImage: !imgBase64 ? `url(${logoValue})` : "none",
                   backgroundSize: "contain",
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
@@ -134,59 +136,64 @@ const UploadSignForm = forwardRef(
               : {},
           }}
         >
-          <Stack
-            // direction="row-reverse"
-            direction={
-              watch("alignment") === "auto" || watch("alignment") === "left"
-                ? "row"
-                : "row-reverse"
-            }
-            sx={{
-              // flexDirection: "row-reversed",
-              display: "flex",
-              width: "100%",
-              // height: "150px",
-              height: "100%",
-              alignItems: "center",
-              minHeight: "100px",
-              // padding: "2rem 0",
-            }}
-            // ref={sigFileRef}
-          >
+          {imgBase64 && (
+            <img src={imgBase64} style={{ width: "auto", height: "100%" }} />
+          )}
+          {!imgBase64 && (
             <Stack
-              justifyContent={"center"}
-              alignItems={"center"}
+              // direction="row-reverse"
+              direction={
+                watch("alignment") === "auto" || watch("alignment") === "left"
+                  ? "row"
+                  : "row-reverse"
+              }
               sx={{
-                marginLeft: "auto",
-                marginRight: "auto",
-                width: direction ? "50%" : "100%",
+                // flexDirection: "row-reversed",
+                display: "flex",
+                width: "100%",
+                // height: "150px",
                 height: "100%",
-                fontSize: "2rem",
-                textAlign: "center",
-                textTransform: "capitalize",
+                alignItems: "center",
+                minHeight: "100px",
+                // padding: "2rem 0",
               }}
-              className="font-moon-dance"
+              // ref={sigFileRef}
             >
-              {/* {watch("text") || ""} */}
-              {watch("imageScrop") ? (
-                <Box
-                  component="img"
-                  sx={{
-                    // height: "100%",
-                    maxWidth: "70%",
-                    maxHeight: "100%",
-                  }}
-                  alt="The house from the offer."
-                  src={watch("imageScrop")}
-                />
-              ) : null}
+              <Stack
+                justifyContent={"center"}
+                alignItems={"center"}
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: direction ? "50%" : "100%",
+                  height: "100%",
+                  fontSize: "2rem",
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                }}
+                className="font-moon-dance"
+              >
+                {/* {watch("text") || ""} */}
+                {watch("imageScrop") ? (
+                  <Box
+                    component="img"
+                    sx={{
+                      // height: "100%",
+                      maxWidth: "70%",
+                      maxHeight: "100%",
+                    }}
+                    alt="The house from the offer."
+                    src={watch("imageScrop")}
+                  />
+                ) : null}
+              </Stack>
+              <ContentRight
+                direction={direction}
+                subtitle={subtitle}
+                watch={watch}
+              />
             </Stack>
-            <ContentRight
-              direction={direction}
-              subtitle={subtitle}
-              watch={watch}
-            />
-          </Stack>
+          )}
           {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",

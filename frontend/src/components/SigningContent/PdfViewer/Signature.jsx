@@ -29,7 +29,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   // console.log("index: ", index);
   // console.log("signatureData: ", signatureData);
   const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
-
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
   const [isShowModalSmartid, setShowModalSmartid] = useState([false]);
@@ -702,6 +701,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           dataSigning={dataSigning}
           setDataSigning={setDataSigning}
           handleShowmodal={() => handleShowmodal(index)}
+          signatureData={signatureData}
+          pdfPage={pdfPage}
+          isControlled={isControlled}
+          isSetPos={isSetPos}
+          index={index}
+          signerId={signerId}
+          maxPosibleResizeWidth={maxPosibleResizeWidth}
+          maxPosibleResizeHeight={maxPosibleResizeHeight}
+          workFlow={workFlow}
         />
       )}
 

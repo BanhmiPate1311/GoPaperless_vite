@@ -1,18 +1,7 @@
 import imageNotFound from "@/assets/images/noSignature.png";
-import { ReactComponent as IconChipWhite } from "@/assets/images/svg/icon_Chip_White.svg";
-import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/valid.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
-import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
-import { ReactComponent as ValidIcon } from "@/assets/images/svg/icon_Chip_White.svg";
-import {
-  ReactComponent as InValidIcon,
-  ReactComponent as WarningIcon,
-} from "@/assets/images/svg/warningErrorwf.svg";
-import {
-  ReactComponent as InValidWFIcon,
-  ReactComponent as WarningWFIcon,
-} from "@/assets/images/svg/warningError.svg";
-import { Error } from "@mui/icons-material";
+import { ReactComponent as InValidIcon } from "@/assets/images/svg/error.svg";
+import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningError.svg";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -34,7 +23,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
       value: validFile.filter((sig) => sig.indication === "INDETERMINATE"),
       icon: (
         <SvgIcon viewBox={"0 0 40 40"}>
-          <WarningWFIcon height={40} width={40} color="#EB6A00" />
+          <InValidIcon height={40} width={40} color="#EB6A00" />
         </SvgIcon>
       ),
 
@@ -45,7 +34,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
       value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
       icon: (
         <SvgIcon viewBox={"0 0 35 35"}>
-          <InValidWFIcon height={35} width={35} />
+          <WarningWFIcon height={35} width={35} />
         </SvgIcon>
       ),
 

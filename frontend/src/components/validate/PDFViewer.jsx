@@ -6,14 +6,16 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
-export const PDFViewer = ({ base64 }) => {
+export const PDFViewer = ({ base64, renderPage, pageLayout }) => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   return (
-    <Box height="100%">
+    <Box height="100%" width="100%">
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
         <Viewer
           fileUrl={`data:application/pdf;base64,${base64}`}
           plugins={[defaultLayoutPluginInstance]}
+          renderPage={renderPage}
+          pageLayout={pageLayout}
         />
       </Worker>
     </Box>
