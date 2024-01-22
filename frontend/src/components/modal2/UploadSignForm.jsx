@@ -223,6 +223,8 @@ UploadSignForm.propTypes = {
   onDisableSubmit: PropTypes.func,
   watch: PropTypes.func,
   control: PropTypes.object,
+  showInput: PropTypes.bool,
+  imgBase64: PropTypes.string,
 };
 UploadSignForm.displayName = "TextSignForm";
 export default UploadSignForm;

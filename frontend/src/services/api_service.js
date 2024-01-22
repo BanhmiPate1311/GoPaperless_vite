@@ -38,6 +38,9 @@ export const apiService = {
       language: lang,
     });
   },
+  getView: ({ qr }) => {
+    return api.post("/uiApi/getFromQR", { qr });
+  },
 
   updateQr: async (data) => {
     const response = await api.post("/uiApi/updateQr", data);

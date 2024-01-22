@@ -286,7 +286,7 @@ export const checkEseal = (cert) => {
 };
 
 export const debounce = (fn, delay = 1000) => {
-  let timerId = null;
+  let timerId;
   return (...args) => {
     clearTimeout(timerId);
     timerId = setTimeout(() => fn(...args), delay);

@@ -120,6 +120,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
         setIsControlled(false);
       }}
       onStop={(e, data) => {
+        e.preventDefault();
         // console.log("data: ", data);
         // console.log("e: ", e);
         setIsControlled(true);
@@ -319,12 +320,6 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
         <Box
           id={`qrDrag-${index}`}
           sx={{
-            backgroundColor:
-              qrData.verification ||
-              signerId + "_" + qrData.type + "_" + qrData.suffix !==
-                qrData.field_name
-                ? "rgba(217, 223, 228, 0.7)"
-                : "rgba(254, 240, 138, 0.7)",
             height: "100%",
             position: "relative",
             // padding: "10px",
@@ -333,13 +328,8 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
             alignItems: "center",
             justifyContent: "center",
 
-            border: "2px dashed",
-            borderColor:
-              qrData.verification ||
-              signerId + "_" + qrData.type + "_" + qrData.suffix !==
-                qrData.field_name
-                ? "black"
-                : "#EAB308",
+            border: "2px solid",
+            borderColor: "#e1e1e1",
           }}
           onMouseMove={(e) => {
             setShowTopbar(true);
@@ -391,18 +381,17 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
             className={`qrrauria-${index} leftline`}
             style={{ display: "none" }}
           ></span>
-          {/* <Box
-                id="click-duoc"
-                variant="h5"
-                width={"100%"}
-                borderBottom="2px dotted"
-                borderColor="#EAB308"
-                textAlign={"center"}
-                height="45px"
-              >
-                cuongcuong
-              </Box> */}
-          abc
+          <Box
+            sx={{
+              height: "100%",
+              width: "100%",
+              backgroundImage: `url(data:image/png;base64,${qrData.image_qr})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+            }}
+            alt="The house from the offer."
+          />
         </Box>
       </ResizableBox>
     </Draggable>

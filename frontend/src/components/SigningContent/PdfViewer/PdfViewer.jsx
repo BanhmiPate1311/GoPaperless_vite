@@ -15,10 +15,9 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
-import { v4 as uuidv4 } from "uuid";
-import { UseUpdateQr } from "@/hook/use-apiService";
 
 export const PdfViewer = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
@@ -69,7 +68,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const addSignature = UseAddSig();
   const addTextBox = UseAddTextField();
-  const updateQr = UseUpdateQr();
+  // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
     // console.log("event: ", event);
@@ -152,6 +151,8 @@ export const PdfViewer = ({ workFlow }) => {
         return signer.metaInformation?.position || "";
       case "COMPANY":
         return signer.metaInformation?.company || "";
+      default:
+        return "";
     }
   };
 
@@ -165,6 +166,39 @@ export const PdfViewer = ({ workFlow }) => {
       value: handleValue(value),
       read_only: false,
       multiline: false,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 22,
+        height: 5,
+      },
+      suffix: Number(field.textbox.length + 1),
+    };
+    addTextBox.mutate(
+      {
+        body: newTextField,
+        field: "text",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
+  const addTextField = (value) => {
+    console.log("value: ", value);
+    const newTextField = {
+      type: "TEXT_FIELD",
+      field_name:
+        signerId + "_" + "TEXT_FIELD" + "_" + Number(field.textbox.length + 1),
+      page: signInfo.page,
+      value: handleValue(value),
+      read_only: false,
+      multiline: true,
+      format_type: "ALPHANUMERIC",
       dimension: {
         x: signInfo.x,
         y: signInfo.y,
@@ -215,6 +249,8 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const qrCode = (value) => {
+    console.log("qr: ", field?.qr);
+    if (field?.qr?.length > 0) return;
     const qrToken = uuidv4();
     const newInitField = {
       field_name: signerId + "_" + value + "_" + Number(field.qr.length + 1),
@@ -256,6 +292,9 @@ export const PdfViewer = ({ workFlow }) => {
       case "JOB_TITLE":
       case "COMPANY":
         textField(value);
+        break;
+      case "AddText":
+        addTextField(value);
         break;
       case "INITIAL":
         initial(value);
