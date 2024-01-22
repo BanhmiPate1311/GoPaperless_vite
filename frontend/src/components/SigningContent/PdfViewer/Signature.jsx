@@ -69,13 +69,13 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   useEffect(() => {
     const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
     const newSig1 = sigInfor
-      .filter((item) => item.value.field_name === signatureData.field_name)
+      ?.filter((item) => item.value.field_name === signatureData.field_name)
       .map((item) => {
         return { isSigned: true, ...item.value };
       });
 
     const newSig2 = workFlow.participants
-      .filter(
+      ?.filter(
         (item) =>
           item.certificate &&
           item.certificate.field_name === signatureData.field_name
@@ -513,6 +513,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                 signatureData.field_name
             )
               return;
+            console.log(size, pdfPage, size.width / pdfPage.width);
             putSignature.mutate(
               {
                 body: {

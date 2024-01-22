@@ -14,6 +14,7 @@ import { UseUpdateSig } from "@/hook/use-fpsService";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
 import html2canvas from "html2canvas";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const ReviewSign = forwardRef(
   (
@@ -42,7 +43,7 @@ export const ReviewSign = forwardRef(
   ) => {
     const { t } = useTranslation();
     const putSignature = UseUpdateSig();
-
+    const queryClient = useQueryClient();
     const textElement = useRef(null);
     const renderPage = (props) => {
       return (
@@ -60,7 +61,7 @@ export const ReviewSign = forwardRef(
                 : 150
             }
             style={{
-              background: "#fff",
+              // background: "#fff",
               position: "absolute",
               borderRadius: "6px",
               top: signatureData.dimension?.y + "%",
@@ -138,22 +139,6 @@ export const ReviewSign = forwardRef(
             }}
             onResizeStop={(e, { size }) => {
               console.log("e: ", e);
-              if (e.target.nodeName !== "SPAN") return;
-              // fpsService.putSignature(
-              //   pdfInfo,
-              //   {
-              //     field_name: signatureData.field_name,
-              //     page: signatureData.pdfPage.currentPage,
-              //     dimension: {
-              //       x: signatureData.dimension.x,
-              //       y: signatureData.dimension.y,
-              //       width: (size.width / signatureData.pdfPage.width) * 100,
-              //       height: (size.height / signatureData.pdfPage.height) * 100,
-              //     },
-              //     visible_enabled: true,
-              //   },
-              //   { field: signatureData.type.toLowerCase() }
-              // );
               if (
                 isSetPos ||
                 signerId +
@@ -164,7 +149,7 @@ export const ReviewSign = forwardRef(
                   signatureData.field_name
               )
                 return;
-
+              console.log(size, pdfPage, size.width / pdfPage.width);
               putSignature.mutate(
                 {
                   body: {
@@ -180,12 +165,12 @@ export const ReviewSign = forwardRef(
                   },
                   field: signatureData.type.toLowerCase(),
                   documentId: workFlow.documentId,
+                },
+                {
+                  onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ["getField"] });
+                  },
                 }
-                // {
-                //   onSuccess: () => {
-                //     queryClient.invalidateQueries({ queryKey: ["getField"] });
-                //   },
-                // }
               );
             }}
             className={`sig choioi-${index}`}
