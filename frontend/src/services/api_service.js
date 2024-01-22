@@ -38,4 +38,7 @@ export const apiService = {
       language: lang,
     });
   },
+  getView: ({ qr }) => {
+    return api.post("/uiApi/getFromQR", { qr });
+  },
 };

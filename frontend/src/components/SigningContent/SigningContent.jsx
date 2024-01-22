@@ -7,9 +7,11 @@ import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { PdfViewer } from "./PdfViewer";
+import { PdfViewerDocument } from "./PdfViewer";
 import { TabBar } from "./TabBar";
 
-export const SigningContent = ({ workFlow }) => {
+export const SigningContent = ({ workFlow, page }) => {
+  console.log("page: ", page)
   // console.log("workFlow: ", workFlow);
   // eslint-disable-next-line no-unused-vars
 
@@ -37,6 +39,17 @@ export const SigningContent = ({ workFlow }) => {
     enabled: Object.keys(workFlow).length > 0,
   });
   // console.log("getSignedInfo: ", signedInfo);
+
+  //code thêm
+  function checkPDFView(page) {
+    if (page === "document") {
+      return <PdfViewerDocument workFlow={workFlow} />;
+    }else{
+      return <PdfViewer workFlow={workFlow} />;
+    }
+  }  
+  // code thêm
+
   return (
     <Container
       disableGutters
@@ -64,7 +77,10 @@ export const SigningContent = ({ workFlow }) => {
           {workFlow.fileName}
         </Typography>
         <Box overflow="auto" height={{ xs: "500px", lg: "calc(100% - 25px)" }}>
-          <PdfViewer workFlow={workFlow} />
+          {/* <PdfViewer workFlow={workFlow} /> code a Cường */}
+          {/* code thêm */}
+          {checkPDFView(page)}
+          {/* code thêm */}
         </Box>
       </Box>
       <Box

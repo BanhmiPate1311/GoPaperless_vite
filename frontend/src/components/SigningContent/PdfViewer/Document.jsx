@@ -14,8 +14,18 @@ export const Document = ({ props, workFlow, signatures, textbox, initial }) => {
   // const workFlow = queryClient.getQueryData(["workflow"]);
 
   // const signatures = queryClient.getQueryData(["signatures"]);
-
-  let isSetPos = checkIsPosition(workFlow);
+  //code thêm
+  console.log("workFlow: ", workFlow);
+  console.log("signatures: ", signatures);
+  let isSetPos;
+  if (signatures) {
+    isSetPos = checkIsPosition(workFlow);
+  } else {
+    isSetPos = true;
+  }
+  console.log("isSetPos: ", isSetPos);
+  //code thêm
+  // let isSetPos = checkIsPosition(workFlow);
   // console.log("isSetPos: ", isSetPos);
 
   const pdfPage = {

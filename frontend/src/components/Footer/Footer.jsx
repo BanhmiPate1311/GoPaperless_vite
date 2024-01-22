@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { LanguageSelect } from "../Languages";
+
 export const Footer = ({ headerFooter }) => {
   const { t } = useTranslation();
   const check =
@@ -30,24 +31,38 @@ export const Footer = ({ headerFooter }) => {
         px: 5,
         background: check ? metaData.footerBackgroundColor : "#0b95e5",
         color: check ? metaData.footerTextColor : "#FFF",
+        display: "flex",
       }}
     >
-      <Stack direction="row" spacing={1}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          display: "flex",
+          flexDirection: {
+            sx: "column",
+            lg: "row",
+          },
+        }}
+      >
         <Typography
           variant="h6"
           color={check ? metaData.footerTextColor : "#FFF"}
+          sx={{ textWrap: "nowrap" }}
         >
           {t("0-common.version")} {check ? metaData.version : "1.20231116"}
         </Typography>
         <Typography
           variant="h6"
           color={check ? metaData.footerTextColor : "#FFF"}
+          sx={{ textWrap: "nowrap" }}
         >
           {t("0-common.copyright")} {new Date().getFullYear()} ©
         </Typography>
         <Typography
           variant="h6"
           color={check ? metaData.footerTextColor : "#FFF"}
+          sx={{ textWrap: "wrap" }}
         >
           {check
             ? metaData.companyName

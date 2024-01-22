@@ -1,5 +1,5 @@
 import { MainLayout } from "@/layouts";
-import { NotFound, Signing, Validation } from "@/pages";
+import { NotFound, Signing, Validation, PageDocument } from "@/pages";
 import { useRoutes } from "react-router-dom";
 
 const Routers = () => {
@@ -15,6 +15,10 @@ const Routers = () => {
         {
           path: "/view/validation/:upload_token/show",
           element: <Validation />,
+        },
+        {
+          path: "/view/documents/:qr",
+          element: <PageDocument />,
         },
         {
           path: "/view/*",
