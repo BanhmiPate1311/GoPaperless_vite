@@ -4,9 +4,17 @@ import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { checkIsPosition } from "@/utils/commonFunction";
 import { useQueryClient } from "@tanstack/react-query";
 import Signature from "./Signature";
-import { Initial, TextBox } from ".";
+import { Initial, QrCode, TextBox } from ".";
 // import Signature from "./Signature";
-export const Document = ({ props, workFlow, signatures, textbox, initial }) => {
+export const Document = ({
+  props,
+  workFlow,
+  signatures,
+  textbox,
+  initial,
+  qr,
+  textField,
+}) => {
   // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
@@ -194,6 +202,7 @@ export const Document = ({ props, workFlow, signatures, textbox, initial }) => {
             pdfPage={pdfPage}
             signatureData={signatureData}
             workFlow={workFlow}
+            textField={textField}
           />
         );
       })}
@@ -209,7 +218,6 @@ export const Document = ({ props, workFlow, signatures, textbox, initial }) => {
           />
         );
       })}
-      initial
       {initial?.map((initData, index) => {
         if (initData.page !== props.pageIndex + 1) return null;
         return (
@@ -218,6 +226,18 @@ export const Document = ({ props, workFlow, signatures, textbox, initial }) => {
             index={index}
             pdfPage={pdfPage}
             initData={initData}
+            workFlow={workFlow}
+          />
+        );
+      })}
+      {qr?.map((qrData, index) => {
+        if (qrData.page !== props.pageIndex + 1) return null;
+        return (
+          <QrCode
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            qrData={qrData}
             workFlow={workFlow}
           />
         );

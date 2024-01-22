@@ -106,6 +106,7 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       imageBase64: dataSigning.imageBase64,
       assurance: dataSigning.assurance,
       contactInfor: dataSigning.contactInfor,
+      textField: dataSigning.textField,
     };
     try {
       // const response = await api.post("/elec/authorizeOTP", data);

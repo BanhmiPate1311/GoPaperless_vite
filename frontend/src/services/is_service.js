@@ -36,6 +36,7 @@ export const isService = {
       signingOption: data.signingOption,
       enterpriseId: data.enterpriseId,
       assurance: data.assurance,
+      textField: data.textField,
     };
     return api.post("/is/packFile", request);
   },

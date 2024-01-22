@@ -175,6 +175,9 @@
     "usb1": "Mit meiner Unterschrift erkläre ich mich mit der Weitergabe meines Namens und meiner persönlichen Identifikationsnummer an den Dienstleister einverstanden.",
     "usb2": "Geben Sie die PIN zum Signieren ein",
 
+    "initmodal_title": "Erst anwenden",
+    "initmodal_1": "Auf alle Felder in diesem Dokument anwenden",
+
     "modal1_title": "Signaturfeld bearbeiten",
     "modal1_1": "Authentifizieren Sie den Unterzeichner über OTP",
     "modal1_2": "OTP-Authentifizierung (SMS)",

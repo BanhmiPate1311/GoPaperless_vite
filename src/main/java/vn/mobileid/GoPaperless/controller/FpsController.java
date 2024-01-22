@@ -6,10 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
-import vn.mobileid.GoPaperless.model.apiModel.FirstFile;
 import vn.mobileid.GoPaperless.model.fpsModel.BasicFieldAttribute;
 import vn.mobileid.GoPaperless.model.fpsModel.Signature;
+import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.service.FpsService;
 
 import java.io.InputStream;
@@ -20,8 +19,11 @@ import java.util.List;
 public class FpsController {
     private final FpsService fpsService;
 
-    public FpsController(FpsService fpsService) {
+    private final ProcessDb connect;
+
+    public FpsController(FpsService fpsService, ProcessDb connect) {
         this.fpsService = fpsService;
+        this.connect = connect;
     }
 
     @GetMapping("/{documentId}/getFields")
@@ -42,6 +44,7 @@ public class FpsController {
     public ResponseEntity<?> addSignature(@PathVariable int documentId, @PathVariable String field, @RequestBody BasicFieldAttribute data) throws Exception {
 
         String response = fpsService.addSignature(documentId, field, data, true);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -56,6 +59,17 @@ public class FpsController {
     public ResponseEntity<?> addTextField(@PathVariable int documentId, @PathVariable String field, @RequestBody BasicFieldAttribute data) throws Exception {
 
         String response = fpsService.addTextBox(documentId, field, data, true);
+        System.out.println("field: " + field);
+        System.out.println("qrtoken: " + data.getQrToken());
+        System.out.println("signingtoken: " + data.getSigningToken());
+        if (("qrcode").equals(field)) {
+            String result = connect.USP_GW_PPL_WORKFLOW_UPDATE_QR_TOKEN(data.getSigningToken(), data.getQrToken(), "Gateway view");
+            if (result.equals("1")) {
+                System.out.println("update qr token success");
+            } else {
+                System.out.println("update qr token fail");
+            }
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -66,10 +80,10 @@ public class FpsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{documentId}/fillForm")
-    public ResponseEntity<?> fillForm(@PathVariable int documentId, @PathVariable String field_name) throws Exception {
+    @PostMapping("/{documentId}/fillInit")
+    public ResponseEntity<?> fillInit(@PathVariable int documentId, @RequestBody BasicFieldAttribute data) throws Exception {
 
-        String response = fpsService.deleteSignatue(documentId, field_name);
+        String response = fpsService.fillInit(documentId, data);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

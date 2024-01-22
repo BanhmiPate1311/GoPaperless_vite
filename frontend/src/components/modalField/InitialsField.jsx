@@ -1,5 +1,5 @@
-import useCountry from "@/hook/use-country";
-import { apiService } from "@/services/api_service";
+import { usePending } from "@/hook";
+import { UseFillInit } from "@/hook/use-fpsService";
 import { removeBase64Prefix } from "@/utils/commonFunction";
 import DrawIcon from "@mui/icons-material/Draw";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
@@ -7,24 +7,27 @@ import UploadIcon from "@mui/icons-material/Upload";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
-import { AddSubtitle, TextSignForm } from ".";
-import DrawSignForm from "./DrawSignForm";
-import UploadSignForm from "./UploadSignForm";
+import { TextInitForm } from ".";
+import DrawInitForm from "./DrawInitForm";
+import UploadInitForm from "./UploadInitForm";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,82 +68,37 @@ function a11yProps(index) {
   };
 }
 
-export const ModalSigning = ({
+export const InitialsField = ({
   open,
   onClose,
   signer,
-  dataSigning,
-  setDataSigning,
-  handleShowmodal,
+  initData,
+  workFlow,
 }) => {
+  // console.log("initData: ", initData);
+  // console.log("signer: ", signer);
   const { t } = useTranslation();
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
-      text:
-        typeof dataSigning.certChain.subject === "string"
-          ? dataSigning.certChain.subject
-          : dataSigning.certChain.subject.commonName,
+      text: signer.lastName + " " + signer.firstName,
       drawUrl: "",
       fileUrl: "",
       imageScrop: "",
-      name: true,
-      contactInfor: dataSigning.email,
-      date: false,
-      logo: false,
-      reason: true,
-      dn: false,
-      itver: false,
-      location: true,
-      label: true,
-      alignment: "auto",
-      format: 10,
+      apply: false,
     },
   });
 
-  const { signing_token: signingToken } = useParams();
+  const queryClient = useQueryClient();
+  const isPending = usePending();
+
+  const fillInit = UseFillInit();
+
   const [value, setValue] = useState(0);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
   const textElement = useRef();
-  const drawElement = useRef();
-  const fileElement = useRef();
   const formRef = useRef();
-
-  const { data: headerFooter } = useQuery({
-    queryKey: ["checkHeader"],
-    queryFn: () => apiService.checkHeaderFooter(signingToken),
-  });
-
-  const { address } = useCountry();
-  useEffect(() => {
-    setDataSigning({
-      ...dataSigning,
-      country: signer.metaInformation?.country
-        ? signer.metaInformation?.country
-        : address,
-      countryRealtime: address,
-      signingPurpose: signer.signingPurpose
-        ? signer.signingPurpose
-        : "signature",
-      reason: signer.customReason ? signer.customReason : "Purpose: signature",
-    });
-  }, [address]);
-
-  const currentDatetime = new Date();
-  const options = {
-    timeZone: "Asia/Bangkok", // 'UTC+7' is equivalent to 'Asia/Bangkok'
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  };
-
-  const formattedDatetime = new Intl.DateTimeFormat("en-GB", options).format(
-    currentDatetime
-  );
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -151,59 +109,32 @@ export const ModalSigning = ({
   };
 
   const handleFormSubmit = (data) => {
-    // let config = {
-    //   fetchArgs: {
-    //     mode: "no-cors",
-    //   },
-    // };
-    // setIsPending(true);
-    // console.log("data: ", data);
-    switch (value) {
-      case 0:
-        html2canvas(textElement.current, { backgroundColor: null }).then(
-          (canvas) => {
-            const data64 = canvas.toDataURL();
-            // console.log("data64: ", data64);
+    console.log("data: ", data);
 
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(data64),
-            });
-            onClose();
-            handleShowmodal();
+    html2canvas(textElement.current, { backgroundColor: null }).then(
+      (canvas) => {
+        const data64 = canvas.toDataURL();
+        fillInit.mutate(
+          {
+            body: {
+              field_name: initData.field_name,
+              apply_to_all: data.apply,
+              initial_pages: [initData.page],
+              image: removeBase64Prefix(data64),
+            },
+
+            documentId: workFlow.documentId,
+          },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({ queryKey: ["getField"] });
+              queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+              onClose();
+            },
           }
         );
-        break;
-      case 1:
-        html2canvas(drawElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
-          // console.log("data64: ", canvas);
-
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
-        break;
-      case 2:
-        html2canvas(fileElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
-
-          // console.log(data64);
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
-        break;
-    }
+      }
+    );
   };
 
   const handleSubmitClick = () => {
@@ -249,8 +180,7 @@ export const ModalSigning = ({
             paddingBottom: "5px",
           }}
         >
-          {/* {title} */}
-          {t("signing.sign_document")}
+          {t("modal.initmodal_title")}
         </Typography>
       </DialogTitle>
 
@@ -265,7 +195,6 @@ export const ModalSigning = ({
         }}
       >
         <DialogContentText
-          //   component="div"
           ref={formRef}
           component="form"
           id="scroll-dialog-description"
@@ -274,7 +203,6 @@ export const ModalSigning = ({
             height: "100%",
           }}
           onSubmit={handleSubmit(handleFormSubmit)}
-          // className="choyoyoy"
         >
           <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
             <AppBar position="static" elevation={0}>
@@ -326,43 +254,38 @@ export const ModalSigning = ({
                 />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <TextSignForm
+                <TextInitForm
                   ref={textElement}
-                  dataSigning={dataSigning}
-                  headerFooter={headerFooter?.data}
-                  formattedDatetime={formattedDatetime}
-                  onDisableSubmit={handleDisableSubmit}
                   watch={watch}
                   control={control}
+                  onDisableSubmit={handleDisableSubmit}
                 />
                 {/* text */}
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DrawSignForm
-                  ref={drawElement}
-                  dataSigning={dataSigning}
-                  headerFooter={headerFooter?.data}
-                  formattedDatetime={formattedDatetime}
-                  onDisableSubmit={handleDisableSubmit}
+                <DrawInitForm
+                  ref={textElement}
                   watch={watch}
                   control={control}
+                  onDisableSubmit={handleDisableSubmit}
                 />
-                {/* draw */}
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <UploadSignForm
-                  ref={fileElement}
-                  dataSigning={dataSigning}
-                  headerFooter={headerFooter?.data}
-                  formattedDatetime={formattedDatetime}
-                  onDisableSubmit={handleDisableSubmit}
+                <UploadInitForm
+                  ref={textElement}
                   watch={watch}
                   control={control}
+                  onDisableSubmit={handleDisableSubmit}
                 />
               </TabPanel>
             </AppBar>
           </Box>
-          <AddSubtitle control={control} signer={signer} />
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox name="apply" control={control} />}
+              label={t("modal.initmodal_1")}
+            />
+          </FormGroup>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
@@ -375,10 +298,10 @@ export const ModalSigning = ({
         </Button>
         <Button
           variant="contained"
-          disabled={isSubmitDisabled}
-          // startIcon={
-          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          // }
+          disabled={isPending || isSubmitDisabled}
+          startIcon={
+            isPending ? <CircularProgress color="inherit" size="1em" /> : null
+          }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",
@@ -387,20 +310,19 @@ export const ModalSigning = ({
           onClick={handleSubmitClick}
           type="button"
         >
-          {t("0-common.continue")}
+          {t("0-common.sign")}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-ModalSigning.propTypes = {
+InitialsField.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   signer: PropTypes.object,
-  dataSigning: PropTypes.object,
-  setDataSigning: PropTypes.func,
-  handleShowmodal: PropTypes.func,
+  initData: PropTypes.object,
+  workFlow: PropTypes.object,
 };
 
-export default ModalSigning;
+export default InitialsField;

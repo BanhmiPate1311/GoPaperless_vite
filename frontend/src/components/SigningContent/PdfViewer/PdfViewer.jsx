@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
+import { v4 as uuidv4 } from "uuid";
+import { UseUpdateQr } from "@/hook/use-apiService";
 
 export const PdfViewer = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
@@ -28,7 +30,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
-  const { signerToken } = useCommonHook();
+  const { signingToken, signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
@@ -46,20 +48,28 @@ export const PdfViewer = ({ workFlow }) => {
   const { data: field } = useQuery({
     queryKey: ["getField"],
     queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
-    // select: (data) => {
-    //   console.log("data: ", data);
-    //   const newData = { ...data };
-    //   return {
-    //     ...newData,
-    //     workFlowId: workFlow.workFlowId,
-    //   };
-    // },
+    select: (data) => {
+      // console.log("data: ", data);
+      const newData = { ...data };
+      const textField = data.textbox.map((item) => {
+        return {
+          field_name: item.field_name,
+          value: item.value,
+        };
+      });
+      return {
+        ...newData,
+        textField,
+        workFlowId: workFlow.workFlowId,
+      };
+    },
   });
 
   // console.log("getField: ", field);
 
   const addSignature = UseAddSig();
   const addTextBox = UseAddTextField();
+  const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
     // console.log("event: ", event);
@@ -188,12 +198,42 @@ export const PdfViewer = ({ workFlow }) => {
         width: 22,
         height: 5,
       },
-      suffix: Number(field.textbox.length + 1),
+      suffix: Number(field.initial.length + 1),
     };
     addTextBox.mutate(
       {
         body: newInitField,
         field: "initial",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
+  const qrCode = (value) => {
+    const qrToken = uuidv4();
+    const newInitField = {
+      field_name: signerId + "_" + value + "_" + Number(field.qr.length + 1),
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 20,
+        height: 13,
+      },
+      suffix: Number(field.qr.length + 1),
+      qr_token: qrToken,
+      value: `${window.location.origin}/view/documents/${qrToken}`,
+      signing_token: signingToken,
+    };
+    addTextBox.mutate(
+      {
+        body: newInitField,
+        field: "qrcode",
         documentId: workFlow.documentId,
       },
       {
@@ -219,6 +259,9 @@ export const PdfViewer = ({ workFlow }) => {
         break;
       case "INITIAL":
         initial(value);
+        break;
+      case "QR":
+        qrCode(value);
         break;
     }
 
@@ -260,6 +303,8 @@ export const PdfViewer = ({ workFlow }) => {
           signatures={field?.signature}
           textbox={field?.textbox}
           initial={field?.initial}
+          qr={field?.qr}
+          textField={field.textField}
         />
       </div>
     );

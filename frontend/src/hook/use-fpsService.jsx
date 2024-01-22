@@ -30,3 +30,13 @@ export const UseAddTextField = () => {
   });
   return { mutate, data, isLoading, isPending, error };
 };
+
+export const UseFillInit = () => {
+  const { mutate, data, isLoading, isPending, error } = useMutation({
+    mutationFn: async ({ body, documentId }) => {
+      const response = await fpsService.fillInit(body, documentId);
+      return response.data;
+    },
+  });
+  return { mutate, data, isLoading, isPending, error };
+};
