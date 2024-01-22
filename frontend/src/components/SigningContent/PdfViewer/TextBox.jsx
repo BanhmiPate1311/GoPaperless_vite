@@ -9,6 +9,7 @@ import SvgIcon from "@mui/material/SvgIcon";
 import TextField from "@mui/material/TextField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
+import { useRef } from "react";
 import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
@@ -22,6 +23,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
   const signer = getSigner(workFlow);
   const signerId = signer.signerId;
 
+  const [textValue, setTextValue] = useState(textData.value);
   const [isControlled, setIsControlled] = useState(false);
   // console.log("isControlled: ", isControlled);
   const [showTopbar, setShowTopbar] = useState(false);
@@ -151,24 +153,31 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
   //   }
   // };
 
-  const handleTextChange = debounce((e) =>
-    putSignature.mutate({
-      body: {
-        field_name: textData.field_name,
-        page: pdfPage.currentPage,
-        dimension: {
-          x: -1,
-          y: -1,
-          width: -1,
-          height: -1,
+  const valueRef = useRef(null);
+
+  const handleChange = (e) => {
+    // console.log("e.target.value: ", e.target.value);
+    setTextValue(e.target.value);
+    if (valueRef.current) clearTimeout(valueRef.current);
+    valueRef.current = setTimeout(() => {
+      putSignature.mutate({
+        body: {
+          field_name: textData.field_name,
+          page: pdfPage.currentPage,
+          dimension: {
+            x: -1,
+            y: -1,
+            width: -1,
+            height: -1,
+          },
+          visible_enabled: true,
+          value: e.target.value,
         },
-        visible_enabled: true,
-        value: e.target.value,
-      },
-      field: "text",
-      documentId: workFlow.documentId,
-    })
-  );
+        field: "text",
+        documentId: workFlow.documentId,
+      });
+    }, 1000);
+  };
 
   return (
     <>
@@ -474,7 +483,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               margin="normal"
               // name={name}
               // value={code}
-              value={textData.value}
+              value={textValue}
               autoComplete="off"
               placeholder={handlePlaceHolder(textData.type)}
               sx={{
@@ -486,7 +495,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
                 "& fieldset": { border: "none" },
                 // backgroundColor: "rgba(254, 240, 138, 0.7)",
               }}
-              onChange={handleTextChange}
+              onChange={handleChange}
             />
           </Box>
         </ResizableBox>

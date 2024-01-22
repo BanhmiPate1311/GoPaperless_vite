@@ -214,6 +214,8 @@ DrawSignForm.propTypes = {
   onDisableSubmit: PropTypes.func,
   watch: PropTypes.func,
   control: PropTypes.object,
+  showInput: PropTypes.bool,
+  imgBase64: PropTypes.string,
 };
 DrawSignForm.displayName = "DrawSignForm";
 export default DrawSignForm;

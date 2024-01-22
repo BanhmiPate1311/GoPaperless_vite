@@ -54,20 +54,21 @@ public class ApiController {
         Map<String, Object> map = new HashMap<>();
         map.put("documenId", participants.getDocumentId());
         map.put("headerVisible", participants.getVisibleHeaderFooter());
-//        if (participants.getVisibleHeaderFooter() == 1) {
-//            List<Enterprise> enterprises = LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
-//
-//            if (enterprises.size() > 0) {
-//                for (Enterprise enterprise : enterprises) {
-//                    if (enterprise.getId() == participants.getEnterpriseId()) {
-//                        map.put("loGo", enterprise.getLogo());
-//                        map.put("metadataGatewayView", enterprise.getMetadataGatewayView());
-//                        map.put("name", enterprise.getName());
-//                        map.put("notificationEmail", enterprise.getNotificationEmail());
-//                    }
-//                }
-//            }
-//        }
+        // if (participants.getVisibleHeaderFooter() == 1) {
+        // List<Enterprise> enterprises =
+        // LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
+        //
+        // if (enterprises.size() > 0) {
+        // for (Enterprise enterprise : enterprises) {
+        // if (enterprise.getId() == participants.getEnterpriseId()) {
+        // map.put("loGo", enterprise.getLogo());
+        // map.put("metadataGatewayView", enterprise.getMetadataGatewayView());
+        // map.put("name", enterprise.getName());
+        // map.put("notificationEmail", enterprise.getNotificationEmail());
+        // }
+        // }
+        // }
+        // }
         List<Enterprise> enterprises = LoadParamSystem.getEnterpriseStart(Difinitions.CONFIG_LOAD_PARAM_ENTERPRISE);
 
         if (enterprises.size() > 0) {
@@ -133,12 +134,12 @@ public class ApiController {
             signingWorkflowDto.setSigningToken(signingToken);
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
             signingWorkflowDto.setLastFileUuid(lastFile.getLastPplFileUuid());
-            if(lastFile.getDeadlineAt() != null){
+            if (lastFile.getDeadlineAt() != null) {
                 signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
             }
-//            signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
+            // signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
 
-            System.out.println("get connect xong: " );
+            System.out.println("get connect xong: ");
             String base64 = fpsService.getBase64ImagePdf(lastFile.getDocumentId());
             signingWorkflowDto.setPdfBase64(base64);
         } catch (Exception e) {
@@ -148,48 +149,54 @@ public class ApiController {
         }
 
         if (participants.size() > 0) {
-//            for (Participants participant : participants) {
-//                if (CommonFunction.isNotNullOrEmpty(participant.getCertificate())) {
-//                    String sIssue = "";
-//                    String sOwner = "";
-//                    String sFrom = "";
-//                    String sTo = "";
-//                    String sCertificate = CommonFunction.CheckTextNull(participant.getCertificate());
-//                    System.out.println("signed time: " + participant.getSignedTime());
-//                    participant.setSignedTime(CommonFunction.convertToGetTimeZone(participant.getSignedTime()));
-//
-//                    ObjectMapper oMapperParse = new ObjectMapper();
-//                    CertificateJson itemParse = oMapperParse.readValue(sCertificate, CertificateJson.class);
-//
-//                    if (itemParse != null) {
-//                        if(itemParse.signer_info != null){
-//                            System.out.println("trên");
-//                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.issuer);
-//                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info.certificate.subject);
-//                            sFrom = itemParse.signer_info.certificate.valid_from;
-//                            sTo = itemParse.signer_info.certificate.valid_to;
-//                        } else {
-//                            System.out.println("duoi");
-//                            sIssue = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.issuer);
-//                            sOwner = CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.subject);
-//                            sFrom = itemParse.signer_info_dto.certificate.valid_from;
-//                            sTo = itemParse.signer_info_dto.certificate.valid_to;
-//                        }
-//                    }
-//                    if (!"".equals(sIssue)) {
-//                        sIssue = CommonFunction.getCommonNameInDN(sIssue);
-//                    }
-//                    if (!"".equals(sOwner)) {
-//                        sOwner = CommonFunction.getCommonNameInDN(sOwner);
-//                    }
-//                    participant.setIssuer(sIssue);
-//                    participant.setOwner(sOwner);
-//                    System.out.println("sFrom: " + sFrom);
-//                    System.out.println("sTo: " + sTo);
-//                    participant.setValidFrom(sFrom);
-//                    participant.setValidTo(sTo);
-//                }
-//            }
+            // for (Participants participant : participants) {
+            // if (CommonFunction.isNotNullOrEmpty(participant.getCertificate())) {
+            // String sIssue = "";
+            // String sOwner = "";
+            // String sFrom = "";
+            // String sTo = "";
+            // String sCertificate =
+            // CommonFunction.CheckTextNull(participant.getCertificate());
+            // System.out.println("signed time: " + participant.getSignedTime());
+            // participant.setSignedTime(CommonFunction.convertToGetTimeZone(participant.getSignedTime()));
+            //
+            // ObjectMapper oMapperParse = new ObjectMapper();
+            // CertificateJson itemParse = oMapperParse.readValue(sCertificate,
+            // CertificateJson.class);
+            //
+            // if (itemParse != null) {
+            // if(itemParse.signer_info != null){
+            // System.out.println("trên");
+            // sIssue =
+            // CommonFunction.CheckTextNull(itemParse.signer_info.certificate.issuer);
+            // sOwner =
+            // CommonFunction.CheckTextNull(itemParse.signer_info.certificate.subject);
+            // sFrom = itemParse.signer_info.certificate.valid_from;
+            // sTo = itemParse.signer_info.certificate.valid_to;
+            // } else {
+            // System.out.println("duoi");
+            // sIssue =
+            // CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.issuer);
+            // sOwner =
+            // CommonFunction.CheckTextNull(itemParse.signer_info_dto.certificate.subject);
+            // sFrom = itemParse.signer_info_dto.certificate.valid_from;
+            // sTo = itemParse.signer_info_dto.certificate.valid_to;
+            // }
+            // }
+            // if (!"".equals(sIssue)) {
+            // sIssue = CommonFunction.getCommonNameInDN(sIssue);
+            // }
+            // if (!"".equals(sOwner)) {
+            // sOwner = CommonFunction.getCommonNameInDN(sOwner);
+            // }
+            // participant.setIssuer(sIssue);
+            // participant.setOwner(sOwner);
+            // System.out.println("sFrom: " + sFrom);
+            // System.out.println("sTo: " + sTo);
+            // participant.setValidFrom(sFrom);
+            // participant.setValidTo(sTo);
+            // }
+            // }
             List<Participants> participantsList = new ArrayList<>(participants);
             signingWorkflowDto.setParticipants(participantsList);
         }
@@ -212,8 +219,6 @@ public class ApiController {
         List<PplFileDetail> listPplFileDetail = new ArrayList<>();
         connect.USP_GW_PPL_FILE_DETAIL_GET(request.getFileId(), listPplFileDetail);
 
-
-
         return new ResponseEntity<>(listPplFileDetail, HttpStatus.OK);
     }
 
@@ -223,7 +228,8 @@ public class ApiController {
         System.out.println("request: " + request.getSigningOptions());
         try {
             Map<String, List<Map<String, String>>> responseList = new HashMap<>();
-            List<ConnectorName> connectorNameList = LoadParamSystem.getConnectorStart(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME);
+            List<ConnectorName> connectorNameList = LoadParamSystem
+                    .getConnectorStart(Difinitions.CONFIG_LOAD_PARAM_CONNECTOR_NAME);
 
             if (connectorNameList != null && !connectorNameList.isEmpty()) {
                 for (String provider : request.getSigningOptions()) {
@@ -238,7 +244,8 @@ public class ApiController {
                             map.put("provider", provider);
                             if (connectorNameItem.getProvider().equals("USB_TOKEN_SIGNING")) {
 
-                                String jsonInput = connectorNameItem.getIdentifier(); // Assuming this is your JSON string
+                                String jsonInput = connectorNameItem.getIdentifier(); // Assuming this is your JSON
+                                                                                      // string
 
                                 try {
                                     ObjectMapper objectMapper = new ObjectMapper();
@@ -264,7 +271,8 @@ public class ApiController {
             }
 
             if (request.getSigningOptions().contains("ELECTRONIC_ID")) {
-                List<CountryName> countryNameList = LoadParamSystem.getCountryNameList(Difinitions.CONFIG_LOAD_PARAM_COUNTRY);
+                List<CountryName> countryNameList = LoadParamSystem
+                        .getCountryNameList(Difinitions.CONFIG_LOAD_PARAM_COUNTRY);
                 if (countryNameList != null && !countryNameList.isEmpty()) {
                     List<Map<String, String>> connectorList = new ArrayList<>();
 
@@ -281,15 +289,14 @@ public class ApiController {
                 }
             }
 
-
             return new ResponseEntity<>(responseList, HttpStatus.OK);
         } catch (Exception e) {
-//            LOGGER.error("Error in getConnecterProvider", e112);
+            // LOGGER.error("Error in getConnecterProvider", e112);
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping(value = {"/getPrefixList"})
+    @PostMapping(value = { "/getPrefixList" })
     public ResponseEntity<?> getPrefixList(@RequestBody ApiDtoRequest request) throws Exception {
         System.out.println("getPrefixList");
         String lang = request.getLanguage();
@@ -307,7 +314,7 @@ public class ApiController {
         LastFile lastFile = new LastFile();
         connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, signingToken);
 
-        if(lastFile.getLastPplFileName() == null || lastFile.getLastPplFileName().isEmpty()){
+        if (lastFile.getLastPplFileName() == null || lastFile.getLastPplFileName().isEmpty()) {
             return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
         }
         String fileName = lastFile.getLastPplFileName().replace(".pdf", "");
@@ -318,10 +325,11 @@ public class ApiController {
             // trả về stream input file để download kèm header content type và content
             // length để browser hiểu
             HttpHeaders headers = new HttpHeaders();
-//                headers.add("Content-Disposition", "attachment; filename=" + "file.pdf");
+            // headers.add("Content-Disposition", "attachment; filename=" + "file.pdf");
             String encodedFileName = URLEncoder.encode(fileName + ".pdf", StandardCharsets.UTF_8.toString());
             headers.add("Content-Disposition", "attachment; filename=" + encodedFileName);
-//            headers.add("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
+            // headers.add("Content-Disposition", "attachment; filename=" + fileName +
+            // ".pdf");
             // jrbFile.getFileName());
             InputStreamResource inputStreamResource = new InputStreamResource(response);
             return ResponseEntity.ok()
@@ -334,15 +342,20 @@ public class ApiController {
         }
     }
 
-    @RequestMapping(value = {"/download/checkid"}, method = RequestMethod.GET)
+    @RequestMapping(value = { "/download/checkid" }, method = RequestMethod.GET)
     public ResponseEntity<Resource> downloadCheckId() throws IOException {
         // Đọc file checkid.exe từ thư mục tài nguyên tĩnh
         Resource resource = new ClassPathResource("static/checkid_client_installer.exe");
-//        Resource resource = new UrlResource("static/checkid.zip");
+        // Resource resource = new UrlResource("static/checkid.zip");
         // Trả về file dưới dạng response để người dùng tải về
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"checkid_client_installer.exe\"")
                 .body(resource);
     }
 
+    @PostMapping("/getFromQR")
+    public String getView(@RequestBody Map<String, String> request) throws Exception {
+        System.out.println("res: " + connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr")));
+        return connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr"));
+    }
 }
