@@ -1,5 +1,9 @@
 package vn.mobileid.GoPaperless.model.Electronic.request;
 
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
+
+import java.util.List;
+
 public class AuthorizeOTPRequest extends ElectronicBaseRequest{
     private String credentialID;
     private String requestID;
@@ -21,6 +25,7 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
     private int lastFileId;
     private int documentId;
     private String assurance;
+    private List<TextField> textField;
 
     public String getCredentialID() {
         return credentialID;
@@ -180,5 +185,13 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
 
     public void setAssurance(String assurance) {
         this.assurance = assurance;
+    }
+
+    public List<TextField> getTextField() {
+        return textField;
+    }
+
+    public void setTextField(List<TextField> textField) {
+        this.textField = textField;
     }
 }

@@ -1,7 +1,7 @@
 import logo1 from "@/assets/images/Logo/gopaperless_white.png";
 import { ContentRight, DialogDraw } from "@/components/modal2";
-import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useState } from "react";

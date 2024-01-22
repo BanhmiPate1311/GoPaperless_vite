@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import vn.mobileid.GoPaperless.dto.fpsDto.AccessTokenDto;
+import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
 import vn.mobileid.GoPaperless.model.fpsModel.BasicFieldAttribute;
 import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
 import vn.mobileid.GoPaperless.model.fpsModel.HashFileRequest;
@@ -281,7 +283,7 @@ public class FpsService {
         String requestDataJson = objectMapper.writeValueAsString(requestData);
 
         // Log the JSON string
-        System.out.println("Request Data as JSON: " + requestDataJson);
+        System.out.println("Request Data addTextBox as JSON: " + requestDataJson);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 
@@ -299,6 +301,101 @@ public class FpsService {
             if (statusCode.value() == 401) {
                 getAccessToken();
                 return addTextBox(documentId, field, data, drag);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String fillForm(int documentId, List<TextField> data) throws Exception {
+        System.out.println("fillForm");
+        String fillFormUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields";
+
+        System.out.println("fillForm: " + fillFormUrl);
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("text", data);
+
+        // Convert requestData to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestDataJson = objectMapper.writeValueAsString(requestData);
+
+        // Log the JSON string
+        System.out.println("Request Data fillForm as JSON: " + requestDataJson);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(fillFormUrl, HttpMethod.PUT, httpEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error : ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return fillForm(documentId, data);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String fillInit(int documentId, BasicFieldAttribute data) throws Exception {
+        System.out.println("fillInit");
+        String fillInitUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/initial";
+
+        System.out.println("fillInit: " + fillInitUrl);
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        System.out.println("imageBase64: " + data.getImage());
+
+
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("field_name", data.getFieldName());
+        requestData.put("apply_to_all", data.getApply_to_all());
+        if(!data.getApply_to_all()) {
+            requestData.put("initial_pages", data.getInitial_pages());
+        }
+        requestData.put("image", data.getImage());
+
+        // Convert requestData to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestDataJson = objectMapper.writeValueAsString(requestData);
+
+        // Log the JSON string
+        System.out.println("Request Data fillInit as JSON: " + requestDataJson);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(fillInitUrl, HttpMethod.POST, httpEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error : ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return fillInit(documentId, data);
             } else {
                 throw new Exception(e.getMessage());
             }

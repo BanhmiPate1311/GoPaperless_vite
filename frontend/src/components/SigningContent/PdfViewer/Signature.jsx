@@ -21,7 +21,13 @@ import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
 
 /* eslint-disable react/prop-types */
-export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+export const Signature = ({
+  index,
+  pdfPage,
+  signatureData,
+  workFlow,
+  textField,
+}) => {
   // console.log("pdfPage: ", pdfPage);
   // console.log("pdfPage: ", pdfPage);
   // console.log("workFlow: ", workFlow);
@@ -443,7 +449,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             // top: signatureData.dimension?.y + "%",
             // left: signatureData.dimension?.x + "%",
             zIndex: 100,
-            opacity: signatureData.verification === undefined ? 1 : 0.1,
+            opacity: signatureData.verification === undefined ? 1 : 0,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           // minConstraints={[
@@ -718,7 +724,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <ModalSmartid
           open={isShowModalSmartid[index]}
           onClose={() => handleCloseModalSmartid(index)}
-          dataSigning={dataSigning}
+          dataSigning={{ ...dataSigning, textField }}
         />
       )}
 
@@ -726,8 +732,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <ModalUsb
           open={isShowModalUsb[index]}
           onClose={() => handleCloseModalUsb(index)}
-          dataSigning={dataSigning}
+          dataSigning={{ ...dataSigning, textField }}
           setDataSigning={setDataSigning}
+          textField={textField}
         />
       )}
 
@@ -735,7 +742,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <ModalEidSign
           open={isShowEidModalSign[index]}
           onClose={() => handleCloseEidModalSign(index)}
-          dataSigning={dataSigning}
+          dataSigning={{ ...dataSigning, textField }}
           setDataSigning={setDataSigning}
           signatureData={signatureData}
         />

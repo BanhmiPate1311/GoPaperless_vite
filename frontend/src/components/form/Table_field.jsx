@@ -70,12 +70,12 @@ export const TableField = ({ data }) => {
 
     setOpen(newIsOpen);
   };
-  const handleClose = (index) => {
-    const newIsOpen = [...open];
-    newIsOpen[index] = false;
+  // const handleClose = (index) => {
+  //   const newIsOpen = [...open];
+  //   newIsOpen[index] = false;
 
-    setOpen(newIsOpen);
-  };
+  //   setOpen(newIsOpen);
+  // };
   return (
     <Paper elevation={0}>
       <TableContainer sx={{ maxHeight: 440 }}>

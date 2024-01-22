@@ -2,6 +2,8 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
+import { InitialsField } from "@/components/modalField";
+import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
@@ -18,6 +20,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
   const [dragPosition, setDragPosition] = useState(null);
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
+  const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
 
   const newPos = useRef({ x: null, y: null });
 
@@ -28,6 +31,8 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
     (pdfPage.width * (100 - initData.dimension?.x)) / 100;
   const maxPosibleResizeHeight =
     (pdfPage.height * (100 - initData.dimension?.y)) / 100;
+
+  const putSignature = UseUpdateSig();
 
   const removeSignature = useMutation({
     mutationFn: () => {
@@ -48,6 +53,18 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
       y: (initData.dimension?.y * pdfPage.height) / 100,
     });
   }, [initData]);
+
+  const handleOpenSigningForm = (index) => {
+    const newValue = [...isOpenSigningForm];
+    newValue[index] = true;
+    setOpenSigningForm(newValue);
+  };
+
+  const handleCloseSigningForm = (index) => {
+    const newValue = [...isOpenSigningForm];
+    newValue[index] = false;
+    setOpenSigningForm(newValue);
+  };
 
   const handleRemoveSignature = async () => {
     console.log("remove");
@@ -85,7 +102,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             color: "#545454",
             cursor: "pointer",
           }}
-          //   onClick={() => handleOpenSigningForm(index)}
+          onClick={() => handleOpenSigningForm(index)}
         />
         <SvgIcon
           component={SettingIcon}
@@ -213,28 +230,28 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
 
-            // putSignature.mutate(
-            //   {
-            //     body: {
-            //       field_name: signatureData.field_name,
-            //       page: pdfPage.currentPage,
-            //       dimension: {
-            //         x: x,
-            //         y: y,
-            //         width: -1,
-            //         height: -1,
-            //       },
-            //       visible_enabled: true,
-            //     },
-            //     field: signatureData.type.toLowerCase(),
-            //     documentId: workFlow.documentId,
-            //   },
-            //   {
-            //     onSuccess: () => {
-            //       queryClient.invalidateQueries({ queryKey: ["getField"] });
-            //     },
-            //   }
-            // );
+            putSignature.mutate(
+              {
+                body: {
+                  field_name: initData.field_name,
+                  page: pdfPage.currentPage,
+                  dimension: {
+                    x: x,
+                    y: y,
+                    width: -1,
+                    height: -1,
+                  },
+                  visible_enabled: true,
+                },
+                field: "initial",
+                documentId: workFlow.documentId,
+              },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
+              }
+            );
           }
         }}
         disabled={
@@ -321,28 +338,28 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
               initData.field_name
             )
               return;
-            // putSignature.mutate(
-            //   {
-            //     body: {
-            //       field_name: initData.field_name,
-            //       page: pdfPage.currentPage,
-            //       dimension: {
-            //         x: -1,
-            //         y: -1,
-            //         width: (size.width / pdfPage.width) * 100,
-            //         height: (size.height / pdfPage.height) * 100,
-            //       },
-            //       visible_enabled: true,
-            //     },
-            //     field: initData.type.toLowerCase(),
-            //     documentId: workFlow.documentId,
-            //   },
-            //   {
-            //     onSuccess: () => {
-            //       queryClient.invalidateQueries({ queryKey: ["getField"] });
-            //     },
-            //   }
-            // );
+            putSignature.mutate(
+              {
+                body: {
+                  field_name: initData.field_name,
+                  page: pdfPage.currentPage,
+                  dimension: {
+                    x: -1,
+                    y: -1,
+                    width: (size.width / pdfPage.width) * 100,
+                    height: (size.height / pdfPage.height) * 100,
+                  },
+                  visible_enabled: true,
+                },
+                field: "initial",
+                documentId: workFlow.documentId,
+              },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
+              }
+            );
           }}
           className={`sig init-${index}`}
         >
@@ -389,12 +406,12 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
               ) {
                 return;
               } else if (
-                e.target.id === `sigDrag-${index}` ||
-                e.target.parentElement?.id === "drag" ||
+                e.target.id === `initDrag-${index}` ||
+                e.target.parentElement?.id === `initDrag-${index}` ||
                 e.target.id === "click-duoc"
               ) {
                 // Your existing logic for opening the signing form...
-                // handleOpenSigningForm(index);
+                handleOpenSigningForm(index);
               }
             }}
           >
@@ -416,11 +433,21 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
                 className={`initRauria-${index} leftline`}
                 style={{ display: "none" }}
               ></span>
-              init
+              Initials
             </div>
           </Box>
         </ResizableBox>
       </Draggable>
+
+      {isOpenSigningForm[index] && (
+        <InitialsField
+          open={isOpenSigningForm[index]}
+          onClose={() => handleCloseSigningForm(index)}
+          signer={signer}
+          initData={initData}
+          workFlow={workFlow}
+        />
+      )}
     </>
   );
 };

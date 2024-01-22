@@ -175,6 +175,9 @@
     "usb1": "Allkirjastades nõustun oma nime ja isikukoodi edastamisega teenuse osutajale.",
     "usb2": "Sisestage allkirjastamiseks PIN-kood",
 
+    "initmodal_title": "Rakenda initsiaal",
+    "initmodal_1": "Rakenda kõikidele selle dokumendi väljadele",
+
     "modal1_title": "Redigeeri allkirjavälja",
     "modal1_1": "Autentige allkirjastaja OTP kaudu",
     "modal1_2": "OTP autentimine (SMS)",

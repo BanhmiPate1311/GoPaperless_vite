@@ -1,0 +1,129 @@
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import PropTypes from "prop-types";
+import { forwardRef, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { DialogDraw } from "../modal2";
+
+const DrawInitForm = forwardRef(({ watch, control, onDisableSubmit }, ref) => {
+  const { t } = useTranslation();
+
+  const [openDraw, setOpenDraw] = useState(false);
+
+  useEffect(() => {
+    //   console.log("drawUrl: ", watch("drawUrl"));
+    if (watch("drawUrl") === "") {
+      onDisableSubmit(true);
+    } else {
+      onDisableSubmit(false);
+    }
+    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
+    //   onDisableSubmit(true);
+    // }
+  }, [watch("drawUrl"), onDisableSubmit, watch]);
+
+  const handleOpenDraw = () => {
+    setOpenDraw(true);
+  };
+
+  const handleCloseDraw = () => {
+    setOpenDraw(false);
+  };
+
+  return (
+    <Box
+      // component="form"
+      // ref={ref}
+      // onSubmit={handleSubmit(handleFormSubmit)}
+      sx={{ minWidth: 400 }}
+    >
+      <Box mb="10px">
+        <Button
+          variant="outlined"
+          style={{
+            height: "45px",
+          }}
+          onClick={handleOpenDraw}
+        >
+          {t("0-common.draw")}
+        </Button>
+      </Box>
+      <Stack
+        ref={ref}
+        sx={{
+          height: "170px",
+          overflow: "hidden",
+          borderRadius: "6px",
+          border: "2px solid #357EEB",
+          position: "relative",
+          // backgroundColor: "white",
+        }}
+      >
+        <Stack
+          direction={
+            watch("alignment") === "auto" || watch("alignment") === "left"
+              ? "row"
+              : "row-reverse"
+          }
+          sx={{
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+            // height: "150px",
+            height: "100%",
+          }}
+          // ref={sigCanvasRef}
+        >
+          <Stack
+            direction="row"
+            justifyContent={"center"}
+            alignItems="center"
+            sx={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "100%",
+              fontSize: "2rem",
+              textAlign: "center",
+              textTransform: "capitalize",
+            }}
+          >
+            {/* {watch("drawUrl") || ""} */}
+            {watch("drawUrl") ? (
+              <Box
+                component="img"
+                sx={{
+                  // height: "100%",
+                  maxWidth: "70%",
+                }}
+                alt="The house from the offer."
+                src={watch("drawUrl")}
+              />
+            ) : null}
+          </Stack>
+        </Stack>
+        {/* <Box
+      style={{
+        borderTop: "2px dashed #357EEB",
+        height: "20px",
+      }}
+    ></Box> */}
+      </Stack>
+
+      <DialogDraw
+        name="drawUrl"
+        control={control}
+        open={openDraw}
+        handleClose={handleCloseDraw}
+      />
+    </Box>
+  );
+});
+
+DrawInitForm.propTypes = {
+  watch: PropTypes.func,
+  control: PropTypes.object,
+  onDisableSubmit: PropTypes.func,
+};
+DrawInitForm.displayName = "DrawInitForm";
+export default DrawInitForm;

@@ -12,6 +12,7 @@ import ua_parser.Client;
 import ua_parser.Parser;
 import vn.mobileid.GoPaperless.controller.GatewayAPI;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.JwtModel;
 import vn.mobileid.GoPaperless.model.Electronic.request.CheckCertificateRequest;
 import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
@@ -785,6 +786,7 @@ public class RsspService {
         String certChain = signRequest.getCertChain().getCert();
         String contactInfor = signRequest.getContactInfor();
         String assurance = signRequest.getAssurance();
+        List<TextField> textFields = signRequest.getTextField();
 
         try {
             System.out.println("connectorName: " + connectorName);
@@ -912,7 +914,8 @@ public class RsspService {
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
-            System.out.println("assurance: " + assurance);
+            fpsService.fillForm(documentId, textFields);
+
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
             postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);

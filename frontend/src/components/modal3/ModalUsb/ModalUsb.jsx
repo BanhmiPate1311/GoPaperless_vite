@@ -27,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
-  // console.log("dataSigning: ", dataSigning);
+  console.log("dataSigning: ", dataSigning);
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       pin: "",
