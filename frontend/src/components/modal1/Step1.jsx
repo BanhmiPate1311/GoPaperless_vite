@@ -25,47 +25,6 @@ export const Step1 = ({
   const { t } = useTranslation();
   const [data2, setData2] = useState(null);
 
-  // const mapProvider = providerName.reduce((acc, option, i) => {
-  //   switch (option) {
-  //     case "MOBILE_ID_SIGNING":
-  //       acc[i] = {
-  //         label: "Mobile-ID",
-  //         icon: <MobileIdIcon />,
-  //         value: "MOBILE_ID_SIGNING",
-  //       };
-  //       break;
-  //     case "SMART_ID_SIGNING":
-  //       acc[i] = {
-  //         label: "Smart-ID",
-  //         icon: <SmartIdIcon />,
-  //         value: "SMART_ID_SIGNING",
-  //       };
-  //       break;
-  //     case "USB_TOKEN_SIGNING":
-  //       acc[i] = {
-  //         label: "USB-Token",
-  //         icon: <UsbIcon />,
-  //         value: "USB_TOKEN_SIGNING",
-  //       };
-  //       break;
-  //     case "ELECTRONIC_ID":
-  //       acc[i] = {
-  //         label: "Electronic video base Identification",
-  //         icon: <EidIcon />,
-  //         value: "ELECTRONIC_ID",
-  //       };
-  //       break;
-  //     default:
-  //       // Handle unknown signing option
-  //       break;
-  //   }
-  //   return acc;
-  // }, []);
-  // useEffect(() => {
-  //   setProvider("");
-  //   setConnectorName("");
-  // }, []);
-
   useEffect(() => {
     if (connectorName === "") {
       onDisableSubmit(true);
@@ -81,7 +40,6 @@ export const Step1 = ({
   }, [connectorName, onDisableSubmit, provider, errorPG]);
 
   const handleChange1 = (e) => {
-    // console.log(e.target.value);
     setProvider(e.target.value);
 
     setConnectorName("");
@@ -113,7 +71,7 @@ export const Step1 = ({
       });
       setData2(content2);
     } else {
-      setData2(null); // Handle the case where filteredData is undefined or null
+      setData2(null);
     }
   };
 

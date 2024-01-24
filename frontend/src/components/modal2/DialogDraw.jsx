@@ -17,7 +17,6 @@ export const DialogDraw = ({ open, handleClose, name, control }) => {
 
   const { t } = useTranslation();
 
-  //   setErrorDraw(error?.message);
   return (
     <Dialog
       open={open}
@@ -25,7 +24,6 @@ export const DialogDraw = ({ open, handleClose, name, control }) => {
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
     >
-      {/* <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle> */}
       <DialogContent dividers={scroll === "paper"}>
         <DialogContentText
           id="scroll-dialog-description"
@@ -46,27 +44,9 @@ export const DialogDraw = ({ open, handleClose, name, control }) => {
             ref={sigCanvasRef}
           />
         </DialogContentText>
-        {/* {trimmedDataURL ? (
-          <Box
-            component="img"
-            sx={{
-              height: 53,
-            }}
-            alt="The house from the offer."
-            src={trimmedDataURL}
-          />
-        ) : null} */}
       </DialogContent>
       <DialogActions>
-        <Button
-          variant="outlined"
-          //   style={{
-          //     marginBottom: "0.5rem",
-          //     marginTop: "1rem",
-          //     fontWeight: "medium",
-          //   }}
-          onClick={() => sigCanvasRef.current.clear()}
-        >
+        <Button variant="outlined" onClick={() => sigCanvasRef.current.clear()}>
           {t("0-common.clear")}
         </Button>
         <Button variant="outlined" onClick={handleClose}>

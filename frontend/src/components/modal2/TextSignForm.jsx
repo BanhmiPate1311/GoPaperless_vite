@@ -20,9 +20,6 @@ export const TextSignForm = forwardRef(
     },
     ref
   ) => {
-    // console.log("dataSigning: ", dataSigning);
-    // const sigTextRef = useRef(null);
-
     const nameValue =
       typeof dataSigning.certChain.subject === "string"
         ? dataSigning.certChain.subject
@@ -51,7 +48,6 @@ export const TextSignForm = forwardRef(
       watch("dn") ||
       watch("itver") ||
       watch("location");
-    // console.log("alignment: ", watch("alignment"));
 
     useEffect(() => {
       if (watch("text") === "" || watch("email") === "") {
@@ -59,16 +55,10 @@ export const TextSignForm = forwardRef(
       } else {
         onDisableSubmit(false);
       }
-      // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-      //   onDisableSubmit(true);
-      // }
     }, [watch("text"), onDisableSubmit, watch("email"), watch]);
 
     return (
       <Box
-        // component="form"
-        // ref={ref}
-        // onSubmit={handleSubmit(handleFormSubmit)}
         sx={showInput ? { width: "100%", height: "100%" } : { minWidth: 400 }}
       >
         <Box sx={showInput ? { display: "none" } : {}}>
@@ -92,7 +82,6 @@ export const TextSignForm = forwardRef(
             borderRadius: "6px",
             border: !imgBase64 ? "2px solid #357EEB" : "none",
             position: "relative",
-            // background: "transparent",
             "&:before": watch("logo")
               ? {
                   content: '""',
@@ -108,7 +97,6 @@ export const TextSignForm = forwardRef(
                   backgroundSize: "contain",
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
-                  // backgroundColor: "rgba(255, 255, 255, 0.5)",
                 }
               : {},
           }}
@@ -118,22 +106,17 @@ export const TextSignForm = forwardRef(
           )}
           {!imgBase64 && (
             <Stack
-              // direction="row-reverse"
               direction={
                 watch("alignment") === "auto" || watch("alignment") === "left"
                   ? "row"
                   : "row-reverse"
               }
               sx={{
-                // flexDirection: "row-reversed",
                 display: "flex",
                 width: "100%",
                 alignItems: "center",
-                // height: "150px",
                 height: "100%",
-                // padding: "2rem 0",
               }}
-              // ref={sigTextRef}
             >
               <Box
                 sx={{

@@ -19,17 +19,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 export const ModalCertInfor = ({ open, onClose, data, provider }) => {
-  //   console.log("data: ", data);
   const { t } = useTranslation();
-
-  // const credentailID = () => {
-  //   switch (provider) {
-  //     case "USB_TOKEN_SIGNING":
-  //       return data.id;
-  //     default:
-  //       return data.credentialID;
-  //   }
-  // };
 
   const issuer = () => {
     switch (provider) {
@@ -59,10 +49,6 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
   };
 
   const certificate = [
-    // {
-    //   title: t("0-common.credentialID"),
-    //   value: credentailID(),
-    // },
     {
       title: t("0-common.issuer"),
       value: issuer(),
@@ -146,11 +132,8 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
           sx={{
             height: "100%",
           }}
-          // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
-            {/* {steps[activeStep]} */}
-            {/* <Box flexGrow={1}>{steps[activeStep - 1]}</Box> */}
             {certificate.map((item, index) => (
               <Box key={index} mb="10px">
                 <Typography
@@ -166,10 +149,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
                   size="small"
                   margin="normal"
                   multiline
-                  //   rows={4}
-                  // name={name}
                   defaultValue={item.value}
-                  //   sx={{ my: 0 }}
                   sx={{
                     my: 0,
                     "& .MuiInputBase-root": {

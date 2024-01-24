@@ -1,4 +1,5 @@
 import logo1 from "@/assets/images/Logo/gopaperless_white.png";
+import { AddSubtitle, ContentRight } from "@/components/modal2";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -7,10 +8,9 @@ import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { InputField } from "../../form";
-import { useTranslation } from "react-i18next";
-import { AddSubtitle, ContentRight } from "@/components/modal2";
 
 export const TextSignForm = forwardRef(
   (
@@ -111,9 +111,6 @@ export const TextSignForm = forwardRef(
       } else {
         onDisableSubmit(false);
       }
-      // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-      //   onDisableSubmit(true);
-      // }
     }, [watch("text"), onDisableSubmit, watch("email"), watch]);
 
     return (
@@ -138,14 +135,10 @@ export const TextSignForm = forwardRef(
         <Stack
           ref={sigTextRef}
           sx={{
-            // opacity: 0.5,
-            // background: "transparent",
             overflow: "hidden",
             borderRadius: "6px",
             border: "1px solid #357EEB",
             position: "relative",
-            // backgroundColor: "white",
-            // set background image
             "&:before": watch("logo")
               ? {
                   content: '""',

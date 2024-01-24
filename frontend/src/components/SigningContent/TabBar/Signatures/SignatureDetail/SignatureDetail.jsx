@@ -49,8 +49,6 @@ export const SignatureDetail = ({
     setExpanded(isExpanded ? panel : true);
   };
 
-  // convert "2023-24-01T15:22:37+07:00" from yyyy-dd-mmThh:mm:ssZ to dd/mm/yyyy hh:mm:ss 24 hour
-
   const signArray = {
     certificated: [
       {

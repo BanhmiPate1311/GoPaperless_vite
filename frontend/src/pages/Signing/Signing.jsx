@@ -64,9 +64,6 @@ export const Signing = () => {
     },
   });
 
-  // queryClient.setQueryData(["workflow"], workFlow);
-  // console.log("workFlow: ", workFlow?.data);
-
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
@@ -99,9 +96,6 @@ export const Signing = () => {
                   color: "white",
                   fontWeight: "500",
                 }}
-                // onClick={() => {
-                //   console.log("click click click");
-                // }}
               />
               <Typography
                 color="signingtext1.main"
@@ -145,12 +139,7 @@ export const Signing = () => {
         </Box>
 
         <Container
-          // maxWidth={(theme) => theme.GoPaperless.containerMaxWidth}
           maxWidth={false}
-          // mt={(theme) => theme.GoPaperless.headerHeight}
-          // height={(theme) =>
-          //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
-          // }
           sx={{
             maxWidth: (theme) => theme.GoPaperless.containerMaxWidth,
             height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,

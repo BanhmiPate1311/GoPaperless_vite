@@ -271,11 +271,6 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
             expanded={expanded === "warnings"}
             onChange={handleChangeShow("warnings")}
             elevation={0}
-            // sx={{
-            //   boxShadow: "none",
-            //   borderBottom: "1px solid #ccc",
-            //   margin: 0,
-            // }}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -285,7 +280,6 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
                 backgroundColor: "accordingBackGround.main",
                 minHeight: "unset !important",
                 "& .MuiAccordionSummary-content": {
-                  // justifyContent: "space-between",
                   alignItems: "center",
                 },
                 height: "25px",
@@ -306,9 +300,6 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
                     sx={{
                       fontSize: "14px",
                       padding: "11px 20px",
-                      // px: "20px",
-                      // width: "100%",
-                      // borderBottom: "1px solid #ccc",
                     }}
                   >
                     {val.value}
@@ -319,7 +310,6 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
                         width: "calc(100% - 20px)",
                         marginLeft: "auto",
                         height: "2px",
-                        // bgcolor: "blueviolet",
                       }}
                     />
                   )}

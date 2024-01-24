@@ -11,8 +11,6 @@ export const PdfViewerDocument = ({ workFlow }) => {
         <Viewer
           fileUrl={`data:application/pdf;base64,${workFlow.pdfBase64}`}
           plugins={[defaultLayoutPluginInstance]}
-          // renderPage={renderPage}
-          // pageLayout={pageLayout}
         />
       </Worker>
     </Box>

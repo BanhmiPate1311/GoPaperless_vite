@@ -3,14 +3,13 @@ import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
-import { debounce, getSigner } from "@/utils/commonFunction";
+import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
 import TextField from "@mui/material/TextField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useRef } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
@@ -54,7 +53,6 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getField"] });
-      // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
     },
   });
 
@@ -62,7 +60,6 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
     // setIsControlled(false);
     // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
-    // setSignature(null);
   };
 
   const TopBar = () => {
@@ -75,11 +72,6 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           top: -25,
           right: -2,
           zIndex: 10,
-          // display:
-          // signerId + "_" + signatureData.type + "_" + signatureData.suffix ===
-          // signatureData.field_name
-          //   ? "flex"
-          //   : "none",
           display: "flex",
           backgroundColor: "#D9DFE4",
           gap: "5px",
@@ -113,10 +105,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
   };
 
   const handleDrag = (type) => {
-    // Sử dụng getElementsByClassName để lấy HTMLCollection
     const elements = document.getElementsByClassName(`textrauria-${index}`);
 
-    // Lặp qua các phần tử trong HTMLCollection và đặt thuộc tính style.display
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.display = type;
     }
@@ -135,47 +125,35 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
     }
   };
 
-  // const handleDefaultValue = (type) => {
-  //   const signerText = workFlow?.participants?.find(
-  //     (item) =>
-  //       item.signerId + "_" + textData.type + "_" + textData.suffix ===
-  //       textData.field_name
-  //   );
-  //   switch (type) {
-  //     case "NAME":
-  //       return signerText.lastName + " " + signerText.firstName;
-  //     case "EMAIL":
-  //       return signerText.email;
-  //     case "JOB_TITLE":
-  //       return signerText.metaInformation?.position || "";
-  //     case "COMPANY":
-  //       return signerText.metaInformation?.company || "";
-  //   }
-  // };
-
   const valueRef = useRef(null);
 
   const handleChange = (e) => {
-    // console.log("e.target.value: ", e.target.value);
     setTextValue(e.target.value);
     if (valueRef.current) clearTimeout(valueRef.current);
     valueRef.current = setTimeout(() => {
-      putSignature.mutate({
-        body: {
-          field_name: textData.field_name,
-          page: pdfPage.currentPage,
-          dimension: {
-            x: -1,
-            y: -1,
-            width: -1,
-            height: -1,
+      putSignature.mutate(
+        {
+          body: {
+            field_name: textData.field_name,
+            page: pdfPage.currentPage,
+            dimension: {
+              x: -1,
+              y: -1,
+              width: -1,
+              height: -1,
+            },
+            visible_enabled: true,
+            value: e.target.value,
           },
-          visible_enabled: true,
-          value: e.target.value,
+          field: "text",
+          documentId: workFlow.documentId,
         },
-        field: "text",
-        documentId: workFlow.documentId,
-      });
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["getField"] });
+          },
+        }
+      );
     }, 1000);
   };
 
@@ -204,38 +182,27 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             `pdf-view-${pdfPage.currentPage - 1}`
           );
 
-          // Lấy kích thước của containerComponent
           const containerRect = containerComponent.getBoundingClientRect();
 
-          // Lấy kích thước của draggableComponent
           const draggableRect = draggableComponent.getBoundingClientRect();
 
-          // Kiểm tra xem draggableComponent có ra khỏi phạm vi của containerComponent không
           if (
             draggableRect.right > containerRect.right ||
             draggableRect.left < containerRect.left ||
             draggableRect.bottom > containerRect.bottom ||
             draggableRect.top < containerRect.top
           ) {
-            // console.log(
-            //   "draggableComponent đã ra khỏi phạm vi của containerComponent"
-            // );
             return;
-          } else {
-            // console.log(
-            //   "draggableComponent nằm trong phạm vi của containerComponent"
-            // );
           }
-          let isOverTarget = false; // Biến để kiểm soát việc thoát khỏi vòng lặp
+          let isOverTarget = false;
 
           targetComponents.forEach((targetComponent) => {
-            if (isOverTarget) return; // Nếu đã thoát khỏi vòng lặp, không kiểm tra phần tử tiếp theo
+            if (isOverTarget) return;
 
             const targetRect = targetComponent.getBoundingClientRect();
 
             if (draggableComponent === targetComponent) return;
 
-            // Kiểm tra xem component có đè lên target không
             if (
               draggableRect.left < targetRect.right &&
               draggableRect.right > targetRect.left &&
@@ -247,7 +214,6 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             }
           });
 
-          // console.log("isOverTarget: ", isOverTarget);
           if (
             (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
             isOverTarget
@@ -262,7 +228,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           // console.log("rectItem: ", rectItem);
 
           const x =
-            (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
+            (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width;
 
           const y =
             (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
@@ -308,10 +274,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           }
           style={{
             position: "absolute",
-            // top: textData.dimension?.y + "%",
-            // left: textData.dimension?.x + "%",
             zIndex: 100,
-            // opacity: textData.verification === undefined ? 1 : 0,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           minConstraints={[
@@ -344,21 +307,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               ? maxPosibleResizeHeight
               : 200,
           ]}
-          onResize={(e, { size }) => {
-            // setShowTopbar(false);
-            // setSignature({
-            //   ...signatureData,
-            //   dimension: {
-            //     ...signatureData.dimension,
-            //     width: (size.width / pdfPage.width) * 100,
-            //     height: (size.height / pdfPage.height) * 100,
-            //   },
-            // });
-          }}
-          // onClick={(e) => {
-          //   console.log("e: ", e);
-          //   return;
-          // }}
+          onResize={(e, { size }) => {}}
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);
             if (
@@ -422,32 +371,6 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
-            // onClick={(e) => {
-            //   console.log("e: ", e);
-            // }}
-            // onDoubleClick={(e) => {
-            //   // if (isControlled) return;
-            //   if (signatureData.verification) {
-            //     console.log("show signature verification");
-            //     toggleSigDetail(index);
-            //   } else if (
-            //     signerId +
-            //       "_" +
-            //       signatureData.type +
-            //       "_" +
-            //       signatureData.suffix !==
-            //     signatureData.field_name
-            //   ) {
-            //     return;
-            //   } else if (
-            //     e.target.id === "drag" ||
-            //     e.target.parentElement?.id === "drag" ||
-            //     e.target.id === "click-duoc"
-            //   ) {
-            //     // Your existing logic for opening the signing form...
-            //     handleOpenSigningForm(index);
-            //   }
-            // }}
           >
             {showTopbar && <TopBar textData={textData} />}
             <span
@@ -466,17 +389,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               className={`textrauria-${index} leftline`}
               style={{ display: "none" }}
             ></span>
-            {/* <Box
-                id="click-duoc"
-                variant="h5"
-                width={"100%"}
-                borderBottom="2px dotted"
-                borderColor="#EAB308"
-                textAlign={"center"}
-                height="45px"
-              >
-                cuongcuong
-              </Box> */}
+
             <TextField
               fullWidth
               size="small"

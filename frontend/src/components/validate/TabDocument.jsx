@@ -1,20 +1,19 @@
 import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/valid.svg";
+import { ReactComponent as Lock } from "@/assets/images/validation/lock_validate.svg";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import SvgIcon from "@mui/material/SvgIcon";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import Details from "./Details";
 import Overview from "./Overview";
 import Signatures from "./Signatures";
-import { Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import { ReactComponent as Lock } from "@/assets/images/validation/lock_validate.svg";
-import { ReactComponent as ValidSealIcon } from "@/assets/images/svg/seal_icon.svg";
-import { ReactComponent as ValidWFIcon } from "@/assets/images/svg/valid.svg";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -55,14 +54,6 @@ export const TabDocument = ({ validFile }) => {
   const [eSealList, setESealList] = useState([]);
   const { t } = useTranslation();
 
-  // const sigList = fileDetail
-  //   ?.map((sig) => {
-  //     if (sig.ppl_file_attr_type_id === 1) {
-  //       return sig.value;
-  //     }
-  //   })
-  //   .filter((value) => value !== undefined);
-
   useEffect(() => {
     if (Object.keys(validFile).length > 0) {
       setSigList(validFile.signatures);
@@ -73,14 +64,6 @@ export const TabDocument = ({ validFile }) => {
   // const sigList = validFile.signatures;
   console.log("sigList: ", sigList);
 
-  // const eSealList = fileDetail
-  //   ?.map((sig) => {
-  //     if (sig.ppl_file_attr_type_id === 3) {
-  //       return sig.value;
-  //     }
-  //   })
-  //   .filter((value) => value !== undefined);
-  // const eSealList = validFile.seals;
   console.log("sigList: ", eSealList);
 
   const [value, setValue] = useState(0);
@@ -88,23 +71,6 @@ export const TabDocument = ({ validFile }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  // useEffect(() => {
-  //   const resizeHandler = () => {
-  //     const viewerContainer = document.getElementById("cookieSetting");
-  //     if (viewerContainer) {
-  //       const windowHeight = window.innerHeight;
-  //       const offsetTop = viewerContainer.offsetTop;
-  //       const viewerHeight = windowHeight - offsetTop;
-  //       viewerContainer.style.height = viewerHeight + "px";
-  //     }
-  //   };
-  //   resizeHandler();
-  //   window.addEventListener("resize", resizeHandler);
-  //   return () => {
-  //     window.removeEventListener("resize", resizeHandler);
-  //   };
-  // }, []);
 
   return (
     <Box
@@ -143,11 +109,6 @@ export const TabDocument = ({ validFile }) => {
           textTransform: "capitalize",
           fontSize: "12px",
         }}
-        // TabIndicatorProps={{
-        //   sx: {
-        //     left: 0,
-        //   },
-        // }}
         TabIndicatorProps={{
           style: { display: "none" },
         }}

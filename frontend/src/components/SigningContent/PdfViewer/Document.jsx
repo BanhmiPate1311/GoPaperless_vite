@@ -3,8 +3,9 @@
 import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { checkIsPosition } from "@/utils/commonFunction";
 import { useQueryClient } from "@tanstack/react-query";
-import Signature from "./Signature";
 import { Initial, QrCode, TextBox } from ".";
+import AddText from "./AddText";
+import Signature from "./Signature";
 // import Signature from "./Signature";
 export const Document = ({
   props,
@@ -14,27 +15,17 @@ export const Document = ({
   initial,
   qr,
   textField,
+  addText,
 }) => {
-  // console.log("signatures: ", signatures);
+  console.log("addText: ", addText);
 
   const queryClient = useQueryClient();
-
-  // const workFlow = queryClient.getQueryData(["workflow"]);
-
-  // const signatures = queryClient.getQueryData(["signatures"]);
-  //code thêm
-  // console.log("workFlow: ", workFlow);
-  // console.log("signatures: ", signatures);
   let isSetPos;
   if (signatures) {
     isSetPos = checkIsPosition(workFlow);
   } else {
     isSetPos = true;
   }
-  // console.log("isSetPos: ", isSetPos);
-  //code thêm
-  // let isSetPos = checkIsPosition(workFlow);
-  // console.log("isSetPos: ", isSetPos);
 
   const pdfPage = {
     currentPage: props.pageIndex + 1,
@@ -89,18 +80,8 @@ export const Document = ({
   };
 
   const handleDragSignature = (value) => {
-    // console.log("value: ", value);
     const { field_name } = value;
-    // setSignatures((prev) => {
-    //   const index = prev.findIndex((item) => item.field_name === field_name);
-    //   if (index !== -1) {
-    //     return prev.map((item, i) => (i === index ? data : item));
-    //   } else {
-    //     return [...prev, data];
-    //   }
-    // });
     queryClient.setQueryData(["getField"], (prev) => {
-      // console.log("prev: ", prev);
       const index = prev.data.signature.findIndex(
         (item) => item.field_name === field_name
       );
@@ -125,76 +106,13 @@ export const Document = ({
       }
     });
   };
-  // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  // const pdfRange = [];
-  // const cursor = [];
-  // useEffect(() => {
-  //   // nghe sự kiện bên trong file pdf
-  //   pdfRange[props.pageIndex] = document.getElementById(
-  //     `pdf-view-${props.pageIndex}`
-  //   );
-  //   cursor[props.pageIndex] = document.querySelector(
-  //     `.cursor-${props.pageIndex}`
-  //   );
-
-  //   const mouseMove = (e) => {
-  //     if (isSetPos) return;
-  //     const rect = e.currentTarget.getBoundingClientRect();
-  //     const x = e.clientX - rect.left; // Xác định vị trí x dựa trên vị trí của chuột
-
-  //     const y = e.clientY - rect.top;
-  //     if (
-  //       e.target instanceof SVGElement ||
-  //       e.target.className.includes("MuiListItemText-primary") ||
-  //       e.target.className.includes("MuiListItemButton-root")
-  //     ) {
-  //       cursor[props.pageIndex].style.display = "none";
-  //     } else {
-  //       pdfRange[props.pageIndex].style.cursor = "none";
-  //       setMousePosition({
-  //         x: x,
-  //         y: y,
-  //       });
-  //       cursor[props.pageIndex].style.display = "block";
-  //     }
-  //   };
-
-  //   const mouseOut = () => {
-  //     cursor[props.pageIndex].style.display = "none";
-  //   };
-
-  //   pdfRange[props.pageIndex].addEventListener("mousemove", mouseMove);
-
-  //   pdfRange[props.pageIndex].addEventListener("mouseleave", mouseOut);
-
-  //   // // Trình nghe sự kiện click và mousedown toàn bộ trang
-  //   // const handleGlobalClickAndMouseDown = (e) => {
-  //   //   // console.log("e: ", e);
-  //   //   // if (
-  //   //   //   (menuRef.current.contains(e.target) &&
-  //   //   //     e.target.className?.includes("pdf-page")) ||
-  //   //   //   !menuRef.current.contains(e.target)
-  //   //   // ) {
-  //   //   //   handleCloseContextMenu();
-  //   //   // }
-  //   //   handleCloseContextMenu();
-  //   // };
-
-  //   return () => {
-  //     // window.removeEventListener("mousedown", handleGlobalClickAndMouseDown);
-  //     pdfRange[props.pageIndex].removeEventListener("mousemove", mouseMove);
-  //     pdfRange[props.pageIndex].removeEventListener("mouseleave", mouseOut);
-  //   };
-  // }, [props.scale, cursor, pdfRange]);
 
   return (
     <div
-      // ref={dropSig(dropSigRef)}
       style={{
         width: "100%",
         height: "100%",
         position: "relative",
-        // cursor: isSetPos ? "auto" : `url(${mouse}), auto`,
         cursor: `url(${mouse}), auto`,
         overflow: "hidden",
       }}
@@ -202,8 +120,6 @@ export const Document = ({
     >
       {props.canvasLayer.children}
       {signatures?.map((signatureData, index) => {
-        // console.log("signatureData: ", signatureData.page);
-        // console.log("pageIndex: ", props.pageIndex + 1);
         if (signatureData.page !== props.pageIndex + 1) return null;
         return (
           <Signature
@@ -224,6 +140,18 @@ export const Document = ({
             index={index}
             pdfPage={pdfPage}
             textData={textData}
+            workFlow={workFlow}
+          />
+        );
+      })}
+      {addText?.map((addTextData, index) => {
+        if (addTextData.page !== props.pageIndex + 1) return null;
+        return (
+          <AddText
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            addTextData={addTextData}
             workFlow={workFlow}
           />
         );

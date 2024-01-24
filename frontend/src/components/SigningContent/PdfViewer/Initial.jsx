@@ -43,7 +43,6 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getField"] });
-      // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
     },
   });
 
@@ -70,11 +69,9 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
     console.log("remove");
     // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
-    // setSignature(null);
   };
 
   const TopBar = ({ initData }) => {
-    // console.log("signatureData: ", signatureData);
     return (
       <div
         style={{
@@ -133,10 +130,8 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
   };
 
   const handleDrag = (type) => {
-    // Sử dụng getElementsByClassName để lấy HTMLCollection
     const elements = document.getElementsByClassName(`initRauria-${index}`);
 
-    // Lặp qua các phần tử trong HTMLCollection và đặt thuộc tính style.display
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.display = type;
     }
@@ -167,38 +162,27 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             `pdf-view-${pdfPage.currentPage - 1}`
           );
 
-          // Lấy kích thước của containerComponent
           const containerRect = containerComponent.getBoundingClientRect();
 
-          // Lấy kích thước của draggableComponent
           const draggableRect = draggableComponent.getBoundingClientRect();
 
-          // Kiểm tra xem draggableComponent có ra khỏi phạm vi của containerComponent không
           if (
             draggableRect.right > containerRect.right ||
             draggableRect.left < containerRect.left ||
             draggableRect.bottom > containerRect.bottom ||
             draggableRect.top < containerRect.top
           ) {
-            // console.log(
-            //   "draggableComponent đã ra khỏi phạm vi của containerComponent"
-            // );
             return;
-          } else {
-            // console.log(
-            //   "draggableComponent nằm trong phạm vi của containerComponent"
-            // );
           }
           let isOverTarget = false;
 
           targetComponents.forEach((targetComponent) => {
-            if (isOverTarget) return; // Nếu đã thoát khỏi vòng lặp, không kiểm tra phần tử tiếp theo
+            if (isOverTarget) return;
 
             const targetRect = targetComponent.getBoundingClientRect();
 
             if (draggableComponent === targetComponent) return;
 
-            // Kiểm tra xem component có đè lên target không
             if (
               draggableRect.left < targetRect.right &&
               draggableRect.right > targetRect.left &&
@@ -211,7 +195,6 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
           });
 
           if (isOverTarget) {
-            // Đặt lại vị trí về ban đầu nếu đè lên một phần tử khác
             return;
           } else {
             if (dragPosition?.x === data.x && dragPosition?.y === data.y) {
@@ -219,13 +202,11 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             }
             setDragPosition({ x: data.x, y: data.y });
             const rectComp = containerComponent.getBoundingClientRect();
-            // console.log("rectComp: ", rectComp);
 
             const rectItem = draggableComponent.getBoundingClientRect();
-            // console.log("rectItem: ", rectItem);
 
             const x =
-              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
+              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width;
 
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
@@ -272,20 +253,10 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
           }
           style={{
             position: "absolute",
-            // top: initData.dimension?.y + "%",
-            // left: initData.dimension?.x + "%",
             zIndex: 100,
             opacity: initData.verification === undefined ? 1 : 0.1,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
-          // minConstraints={[
-          //   initData.dimension?.width * (pdfPage.width / 100),
-          //   initData.dimension?.height * (pdfPage.height / 100),
-          // ]}
-          // maxConstraints={[
-          //   initData.dimension?.width * (pdfPage.width / 100),
-          //   initData.dimension?.height * (pdfPage.height / 100),
-          // ]}
           minConstraints={[
             signerId + "_" + initData.type + "_" + initData.suffix !==
             initData.field_name
@@ -316,21 +287,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
               ? maxPosibleResizeHeight
               : 200,
           ]}
-          onResize={(e, { size }) => {
-            // setShowTopbar(false);
-            // setSignature({
-            //   ...initData,
-            //   dimension: {
-            //     ...initData.dimension,
-            //     width: (size.width / pdfPage.width) * 100,
-            //     height: (size.height / pdfPage.height) * 100,
-            //   },
-            // });
-          }}
-          // onClick={(e) => {
-          //   console.log("e: ", e);
-          //   return;
-          // }}
+          onResize={(e, { size }) => {}}
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);
             if (
@@ -394,9 +351,6 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
-            // onClick={(e) => {
-            //   console.log("e: ", e);
-            // }}
             onClick={(e) => {
               if (
                 signerId + "_" + initData.type + "_" + initData.suffix !==

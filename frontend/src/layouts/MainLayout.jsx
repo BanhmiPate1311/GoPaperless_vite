@@ -14,26 +14,8 @@ export const MainLayout = () => {
   const { data: headerFooter } = useQuery({
     queryKey: ["checkHeader"],
     queryFn: () => apiService.checkHeaderFooter(signingToken),
-    // select: (data) => {
-    //   return Object.keys(data.data).reduce((result, key) => {
-    //     // console.log("data: ", data.data[key]);
-    //     // Kiểm tra nếu giá trị của key không phải là mảng rỗng thì thêm vào object kết quả
-    //     if (data.data[key] !== "null") {
-    //       result[key] = data.data[key];
-    //     }
-    //     return result;
-    //   }, {});
-    // },
-    // initialData: {
-    //   headerVisible: 1,
-    // },
-
-    // queryFn: ({signal}) => apiService.checkHeaderFooter(signing_token, signal),  dùng khi muốn cancel request
-    // refetchOnWindowFocus: false, // không refetch lại khi chuyển tab, đã set default
-    // keepPreviousData: true, // dùng khi phân trang nhằm cải thiện UX
-    enabled: signingToken !== undefined, //chỉ gọi api khi có giá trị id
+    enabled: signingToken !== undefined,
   });
-  // console.log("checkHeader: ", headerFooter?.data);
   return (
     <Box
       sx={{
@@ -55,18 +37,6 @@ export const MainLayout = () => {
               ? (theme) =>
                   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
               : "100vh",
-
-          // height: (theme) =>
-          //   `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`,
-
-          // height: {
-          //   xs: "100%",
-          //   lg:
-          //     headerFooter?.data.headerVisible !== 0
-          //       ? (theme) =>
-          //           `calc(100vh - ${theme.GoPaperless.headerHeight} - ${theme.GoPaperless.footerBarHeight})`
-          //       : "100vh",
-          // },
 
           mx: "auto",
         }}

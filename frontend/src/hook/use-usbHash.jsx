@@ -7,9 +7,6 @@ export const useUsbHash = () => {
       const response = await isService.getHash(data);
       return response.data;
     },
-    // onSuccess: () => {
-    //   cbSuccess();
-    // },
   });
   return { mutate, mutateAsync, data, isLoading, error };
 };
@@ -22,9 +19,6 @@ export const useUsbPackFile = () => {
       const response = await isService.packFile(data);
       return response.data;
     },
-    // onSuccess: () => {
-    //   cbSuccess();
-    // },
   });
   return { mutate, mutateAsync, data, isLoading, error };
 };

@@ -12,15 +12,11 @@ const DrawInitForm = forwardRef(({ watch, control, onDisableSubmit }, ref) => {
   const [openDraw, setOpenDraw] = useState(false);
 
   useEffect(() => {
-    //   console.log("drawUrl: ", watch("drawUrl"));
     if (watch("drawUrl") === "") {
       onDisableSubmit(true);
     } else {
       onDisableSubmit(false);
     }
-    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-    //   onDisableSubmit(true);
-    // }
   }, [watch("drawUrl"), onDisableSubmit, watch]);
 
   const handleOpenDraw = () => {
@@ -32,12 +28,7 @@ const DrawInitForm = forwardRef(({ watch, control, onDisableSubmit }, ref) => {
   };
 
   return (
-    <Box
-      // component="form"
-      // ref={ref}
-      // onSubmit={handleSubmit(handleFormSubmit)}
-      sx={{ minWidth: 400 }}
-    >
+    <Box sx={{ minWidth: 400 }}>
       <Box mb="10px">
         <Button
           variant="outlined"

@@ -2,7 +2,6 @@ import { api } from "@/utils/api";
 
 export const fpsService = {
   getFields: async ({ documentId }) => {
-    // return api.get(`/fps/${documentId}/getFields`);
     const response = await api.get(`/fps/${documentId}/getFields`);
     return response.data;
   },
@@ -37,6 +36,13 @@ export const fpsService = {
 
   fillInit: async (data, documentId) => {
     const response = await api.post(`/fps/${documentId}/fillInit`, data);
+    return response.data;
+  },
+
+  fillForm: async (data, documentId) => {
+    const response = await api.post(`/fps/${documentId}/fillForm`, {
+      textField: data,
+    });
     return response.data;
   },
 

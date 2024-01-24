@@ -1,4 +1,5 @@
 import logo1 from "@/assets/images/Logo/gopaperless_white.png";
+import { AddSubtitle, ContentRight, DialogFile } from "@/components/modal2";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Box from "@mui/material/Box";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -8,10 +9,9 @@ import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { InputField, UploadField } from "../../form";
-import { useTranslation } from "react-i18next";
-import { AddSubtitle, ContentRight, DialogFile } from "@/components/modal2";
 
 const UploadSignForm = forwardRef(
   (
@@ -98,16 +98,6 @@ const UploadSignForm = forwardRef(
       itverText: "itext core 8.0.2",
     };
 
-    // const subtitle = {
-    //   labelText: false,
-    //   nameText: "name name",
-    //   dnText: "your Distinguished Name",
-    //   reasonText: "your reason",
-    //   locationText: "your location",
-    //   dateText: "your date",
-    //   itverText: "your itver",
-    // };
-
     const direction =
       watch("name") ||
       watch("date") ||
@@ -122,18 +112,11 @@ const UploadSignForm = forwardRef(
       } else {
         onDisableSubmit(false);
       }
-      // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-      //   onDisableSubmit(true);
-      // }
     }, [watch("fileUrl"), onDisableSubmit, watch("email"), watch]);
 
     const handleFormSubmit = () => {
-      // console.log("data: ", data);
-      // onFileSubmit(data);
-
       html2canvas(sigFileRef.current).then((canvas) => {
         const data64 = canvas.toDataURL();
-        //   console.log(data64);
         onFileSubmit(data64);
       });
     };
@@ -171,8 +154,6 @@ const UploadSignForm = forwardRef(
             borderRadius: "6px",
             border: "1px solid #357EEB",
             position: "relative",
-            // backgroundColor: "white",
-            // set background image
             "&:before": watch("logo")
               ? {
                   content: '""',

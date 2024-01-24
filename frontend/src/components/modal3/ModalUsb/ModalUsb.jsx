@@ -67,11 +67,6 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
     },
 
     onSuccess: (data) => {
-      // console.log("data: ", data);
-      // setDataSigning({
-      //   ...dataSigning,
-      //   signatures: data.signatures,
-      // });
       const request = {
         ...dataSigning,
         signatures: data.signatures,
@@ -102,9 +97,6 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
     } else {
       setIsSubmitDisabled(true);
     }
-    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-    //   onDisableSubmit(true);
-    // }
   }, [watch("pin"), setIsSubmitDisabled, watch]);
 
   function disconnectWSHTML() {
@@ -193,9 +185,6 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   };
 
   const handleSubmitClick = () => {
-    // if (formRef.current) {
-    //   formRef.current.dispatchEvent(new Event("submit", { cancelable: true }));
-    // }
     formRef.current.requestSubmit();
   };
 
@@ -235,7 +224,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       PaperProps={{
         sx: {
           width: "500px",
-          maxWidth: "500px", // Set your width here
+          maxWidth: "500px",
           height: "700px",
           borderRadius: "10px",
         },
@@ -367,13 +356,12 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // Prevent form submission
+                    e.preventDefault();
                     handleSubmit(handleFormSubmit)();
                   }
                 }}
                 onChange={() => {
                   setErrorApi(null);
-                  // console.log("change");
                 }}
               />
             </Box>

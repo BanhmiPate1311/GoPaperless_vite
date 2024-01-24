@@ -20,7 +20,6 @@ export const apiService = {
     });
   },
   getSignedInfo: async ({ firstFileId }) => {
-    // return api.post("/uiApi/getSignedInfo", { fileId: firstFileId });
     const response = await api.post("/uiApi/getSignedInfo", {
       fileId: firstFileId,
     });

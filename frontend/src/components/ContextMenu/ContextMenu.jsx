@@ -83,10 +83,6 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
 };
 ContextMenu.propTypes = {
   contextMenu: PropTypes.shape({
-    // Define the structure of the object if needed
-    // For example:
-    // key1: PropTypes.string,
-    // key2: PropTypes.number,
     mouseY: PropTypes.number,
     mouseX: PropTypes.number,
   }),

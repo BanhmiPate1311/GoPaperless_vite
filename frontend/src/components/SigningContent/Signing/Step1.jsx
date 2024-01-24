@@ -54,13 +54,6 @@ export const Step1 = forwardRef(({ onStep1Submit }, ref) => {
         label="Select Level of Assurance"
         content={data}
         sx={{ backgroundColor: "signingWFBackground.main" }}
-        // onKeyDown={(e) => {
-        //   console.log("e: ", e);
-        //   if (e.key === "Enter") {
-        //     e.preventDefault();
-        //     handleSubmit();
-        //   }
-        // }}
       />
     </Box>
   );

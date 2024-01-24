@@ -1,4 +1,8 @@
+import { electronicService } from "@/services/electronic_service";
+import { convertEidType } from "@/utils/commonFunction";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -6,15 +10,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
-import Box from "@mui/material/Box";
-import { Step1, Step2 } from ".";
-import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { electronicService } from "@/services/electronic_service";
-import { convertEidType } from "@/utils/commonFunction";
-import CircularProgress from "@mui/material/CircularProgress";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Step1, Step2 } from ".";
 
 export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
   // console.log("dataSigning: ", dataSigning);
@@ -48,10 +48,6 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
     setSkipped(newSkipped);
   };
 
-  //   const handleBack = () => {
-  //     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  //   };
-
   const credentialOTP = async () => {
     setIsFetching(true);
     const data = {
@@ -62,12 +58,10 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       workFlowId: dataSigning.workFlowId,
     };
     try {
-      // const response = await api.post("/elec/credentialOTP", data);
       const response = await electronicService.credentialOTP(data);
       setRequestID(response.data);
       setIsFetching(false);
       if (activeStep === 1) {
-        // handleNext();
         setActiveStep(2);
       }
     } catch (error) {
@@ -77,7 +71,6 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
   };
 
   const authorizeOTP = async (otp) => {
-    // dispatch(apiControllerManagerActions.clearsetMessageSuccess());
     console.log("authorizeOTP");
     setIsFetching(true);
     setErrorPG(null);
@@ -109,10 +102,7 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       textField: dataSigning.textField,
     };
     try {
-      // const response = await api.post("/elec/authorizeOTP", data);
       const response = await electronicService.authorizeOTP(data);
-      // setRequestID(response.data);
-      // handleNext();
       window.parent.postMessage(
         { data: response.data, status: "Success" },
         "*"
@@ -121,8 +111,6 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
       onClose();
-      // dispatch(apiControllerManagerActions.setMessageSuccess());
-      // handleCloseModal1();
     } catch (error) {
       console.log("error", error);
       setIsFetching(false);
@@ -135,14 +123,10 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       case 1:
         credentialOTP();
         break;
-      // case 2:
-      //   connectToWS();
-      //   break;
       case 2:
         authorizeOTP(otp);
         break;
       default:
-        // perFormProcess(); // chỉ để test
         handleNext();
     }
   };
@@ -175,7 +159,7 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       PaperProps={{
         sx: {
           width: "500px",
-          maxWidth: "500px", // Set your width here
+          maxWidth: "500px",
           height: "700px",
           borderRadius: "10px",
         },
@@ -227,9 +211,7 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
           // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
-            {/* {steps[activeStep]} */}
             <Box flexGrow={1}>{steps[activeStep - 1]}</Box>
-            {/* {unavail && <Alert severity="error">{unavail}</Alert>} */}
           </Stack>
         </DialogContentText>
       </DialogContent>

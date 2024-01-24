@@ -118,10 +118,6 @@ export const Footer = ({ headerFooter }) => {
 };
 Footer.propTypes = {
   headerFooter: PropTypes.shape({
-    // Define the structure of the object if needed
-    // For example:
-    // key1: PropTypes.string,
-    // key2: PropTypes.number,
     metadataGatewayView: PropTypes.string,
     loGo: PropTypes.string,
   }),

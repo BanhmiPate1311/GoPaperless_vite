@@ -145,8 +145,6 @@ const SigningForm = ({
     dataApi.current = {
       ...dataApi.current,
       signerId: signer.signerId,
-      // connectorName: data.connector,
-      // provider: data.provider,
       signingOption: convertProviderToSignOption(data.provider),
       lastFileId: workFlow.lastFileId,
       ...data,
@@ -344,7 +342,7 @@ const SigningForm = ({
         "& .MuiDialog-container": {
           "& .MuiPaper-root": {
             width: "100%",
-            maxWidth: "470px", // Set your width here
+            maxWidth: "470px",
             borderRadius: "10px",
           },
         },

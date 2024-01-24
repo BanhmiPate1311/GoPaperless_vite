@@ -41,19 +41,14 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getField"] });
-      // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
     },
   });
 
   const handleRemoveSignature = async () => {
-    // setIsControlled(false);
-    // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
-    // setSignature(null);
   };
 
   const TopBar = () => {
-    // console.log("signatureData: ", signatureData);
     return (
       <div
         style={{
@@ -62,11 +57,6 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           top: -25,
           right: -2,
           zIndex: 10,
-          // display:
-          // signerId + "_" + signatureData.type + "_" + signatureData.suffix ===
-          // signatureData.field_name
-          //   ? "flex"
-          //   : "none",
           display: "flex",
           backgroundColor: "#D9DFE4",
           gap: "5px",
@@ -100,10 +90,8 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
   };
 
   const handleDrag = (type) => {
-    // Sử dụng getElementsByClassName để lấy HTMLCollection
     const elements = document.getElementsByClassName(`qrrauria-${index}`);
 
-    // Lặp qua các phần tử trong HTMLCollection và đặt thuộc tính style.display
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.display = type;
     }
@@ -121,8 +109,6 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
       }}
       onStop={(e, data) => {
         e.preventDefault();
-        // console.log("data: ", data);
-        // console.log("e: ", e);
         setIsControlled(true);
         handleDrag("none");
         const draggableComponent = document.querySelector(`.qrbox-${index}`);
@@ -131,38 +117,27 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           `pdf-view-${pdfPage.currentPage - 1}`
         );
 
-        // Lấy kích thước của containerComponent
         const containerRect = containerComponent.getBoundingClientRect();
 
-        // Lấy kích thước của draggableComponent
         const draggableRect = draggableComponent.getBoundingClientRect();
 
-        // Kiểm tra xem draggableComponent có ra khỏi phạm vi của containerComponent không
         if (
           draggableRect.right > containerRect.right ||
           draggableRect.left < containerRect.left ||
           draggableRect.bottom > containerRect.bottom ||
           draggableRect.top < containerRect.top
         ) {
-          // console.log(
-          //   "draggableComponent đã ra khỏi phạm vi của containerComponent"
-          // );
           return;
-        } else {
-          // console.log(
-          //   "draggableComponent nằm trong phạm vi của containerComponent"
-          // );
         }
-        let isOverTarget = false; // Biến để kiểm soát việc thoát khỏi vòng lặp
+        let isOverTarget = false;
 
         targetComponents.forEach((targetComponent) => {
-          if (isOverTarget) return; // Nếu đã thoát khỏi vòng lặp, không kiểm tra phần tử tiếp theo
+          if (isOverTarget) return;
 
           const targetRect = targetComponent.getBoundingClientRect();
 
           if (draggableComponent === targetComponent) return;
 
-          // Kiểm tra xem component có đè lên target không
           if (
             draggableRect.left < targetRect.right &&
             draggableRect.right > targetRect.left &&
@@ -174,7 +149,6 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           }
         });
 
-        // console.log("isOverTarget: ", isOverTarget);
         if (
           (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
           isOverTarget
@@ -189,7 +163,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
         // console.log("rectItem: ", rectItem);
 
         const x =
-          (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
+          (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width;
 
         const y =
           (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
@@ -234,10 +208,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
         }
         style={{
           position: "absolute",
-          // top: qrData.dimension?.y + "%",
-          // left: qrData.dimension?.x + "%",
           zIndex: 100,
-          // opacity: qrData.verification === undefined ? 1 : 0,
           transition: isControlled ? `transform 0.3s` : `none`,
         }}
         minConstraints={[
@@ -270,21 +241,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
             ? maxPosibleResizeHeight
             : 200,
         ]}
-        onResize={(e, { size }) => {
-          // setShowTopbar(false);
-          // setSignature({
-          //   ...signatureData,
-          //   dimension: {
-          //     ...signatureData.dimension,
-          //     width: (size.width / pdfPage.width) * 100,
-          //     height: (size.height / pdfPage.height) * 100,
-          //   },
-          // });
-        }}
-        // onClick={(e) => {
-        //   console.log("e: ", e);
-        //   return;
-        // }}
+        onResize={(e, { size }) => {}}
         onResizeStop={(e, { size }) => {
           // console.log("e: ", e);
           if (
@@ -337,32 +294,6 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           onMouseLeave={(e) => {
             setShowTopbar(false);
           }}
-          // onClick={(e) => {
-          //   console.log("e: ", e);
-          // }}
-          // onDoubleClick={(e) => {
-          //   // if (isControlled) return;
-          //   if (signatureData.verification) {
-          //     console.log("show signature verification");
-          //     toggleSigDetail(index);
-          //   } else if (
-          //     signerId +
-          //       "_" +
-          //       signatureData.type +
-          //       "_" +
-          //       signatureData.suffix !==
-          //     signatureData.field_name
-          //   ) {
-          //     return;
-          //   } else if (
-          //     e.target.id === "drag" ||
-          //     e.target.parentElement?.id === "drag" ||
-          //     e.target.id === "click-duoc"
-          //   ) {
-          //     // Your existing logic for opening the signing form...
-          //     handleOpenSigningForm(index);
-          //   }
-          // }}
         >
           {showTopbar && <TopBar qrData={qrData} />}
           <span
