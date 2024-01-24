@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { AddSubtitle, TextSignForm, ReviewSign } from ".";
+import { AddSubtitle, ReviewSign, TextSignForm } from ".";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
 
@@ -160,29 +160,20 @@ export const ModalSigning = ({
   };
 
   const handleFormSubmit = (data) => {
-    // let config = {
-    //   fetchArgs: {
-    //     mode: "no-cors",
-    //   },
-    // };
-    // setIsPending(true);
-    // console.log("data: ", data);
     switch (value) {
       case 0:
-        html2canvas(textElement.current, { backgroundColor: null }).then(
-          (canvas) => {
-            const data64 = canvas.toDataURL();
-            // console.log("data64: ", data64);
+        html2canvas(textElement.current).then((canvas) => {
+          const data64 = canvas.toDataURL();
+          // console.log("data64: ", data64);
 
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(data64),
-            });
-            onClose();
-            handleShowmodal();
-          }
-        );
+          setDataSigning({
+            ...dataSigning,
+            contactInfor: data.contactInfor,
+            imageBase64: removeBase64Prefix(data64),
+          });
+          onClose();
+          handleShowmodal();
+        });
         break;
       case 1:
         html2canvas(drawElement.current).then((canvas) => {
@@ -434,9 +425,6 @@ export const ModalSigning = ({
         <Button
           variant="contained"
           disabled={isSubmitDisabled}
-          // startIcon={
-          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          // }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",
@@ -459,7 +447,6 @@ export const ModalSigning = ({
         watch={watch}
         control={control}
         value={value}
-        // Resize & show PDF
         signatureData={signatureData}
         pdfPage={pdfPage}
         isControlled={isControlled}

@@ -18,33 +18,20 @@ export const CheckIdSoft = ({ name, control }) => {
 
     const socket = new WebSocket(url);
 
-    // Xử lý sự kiện khi kết nối mở thành công
     socket.addEventListener("open", () => {
-      // console.log("Kết nối WebSocket đã thành công");
       socket.close();
       onChange("open1");
-      // onBlur(true);
     });
 
-    // Xử lý sự kiện khi xảy ra lỗi trong quá trình kết nối
-    socket.addEventListener("error", () => {
-      // console.error("Lỗi kết nối WebSocket:", error);
-    });
+    socket.addEventListener("error", () => {});
 
-    // Xử lý sự kiện khi kết nối bị đóng
     socket.addEventListener("close", (event) => {
-      // console.log("Kết nối WebSocket đã bị đóng");
-      // console.log("Mã đóng:", event.code);
       if (event.code === 1006) {
         // setErrorPG(
         //   "Required software is missing or not available. Download here"
         // );
       }
-      // console.log("Lí do:", event.reason);
     });
-
-    // Kiểm tra trạng thái kết nối hiện tại
-    // console.log("Trạng thái kết nối:", socket.readyState);
   }, []);
   return (
     <Box name={name} value={value}>
@@ -53,10 +40,6 @@ export const CheckIdSoft = ({ name, control }) => {
         sx={{
           color: "red",
           px: "14px",
-          // position: "absolute",
-          // bottom: 60,
-          // left: "50%",
-          // transform: "translateX(-50%)",
         }}
       >
         {error?.message}

@@ -31,7 +31,7 @@ export const Step4 = ({ image, personalInfomation }) => {
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover", // Để hình ảnh không bị méo
+            objectFit: "cover",
           }}
           alt="image123"
         />

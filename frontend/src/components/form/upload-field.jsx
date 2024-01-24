@@ -28,15 +28,11 @@ export const UploadField = ({
 }) => {
   const {
     field: { onChange },
-    // fieldState: { error },
   } = useController({ name, control });
 
   const handleUploadImage = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
-      //   sigImgCropRef.current.style.backgroundImage = `url(${reader.result})`;
-      //   setCurrentImgCropping(reader.result);
-      //   setShowModalEditImage(true);
       onChange(reader.result);
       externalOnChange();
     };

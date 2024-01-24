@@ -28,7 +28,6 @@ export const Header = ({ headerFooter }) => {
         background: check
           ? metaData.headerBackgroundColor
           : "-webkit-linear-gradient(right, #0a98e7 0%, #3e3a94 100%)",
-        // cursor: `url(${mouse}), auto`,
       }}
     >
       <Box
@@ -45,10 +44,6 @@ export const Header = ({ headerFooter }) => {
 };
 Header.propTypes = {
   headerFooter: PropTypes.shape({
-    // Define the structure of the object if needed
-    // For example:
-    // key1: PropTypes.string,
-    // key2: PropTypes.number,
     metadataGatewayView: PropTypes.string,
     loGo: PropTypes.string,
   }),

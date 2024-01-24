@@ -1,4 +1,11 @@
+import { useSmartIdSign } from "@/hook";
+import { rsspService } from "@/services/rssp_service";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress, {
+  circularProgressClasses,
+} from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -6,25 +13,17 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
-import Alert from "@mui/material/Alert";
-import Box from "@mui/material/Box";
-import CircularProgress, {
-  circularProgressClasses,
-} from "@mui/material/CircularProgress";
 import { useQueryClient } from "@tanstack/react-query";
+import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
-import { useSmartIdSign } from "@/hook";
-import { rsspService } from "@/services/rssp_service";
+import { useTranslation } from "react-i18next";
 
 function CircularProgressWithLabel(props) {
   const formatTime = (seconds) => {
     const totalTime = 300;
-    const minutes = Math.floor(((seconds / 100) * totalTime) / 60); // Số phút là phần nguyên khi chia cho 60
-    const remainingSeconds = Math.floor(((seconds / 100) * totalTime) % 60); // Số giây còn lại là phần dư khi chia cho 60
+    const minutes = Math.floor(((seconds / 100) * totalTime) / 60);
+    const remainingSeconds = Math.floor(((seconds / 100) * totalTime) % 60);
 
-    // Chuyển định dạng sang mm:ss
     const formattedTime = `${minutes}:${remainingSeconds
       .toString()
       .padStart(2, "0")}`;
@@ -100,12 +99,10 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
   const [vcode, setVc] = useState(null);
   const [progress, setProgress] = useState(100);
 
-  // click on cancel
   const [signFileController, setSignFileController] = useState(
     new AbortController()
   );
   const timer = useRef(null);
-  // const [getVCController, setGetVCController] = useState(new AbortController());
 
   const smartSign = useSmartIdSign({ signal: signFileController.signal });
 
@@ -121,7 +118,6 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
     }
     if (progress <= 0.5) {
       setProgress(0);
-      // handleCloseModal1();
     }
   }, [progress]);
 
@@ -155,9 +151,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
 
   const handleCancelSign = () => {
     signFileController.abort();
-    // getVCController.abort();
     setSignFileController(new AbortController());
-    // setGetVCController(new AbortController());
     clearInterval(timer.current);
     onClose();
   };
@@ -174,7 +168,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
       PaperProps={{
         sx: {
           width: "500px",
-          maxWidth: "500px", // Set your width here
+          maxWidth: "500px",
           height: "700px",
           borderRadius: "10px",
         },
@@ -224,7 +218,6 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           sx={{
             height: "100%",
           }}
-          // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
             <Typography variant="h6">{t("modal.smartid1")}</Typography>
@@ -232,16 +225,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
               <Typography fontSize={"48px"} height={"59px"} fontWeight={"bold"}>
                 {vcode ? vcode : <CircularProgress />}
               </Typography>
-              {/* <Typography>
-              {t("modal.smartid2")}{" "}
-              <span style={{ fontWeight: "bold" }}>
-                {mathRound(progress)} {t("modal.smartid3")}
-              </span>
-            </Typography> */}
             </Box>
-            {/* <Box sx={{ flexGrow: 1, mb: 2 }}>
-            <BorderLinearProgress variant="determinate" value={progress} />
-          </Box> */}
             <Typography variant="h6" mb={"10px"}>
               {t("modal.smartid4")}
             </Typography>
@@ -283,7 +267,6 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           onClick={() => {
             setProgress(100);
             setVc(null);
-            // queryClient.invalidateQueries({ queryKey: ["getVc"] });
             smartSign.mutate(dataSigning, {
               onSuccess: (data) => {
                 window.parent.postMessage(

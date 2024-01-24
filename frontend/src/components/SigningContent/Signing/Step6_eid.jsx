@@ -58,12 +58,6 @@ export const Step6_eid = forwardRef(({ onStepSubmit, data }, ref) => {
           sx={{
             backgroundColor: "signingWFBackground.main",
           }}
-          //   sx={{
-          //     "& .MuiListItemSecondaryAction-root": {
-          //       right: "30px",
-          //       display: "flex",
-          //     },
-          //   }}
         />
       </Box>
 

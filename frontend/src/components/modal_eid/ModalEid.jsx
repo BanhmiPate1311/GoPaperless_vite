@@ -62,14 +62,12 @@ export const ModalEid = ({
   const [processId, setProcessId] = useState(null);
   const [otp, setOtp] = useState(null);
   const [certificateList, setCertificateList] = useState([]);
-  // console.log("certificateList: ", certificateList);
   const [newListCert, setNewListCert] = useState([]);
   const [certificate, setCertificate] = useState(null);
   const [assurance, setAssurance] = useState("");
   const [certSelected, setCertSelected] = useState(null);
 
   const sdk = useRef(null);
-  //   const phoneNumberRef = useRef(null);
   const emailRef = useRef(null);
   const taxRef = useRef(null);
   const dialCode = useRef("");
@@ -111,10 +109,6 @@ export const ModalEid = ({
     setActiveStep(0);
   };
 
-  //   const isStepOptional = (step) => {
-  //     return step === 15;
-  //   };
-
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
@@ -133,21 +127,6 @@ export const ModalEid = ({
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  //   const handleSkip = () => {
-  //     if (!isStepOptional(activeStep)) {
-  //       // You probably want to guard against something like this,
-  //       // it should never occur unless someone's actively trying to break something.
-  //       throw new Error("You can't skip a step that isn't optional.");
-  //     }
-
-  //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //     setSkipped((prevSkipped) => {
-  //       const newSkipped = new Set(prevSkipped.values());
-  //       newSkipped.add(activeStep);
-  //       return newSkipped;
-  //     });
-  //   };
 
   const handleDisableSubmit = (disabled) => {
     setIsSubmitDisabled(disabled);
@@ -270,13 +249,10 @@ export const ModalEid = ({
     };
 
     try {
-      // const response = await api.post("/elec/faceAndCreate", data);
       const response = await electronicService.faceAndCreate(data);
       // console.log("faceAndCreate: ", response);
       if (response.data.status === 0) {
         setJwt(response.data.jwt);
-        // setProcessId(response.data);
-        // setIsFetching(false);
         try {
           var decoded = jwtDecode(response.data.jwt);
 
@@ -288,24 +264,18 @@ export const ModalEid = ({
             checkIdentity();
           }
 
-          let stepToNavigate = -1; // Giá trị mặc định để không thực hiện việc nhảy step
+          let stepToNavigate = -1;
 
           if (decoded.phone_number === "") {
             console.log("Đăng ký số điện thoại: ");
-            // stepToNavigate = 1;
             stepToNavigate = 7;
           } else if (decoded.email === "") {
             console.log("Đăng ký email: ");
             setPhoneNumber(decoded.phone_number);
-            // phoneNumberRef.current = decoded.phone_number;
-            // stepToNavigate = 3;
             stepToNavigate = 9;
           } else {
             setPhoneNumber(decoded.phone_number);
-            // setEmail(decoded.email);
-            // phoneNumberRef.current = decoded.phone_number;
             emailRef.current = decoded.email;
-            // stepToNavigate = 5;
             stepToNavigate = 11;
           }
 
@@ -341,7 +311,6 @@ export const ModalEid = ({
     };
 
     try {
-      // const response = await api.post("/elec/updateSubject", data);
       const response = await electronicService.updateSubject(data);
       setProcessId(response.data);
       switch (activeStep) {
@@ -381,7 +350,6 @@ export const ModalEid = ({
     };
     try {
       setIsFetching(true);
-      // const response = await api.post("/elec/processPerForm", data);
       const response = await electronicService.perFormProcess(data);
       setIsFetching(false);
       if (response.data.status === 0) {
@@ -392,16 +360,13 @@ export const ModalEid = ({
           if (activeStep === 8) {
             if (decoded.email === "") {
               console.log("Đăng ký email: ");
-              // handleNext(1); // Đăng ký email
               setActiveStep(9);
             } else {
               console.log("Email đã có, cập nhật: ");
               emailRef.current = decoded.email;
-              // handleNext(3); // Chuyển tới step tiếp theo sau khi cập nhật email
               setActiveStep(11);
             }
           } else {
-            // handleNext(1); // Nhảy một bước tiến nếu không phải step 7
             setActiveStep(11);
           }
         } catch (error) {
@@ -428,7 +393,6 @@ export const ModalEid = ({
       process_id: processId,
     };
     try {
-      // const response = await api.post("/elec/processOTPResend", data);
       const response = await electronicService.processOTPResend(data);
       if (response.data.status === 0) {
         switch (activeStep) {
@@ -459,21 +423,10 @@ export const ModalEid = ({
       workFlowId: workFlow.workFlowId,
     };
     try {
-      // const response = await api.post("/elec/checkCertificate", data);
       const response = await electronicService.checkCertificate(data);
-      // console.log("response: ", response);
       setIsFetching(false);
       setCertificateList(response.data);
-      // handleNext(1);
       setActiveStep(12);
-
-      // if (response.data.length === 0) {
-      //   createCertificate();
-      // } else {
-      //   setCertificateList(response.data);
-      //   handleNext();
-      // }
-      // setCertificate(response.data);
     } catch (error) {
       setIsFetching(false);
       console.log("error", error);
@@ -494,7 +447,6 @@ export const ModalEid = ({
       taxCode: taxRef.current,
     };
     try {
-      // const response = await api.post("/elec/createCertificate", data);
       const response = await electronicService.createCertificate(data);
       setIsFetching(false);
       setCertificate(response.data);
@@ -509,9 +461,6 @@ export const ModalEid = ({
 
       onClose();
       handleShowModalSignImage();
-
-      // handleNext();
-      // setActiveStep(12);
     } catch (error) {
       setIsFetching(false);
       console.log("error", error);
@@ -524,10 +473,8 @@ export const ModalEid = ({
     switch (activeStep) {
       case 1:
         if (isIdentifyRegistered) {
-          // handleNext(3);
           setActiveStep(4);
         } else {
-          // handleNext(1);
           setActiveStep(2);
         }
         break;
@@ -535,16 +482,13 @@ export const ModalEid = ({
         connectToWS();
         break;
       case 6:
-        // faceAndCreate();
         setShouldDetectFaces(true);
         setErrorPG(null);
         break;
       case 7:
         phoneWithoutDialCode = phoneNumber.slice(dialCode.current.length);
         if (phoneWithoutDialCode.match(/^0+/)) {
-          // Remove all leading '0's, leaving at least one '0'
           phoneWithoutDialCode = phoneWithoutDialCode.replace(/^0+/, "");
-          //   phoneNumberRef.current = dialCode.current + phoneWithoutDialCode;
           setPhoneNumber(dialCode.current + phoneWithoutDialCode);
           break;
         }
@@ -572,7 +516,6 @@ export const ModalEid = ({
               setNewListCert(
                 certificateList.filter((item) => item.seal === false)
               );
-              // handleNext(1);
               setActiveStep(13);
             } else {
               createCertificate();
@@ -586,12 +529,9 @@ export const ModalEid = ({
               setNewListCert(
                 certificateList.filter((item) => item.seal === true)
               );
-              // handleNext(1);
               setActiveStep(13);
             } else {
-              // handleNext(2);
               setActiveStep(14);
-              // createCertificate();
             }
             break;
         }
@@ -609,7 +549,6 @@ export const ModalEid = ({
           });
           onClose();
           handleShowModalSignImage();
-          // handleNext(); // chuyển modal
         } else {
           createCertificate();
         }
@@ -721,7 +660,7 @@ export const ModalEid = ({
       PaperProps={{
         sx: {
           width: "500px",
-          maxWidth: "500px", // Set your width here
+          maxWidth: "500px",
           height: "700px",
           borderRadius: "10px",
         },
@@ -770,7 +709,6 @@ export const ModalEid = ({
           sx={{
             height: "100%",
           }}
-          // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
             {activeStep === steps.length + 1 ? (
@@ -825,7 +763,6 @@ export const ModalEid = ({
           variant="contained"
           disabled={
             isFetching ||
-            // activeStep === 5 ||
             ((activeStep === 2 ||
               activeStep === 7 ||
               activeStep === 8 ||
@@ -836,7 +773,6 @@ export const ModalEid = ({
               activeStep === 14) &&
               isSubmitDisabled)
           }
-          //   disabled={isPending || isSubmitDisabled}
           startIcon={
             isFetching ? <CircularProgress color="inherit" size="1em" /> : null
           }

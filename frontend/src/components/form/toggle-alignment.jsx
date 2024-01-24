@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -23,8 +24,6 @@ const ToggleAlignment = ({
       value={value}
       name={name}
       onChange={(event, newAlignment) => {
-        // console.log("newAlignment: ", newAlignment);
-        // console.log("event: ", event);
         onChange(newAlignment);
       }}
       aria-label="Platform"

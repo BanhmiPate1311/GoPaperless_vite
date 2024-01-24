@@ -57,12 +57,11 @@ export const TableField = ({ data }) => {
   ];
 
   const Signed = data.reduce((count, item) => {
-    // If the status is 1, increment the count
     if (item.signerStatus === 2) {
       count++;
     }
     return count;
-  }, 0); // Initial count is 0
+  }, 0);
 
   const handleClickOpen = (index) => {
     const newIsOpen = [...open];
@@ -70,12 +69,6 @@ export const TableField = ({ data }) => {
 
     setOpen(newIsOpen);
   };
-  // const handleClose = (index) => {
-  //   const newIsOpen = [...open];
-  //   newIsOpen[index] = false;
-
-  //   setOpen(newIsOpen);
-  // };
   return (
     <Paper elevation={0}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -90,21 +83,11 @@ export const TableField = ({ data }) => {
           }}
         >
           <TableHead>
-            <TableRow
-              sx={
-                {
-                  // "&:last-child td": {
-                  //   borderTopLeftRadius: "10px",
-                  //   borderBottomLeftRadius: "10px",
-                  // },
-                }
-              }
-            >
+            <TableRow>
               <TableCell
                 align="left"
                 colSpan={5}
                 sx={{
-                  // borderRadius: "10px",
                   backgroundColor: "dialogBackground.main",
                 }}
               >
@@ -119,12 +102,7 @@ export const TableField = ({ data }) => {
                   sx={{
                     top: 57,
                     minWidth: column.minWidth,
-                    // borderTopLeftRadius: i === 0 ? "10px" : "",
-                    // borderBottomLeftRadius: i === 0 ? "10px" : "",
-                    // borderTopRightRadius:
-                    //   i === columns.length - 1 ? "10px" : "",
-                    // borderBottomRightRadius:
-                    //   i === columns.length - 1 ? "10px" : "",
+
                     backgroundColor: "dialogBackground.main",
                   }}
                 >
@@ -156,7 +134,7 @@ export const TableField = ({ data }) => {
                   <TableCell align="left">
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <PerSonIcon />
-                      {/* {tableCheckStatus(item, signerToken)} */}
+
                       {status === 2 ? (
                         <SignedIcon />
                       ) : status === 1 ? (
@@ -185,27 +163,12 @@ export const TableField = ({ data }) => {
                       <WarningIcon />
                     </IconButton>
                   </TableCell>
-                  {/* {open[index] && (
-                    <DialogField
-                      open={open[index]}
-                      title={"signer information"}
-                      data={<SignerInfor data={item} />}
-                      handleClose={() => handleClose(index)}
-                    />
-                  )} */}
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
-
-      {/* <DialogField
-        open={open}
-        title={"signer information"}
-        data={<SignerInfor data={data} />}
-        handleClose={handleClose}
-      /> */}
     </Paper>
   );
 };

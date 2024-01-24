@@ -37,28 +37,12 @@ export const LanguageSelect = ({ color = "white" }) => {
     ) {
       localStorage.setItem("language", "English");
     } else {
-      // Xử lý trường hợp localStorage không khả dụng
       console.error("localStorage is not available!");
     }
   }
 
-  // let language =
-  // typeof window.localStorage === "object" &&
-  // typeof window.localStorage?.getItem !== "undefined"
-  //   ? localStorage.getItem("lang")
-  //   : null;
-  //   if (language) {
-  //   } else {
-  //     if (
-  //       typeof window.localStorage === "object" &&
-  //       typeof window.localStorage?.getItem !== "undefined"
-  //     )
-  //       localStorage?.setItem("lang", "English");
-  //     language = "English";
-  //   }
   useEffect(() => {
     if (lang) {
-      // setLanguage(lang);
       switch (lang) {
         case "English":
           i18n.changeLanguage("en");

@@ -11,10 +11,9 @@ import OtpInput from "react-otp-input";
 function CircularProgressWithLabel(props) {
   const formatTime = (seconds) => {
     const totalTime = 300;
-    const minutes = Math.floor(((seconds / 100) * totalTime) / 60); // Số phút là phần nguyên khi chia cho 60
-    const remainingSeconds = Math.floor(((seconds / 100) * totalTime) % 60); // Số giây còn lại là phần dư khi chia cho 60
+    const minutes = Math.floor(((seconds / 100) * totalTime) / 60);
+    const remainingSeconds = Math.floor(((seconds / 100) * totalTime) % 60);
 
-    // Chuyển định dạng sang mm:ss
     const formattedTime = `${minutes}:${remainingSeconds
       .toString()
       .padStart(2, "0")}`;
@@ -97,22 +96,6 @@ export const Step8 = ({
   const [isFirst, setIsFirst] = useState(true);
   const [otp1, setOtp1] = useState("");
 
-  // const containerStyle = {
-  //   display: "flex",
-  //   justifyContent: "center",
-  // };
-
-  // const inputStyle = {
-  //   width: "43px",
-  //   height: "43px",
-  //   borderRadius: "7px",
-  //   marginLeft: "8px",
-  //   marginRight: "8px",
-  //   /* background: #dddddd; */
-  //   fontSize: "20px",
-  //   border: "1px solid #3b82f6",
-  // };
-
   useEffect(() => {
     if (progress > 0.5) {
       const timer = setInterval(() => {
@@ -130,13 +113,11 @@ export const Step8 = ({
     if (progress <= 0.5) {
       setProgress(0);
       setErrorPG(t("electronic.timeout"));
-      // handleCloseModal1();
     }
   }, [progress]);
 
   const handlePaste = (event) => {
     const data = event.clipboardData.getData("text");
-    // cut "-" from the data
     const formattedData = data.replace(/-/g, "");
 
     setOtp1(formattedData);
@@ -152,8 +133,6 @@ export const Step8 = ({
     }
   };
 
-  // const [result, setResult] = useState();
-  // console.log("result: ", result);
   const handleOnChange = (res) => {
     setOtp1(res);
     // console.log("res: ", res.length);
@@ -208,22 +187,7 @@ export const Step8 = ({
         {/* Enter The Code That Was Sent To Your Phone */}
         {t("electronic.step81")}
       </Typography>
-      {/* <Typography
-        color="#1976D2"
-        marginTop="26px"
-        marginBottom="10px"
-        textAlign="center"
-      >
-        {t("electronic.step83")}
-      </Typography> */}
-      {/* <Box className="container">
-        <AuthCode
-          ref={AuthInputRef}
-          containerClassName="phoneContainer"
-          inputClassName="phoneinputverified"
-          onChange={handleOnChange}
-        />
-      </Box> */}
+
       <OtpInput
         value={otp1}
         onChange={handleOnChange}

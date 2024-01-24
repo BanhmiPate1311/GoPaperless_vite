@@ -109,7 +109,7 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
       PaperProps={{
         sx: {
           width: "500px",
-          maxWidth: "500px", // Set your width here
+          maxWidth: "500px",
           height: "700px",
           borderRadius: "10px",
         },
@@ -171,7 +171,7 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
                 aria-label="full width tabs example"
                 sx={{
                   height: "46px",
-                  minHeight: "46px", //set height for tabs and tab
+                  minHeight: "46px",
                   backgroundColor: "dialogBackground.main",
                 }}
               >
@@ -182,7 +182,7 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
                     minHeight: "46px",
                     height: "46px",
                     textTransform: "none",
-                  }} //set height for tabs and tab
+                  }}
                 />
                 <Tab
                   label={t("0-common.details")}
@@ -191,7 +191,7 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
                     minHeight: "46px",
                     height: "46px",
                     textTransform: "none",
-                  }} //set height for tabs and tab
+                  }}
                 />
               </Tabs>
             </AppBar>
@@ -225,19 +225,15 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
                   multiple
                   id="tags-outlined"
                   size="small"
-                  forcePopupIcon={false} //remove down arrow
+                  forcePopupIcon={false}
                   options={top100Films}
                   getOptionLabel={(option) => option.title}
-                  // defaultValue={[top100Films[0]]}
                   filterSelectedOptions
-                  disableClearable // remove clear icon
-                  // value={listAssurance}
+                  disableClearable
                   onChange={(event, value) => console.log(value)}
                   renderInput={({ InputProps, ...params }) => (
                     <TextField
                       {...params}
-                      // label="filterSelectedOptions"
-                      // placeholder="Favorites"
                       InputProps={{
                         ...InputProps,
                         sx: {
@@ -289,21 +285,13 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
                   </Typography>
                   <PhoneInput
                     country={"vn"}
-                    // placeholder={label}
-                    // enableSearch={true}
                     specialLabel={""}
-                    // value={code}
-                    // onChange={(phone, country) => {
-                    //   setCode(phone);
-                    //   dialCode.current = country.dialCode;
-                    // }}
                     inputStyle={{
                       height: "45px",
                       width: "100%",
                     }}
                     copyNumbersOnly={false}
                     countryCodeEditable={false}
-                    // enableLongNumbers={11}
                     inputProps={{
                       maxLength: 16,
                     }}
@@ -313,11 +301,8 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
               <Box>
                 <FormGroup>
                   <FormControlLabel
-                    // control={<Checkbox defaultChecked />}
-                    // label={t("modal.modal1_1")}
                     control={
                       <div style={{ alignSelf: "start" }}>
-                        {/* set height to make check box align with text */}
                         <Checkbox defaultChecked sx={{ height: "24px" }} />
                       </div>
                     }
@@ -596,10 +581,6 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
         </Button>
         <Button
           variant="contained"
-          //   disabled={isPending || isSubmitDisabled}
-          //   startIcon={
-          //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          //   }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",

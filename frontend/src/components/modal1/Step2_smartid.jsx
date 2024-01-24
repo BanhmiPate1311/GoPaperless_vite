@@ -26,30 +26,7 @@ export const Step2_smartid = ({
   const { t } = useTranslation();
   const [isPhoneSelect, setIsPhoneSelect] = useState(true);
 
-  // console.log("criteria: ", criteria);
   useEffect(() => {
-    // let phoneWithoutDialCode = code.slice(dialCode.current.length);
-    // if (phoneWithoutDialCode.match(/^0+/)) {
-    //   // Remove all leading '0's, leaving at least one '0'
-    //   phoneWithoutDialCode = phoneWithoutDialCode.replace(/^0+/, "");
-    // }
-    // if (isPhoneSelect) {
-    //   let phoneWithoutDialCode = code.slice(dialCode.current.length);
-    //   console.log("phoneWithoutDialCode: ", phoneWithoutDialCode);
-    //   if (
-    //     phoneWithoutDialCode.match(/^0+/) &&
-    //     phoneWithoutDialCode.length === 10
-    //   ) {
-    //     onDisableSubmit(false);
-    //   } else if (
-    //     phoneWithoutDialCode.match(/^(?!0+)/) &&
-    //     phoneWithoutDialCode.length === 9
-    //   ) {
-    //     onDisableSubmit(false);
-    //   } else {
-    //     onDisableSubmit(true);
-    //   }
-    // }
     let phoneWithoutDialCode;
     switch (criteria) {
       case "PHONE":
@@ -83,18 +60,8 @@ export const Step2_smartid = ({
         }
         break;
     }
-
-    // if (
-    //   (isPhoneSelect && code.length < 11) ||
-    //   (!isPhoneSelect && code.length < 9)
-    // ) {
-    //   onDisableSubmit(true);
-    // } else {
-    //   onDisableSubmit(false);
-    // }
   }, [isPhoneSelect, code, criteria]);
   const handleChange1 = (event) => {
-    // console.log("event: ", event.target.value);
     setErrorApi(null);
     setCriteria(event.target.value);
 

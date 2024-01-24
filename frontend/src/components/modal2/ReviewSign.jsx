@@ -63,7 +63,6 @@ export const ReviewSign = forwardRef(
                 : 150
             }
             style={{
-              // background: "#fff",
               position: "absolute",
               borderRadius: "6px",
               top: signatureData.dimension?.y + "%",
@@ -72,14 +71,6 @@ export const ReviewSign = forwardRef(
               opacity: signatureData.verification === undefined ? 1 : 0,
               transition: isControlled ? `transform 0.3s` : `none`,
             }}
-            // minConstraints={[
-            //   signatureData.dimension?.width * (signatureData.pdfPage.width / 100),
-            //   signatureData.dimension?.height * (signatureData.pdfPage.height / 100),
-            // ]}
-            // maxConstraints={[
-            //   signatureData.dimension?.width * (signatureData.pdfPage.width / 100),
-            //   signatureData.dimension?.height * (signatureData.pdfPage.height / 100),
-            // ]}
             minConstraints={[
               isSetPos ||
               signerId +
@@ -128,17 +119,7 @@ export const ReviewSign = forwardRef(
                 ? maxPosibleResizeHeight
                 : 200,
             ]}
-            onResize={(e, { size }) => {
-              // setShowTopbar(false);
-              // setSignature({
-              //   ...signatureData,
-              //   dimension: {
-              //     ...signatureData.dimension,
-              //     width: (size.width / signatureData.pdfPage.width) * 100,
-              //     height: (size.height / signatureData.pdfPage.height) * 100,
-              //   },
-              // });
-            }}
+            onResize={(e, { size }) => {}}
             onResizeStop={(e, { size }) => {
               console.log("e: ", e);
               if (
@@ -223,9 +204,6 @@ export const ReviewSign = forwardRef(
         height: size.height + 30,
         width: size.width + 30,
       }),
-      // buildPageStyles: ({ numPages, pageIndex }) => ({
-      //   zIndex: numPages - pageIndex,
-      // }),
     };
     return (
       <Dialog
@@ -297,9 +275,6 @@ export const ReviewSign = forwardRef(
           </Button>
           <Button
             variant="contained"
-            // startIcon={
-            //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
-            // }
             sx={{
               borderRadius: "10px",
               borderColor: "borderColor.main",

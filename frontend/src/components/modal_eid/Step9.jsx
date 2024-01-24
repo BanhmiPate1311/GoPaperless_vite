@@ -66,16 +66,12 @@ export const Step9 = ({
           type="email"
           //   inputRef={phoneNumberInputRef}
           autoComplete="new-password"
-          InputLabelProps={{ shrink: true }} // shrink here
+          InputLabelProps={{ shrink: true }}
           inputProps={{
-            // style: {
-            //   fontSize: "14px",
-            // },
             sx: {
               fontSize: "14px",
               backgroundColor: "signingWFBackground.main",
             },
-            // maxLength: "16",
           }}
           onChange={handleEmail}
           onKeyDown={(e) => {

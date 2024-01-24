@@ -11,7 +11,7 @@ export const SelectField = ({
   label,
   control,
   content,
-  onChange: externalOnChange, // không cho user overide lại các thuộc tính này
+  onChange: externalOnChange,
   // onBlur: externalOnBlur,
   // ref: externalRef,
   // value: externalValue,
@@ -23,12 +23,7 @@ export const SelectField = ({
   } = useController({ name, control });
   return (
     <FormControl sx={{ width: "100%" }} size="small">
-      <InputLabel
-        id="demo-select-small-label"
-        // sx={{ backgroundColor: "signingWFBackground.main" }}
-      >
-        {label}
-      </InputLabel>
+      <InputLabel id="demo-select-small-label">{label}</InputLabel>
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
@@ -39,16 +34,11 @@ export const SelectField = ({
           onChange(e.target.value);
           externalOnChange?.(e);
         }}
-        // error={!!error}
-        // renderValue={(value) => `⚠️  - ${value}`}
         {...rest}
       >
         {content}
       </Select>
-      <FormHelperText
-        // sx={{ color: "error.main", position: "absolute", top: "100%" }}
-        sx={{ color: "error.main" }}
-      >
+      <FormHelperText sx={{ color: "error.main" }}>
         {error?.message}
       </FormHelperText>
     </FormControl>

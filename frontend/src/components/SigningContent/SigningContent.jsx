@@ -23,19 +23,6 @@ export const SigningContent = ({ workFlow, page }) => {
   const { data: signedInfo } = useQuery({
     queryKey: ["getSignedInfo"],
     queryFn: () => apiService.getSignedInfo(workFlow),
-
-    // select: (data) => {
-    //   const newData = [...data.data];
-    //   const transformer = newData.map((item) => {
-    //     const parsedValue = JSON.parse(item.value);
-    //     return {
-    //       ...item,
-    //       value: parsedValue,
-    //     };
-    //   });
-    //   return transformer;
-    // },
-
     enabled: Object.keys(workFlow).length > 0,
   });
   // console.log("getSignedInfo: ", signedInfo);
@@ -57,15 +44,14 @@ export const SigningContent = ({ workFlow, page }) => {
       sx={{
         display: "flex",
         flexDirection: { xs: "column", lg: "row" },
-        height: { lg: "100%" }, // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha
+        height: { lg: "100%" },
         pt: 2,
         gap: 4,
       }}
     >
-      {/* width={{ xs: "100%", lg: "70%" }} */}
       <Box
         width={{ xs: "100%", lg: "72%" }}
-        height={{ xs: "500px", lg: "100%" }} // ở màn hình lg sẽ cao bằng 100% chiều cao thẻ div cha, ở màn hình sx sẽ cao 500px
+        height={{ xs: "500px", lg: "100%" }}
       >
         <Typography
           variant="h6"

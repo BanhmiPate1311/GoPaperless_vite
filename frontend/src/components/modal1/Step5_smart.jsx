@@ -20,7 +20,6 @@ const ToggleButtonStyle = styled(ToggleButton)({
     border: "2px solid #0f6dca !important",
   },
   "&:not(.Mui-selected)": {
-    // Đặt kiểu cho các phần tử không được chọn
     color: "#111", // tắt chức năng làm mờ của Mui
   },
   marginBottom: "4px",
@@ -48,9 +47,6 @@ export const Step5_smart = ({
     } else {
       onDisableSubmit(false);
     }
-    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-    //   onDisableSubmit(true);
-    // }
   }, [certSelected, onDisableSubmit]);
 
   const content = data?.map((value, index) => (
@@ -68,12 +64,6 @@ export const Step5_smart = ({
           onDoubleClick(index);
         }
       }}
-      // onMouseDown={(e) => {
-      //   if (e.detail === 2) {
-      //     e.preventDefault();
-      //     handleSubmit(handleFormSubmit)();
-      //   }
-      // }}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
         <Tooltip title={t("signing.cert_tooltip")} followCursor>
@@ -137,7 +127,6 @@ export const Step5_smart = ({
   };
 
   const handleChange = (event, nextView) => {
-    // console.log("nextView: ", nextView);
     setCertSelected(nextView);
   };
 

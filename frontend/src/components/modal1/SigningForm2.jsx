@@ -58,9 +58,6 @@ export const SigningForm2 = ({
   setDataSigning,
   signatureData,
 }) => {
-  // console.log("workFlow: ", workFlow);
-  // console.log("index: ", index);
-  // console.log("open: ", open);
   const { t } = useTranslation();
 
   const descriptionElementRef = useRef(null);
@@ -72,7 +69,6 @@ export const SigningForm2 = ({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [assurance, setAssurance] = useState("");
   const [provider, setProvider] = useState("");
-  // console.log("provider: ", provider);
   const [connectorName, setConnectorName] = useState("");
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
@@ -86,11 +82,8 @@ export const SigningForm2 = ({
   const [certSelected, setCertSelected] = useState(0);
 
   const [activeStep, setActiveStep] = useState(1);
-  // console.log("activeStep: ", activeStep);
 
   const signer = getSigner(workFlow);
-  // console.log("signer: ", signer);
-  // console.log("check seal: ", checkEseal());
 
   const signingOptions = signer.signingOptions
     ? signer.signingOptions.map((item) => Object.keys(item)[0])
@@ -126,11 +119,10 @@ export const SigningForm2 = ({
               value: "ELECTRONIC_ID",
             };
           default:
-            // Handle unknown signing option
             return null;
         }
       })
-      .filter(Boolean); // Remove null values from the array
+      .filter(Boolean);
   }, [providerName]);
 
   const filterConnector = signer.signingOptions
@@ -150,14 +142,11 @@ export const SigningForm2 = ({
     lastFileUuid: workFlow.lastFileUuid,
     email: signer?.email,
   });
-  // console.log("dataApi: ", dataApi.current);
 
   const certificateInfor = useMutation({
     mutationFn: async (data) => {
       try {
         const response = await connectWS(data);
-        // console.log("response: ", response);
-        // console.log(checkEseal(response.signingCertificates[0]));
         return response;
       } catch (error) {
         console.log("error: ", error);
@@ -165,9 +154,6 @@ export const SigningForm2 = ({
         throw new Error(error);
       }
     },
-    // onSuccess: (data) => {
-    //   console.log("data: ", data);
-    // },
   });
 
   useEffect(() => {
@@ -283,8 +269,6 @@ export const SigningForm2 = ({
         setActiveStep(1);
         break;
       case 3:
-        // setProvider("");
-        // setConnectorName("");
         setActiveStep(1);
         break;
       case 4:
