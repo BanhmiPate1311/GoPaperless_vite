@@ -10,3 +10,13 @@ export const UseUpdateQr = () => {
   });
   return { mutate, data, isLoading, isPending, error };
 };
+
+export const UseGetCertDetail = () => {
+  const { mutate, data, isLoading, isPending, error } = useMutation({
+    mutationFn: async (body) => {
+      const response = await apiService.getCertDetail(body);
+      return response.data;
+    },
+  });
+  return { mutate, data, isLoading, isPending, error };
+};
