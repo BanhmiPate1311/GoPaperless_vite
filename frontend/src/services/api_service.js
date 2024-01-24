@@ -45,4 +45,9 @@ export const apiService = {
     const response = await api.post("/uiApi/updateQr", data);
     return response.data;
   },
+
+  getCertDetail: async ({ cert }) => {
+    const response = await api.post("/uiApi/getCertDetail", { cert });
+    return response.data;
+  },
 };

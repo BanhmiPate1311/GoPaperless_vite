@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ModalCertInfor } from ".";
+import { UseGetCertDetail } from "@/hook/use-apiService";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -40,6 +41,7 @@ export const Step5_smart = ({
   const { t } = useTranslation();
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
+  const getCertDetail = UseGetCertDetail();
 
   useEffect(() => {
     if (certSelected === null) {
@@ -79,7 +81,17 @@ export const Step5_smart = ({
                 // mx: 2,
               }}
               onClick={() => {
-                handleShowCertInfor(index);
+                getCertDetail.mutate(
+                  {
+                    cert: value.cert,
+                  },
+                  {
+                    onSuccess: () => {
+                      // queryClient.invalidateQueries({ queryKey: ["getField"] });
+                    },
+                  }
+                );
+                // handleShowCertInfor(index);
               }}
             />
           </Box>
