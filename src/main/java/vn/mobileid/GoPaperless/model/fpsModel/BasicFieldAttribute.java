@@ -32,6 +32,7 @@ public class BasicFieldAttribute {
     private String image;
     private String qrToken;
     private String signingToken;
+    private String formatType;
     private List<Integer> initial_pages;
 }
 
