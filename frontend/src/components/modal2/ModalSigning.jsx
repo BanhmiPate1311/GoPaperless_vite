@@ -162,46 +162,52 @@ export const ModalSigning = ({
   const handleFormSubmit = (data) => {
     switch (value) {
       case 0:
-        html2canvas(textElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
-          // console.log("data64: ", data64);
+        html2canvas(textElement.current, { backgroundColor: null }).then(
+          (canvas) => {
+            const data64 = canvas.toDataURL();
+            // console.log("data64: ", data64);
 
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(data64),
+            });
+            onClose();
+            handleShowmodal();
+          }
+        );
         break;
       case 1:
-        html2canvas(drawElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
-          // console.log("data64: ", canvas);
+        html2canvas(drawElement.current, { backgroundColor: null }).then(
+          (canvas) => {
+            const data64 = canvas.toDataURL();
+            // console.log("data64: ", canvas);
 
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(data64),
+            });
+            onClose();
+            handleShowmodal();
+          }
+        );
         break;
       case 2:
-        html2canvas(fileElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
+        html2canvas(fileElement.current, { backgroundColor: null }).then(
+          (canvas) => {
+            const data64 = canvas.toDataURL();
 
-          // console.log(data64);
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
+            // console.log(data64);
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(data64),
+            });
+            onClose();
+            handleShowmodal();
+          }
+        );
         break;
     }
   };

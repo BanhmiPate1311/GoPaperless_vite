@@ -96,6 +96,9 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
       elements[i].style.display = type;
     }
   };
+
+  if (qrData.page !== null && qrData.page !== pdfPage.currentPage) return null;
+
   return (
     <Draggable
       handle={`#qrDrag-${index}`}

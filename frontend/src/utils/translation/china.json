@@ -168,6 +168,9 @@
     "smartid2": "您的验证码将于",
     "smartid3": "秒",
     "smartid4": "如果上面的代码与您在设备屏幕上看到的代码相符，请验证您的 SmartID.",
+    "smartid5": "认证请求",
+    "smartid6": "等待您的批准...",
+    "smartid7": "请检查您的 Smart-ID 上的通知并批准签名请求.",
     "subtitle1": "选择证书即表示我同意将我的姓名和个人识别码转移给服务提供商",
     "title1": "选择证书",
     "upload1": "保持原创",
@@ -177,6 +180,12 @@
 
     "initmodal_title": "申请初始",
     "initmodal_1": "适用于本文档中的所有字段",
+
+    "certDetail_1": "该证书用于以下目的：",
+    "certDetail_2": "向远程计算机证明您的身份",
+    "certDetail_3": "保护电子邮件",
+    "certDetail_4": "发给",
+    "certDetail_5": "由...发出",
 
     "modal1_title": "编辑签名字段",
     "modal1_1": "通过 OTP 验证签名者身份",

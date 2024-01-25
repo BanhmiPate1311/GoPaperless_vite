@@ -168,6 +168,9 @@
     "smartid2": "Mã xác minh của bạn sẽ hết hạn sau",
     "smartid3": "giây",
     "smartid4": "Nếu mã ở trên khớp với mã bạn nhìn thấy trên màn hình thiết bị, vui lòng xác thực SmartID của bạn.",
+    "smartid5": "Yêu cầu xác thực",
+    "smartid6": "Chờ đợi sự chấp thuận của bạn...",
+    "smartid7": "Vui lòng kiểm tra thông báo trên Smart-ID của bạn và phê duyệt yêu cầu ký.",
     "subtitle1": "Bằng việc lựa chọn chứng thư số, tôi đồng ý chuyển tên và mã số nhận dạng cá nhân của mình cho nhà cung cấp dịch vụ",
     "title1": "Chọn chứng thư số",
     "upload1": "Giữ nguyên",
@@ -177,6 +180,12 @@
 
     "initmodal_title": "Áp dụng ban đầu",
     "initmodal_1": "Áp dụng cho tất cả các trường trong tài liệu này",
+
+    "certDetail_1": "Chứng chỉ này được sử dụng cho các mục đích sau:",
+    "certDetail_2": "Chứng minh danh tính của bạn với máy tính từ xa",
+    "certDetail_3": "Bảo vệ email",
+    "certDetail_4": "Cấp cho",
+    "certDetail_5": "Phát hành bởi",
 
     "modal1_title": "Chỉnh sửa trường chữ ký",
     "modal1_1": "Xác thực người ký qua OTP",

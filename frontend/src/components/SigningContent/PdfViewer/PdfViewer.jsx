@@ -246,7 +246,7 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const qrCode = (value) => {
-    console.log("qr: ", field?.qr);
+    // console.log("qr: ", field?.qr);
     if (field?.qr?.length > 0) return;
     const qrToken = uuidv4();
     const newInitField = {
@@ -278,7 +278,7 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const handleClickMenu = (value) => () => {
-    console.log("data: ", value);
+    // console.log("data: ", value);
     handleClose();
     switch (value) {
       case "SIGNATURE":
@@ -325,7 +325,7 @@ export const PdfViewer = ({ workFlow }) => {
           textbox={field?.textbox?.filter((item) => item.type !== "TEXT_FIELD")}
           initial={field?.initial}
           qr={field?.qr}
-          textField={field.textField}
+          textField={field?.textField}
           addText={field?.textbox?.filter((item) => item.type === "TEXT_FIELD")}
         />
       </div>

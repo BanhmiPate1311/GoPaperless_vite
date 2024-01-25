@@ -52,7 +52,10 @@ export const Signature = ({
   const [isShowSigDetail, setIsShowSigDetail] = useState([false]);
 
   const queryClient = useQueryClient();
-  const newPos = useRef({ x: null, y: null });
+  const newPos = useRef({
+    x: (signatureData.dimension?.x * pdfPage.width) / 100,
+    y: (signatureData.dimension?.y * pdfPage.height) / 100,
+  });
   // console.log("currentPos: ", newPos.current);
   const [dataSigning, setDataSigning] = useState({});
 
@@ -293,6 +296,9 @@ export const Signature = ({
       elements[i].style.display = type;
     }
   };
+
+  if (signatureData.page !== null && signatureData.page !== pdfPage.currentPage)
+    return null;
 
   return (
     <>
@@ -542,6 +548,7 @@ export const Signature = ({
                 (newPos.current.x !== dragPosition.x &&
                   newPos.current.y !== dragPosition.y)
               ) {
+                console.log("true");
                 return;
               } else if (
                 e.target.id === `sigDrag-${index}` ||

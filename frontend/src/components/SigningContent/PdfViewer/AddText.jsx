@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -27,9 +27,9 @@ Font.whitelist = [
 ];
 Quill.register(Font, true);
 
-const CustomToolbar = ({ handleSave, handleRemove }) => {
+const CustomToolbar = ({ handleSave, handleRemove, index }) => {
   return (
-    <div id="toolbar">
+    <div id={`toolbar-${index}`} className="toolbar">
       <div
         className="canDrag"
         style={{
@@ -94,16 +94,18 @@ const CustomToolbar = ({ handleSave, handleRemove }) => {
 CustomToolbar.propTypes = {
   handleRemove: PropTypes.func,
   handleSave: PropTypes.func,
+  index: PropTypes.number,
 };
 
 export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
+  // console.log("index: ", index);
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
   const fillForm = UseFillForm();
 
   const [isControlled, setIsControlled] = useState(false);
   const [state, setState] = useState({ value: "" });
-  console.log("state: ", state);
+  // console.log("state: ", state);
 
   const signer = getSigner(workFlow);
   const signerId = signer.signerId;
@@ -112,6 +114,13 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
     x: (addTextData.dimension?.x * pdfPage.width) / 100,
     y: (addTextData.dimension?.y * pdfPage.height) / 100,
   });
+
+  useEffect(() => {
+    setDragPosition({
+      x: (addTextData.dimension?.x * pdfPage.width) / 100,
+      y: (addTextData.dimension?.y * pdfPage.height) / 100,
+    });
+  }, [addTextData]);
 
   const removeSignature = useMutation({
     mutationFn: () => {
@@ -162,7 +171,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
 
   const modules = {
     toolbar: {
-      container: "#toolbar",
+      container: `#toolbar-${index}`,
     },
   };
 
@@ -190,6 +199,12 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
   const handleChange = (value) => {
     setState({ value });
   };
+
+  if (
+    (addTextData.page !== null && addTextData.page !== pdfPage.currentPage) ||
+    addTextData.process_status === "PROCESSED"
+  )
+    return null;
 
   return (
     <Draggable
@@ -326,6 +341,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
           <CustomToolbar
             handleSave={handleSave}
             handleRemove={handleRemoveSignature}
+            index={index}
           />
           <ReactQuill
             value={state.value}

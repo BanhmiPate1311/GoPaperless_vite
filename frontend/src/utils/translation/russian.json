@@ -168,6 +168,9 @@
     "smartid2": "Срок действия вашего кода подтверждения истечет через",
     "smartid3": "секунды",
     "smartid4": "Если приведенный выше код соответствует коду, который вы видите на экране вашего устройства, подтвердите свой SmartID.",
+    "smartid5": "Запрос аутентификации",
+    "smartid6": "Ждем вашего одобрения...",
+    "smartid7": "Пожалуйста, проверьте уведомление на своем Smart-ID и подтвердите запрос на подпись.",
     "subtitle1": "Mit der Auswahl des Zertifikats erkläre ich mich mit der Übermittlung meines Namens und meines persönlichen Identifikationscodes an den Dienstleister einverstanden",
     "title1": "Wählen Sie ein Zertifikat aus",
     "upload1": "Сохранить оригинал",
@@ -177,6 +180,12 @@
 
     "initmodal_title": "Применить первоначальный",
     "initmodal_1": "Применить ко всем полям в этом документе",
+
+    "certDetail_1": "Dieses Zertifikat wird für folgende Zwecke verwendet:",
+    "certDetail_2": "Weisen Sie dem Remote-Computer Ihre Identität nach",
+    "certDetail_3": "E-Mail schützen",
+    "certDetail_4": "Lautend auf",
+    "certDetail_5": "Ausgestellt von",
 
     "modal1_title": "Редактировать поле подписи",
     "modal1_1": "Аутентификация подписывающего лица через OTP",

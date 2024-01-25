@@ -42,6 +42,7 @@ export const Step5_smart = ({
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
   const getCertDetail = UseGetCertDetail();
+  console.log("getCertDetail: ", getCertDetail.data);
 
   useEffect(() => {
     if (certSelected === null) {
@@ -87,11 +88,10 @@ export const Step5_smart = ({
                   },
                   {
                     onSuccess: () => {
-                      // queryClient.invalidateQueries({ queryKey: ["getField"] });
+                      handleShowCertInfor(index);
                     },
                   }
                 );
-                // handleShowCertInfor(index);
               }}
             />
           </Box>
@@ -121,6 +121,7 @@ export const Step5_smart = ({
         open={isShowCertInfor[index]}
         onClose={() => handleCloseCertInfor(index)}
         data={value}
+        certData={getCertDetail.data}
         provider={provider}
       />
     </ToggleButtonStyle>
