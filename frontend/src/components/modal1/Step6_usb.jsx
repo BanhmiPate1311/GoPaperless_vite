@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ModalCertInfor } from ".";
+import { UseGetCertDetail } from "@/hook/use-apiService";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -39,6 +40,7 @@ export const Step6_usb = ({
   const { t } = useTranslation();
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
+  const getCertDetail = UseGetCertDetail();
 
   useEffect(() => {
     if (certSelected === null) {
@@ -78,7 +80,16 @@ export const Step6_usb = ({
                 // mx: 2,
               }}
               onClick={() => {
-                handleShowCertInfor(index);
+                getCertDetail.mutate(
+                  {
+                    cert: value.cert,
+                  },
+                  {
+                    onSuccess: () => {
+                      handleShowCertInfor(index);
+                    },
+                  }
+                );
               }}
             />
           </Box>
@@ -106,6 +117,7 @@ export const Step6_usb = ({
         open={isShowCertInfor[index]}
         onClose={() => handleCloseCertInfor(index)}
         data={value}
+        certData={getCertDetail.data}
         provider={provider}
       />
     </ToggleButtonStyle>

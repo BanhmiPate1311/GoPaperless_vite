@@ -1,31 +1,33 @@
-import { convertTime } from "@/utils/commonFunction";
+import { convertTime, downloadCertFromPEM } from "@/utils/commonFunction";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { Chip } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Grow from "@mui/material/Grow";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
-import { forwardRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import FormControl from "@mui/material/FormControl";
+import Grow from "@mui/material/Grow";
 import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import Tabs from "@mui/material/Tabs";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import { forwardRef, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 // import forge from "node-forge";
 
 function TabPanel(props) {
@@ -72,8 +74,8 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
-  console.log("certData: ", certData);
-  console.log("data: ", data);
+  // console.log("certData: ", certData);
+  // console.log("data: ", data);
   const { t } = useTranslation();
 
   const [value, setValue] = useState(0);
@@ -84,6 +86,9 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
   };
 
   const [type, setType] = useState("all");
+  // console.log("type: ", type);
+
+  const [typeValue, setTypeValue] = useState(0);
 
   const handleSelectChange = (event) => {
     setType(event.target.value);
@@ -107,15 +112,6 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
     }
   };
 
-  // const subjectDN = () => {
-  //   switch (provider) {
-  //     case "USB_TOKEN_SIGNING":
-  //       return data.name;
-  //     default:
-  //       return data.subjectDN;
-  //   }
-  // };
-
   const certificate = [
     {
       title: t("modal.certDetail_4"),
@@ -125,10 +121,6 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
       title: t("modal.certDetail_5"),
       value: issuer(),
     },
-    // {
-    //   title: t("0-common.subjectDN"),
-    //   value: subjectDN(),
-    // },
     {
       title: t("0-common.valid_from"),
       value: data.validFrom ? convertTime(data.validFrom) : null,
@@ -157,7 +149,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
       label: "Critical Extensions Only",
     },
     {
-      value: "prop",
+      value: "proper",
       label: "Properties Only",
     },
   ];
@@ -166,74 +158,92 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
 
   const all = [
     {
+      key: "version",
       label: "Version",
       value: certData?.version,
     },
     {
+      key: "serialNumber",
       label: "Serial number",
       value: certData?.serialNumber,
     },
     {
+      key: "sigAlgName",
       label: "Signature algorithm",
       value: certData?.sigAlgName,
     },
     {
+      key: "sigHashAlgName",
       label: "Signature hash algorithm",
       value: certData?.algorithm,
     },
     {
+      key: "issuer",
       label: "Issuer",
       value: certData?.issuerDN,
     },
     {
+      key: "validFrom",
       label: "Valid from",
       value: certData?.validFrom,
     },
     {
+      key: "validTo",
       label: "Valid to",
       value: certData?.validTo,
     },
     {
+      key: "subject",
       label: "Subject",
       value: certData?.subjectDN,
     },
     {
+      key: "publicKey",
       label: "Public key",
-      value: certData?.subject?.split("\n")[0],
+      value: certData?.publicKey?.split("\n")[0],
     },
     {
+      key: "authInfoAccess",
       label: "Authority information access",
       value: certData?.authorityInformationAccess,
     },
     {
+      key: "subjectKeyIdentifier",
       label: "Subject key identifier",
-      value: certData?.subjectKeyIdentifier?.substring(2),
+      value: certData?.subjectKeyIdentifier?.replace("0414", ""),
     },
     {
+      key: "authorityKeyIdentifier",
       label: "Authority key identifier",
       value: certData?.authorityKeyIdentifier,
     },
     {
+      key: "crlDistributionPoints",
       label: "CRL distribution point",
       value: certData?.crlDistributionPoints,
     },
     {
+      key: "EnhancedkeyUsage",
       label: "Enhanced key usage",
       value: certData?.enhancedKeyUsage,
     },
     {
+      key: "subjectAlternativeName",
       label: "Subject alternative name",
       value: certData?.subjectAlternativeName,
     },
     {
+      key: "basicConstraints",
       label: "Basic Constraints",
       value: certData?.basicConstraints,
     },
     {
+      key: "keyUsage",
       label: "Key usage",
       value: certData?.keyUsage,
     },
     {
+      key: "thumbprint",
       label: "Thumbprint",
       value: certData?.thumbprint,
     },
@@ -241,77 +251,95 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
 
   const field = [
     {
+      key: "version",
       label: "Version",
       value: certData?.version,
     },
     {
+      key: "serialNumber",
       label: "Serial number",
       value: certData?.serialNumber,
     },
     {
+      key: "sigAlgName",
       label: "Signature algorithm",
       value: certData?.sigAlgName,
     },
     {
+      key: "sigHashAlgName",
       label: "Signature hash algorithm",
       value: certData?.algorithm,
     },
     {
+      key: "issuer",
       label: "Issuer",
       value: certData?.issuerDN,
     },
     {
+      key: "validFrom",
       label: "Valid from",
       value: certData?.validFrom,
     },
     {
+      key: "validTo",
       label: "Valid to",
       value: certData?.validTo,
     },
     {
+      key: "subject",
       label: "Subject",
       value: certData?.subjectDN,
     },
     {
+      key: "publicKey",
       label: "Public key",
-      value: certData?.subject?.split("\n")[0],
+      value: certData?.publicKey?.split("\n")[0],
     },
   ];
 
-  const extension = [
+  const ext = [
     {
+      key: "authInfoAccess",
       label: "Authority information access",
       value: certData?.authorityInformationAccess,
     },
     {
+      key: "subjectKeyIdentifier",
       label: "Subject key identifier",
-      value: certData?.subjectKeyIdentifier?.substring(2),
+      value: certData?.subjectKeyIdentifier?.replace("0414", ""),
     },
     {
+      key: "authorityKeyIdentifier",
       label: "Authority key identifier",
       value: certData?.authorityKeyIdentifier,
     },
     {
+      key: "crlDistributionPoints",
       label: "CRL distribution point",
       value: certData?.crlDistributionPoints,
     },
     {
+      key: "EnhancedkeyUsage",
       label: "Enhanced key usage",
       value: certData?.enhancedKeyUsage,
     },
     {
+      key: "subjectAlternativeName",
       label: "Subject alternative name",
       value: certData?.subjectAlternativeName,
     },
     {
+      key: "basicConstraints",
       label: "Basic Constraints",
       value: certData?.basicConstraints,
     },
     {
+      key: "keyUsage",
       label: "Key usage",
       value: certData?.keyUsage,
     },
     {
+      key: "thumbprint",
       label: "Thumbprint",
       value: certData?.thumbprint,
     },
@@ -319,33 +347,42 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
 
   const crit = [
     {
+      key: "basicConstraints",
       label: "Basic Constraints",
       value: certData?.basicConstraints,
     },
     {
+      key: "keyUsage",
       label: "Key usage",
       value: certData?.keyUsage,
     },
   ];
 
-  const props = [
+  const proper = [
     {
+      key: "thumbprint",
       label: "Thumbprint",
       value: certData?.thumbprint,
     },
   ];
 
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
+  const rowData = {
+    all,
+    field,
+    ext,
+    crit,
+    proper,
+  };
 
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
+  // console.log("rowData: ", rowData);
+
+  useEffect(() => {
+    setTypeValue(0);
+  }, [type]);
+
+  const handleRowClick = (value) => {
+    setTypeValue(value);
+  };
 
   return (
     <Dialog
@@ -419,8 +456,8 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                 variant="fullWidth"
                 aria-label="full width tabs example"
                 sx={{
-                  height: "46px",
-                  minHeight: "46px",
+                  height: "45px",
+                  minHeight: "45px",
                   backgroundColor: "dialogBackground.main",
                 }}
               >
@@ -428,8 +465,8 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                   label={t("0-common.general")}
                   {...a11yProps(0)}
                   sx={{
-                    minHeight: "46px",
-                    height: "46px",
+                    minHeight: "45px",
+                    height: "45px",
                     textTransform: "none",
                   }}
                 />
@@ -437,8 +474,8 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                   label={t("0-common.details")}
                   {...a11yProps(1)}
                   sx={{
-                    minHeight: "46px",
-                    height: "46px",
+                    minHeight: "45px",
+                    height: "45px",
                     textTransform: "none",
                   }}
                 />
@@ -497,84 +534,176 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <Stack
-                direction={"row"}
-                alignItems={"center"}
-                width={"100%"}
-                mb={"10px"}
-              >
-                <Typography variant="h4" sx={{ mr: 1 }}>
-                  Show:
-                </Typography>
-                <FormControl fullWidth size="small">
-                  <Select
-                    labelId="demo-simple-select1-label"
-                    id="demo-simple-select"
-                    value={type}
-                    onChange={handleSelectChange}
+              <Stack direction="column" sx={{ height: "513px" }}>
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  width={"100%"}
+                  mb={"10px"}
+                >
+                  <Typography variant="h4" sx={{ mr: 1 }}>
+                    Show:
+                  </Typography>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      labelId="demo-simple-select1-label"
+                      id="demo-simple-select"
+                      value={type}
+                      onChange={handleSelectChange}
+                      sx={{
+                        "& .MuiListItemSecondaryAction-root": {
+                          right: "30px",
+                          display: "flex",
+                        },
+                        backgroundColor: "signingWFBackground.main",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {selectData?.map((item, index) => (
+                        <MenuItem
+                          key={index}
+                          value={item.value}
+                          sx={{ fontSize: "12px" }}
+                        >
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Stack>
+                <Box flexGrow={1} alignSelf={"stretch"}>
+                  <TableContainer
+                    component={Paper}
                     sx={{
-                      "& .MuiListItemSecondaryAction-root": {
-                        right: "30px",
-                        display: "flex",
-                      },
-                      backgroundColor: "signingWFBackground.main",
-                      fontSize: "12px",
+                      maxHeight: 300,
+                      mb: "10px",
+                      backgroundColor: "transparent",
                     }}
                   >
-                    {selectData?.map((item, index) => (
-                      <MenuItem
-                        key={index}
-                        value={item.value}
-                        sx={{ fontSize: "12px" }}
-                      >
-                        {item.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
-              <TableContainer component={Paper}>
-                <Table
-                  sx={{ width: "100%", tableLayout: "fixed" }}
-                  aria-label="simple table"
-                >
-                  <TableHead>
-                    <TableRow sx={{ height: "30px" }}>
-                      {columns.map((column) => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          sx={{ p: "0 20px", width: "50%" }}
+                    <Table
+                      sx={{
+                        width: "100%",
+                        tableLayout: "fixed",
+                        overflow: "auto",
+                      }}
+                      stickyHeader
+                      aria-label="simple table"
+                    >
+                      <TableHead>
+                        <TableRow
+                          sx={{ height: "30px", backgroundColor: "#F9FAFB" }}
                         >
-                          {column.label}
-                        </TableCell>
-                      ))}
-                      {/* <TableCell>Dessert (100g serving)</TableCell>
-                      <TableCell align="right">Calories</TableCell>
-                      <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                      <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                      <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {all.map((row) => (
-                      <TableRow
-                        key={row.name}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                          height: "30px",
-                        }}
-                      >
-                        {/* <TableCell component="th" scope="row">
+                          {columns.map((column, index) => (
+                            <TableCell
+                              key={index}
+                              align={column.align}
+                              sx={{
+                                p: "0 20px",
+                                width: "50%",
+                                fontSize: "12px",
+                                backgroundColor: "#F9FAFB",
+                              }}
+                            >
+                              {column.label}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rowData[type]?.map((row, index) => (
+                          <TableRow
+                            key={index}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                              height: "30px",
+                              backgroundColor:
+                                index === typeValue ? "#A6D1FF" : "",
+                            }}
+                            onClick={() => handleRowClick(index)}
+                          >
+                            {/* <TableCell component="th" scope="row">
                           {row.name}
                         </TableCell> */}
-                        <TableCell sx={{ p: "0 20px" }}>{row.label}</TableCell>
-                        <TableCell sx={{ p: "0 20px" }}>{row.value}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                            <TableCell sx={{ p: "0 20px", fontSize: "12px" }}>
+                              {row.label}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                p: "0 20px",
+                                fontSize: "12px",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {row.value}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+                <Box
+                  width={"100%"}
+                  height={"120px"}
+                  bgcolor={"white"}
+                  border={"1px solid #E5E7EB"}
+                  borderRadius={"6px"}
+                  p={"10px"}
+                  fontSize={"12px"}
+                  sx={{
+                    wordBreak: "break-all",
+                    overflow: "auto",
+                    // textOverflow: "ellipsis",
+                  }}
+                >
+                  {rowData[type]?.[typeValue]?.key !== "publicKey"
+                    ? rowData[type]?.[typeValue]?.value
+                    : certData.publicKeyHex}
+                  {/* {rowData[type]?.[typeValue]?.value} */}
+                </Box>
+                {/* <Typography
+                  variant="h4"
+                  sx={{ mt: "10px" }}
+                  onClick={() => downloadCertFromPEM(data.cert)}
+                >
+                  click
+                </Typography> */}
+                <Stack
+                  width={"100%"}
+                  height={"19px"}
+                  direction={"row"}
+                  justifyContent={"flex-end"}
+                  alignItems={"center"}
+                  mt={"9px"}
+                >
+                  <Chip
+                    label={t("modal.download")}
+                    component="div"
+                    sx={{
+                      // padding: "8px 16px",
+                      height: "19px",
+                      // fontWeight: "500",
+                      // borderRadius: "25px",
+                      backgroundColor: "transparent",
+                      color: "blue",
+                      gap: "10px",
+                      "& span": {
+                        padding: "0",
+                      },
+                      "& svg.MuiChip-icon": {
+                        margin: "0",
+                      },
+                    }}
+                    onClick={() => downloadCertFromPEM(data.cert)}
+                    icon={
+                      <SaveAltIcon fontSize="small" color="borderColor.light" />
+                    }
+                    clickable
+                  />
+                </Stack>
+              </Stack>
             </TabPanel>
           </Box>
         </DialogContentText>

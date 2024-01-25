@@ -83,7 +83,7 @@ export const Signature = ({
         return { isSigned: true, ...item.value };
       });
 
-    const newSig2 = workFlow.participants
+    const newSig2 = workFlow?.participants
       ?.filter(
         (item) =>
           item.certificate &&
