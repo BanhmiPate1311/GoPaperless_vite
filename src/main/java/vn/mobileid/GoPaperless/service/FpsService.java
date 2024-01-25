@@ -260,14 +260,17 @@ public class FpsService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
-        if(data.getValue() != null) {
+        if(data.getType() != null) {
             requestData.put("type", data.getType());
         }
         if(data.getValue() != null) {
             requestData.put("value", data.getValue());
         }
-        if(data.getValue() != null) {
+        if(data.getMultiline() != null) {
             requestData.put("multiline", data.getMultiline());
+        }
+        if(data.getFormatType() != null) {
+            requestData.put("format_type", data.getFormatType());
         }
 
         requestData.put("suffix", data.getSuffix());

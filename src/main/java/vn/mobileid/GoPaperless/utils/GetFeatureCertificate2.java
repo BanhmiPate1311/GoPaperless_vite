@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vn.ra.process;
+package vn.mobileid.GoPaperless.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -43,8 +43,6 @@ import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509ObjectIdentifiers;
 import org.bouncycastle.util.encoders.Hex;
 import sun.security.util.DerInputStream;
-import vn.ra.utility.Config;
-import vn.ra.utility.Definitions;
 
 /**
  *
@@ -213,40 +211,40 @@ public class GetFeatureCertificate2 {
         return distributionPointUrls;
     }
 
-    public static void parserCertificateComponent(String certstr, String[] sComponent)
-        throws CertificateException, IOException, NoSuchAlgorithmException, Exception {
-        Config confWs = new Config();
-        if (certstr.toUpperCase().contains(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_BEGIN_CONTAINS)) {
-            certstr = certstr.replace(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_BEGIN, "");
-        }
-        if (certstr.toUpperCase().contains(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_END_CONTAINS)) {
-            certstr = certstr.replace(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_END, "");
-        }
-        CertificateFactory certFactory1 = CertificateFactory.getInstance("X.509");
-        InputStream in = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(certstr));
-        X509Certificate cert = (X509Certificate) certFactory1.generateCertificate(in);
-        if (cert != null) {
-            PublicKey publicKey = cert.getPublicKey();
-            sComponent[0] = "0";
-            sComponent[1] = "V" + cert.getVersion();
-            sComponent[2] = cert.getSigAlgName();
-            sComponent[3] = publicKey.getAlgorithm();
-            sComponent[4] = GetFeatureCertificate2.getAccessLocation(cert);
-            sComponent[5] = GenFeatureCertificate.getKeyUsage(certstr);
-            sComponent[6] = cert.getExtendedKeyUsage() == null ? "" : cert.getExtendedKeyUsage().toString();
-            sComponent[7] = GetFeatureCertificate2.getSubjectKeyID(cert);
-            sComponent[8] = GetFeatureCertificate2.getAuthorityKeyIdentifier(cert);
-            sComponent[9] = GetFeatureCertificate2.getCertificatePolicyId(cert, 0, 0);
-            List<String> sCRL = getCRLDistributionPoints(cert);
-            sComponent[10] = sCRL.toString();
-            sComponent[11] = GetFeatureCertificate2.getSubjectType(cert);
-            sComponent[12] = cert.getSubjectAlternativeNames() == null ? "" : cert.getSubjectAlternativeNames().toString();
-            String thumbprintAlgorithm = confWs.GetPropertybyCode(Definitions.CONFIG_REPORT_NEAC_THUMBPRINT_ALGORITHM_API);
-            sComponent[13] = thumbprintAlgorithm;
-            sComponent[14] = GetFeatureCertificate2.getThumprintCert(cert, thumbprintAlgorithm);
-            sComponent[15] = javax.xml.bind.DatatypeConverter.printHexBinary(publicKey.getEncoded());
-        } else {
-            sComponent[0] = "1";
-        }
-    }
+//    public static void parserCertificateComponent(String certstr, String[] sComponent)
+//        throws CertificateException, IOException, NoSuchAlgorithmException, Exception {
+//        Config confWs = new Config();
+//        if (certstr.toUpperCase().contains(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_BEGIN_CONTAINS)) {
+//            certstr = certstr.replace(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_BEGIN, "");
+//        }
+//        if (certstr.toUpperCase().contains(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_END_CONTAINS)) {
+//            certstr = certstr.replace(Definitions.CONFIG_WORKER_TAG_CERTIFICATE_END, "");
+//        }
+//        CertificateFactory certFactory1 = CertificateFactory.getInstance("X.509");
+//        InputStream in = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(certstr));
+//        X509Certificate cert = (X509Certificate) certFactory1.generateCertificate(in);
+//        if (cert != null) {
+//            PublicKey publicKey = cert.getPublicKey();
+//            sComponent[0] = "0";
+//            sComponent[1] = "V" + cert.getVersion();
+//            sComponent[2] = cert.getSigAlgName();
+//            sComponent[3] = publicKey.getAlgorithm();
+//            sComponent[4] = GetFeatureCertificate2.getAccessLocation(cert);
+//            sComponent[5] = GenFeatureCertificate.getKeyUsage(certstr);
+//            sComponent[6] = cert.getExtendedKeyUsage() == null ? "" : cert.getExtendedKeyUsage().toString();
+//            sComponent[7] = GetFeatureCertificate2.getSubjectKeyID(cert);
+//            sComponent[8] = GetFeatureCertificate2.getAuthorityKeyIdentifier(cert);
+//            sComponent[9] = GetFeatureCertificate2.getCertificatePolicyId(cert, 0, 0);
+//            List<String> sCRL = getCRLDistributionPoints(cert);
+//            sComponent[10] = sCRL.toString();
+//            sComponent[11] = GetFeatureCertificate2.getSubjectType(cert);
+//            sComponent[12] = cert.getSubjectAlternativeNames() == null ? "" : cert.getSubjectAlternativeNames().toString();
+//            String thumbprintAlgorithm = confWs.GetPropertybyCode(Definitions.CONFIG_REPORT_NEAC_THUMBPRINT_ALGORITHM_API);
+//            sComponent[13] = thumbprintAlgorithm;
+//            sComponent[14] = GetFeatureCertificate2.getThumprintCert(cert, thumbprintAlgorithm);
+//            sComponent[15] = DatatypeConverter.printHexBinary(publicKey.getEncoded());
+//        } else {
+//            sComponent[0] = "1";
+//        }
+//    }
 }
