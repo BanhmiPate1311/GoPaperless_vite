@@ -111,28 +111,30 @@ export const InitialsField = ({
   const handleFormSubmit = (data) => {
     console.log("data: ", data);
 
-    html2canvas(textElement.current).then((canvas) => {
-      const data64 = canvas.toDataURL();
-      fillInit.mutate(
-        {
-          body: {
-            field_name: initData.field_name,
-            apply_to_all: data.apply,
-            initial_pages: [initData.page],
-            image: removeBase64Prefix(data64),
-          },
+    html2canvas(textElement.current, { backgroundColor: null }).then(
+      (canvas) => {
+        const data64 = canvas.toDataURL();
+        fillInit.mutate(
+          {
+            body: {
+              field_name: initData.field_name,
+              apply_to_all: data.apply,
+              initial_pages: [initData.page],
+              image: removeBase64Prefix(data64),
+            },
 
-          documentId: workFlow.documentId,
-        },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["getField"] });
-            queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
-            onClose();
+            documentId: workFlow.documentId,
           },
-        }
-      );
-    });
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({ queryKey: ["getField"] });
+              queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+              onClose();
+            },
+          }
+        );
+      }
+    );
   };
 
   const handleSubmitClick = () => {

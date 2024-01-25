@@ -168,6 +168,9 @@
     "smartid2": "Teie kinnituskood aegub aastal",
     "smartid3": "sekundit",
     "smartid4": "Kui ülaltoodud kood ühtib oma seadme ekraanil kuvatavaga, autentige oma SmartID.",
+    "smartid5": "Autentimistaotlus",
+    "smartid6": "Teie heakskiidu ootel...",
+    "smartid7": "Palun kontrolli oma Smart-ID teadet ja kinnita allkirjastamissoov.",
     "subtitle1": "Sertifikaadi valimisega nõustun oma nime ja isikukoodi edastamisega teenusepakkujale",
     "title1": "Valige sertifikaat",
     "upload1": "Hoidke originaal",
@@ -177,6 +180,12 @@
 
     "initmodal_title": "Rakenda initsiaal",
     "initmodal_1": "Rakenda kõikidele selle dokumendi väljadele",
+
+    "certDetail_1": "Seda sertifikaati kasutatakse järgmistel eesmärkidel:",
+    "certDetail_2": "Tõesta oma identiteet kaugarvutile",
+    "certDetail_3": "Kaitske e-posti",
+    "certDetail_4": "Välja antud",
+    "certDetail_5": "Poolt välja antud",
 
     "modal1_title": "Redigeeri allkirjavälja",
     "modal1_1": "Autentige allkirjastaja OTP kaudu",

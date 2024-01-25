@@ -157,6 +157,9 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
     }, 1000);
   };
 
+  if (textData.page !== null && textData.page !== pdfPage.currentPage)
+    return null;
+
   return (
     <>
       <Draggable
