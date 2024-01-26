@@ -304,7 +304,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
       }}
       disabled={
         signerId + "_" + addTextData.type + "_" + addTextData.suffix !==
-        addTextData.field_name
+          addTextData.field_name || addTextData.process_status === "PROCESSED"
       }
     >
       <Box

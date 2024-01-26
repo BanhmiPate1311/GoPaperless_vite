@@ -17,7 +17,7 @@ export const Document = ({
   textField,
   addText,
 }) => {
-  // console.log("addText: ", addText);
+  // console.log("props: ", props);
 
   const queryClient = useQueryClient();
   let isSetPos;

@@ -217,3 +217,7 @@ input[type="number"] {
 .ql-toolbar.ql-snow {
   border-bottom: none;
 }
+
+.rpv-toolbar__item button[data-testid="toolbar__more-actions-popover-target"] {
+  display: none;
+}

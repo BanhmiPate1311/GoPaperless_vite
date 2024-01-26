@@ -27,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
-  console.log("dataSigning: ", dataSigning);
+  // console.log("dataSigning: ", dataSigning);
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       pin: "",
@@ -161,7 +161,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       timeOutInterval,
       lang,
       function (response) {
-        // console.log("response: ", response);
+        console.log("response: ", response);
         resolve(response);
         disconnectWSHTML();
       },
@@ -207,9 +207,13 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       },
     });
   };
+  console.log("hash error: ", usbHash.error);
 
   useEffect(() => {
-    const error1 = getCertificate?.error?.message || packFile?.error?.message;
+    const error1 =
+      getCertificate?.error?.message ||
+      packFile?.error?.message ||
+      usbHash?.error?.message;
     setErrorApi(error1);
   }, [getCertificate?.error, packFile?.error]);
   return (

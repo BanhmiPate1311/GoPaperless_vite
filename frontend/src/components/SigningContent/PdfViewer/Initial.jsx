@@ -137,7 +137,10 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
     }
   };
 
-  if (initData.page !== null && initData.page !== pdfPage.currentPage)
+  if (
+    (initData.page !== null && initData.page !== pdfPage.currentPage) ||
+    initData.process_status === "PROCESSED"
+  )
     return null;
 
   return (

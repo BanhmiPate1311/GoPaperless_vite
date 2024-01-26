@@ -103,6 +103,15 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
     }
   };
 
+  const pemValue = () => {
+    switch (provider) {
+      case "USB_TOKEN_SIGNING":
+        return data.value;
+      default:
+        return data.cert;
+    }
+  };
+
   const subject = () => {
     switch (provider) {
       case "USB_TOKEN_SIGNING":
@@ -247,7 +256,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
       label: "Thumbprint",
       value: certData?.thumbprint,
     },
-  ];
+  ].filter((item) => item.value !== null && item.value !== "");
 
   const field = [
     {
@@ -295,7 +304,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
       label: "Public key",
       value: certData?.publicKey?.split("\n")[0],
     },
-  ];
+  ].filter((item) => item.value !== null && item.value !== "");
 
   const ext = [
     {
@@ -343,7 +352,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
       label: "Thumbprint",
       value: certData?.thumbprint,
     },
-  ];
+  ].filter((item) => item.value !== null && item.value !== "");
 
   const crit = [
     {
@@ -356,7 +365,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
       label: "Key usage",
       value: certData?.keyUsage,
     },
-  ];
+  ].filter((item) => item.value !== null && item.value !== "");
 
   const proper = [
     {
@@ -364,7 +373,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
       label: "Thumbprint",
       value: certData?.thumbprint,
     },
-  ];
+  ].filter((item) => item.value !== null && item.value !== "");
 
   const rowData = {
     all,
@@ -696,7 +705,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                         margin: "0",
                       },
                     }}
-                    onClick={() => downloadCertFromPEM(data.cert)}
+                    onClick={() => downloadCertFromPEM(pemValue())}
                     icon={
                       <SaveAltIcon fontSize="small" color="borderColor.light" />
                     }
