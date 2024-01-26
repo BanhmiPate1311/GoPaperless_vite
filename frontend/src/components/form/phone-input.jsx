@@ -34,20 +34,6 @@ export const PhoneInputField = ({
           onChange(phone);
           externalOnChange(phone, country);
         }}
-        // inputProps={{
-        //   name: name,
-        //   ref: ref,
-        // }}
-        // onKeyDown={enterToSubmit}
-        // onBlur={(phone, country) => {
-        //   if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
-        // }}
-        // onFocus={(phone, country) => {
-        //   if (phoneNumber === "") setPhoneNumber(`+ ${country.dialCode}`);
-        // }}
-        // disableDropdown
-        // disableCountryCode
-        // renderStringAsFlag={"vn"}
         inputStyle={{
           height: "40px",
           opacity: disabled ? "0.5" : "1",

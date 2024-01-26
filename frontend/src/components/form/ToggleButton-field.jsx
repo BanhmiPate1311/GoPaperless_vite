@@ -18,14 +18,8 @@ export const ToggleButtonField = ({
     field: { onChange, value },
     fieldState: { error },
   } = useController({ name, control });
-  // console.log("value: ", value);
   const handleChange = (event, nextView) => {
-    // console.log("data: ", data);
     onChange(nextView);
-    // console.log("nextView: ", nextView);
-    // setView(nextView);
-    // convert data[nextView] from string to number
-    // const nextViewNumber = Number(nextView);
   };
 
   return (
@@ -39,17 +33,6 @@ export const ToggleButtonField = ({
         {...rest}
       >
         {content}
-        {/* <FormHelperText
-        sx={{
-          color: "red",
-          position: "absolute",
-          bottom: 60,
-          left: "50%",
-          transform: "translateX(-50%)",
-        }}
-      >
-        {error?.message}
-      </FormHelperText> */}
       </ToggleButtonGroup>
       <FormHelperText
         error={!!error}

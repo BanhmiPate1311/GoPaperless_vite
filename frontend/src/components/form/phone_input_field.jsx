@@ -10,7 +10,6 @@ export const PhoneInputField2 = ({
   enterToSubmit,
   disabled = false,
   isSubmitDisabled = false,
-  // copyNumbersOnly = true,
 }) => {
   return (
     <PhoneInput

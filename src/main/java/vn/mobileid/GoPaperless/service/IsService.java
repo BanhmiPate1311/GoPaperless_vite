@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import vn.mobileid.GoPaperless.controller.GatewayAPI;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
 import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
@@ -106,6 +107,9 @@ public class IsService {
             int enterpriseId = data.getEnterpriseId();
             String assurance = data.getAssurance();
             String sResult = "";
+            List<TextField> textFields = data.getTextField();
+//            System.out.println("textFields: " + textFields);
+//            System.out.println("dataText: " + data.getTextField());
 
             WorkFlowList rsWFList = new WorkFlowList();
             connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
@@ -152,6 +156,8 @@ public class IsService {
 
             JsonNode dataNode = objectMapper.readTree(dataResponse);
             String signatureId = dataNode.get("id").asText();
+
+            fpsService.fillForm(documentId, textFields);
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary

@@ -14,13 +14,13 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ModalCertInfor } from ".";
+import { UseGetCertDetail } from "@/hook/use-apiService";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
     border: "2px solid #0f6dca !important",
   },
   "&:not(.Mui-selected)": {
-    // Đặt kiểu cho các phần tử không được chọn
     color: "#111", // tắt chức năng làm mờ của Mui
   },
   marginBottom: "4px",
@@ -41,6 +41,7 @@ export const Step5_smart = ({
   const { t } = useTranslation();
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
+  const getCertDetail = UseGetCertDetail();
 
   useEffect(() => {
     if (certSelected === null) {
@@ -48,9 +49,6 @@ export const Step5_smart = ({
     } else {
       onDisableSubmit(false);
     }
-    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-    //   onDisableSubmit(true);
-    // }
   }, [certSelected, onDisableSubmit]);
 
   const content = data?.map((value, index) => (
@@ -68,12 +66,6 @@ export const Step5_smart = ({
           onDoubleClick(index);
         }
       }}
-      // onMouseDown={(e) => {
-      //   if (e.detail === 2) {
-      //     e.preventDefault();
-      //     handleSubmit(handleFormSubmit)();
-      //   }
-      // }}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
         <Tooltip title={t("signing.cert_tooltip")} followCursor>
@@ -89,7 +81,17 @@ export const Step5_smart = ({
                 // mx: 2,
               }}
               onClick={() => {
-                handleShowCertInfor(index);
+                getCertDetail.mutate(
+                  {
+                    cert: value.cert,
+                  },
+                  {
+                    onSuccess: () => {
+                      // queryClient.invalidateQueries({ queryKey: ["getField"] });
+                    },
+                  }
+                );
+                // handleShowCertInfor(index);
               }}
             />
           </Box>
@@ -137,7 +139,6 @@ export const Step5_smart = ({
   };
 
   const handleChange = (event, nextView) => {
-    // console.log("nextView: ", nextView);
     setCertSelected(nextView);
   };
 

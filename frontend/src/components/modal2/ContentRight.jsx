@@ -82,6 +82,7 @@ ContentRight.propTypes = {
   subtitle: PropTypes.object,
   direction: PropTypes.bool,
   watch: PropTypes.func,
+  type: PropTypes.string,
 };
 
 export default ContentRight;

@@ -1,21 +1,20 @@
+import { Alert, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import CircularProgress, {
   circularProgressClasses,
 } from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import OtpInput from "react-otp-input";
-import { Alert, Stack } from "@mui/material";
 
 function CircularProgressWithLabel(props) {
   const formatTime = (seconds) => {
     const totalTime = 300;
-    const minutes = Math.floor(((seconds / 100) * totalTime) / 60); // Số phút là phần nguyên khi chia cho 60
-    const remainingSeconds = Math.floor(((seconds / 100) * totalTime) % 60); // Số giây còn lại là phần dư khi chia cho 60
+    const minutes = Math.floor(((seconds / 100) * totalTime) / 60);
+    const remainingSeconds = Math.floor(((seconds / 100) * totalTime) % 60);
 
-    // Chuyển định dạng sang mm:ss
     const formattedTime = `${minutes}:${remainingSeconds
       .toString()
       .padStart(2, "0")}`;
@@ -122,18 +121,16 @@ export const Step2 = ({
     }
   }, [progress]);
 
-  // close
   useEffect(() => {
     if (progress <= 0.5) {
       setProgress(0);
       setErrorPG(t("electronic.timeout"));
-      // handleCloseModal1();
     }
   }, [progress]);
 
   const handlePaste = (event) => {
     const data = event.clipboardData.getData("text");
-    // cut "-" from the data
+
     const formattedData = data.replace(/-/g, "");
 
     setOtp1(formattedData);
@@ -174,7 +171,6 @@ export const Step2 = ({
       setProgress(100);
       setErrorPG(null);
       setIsFirst(true);
-      //   AuthInputRef.current?.clear();
       setOtp1("");
       resendCredentialOTP();
       setEnResend(false);
@@ -222,7 +218,6 @@ export const Step2 = ({
         value={otp1}
         onChange={handleOnChange}
         numInputs={6}
-        //   renderSeparator={<span>-</span>}
         renderInput={(props) => <input disabled={isFetching} {...props} />}
         // inputStyle="inputStyle"
         // containerStyle="containerStyle"

@@ -7,29 +7,78 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Grow from "@mui/material/Grow";
 import TextField from "@mui/material/TextField";
 import { Box } from "@mui/material";
 import { convertTime } from "@/utils/commonFunction";
+import forge from "node-forge";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Grow ref={ref} {...props} />;
 });
 
 export const ModalCertInfor = ({ open, onClose, data, provider }) => {
-  //   console.log("data: ", data);
+  console.log("data: ", data);
   const { t } = useTranslation();
 
-  // const credentailID = () => {
-  //   switch (provider) {
-  //     case "USB_TOKEN_SIGNING":
-  //       return data.id;
-  //     default:
-  //       return data.credentialID;
-  //   }
-  // };
+  useEffect(() => {
+    // Đoạn mã PEM (đã bị lược bỏ BEGIN CERTIFICATE và END CERTIFICATE)
+
+    // Thêm "BEGIN CERTIFICATE" và "END CERTIFICATE"
+    const completePemData = `-----BEGIN CERTIFICATE-----\n${data?.cert}\n-----END CERTIFICATE-----`;
+
+    // Tạo đối tượng x509 certificate từ PEM
+    const certificate = forge.pki.certificateFromPem(completePemData);
+
+    // Lấy các giá trị cần thiết từ chứng chỉ
+    const version = certificate.extensions;
+    const serialNumber = certificate.serialNumber;
+    const signatureAlgorithm = certificate.signatureAlgorithm;
+    const signatureHashAlgorithm = certificate.signature.algorithm;
+    const issuer = certificate.issuer;
+    const validFrom = certificate.validity.notBefore;
+    const validTo = certificate.validity.notAfter;
+    const subject = certificate.subject;
+    const publicKey = certificate.publicKey;
+    const publicKeyParams = publicKey.n.toString();
+    const authorityInfoAccess = certificate.extensions.authorityInfoAccess;
+    const subjectKeyIdentifier = certificate.extensions.subjectKeyIdentifier;
+    const authorityKeyIdentifier =
+      certificate.extensions.authorityKeyIdentifier;
+    const crlDistributionPoints = certificate.extensions.crlDistributionPoints;
+    const enhancedKeyUsage = certificate.extensions.extKeyUsage;
+    const subjectAltName = certificate.extensions.subjectAltName;
+    const basicConstraints = certificate.extensions.basicConstraints;
+    const keyUsage = certificate.extensions.keyUsage;
+    // const thumbprint = forge.md.sha1
+    //   .create()
+    //   .update(certificate.raw)
+    //   .digest()
+    //   .toHex();
+
+    // In ra các giá trị
+    console.log("Version:", version);
+    console.log("Serial number:", serialNumber);
+    console.log("Signature algorithm:", signatureAlgorithm);
+    console.log("Signature hash algorithm:", signatureHashAlgorithm);
+    console.log("Issuer:", issuer);
+    console.log("Valid from:", validFrom);
+    console.log("Valid to:", validTo);
+    console.log("Subject:", subject);
+    console.log("Public key:", publicKey);
+    console.log("Public key parameters:", publicKeyParams);
+    console.log("Authority Info Access:", authorityInfoAccess);
+    console.log("Subject Key Identifier:", subjectKeyIdentifier);
+    console.log("Authority Key Identifier:", authorityKeyIdentifier);
+    console.log("CRL Distribution Points:", crlDistributionPoints);
+    console.log("Enhanced Key Usage:", enhancedKeyUsage);
+    console.log("Subject Alternative Name:", subjectAltName);
+    console.log("Basic Constraints:", basicConstraints);
+    console.log("Key Usage:", keyUsage);
+    // console.log("Thumbprint:", thumbprint);
+  }, [open]);
 
   const issuer = () => {
     switch (provider) {
@@ -59,10 +108,6 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
   };
 
   const certificate = [
-    // {
-    //   title: t("0-common.credentialID"),
-    //   value: credentailID(),
-    // },
     {
       title: t("0-common.issuer"),
       value: issuer(),
@@ -146,11 +191,8 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
           sx={{
             height: "100%",
           }}
-          // className="choyoyoy"
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
-            {/* {steps[activeStep]} */}
-            {/* <Box flexGrow={1}>{steps[activeStep - 1]}</Box> */}
             {certificate.map((item, index) => (
               <Box key={index} mb="10px">
                 <Typography
@@ -166,10 +208,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
                   size="small"
                   margin="normal"
                   multiline
-                  //   rows={4}
-                  // name={name}
                   defaultValue={item.value}
-                  //   sx={{ my: 0 }}
                   sx={{
                     my: 0,
                     "& .MuiInputBase-root": {

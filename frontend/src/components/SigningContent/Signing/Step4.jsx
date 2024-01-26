@@ -17,8 +17,7 @@ const ToggleButtonStyle = styled(ToggleButton)({
     border: "2px solid #0f6dca !important",
   },
   "&:not(.Mui-selected)": {
-    // Đặt kiểu cho các phần tử không được chọn
-    color: "#111", // tắt chức năng làm mờ của Mui
+    color: "#111",
   },
   marginBottom: "4px",
   border: "1px solid gray !important",

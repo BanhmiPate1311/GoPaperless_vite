@@ -20,7 +20,6 @@ const ToggleButtonStyle = styled(ToggleButton)({
     border: "2px solid #0f6dca !important",
   },
   "&:not(.Mui-selected)": {
-    // Đặt kiểu cho các phần tử không được chọn
     color: "#111", // tắt chức năng làm mờ của Mui
   },
   marginBottom: "4px",
@@ -37,7 +36,6 @@ export const Step6_usb = ({
   assurance,
   provider,
 }) => {
-  // console.log("provider: ", provider);
   const { t } = useTranslation();
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
@@ -48,9 +46,6 @@ export const Step6_usb = ({
     } else {
       onDisableSubmit(false);
     }
-    // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-    //   onDisableSubmit(true);
-    // }
   }, [certSelected, onDisableSubmit]);
 
   const content = data?.map((value, index) => (
@@ -82,7 +77,6 @@ export const Step6_usb = ({
                 cursor: "pointer",
                 // mx: 2,
               }}
-              // onClick={() => handleOpenSigningForm(index)}
               onClick={() => {
                 handleShowCertInfor(index);
               }}
@@ -130,7 +124,6 @@ export const Step6_usb = ({
   };
 
   const handleChange = (event, nextView) => {
-    // console.log("nextView: ", nextView);
     setCertSelected(nextView);
   };
 

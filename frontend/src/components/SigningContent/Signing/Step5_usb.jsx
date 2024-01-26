@@ -1,25 +1,24 @@
+import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
+import { convertTime } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
-import ToggleButton from "@mui/material/ToggleButton";
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
+import ToggleButton from "@mui/material/ToggleButton";
 import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import { forwardRef } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import { ToggleButtonField } from "../../form";
-import { convertTime } from "@/utils/commonFunction";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
     border: "2px solid #0f6dca !important",
   },
   "&:not(.Mui-selected)": {
-    // Đặt kiểu cho các phần tử không được chọn
-    color: "#111", // tắt chức năng làm mờ của Mui
+    color: "#111",
   },
   marginBottom: "4px",
   border: "1px solid gray !important",

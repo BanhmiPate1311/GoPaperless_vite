@@ -2,6 +2,8 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
+import { InitialsField } from "@/components/modalField";
+import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
@@ -18,6 +20,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
   const [dragPosition, setDragPosition] = useState(null);
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
+  const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
 
   const newPos = useRef({ x: null, y: null });
 
@@ -29,6 +32,8 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
   const maxPosibleResizeHeight =
     (pdfPage.height * (100 - initData.dimension?.y)) / 100;
 
+  const putSignature = UseUpdateSig();
+
   const removeSignature = useMutation({
     mutationFn: () => {
       return fpsService.removeSignature(
@@ -38,7 +43,6 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getField"] });
-      // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
     },
   });
 
@@ -49,15 +53,25 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
     });
   }, [initData]);
 
+  const handleOpenSigningForm = (index) => {
+    const newValue = [...isOpenSigningForm];
+    newValue[index] = true;
+    setOpenSigningForm(newValue);
+  };
+
+  const handleCloseSigningForm = (index) => {
+    const newValue = [...isOpenSigningForm];
+    newValue[index] = false;
+    setOpenSigningForm(newValue);
+  };
+
   const handleRemoveSignature = async () => {
     console.log("remove");
     // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
-    // setSignature(null);
   };
 
   const TopBar = ({ initData }) => {
-    // console.log("signatureData: ", signatureData);
     return (
       <div
         style={{
@@ -85,7 +99,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             color: "#545454",
             cursor: "pointer",
           }}
-          //   onClick={() => handleOpenSigningForm(index)}
+          onClick={() => handleOpenSigningForm(index)}
         />
         <SvgIcon
           component={SettingIcon}
@@ -116,10 +130,8 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
   };
 
   const handleDrag = (type) => {
-    // Sử dụng getElementsByClassName để lấy HTMLCollection
     const elements = document.getElementsByClassName(`initRauria-${index}`);
 
-    // Lặp qua các phần tử trong HTMLCollection và đặt thuộc tính style.display
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.display = type;
     }
@@ -150,38 +162,27 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             `pdf-view-${pdfPage.currentPage - 1}`
           );
 
-          // Lấy kích thước của containerComponent
           const containerRect = containerComponent.getBoundingClientRect();
 
-          // Lấy kích thước của draggableComponent
           const draggableRect = draggableComponent.getBoundingClientRect();
 
-          // Kiểm tra xem draggableComponent có ra khỏi phạm vi của containerComponent không
           if (
             draggableRect.right > containerRect.right ||
             draggableRect.left < containerRect.left ||
             draggableRect.bottom > containerRect.bottom ||
             draggableRect.top < containerRect.top
           ) {
-            // console.log(
-            //   "draggableComponent đã ra khỏi phạm vi của containerComponent"
-            // );
             return;
-          } else {
-            // console.log(
-            //   "draggableComponent nằm trong phạm vi của containerComponent"
-            // );
           }
           let isOverTarget = false;
 
           targetComponents.forEach((targetComponent) => {
-            if (isOverTarget) return; // Nếu đã thoát khỏi vòng lặp, không kiểm tra phần tử tiếp theo
+            if (isOverTarget) return;
 
             const targetRect = targetComponent.getBoundingClientRect();
 
             if (draggableComponent === targetComponent) return;
 
-            // Kiểm tra xem component có đè lên target không
             if (
               draggableRect.left < targetRect.right &&
               draggableRect.right > targetRect.left &&
@@ -194,7 +195,6 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
           });
 
           if (isOverTarget) {
-            // Đặt lại vị trí về ban đầu nếu đè lên một phần tử khác
             return;
           } else {
             if (dragPosition?.x === data.x && dragPosition?.y === data.y) {
@@ -202,39 +202,37 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             }
             setDragPosition({ x: data.x, y: data.y });
             const rectComp = containerComponent.getBoundingClientRect();
-            // console.log("rectComp: ", rectComp);
 
             const rectItem = draggableComponent.getBoundingClientRect();
-            // console.log("rectItem: ", rectItem);
 
             const x =
-              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
+              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width;
 
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
 
-            // putSignature.mutate(
-            //   {
-            //     body: {
-            //       field_name: signatureData.field_name,
-            //       page: pdfPage.currentPage,
-            //       dimension: {
-            //         x: x,
-            //         y: y,
-            //         width: -1,
-            //         height: -1,
-            //       },
-            //       visible_enabled: true,
-            //     },
-            //     field: signatureData.type.toLowerCase(),
-            //     documentId: workFlow.documentId,
-            //   },
-            //   {
-            //     onSuccess: () => {
-            //       queryClient.invalidateQueries({ queryKey: ["getField"] });
-            //     },
-            //   }
-            // );
+            putSignature.mutate(
+              {
+                body: {
+                  field_name: initData.field_name,
+                  page: pdfPage.currentPage,
+                  dimension: {
+                    x: x,
+                    y: y,
+                    width: -1,
+                    height: -1,
+                  },
+                  visible_enabled: true,
+                },
+                field: "initial",
+                documentId: workFlow.documentId,
+              },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
+              }
+            );
           }
         }}
         disabled={
@@ -255,20 +253,10 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
           }
           style={{
             position: "absolute",
-            // top: initData.dimension?.y + "%",
-            // left: initData.dimension?.x + "%",
             zIndex: 100,
             opacity: initData.verification === undefined ? 1 : 0.1,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
-          // minConstraints={[
-          //   initData.dimension?.width * (pdfPage.width / 100),
-          //   initData.dimension?.height * (pdfPage.height / 100),
-          // ]}
-          // maxConstraints={[
-          //   initData.dimension?.width * (pdfPage.width / 100),
-          //   initData.dimension?.height * (pdfPage.height / 100),
-          // ]}
           minConstraints={[
             signerId + "_" + initData.type + "_" + initData.suffix !==
             initData.field_name
@@ -299,21 +287,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
               ? maxPosibleResizeHeight
               : 200,
           ]}
-          onResize={(e, { size }) => {
-            // setShowTopbar(false);
-            // setSignature({
-            //   ...initData,
-            //   dimension: {
-            //     ...initData.dimension,
-            //     width: (size.width / pdfPage.width) * 100,
-            //     height: (size.height / pdfPage.height) * 100,
-            //   },
-            // });
-          }}
-          // onClick={(e) => {
-          //   console.log("e: ", e);
-          //   return;
-          // }}
+          onResize={(e, { size }) => {}}
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);
             if (
@@ -321,28 +295,28 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
               initData.field_name
             )
               return;
-            // putSignature.mutate(
-            //   {
-            //     body: {
-            //       field_name: initData.field_name,
-            //       page: pdfPage.currentPage,
-            //       dimension: {
-            //         x: -1,
-            //         y: -1,
-            //         width: (size.width / pdfPage.width) * 100,
-            //         height: (size.height / pdfPage.height) * 100,
-            //       },
-            //       visible_enabled: true,
-            //     },
-            //     field: initData.type.toLowerCase(),
-            //     documentId: workFlow.documentId,
-            //   },
-            //   {
-            //     onSuccess: () => {
-            //       queryClient.invalidateQueries({ queryKey: ["getField"] });
-            //     },
-            //   }
-            // );
+            putSignature.mutate(
+              {
+                body: {
+                  field_name: initData.field_name,
+                  page: pdfPage.currentPage,
+                  dimension: {
+                    x: -1,
+                    y: -1,
+                    width: (size.width / pdfPage.width) * 100,
+                    height: (size.height / pdfPage.height) * 100,
+                  },
+                  visible_enabled: true,
+                },
+                field: "initial",
+                documentId: workFlow.documentId,
+              },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
+              }
+            );
           }}
           className={`sig init-${index}`}
         >
@@ -377,9 +351,6 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
-            // onClick={(e) => {
-            //   console.log("e: ", e);
-            // }}
             onClick={(e) => {
               if (
                 signerId + "_" + initData.type + "_" + initData.suffix !==
@@ -389,12 +360,12 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
               ) {
                 return;
               } else if (
-                e.target.id === `sigDrag-${index}` ||
-                e.target.parentElement?.id === "drag" ||
+                e.target.id === `initDrag-${index}` ||
+                e.target.parentElement?.id === `initDrag-${index}` ||
                 e.target.id === "click-duoc"
               ) {
                 // Your existing logic for opening the signing form...
-                // handleOpenSigningForm(index);
+                handleOpenSigningForm(index);
               }
             }}
           >
@@ -416,11 +387,21 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
                 className={`initRauria-${index} leftline`}
                 style={{ display: "none" }}
               ></span>
-              init
+              Initials
             </div>
           </Box>
         </ResizableBox>
       </Draggable>
+
+      {isOpenSigningForm[index] && (
+        <InitialsField
+          open={isOpenSigningForm[index]}
+          onClose={() => handleCloseSigningForm(index)}
+          signer={signer}
+          initData={initData}
+          workFlow={workFlow}
+        />
+      )}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import logo1 from "@/assets/images/Logo/gopaperless_white.png";
 import { ContentRight, DialogDraw } from "@/components/modal2";
-import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useState } from "react";
@@ -23,8 +23,6 @@ const DrawSignForm = forwardRef(
   ) => {
     const { t } = useTranslation();
     const [openDraw, setOpenDraw] = useState(false);
-
-    // const sigCanvasRef = useRef(null);
 
     const nameValue =
       typeof dataSigning.certChain.subject === "string"
@@ -54,9 +52,6 @@ const DrawSignForm = forwardRef(
       } else {
         onDisableSubmit(false);
       }
-      // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-      //   onDisableSubmit(true);
-      // }
     }, [watch("drawUrl"), onDisableSubmit, watch("email"), watch]);
 
     const handleOpenDraw = () => {
@@ -67,18 +62,6 @@ const DrawSignForm = forwardRef(
       setOpenDraw(false);
     };
 
-    //   const handleFormSubmit = () => {
-    //     // console.log("data: ", data);
-    //     // const data64 = sigCanvasRef.current.getTrimmedCanvas().toDataURL();
-    //     // onDrawSubmit(data64);
-
-    //     html2canvas(sigCanvasRef.current).then((canvas) => {
-    //       const data64 = canvas.toDataURL();
-    //       //   console.log(data64);
-    //       onDrawSubmit(data64);
-    //     });
-    //   };
-
     const direction =
       watch("name") ||
       watch("date") ||
@@ -88,9 +71,6 @@ const DrawSignForm = forwardRef(
       watch("location");
     return (
       <Box
-        // component="form"
-        // ref={ref}
-        // onSubmit={handleSubmit(handleFormSubmit)}
         sx={showInput ? { width: "100%", height: "100%" } : { minWidth: 400 }}
       >
         <Box mb="10px" sx={showInput ? { display: "none" } : {}}>
@@ -150,7 +130,6 @@ const DrawSignForm = forwardRef(
                 // height: "150px",
                 height: "100%",
               }}
-              // ref={sigCanvasRef}
             >
               <Stack
                 direction="row"
@@ -214,6 +193,8 @@ DrawSignForm.propTypes = {
   onDisableSubmit: PropTypes.func,
   watch: PropTypes.func,
   control: PropTypes.object,
+  showInput: PropTypes.bool,
+  imgBase64: PropTypes.string,
 };
 DrawSignForm.displayName = "DrawSignForm";
 export default DrawSignForm;

@@ -2,7 +2,6 @@ import { api } from "@/utils/api";
 
 export const fpsService = {
   getFields: async ({ documentId }) => {
-    // return api.get(`/fps/${documentId}/getFields`);
     const response = await api.get(`/fps/${documentId}/getFields`);
     return response.data;
   },
@@ -12,15 +11,39 @@ export const fpsService = {
   },
 
   addSignature: async (data, field, documentId) => {
-    return await api.post(`/fps/${documentId}/${field}/addSignature`, data);
+    const response = await api.post(
+      `/fps/${documentId}/${field}/addSignature`,
+      data
+    );
+    return response.data;
   },
 
   putSignature: async (data, field, documentId) => {
-    return await api.put(`/fps/${documentId}/${field}/putSignature`, data);
+    const response = await api.put(
+      `/fps/${documentId}/${field}/putSignature`,
+      data
+    );
+    return response.data;
   },
 
   addTextBox: async (data, field, documentId) => {
-    return await api.post(`/fps/${documentId}/${field}/addTextBox`, data);
+    const response = await api.post(
+      `/fps/${documentId}/${field}/addTextBox`,
+      data
+    );
+    return response.data;
+  },
+
+  fillInit: async (data, documentId) => {
+    const response = await api.post(`/fps/${documentId}/fillInit`, data);
+    return response.data;
+  },
+
+  fillForm: async (data, documentId) => {
+    const response = await api.post(`/fps/${documentId}/fillForm`, {
+      textField: data,
+    });
+    return response.data;
   },
 
   removeSignature: async ({ documentId }, field_name) => {

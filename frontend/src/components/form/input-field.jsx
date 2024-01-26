@@ -6,7 +6,7 @@ import { useController } from "react-hook-form";
 export const InputField = ({
   name,
   control,
-  onChange: externalOnChange, // không cho user overide lại các thuộc tính này
+  onChange: externalOnChange,
   onBlur: externalOnBlur,
   ref: externalRef,
   value: externalValue,

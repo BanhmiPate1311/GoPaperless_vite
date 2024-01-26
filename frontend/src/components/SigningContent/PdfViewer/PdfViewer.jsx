@@ -15,6 +15,7 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
 
@@ -28,12 +29,9 @@ export const PdfViewer = ({ workFlow }) => {
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
-  const { signerToken } = useCommonHook();
+  const { signingToken, signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
-  // console.log("signInfo: ", signInfo);
-  // const [increment, setIncrement] = useState(0);
-  // console.log("increment: ", increment);
 
   const isSetPosRef = useRef(checkIsPosition(workFlow));
   // const isSetPos = isSetPosRef.current;
@@ -46,24 +44,32 @@ export const PdfViewer = ({ workFlow }) => {
   const { data: field } = useQuery({
     queryKey: ["getField"],
     queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
-    // select: (data) => {
-    //   console.log("data: ", data);
-    //   const newData = { ...data };
-    //   return {
-    //     ...newData,
-    //     workFlowId: workFlow.workFlowId,
-    //   };
-    // },
+    select: (data) => {
+      // console.log("data: ", data);
+      const newData = { ...data };
+      const textField = data.textbox
+        .filter((item) => item.type !== "TEXT_FIELD")
+        .map((item) => {
+          return {
+            field_name: item.field_name,
+            value: item.value,
+          };
+        });
+      return {
+        ...newData,
+        textField,
+        workFlowId: workFlow.workFlowId,
+      };
+    },
   });
 
   // console.log("getField: ", field);
 
   const addSignature = UseAddSig();
   const addTextBox = UseAddTextField();
+  // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
-    // console.log("event: ", event);
-    // console.log("page: ", page);
     if (
       checkSignerStatus(signer, signerToken) === 2 ||
       (event.target.className !== "rpv-core__text-layer" &&
@@ -71,7 +77,7 @@ export const PdfViewer = ({ workFlow }) => {
     )
       return;
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left; // Xác định vị trí x dựa trên vị trí của chuột
+    const x = event.clientX - rect.left;
 
     const y = event.clientY - rect.top;
 
@@ -142,6 +148,8 @@ export const PdfViewer = ({ workFlow }) => {
         return signer.metaInformation?.position || "";
       case "COMPANY":
         return signer.metaInformation?.company || "";
+      default:
+        return "";
     }
   };
 
@@ -177,6 +185,39 @@ export const PdfViewer = ({ workFlow }) => {
     );
   };
 
+  const addTextField = (value) => {
+    console.log("value: ", value);
+    const newTextField = {
+      type: "TEXT_FIELD",
+      field_name:
+        signerId + "_" + "TEXT_FIELD" + "_" + Number(field.textbox.length + 1),
+      page: signInfo.page,
+      value: handleValue(value),
+      read_only: false,
+      multiline: true,
+      format_type: "ALPHANUMERIC",
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 22,
+        height: 5,
+      },
+      suffix: Number(field.textbox.length + 1),
+    };
+    addTextBox.mutate(
+      {
+        body: newTextField,
+        field: "text",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
   const initial = (value) => {
     const newInitField = {
       field_name:
@@ -188,12 +229,44 @@ export const PdfViewer = ({ workFlow }) => {
         width: 22,
         height: 5,
       },
-      suffix: Number(field.textbox.length + 1),
+      suffix: Number(field.initial.length + 1),
     };
     addTextBox.mutate(
       {
         body: newInitField,
         field: "initial",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
+  const qrCode = (value) => {
+    console.log("qr: ", field?.qr);
+    if (field?.qr?.length > 0) return;
+    const qrToken = uuidv4();
+    const newInitField = {
+      field_name: signerId + "_" + value + "_" + Number(field.qr.length + 1),
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 20,
+        height: 13,
+      },
+      suffix: Number(field.qr.length + 1),
+      qr_token: qrToken,
+      value: `${window.location.origin}/view/documents/${qrToken}`,
+      signing_token: signingToken,
+    };
+    addTextBox.mutate(
+      {
+        body: newInitField,
+        field: "qrcode",
         documentId: workFlow.documentId,
       },
       {
@@ -217,36 +290,27 @@ export const PdfViewer = ({ workFlow }) => {
       case "COMPANY":
         textField(value);
         break;
+      case "AddText":
+        addTextField(value);
+        break;
       case "INITIAL":
         initial(value);
         break;
+      case "QR":
+        qrCode(value);
+        break;
     }
-
-    // if (
-    //   signatures &&
-    //   signatures.findIndex((item) => item.field_name === signerId) !== -1
-    // ) {
-    //   // handleClose();
-    //   return alert("Signature Duplicated");
-    // }
   };
 
   const renderPage = (props) => {
-    // console.log("props: ", props);
-
     return (
       <div
-        // className="cuong2"
         className={`cuong-page-${props.pageIndex}`}
-        // onContextMenu={(e) => handleContextMenu(e, props.pageIndex + 1)}
-        // ref={menuRef}
         onContextMenu={handleContextMenu(props)}
-        // style={{ cursor: "context-menu" }}
         style={{
           width: "100%",
           height: "100%",
         }}
-        // id="pdf-view"
       >
         <ContextMenu
           contextMenu={contextMenu}
@@ -258,8 +322,11 @@ export const PdfViewer = ({ workFlow }) => {
           props={props}
           workFlow={workFlow}
           signatures={field?.signature}
-          textbox={field?.textbox}
+          textbox={field?.textbox?.filter((item) => item.type !== "TEXT_FIELD")}
           initial={field?.initial}
+          qr={field?.qr}
+          textField={field.textField}
+          addText={field?.textbox?.filter((item) => item.type === "TEXT_FIELD")}
         />
       </div>
     );
@@ -270,9 +337,6 @@ export const PdfViewer = ({ workFlow }) => {
       height: size.height + 30,
       width: size.width + 30,
     }),
-    // buildPageStyles: ({ numPages, pageIndex }) => ({
-    //   zIndex: numPages - pageIndex,
-    // }),
   };
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();

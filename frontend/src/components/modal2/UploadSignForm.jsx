@@ -54,16 +54,6 @@ const UploadSignForm = forwardRef(
       itverText: "itext core 8.0.2",
     };
 
-    // const subtitle = {
-    //   labelText: false,
-    //   nameText: "name name",
-    //   dnText: "your Distinguished Name",
-    //   reasonText: "your reason",
-    //   locationText: "your location",
-    //   dateText: "your date",
-    //   itverText: "your itver",
-    // };
-
     const direction =
       watch("name") ||
       watch("date") ||
@@ -78,9 +68,6 @@ const UploadSignForm = forwardRef(
       } else {
         onDisableSubmit(false);
       }
-      // if (provider === "USB_TOKEN_SIGNING" && errorPG) {
-      //   onDisableSubmit(true);
-      // }
     }, [watch("fileUrl"), onDisableSubmit, watch("email"), watch]);
 
     const handleUploadFile = () => {
@@ -89,9 +76,6 @@ const UploadSignForm = forwardRef(
 
     return (
       <Box
-        // component="form"
-        // ref={ref}
-        // onSubmit={handleSubmit(handleFormSubmit)}
         sx={showInput ? { width: "100%", height: "100%" } : { minWidth: 400 }}
       >
         <Box mb="10px" sx={showInput ? { display: "none" } : {}}>
@@ -114,8 +98,6 @@ const UploadSignForm = forwardRef(
             borderRadius: "6px",
             border: !imgBase64 ? "2px solid #357EEB" : "none",
             position: "relative",
-            // backgroundColor: "white",
-            // set background image
             "&:before": watch("logo")
               ? {
                   content: '""',
@@ -141,23 +123,18 @@ const UploadSignForm = forwardRef(
           )}
           {!imgBase64 && (
             <Stack
-              // direction="row-reverse"
               direction={
                 watch("alignment") === "auto" || watch("alignment") === "left"
                   ? "row"
                   : "row-reverse"
               }
               sx={{
-                // flexDirection: "row-reversed",
                 display: "flex",
                 width: "100%",
-                // height: "150px",
                 height: "100%",
                 alignItems: "center",
                 minHeight: "100px",
-                // padding: "2rem 0",
               }}
-              // ref={sigFileRef}
             >
               <Stack
                 justifyContent={"center"}
@@ -178,7 +155,6 @@ const UploadSignForm = forwardRef(
                   <Box
                     component="img"
                     sx={{
-                      // height: "100%",
                       maxWidth: "70%",
                       maxHeight: "100%",
                     }}
@@ -223,6 +199,8 @@ UploadSignForm.propTypes = {
   onDisableSubmit: PropTypes.func,
   watch: PropTypes.func,
   control: PropTypes.object,
+  showInput: PropTypes.bool,
+  imgBase64: PropTypes.string,
 };
 UploadSignForm.displayName = "TextSignForm";
 export default UploadSignForm;

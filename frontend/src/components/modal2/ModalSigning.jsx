@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { AddSubtitle, TextSignForm, ReviewSign } from ".";
+import { AddSubtitle, ReviewSign, TextSignForm } from ".";
 import DrawSignForm from "./DrawSignForm";
 import UploadSignForm from "./UploadSignForm";
 
@@ -160,13 +160,6 @@ export const ModalSigning = ({
   };
 
   const handleFormSubmit = (data) => {
-    // let config = {
-    //   fetchArgs: {
-    //     mode: "no-cors",
-    //   },
-    // };
-    // setIsPending(true);
-    // console.log("data: ", data);
     switch (value) {
       case 0:
         html2canvas(textElement.current).then((canvas) => {
@@ -432,9 +425,6 @@ export const ModalSigning = ({
         <Button
           variant="contained"
           disabled={isSubmitDisabled}
-          // startIcon={
-          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          // }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",
@@ -457,7 +447,6 @@ export const ModalSigning = ({
         watch={watch}
         control={control}
         value={value}
-        // Resize & show PDF
         signatureData={signatureData}
         pdfPage={pdfPage}
         isControlled={isControlled}

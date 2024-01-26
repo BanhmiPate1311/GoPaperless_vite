@@ -15,14 +15,14 @@ export const OverView = ({ workFlow }) => {
   const { t } = useTranslation();
   const { signingToken } = useCommonHook();
 
-  console.log("OverView workFlow", workFlow?.signingToken);
+  // console.log("OverView workFlow", workFlow?.signingToken);
 
   const { data: headerFooter } = useQuery({
     queryKey: ["checkHeader"],
-    // queryFn: () => apiService.checkHeaderFooter(signingToken), //code a Cường
-    queryFn: () => apiService.checkHeaderFooter(workFlow?.signingToken),
-    // enabled: signingToken !== undefined, //chỉ gọi api khi có giá trị id // Code a Cường
-    enabled: workFlow?.signingToken !== undefined, //chỉ gọi api khi có giá trị id
+    queryFn: () => apiService.checkHeaderFooter(signingToken), //code a Cường
+    // queryFn: () => apiService.checkHeaderFooter(workFlow?.signingToken),
+    enabled: signingToken !== undefined, //chỉ gọi api khi có giá trị id // Code a Cường
+    // enabled: workFlow?.signingToken !== undefined, //chỉ gọi api khi có giá trị id
   });
   // console.log("headerFooter: ", headerFooter?.data);
   return (

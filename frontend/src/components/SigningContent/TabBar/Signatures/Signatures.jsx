@@ -28,7 +28,7 @@ export const Signatures = ({ sigList1, sigList2 }) => {
   const valueSign = [
     {
       name: t("validation.sigValidTitle"),
-      value: signedInfo.filter((sig) => {
+      value: signedInfo?.filter((sig) => {
         return sig.indication === "TOTAL_PASSED" && sig.is_valid === true;
       }),
       icon: {
@@ -47,7 +47,7 @@ export const Signatures = ({ sigList1, sigList2 }) => {
     },
     {
       name: t("validation.indeterminateTitle"),
-      value: signedInfo.filter((sig) => {
+      value: signedInfo?.filter((sig) => {
         return sig.indication === "INDETERMINATE";
       }),
       icon: {
@@ -67,7 +67,7 @@ export const Signatures = ({ sigList1, sigList2 }) => {
     },
     {
       name: t("validation.invalidSig"),
-      value: signedInfo.filter((sig) => {
+      value: signedInfo?.filter((sig) => {
         // console.log("invalid: ", sig.signature.is_valid);
 
         return (

@@ -8,6 +8,7 @@ import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.mobileid.GoPaperless.controller.GatewayAPI;
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.JwtModel;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.PadesConstants;
 import vn.mobileid.GoPaperless.model.Electronic.request.*;
@@ -614,6 +615,7 @@ public class ElectronicService {
         String otp = authorizeOTPRequest.getOtp();
         String contactInfor = authorizeOTPRequest.getContactInfor();
         String assurance = authorizeOTPRequest.getAssurance();
+        List<TextField> textFields = authorizeOTPRequest.getTextField();
 
         try {
             boolean error = false;
@@ -692,7 +694,8 @@ public class ElectronicService {
             JsonNode dataNode = objectMapper.readTree(dataResponse);
             String signatureId = dataNode.get("id").asText();
 
-            System.out.println("assurance: " + assurance);
+            fpsService.fillForm(documentId, textFields);
+
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
             postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);

@@ -42,7 +42,7 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
     // { icon: <TextArea />, label: "Text Area" },
     // { icon: <RadioButton />, label: "Radio Button" },
     // { icon: <CheckBox />, label: "Check Box" },
-    { icon: <QRCode />, label: t("0-common.qrcode"), value: "QRCode" },
+    { icon: <QRCode />, label: t("0-common.qrcode"), value: "QR" },
     {
       icon: <AddText />,
       label: t("0-common.addtext"),
@@ -83,10 +83,6 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
 };
 ContextMenu.propTypes = {
   contextMenu: PropTypes.shape({
-    // Define the structure of the object if needed
-    // For example:
-    // key1: PropTypes.string,
-    // key2: PropTypes.number,
     mouseY: PropTypes.number,
     mouseX: PropTypes.number,
   }),

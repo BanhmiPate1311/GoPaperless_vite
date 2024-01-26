@@ -52,9 +52,8 @@ export const Step6 = ({
         webcamRef.current.video,
         false
       );
-      //   console.log("prediction:", prediction);
-      const MAX_FACE_WIDTH = 150; // Ngưỡng kích thước khuôn mặt (tùy chọn)
-      const MAX_FACE_HEIGHT = 110; // Ngưỡng kích thước khuôn mặt (tùy chọn)
+      const MAX_FACE_WIDTH = 150;
+      const MAX_FACE_HEIGHT = 110;
 
       const ctx = canvasRef.current.getContext("2d");
       ctx.drawImage(webcamRef.current.video, 0, 0, 440, 300);
@@ -65,13 +64,9 @@ export const Step6 = ({
         setDirection(null);
         const pred = prediction.current[0];
         const faceWidth = pred.bottomRight[0] - pred.topLeft[0];
-        // console.log("faceWidth: ", faceWidth);
         const faceHeight = pred.bottomRight[1] - pred.topLeft[1];
-        // console.log("faceHeight: ", faceHeight);
-        // So sánh kích thước khuôn mặt với ngưỡng
         if (faceWidth < MAX_FACE_WIDTH || faceHeight < MAX_FACE_HEIGHT) {
           setDirection(t("electronic.cam closer"));
-          // console.log("first");
         } else {
           setDirection(null);
           prediction.current.forEach((pred) => {
@@ -86,7 +81,6 @@ export const Step6 = ({
               pred.bottomRight[1] - pred.topLeft[1] + 20
             );
             ctx.stroke();
-            // console.log("landmark81: ", pred.landmarks);
             ctx.fillStyle = "transparent";
             pred.landmarks.forEach((landmark) => {
               ctx.fillRect(landmark[0], landmark[1], 5, 5);
@@ -99,46 +93,6 @@ export const Step6 = ({
   };
 
   const isWaitingForCaptureRef = useRef(false);
-
-  // const checkFaceDirection = (landmarks) => {
-  //   // Xác định các điểm landmark cần thiết để xác định hướng
-  //   const eyeLeft = landmarks[0]; // Điểm mắt trái
-  //   const eyeRight = landmarks[1]; // Điểm mắt phải
-  //   const noseTip = landmarks[2]; // Điểm mũi
-
-  //   // Tính vector giữa mắt trái và mắt phải
-  //   const eyeVector = [eyeRight[0] - eyeLeft[0], eyeRight[1] - eyeLeft[1]];
-
-  //   // Tính góc giữa vector mắt và trục ngang
-  //   const angle = Math.atan2(eyeVector[1], eyeVector[0]) * (180 / Math.PI);
-
-  //   // Xác định hướng dựa trên góc
-  //   if (angle > -30 && angle < 30) {
-  //     // Hướng thẳng
-  //     console.log("Hướng thẳng");
-  //   } else if (angle <= -30) {
-  //     // Hướng qua trái
-  //     console.log("Hướng qua trái");
-  //   } else {
-  //     // Hướng qua phải
-  //     console.log("Hướng qua phải");
-  //   }
-
-  //   // Kiểm tra góc nghiêng
-  //   const verticalAngle =
-  //     Math.atan2(
-  //       noseTip[1] - (eyeLeft[1] + eyeRight[1]) / 2,
-  //       noseTip[0] - (eyeLeft[0] + eyeRight[0]) / 2
-  //     ) *
-  //     (180 / Math.PI);
-  //   if (verticalAngle > 15) {
-  //     // Ngước lên
-  //     console.log("Ngước lên");
-  //   } else if (verticalAngle < -15) {
-  //     // Cúi xuống
-  //     console.log("Cúi xuống");
-  //   }
-  // };
 
   const checkFaceDirection = (landmarks) => {
     const eyeLeft = landmarks[0];
@@ -226,16 +180,9 @@ export const Step6 = ({
     if (model && cameraSetup && shouldDetectFaces && hasCamera) {
       const id = setInterval(detectFaces, 100);
       setIntervalId(id);
-      //   detectFaces(); // Gọi detectFaces() sau khi model và camera được tải
       return () => clearInterval(id);
     }
   }, [model, cameraSetup, shouldDetectFaces, hasCamera]);
-
-  //   return (
-  //     <div className="App">
-  //       <Webcam ref={webcamRef} autoPlay />
-  //     </div>
-  //   );
 
   const captureFace = (prediction) => {
     if (shouldDetectFaces) {
@@ -275,7 +222,6 @@ export const Step6 = ({
         sx={{ fontWeight: 700, color: "textBold.main" }}
         textAlign={"center"}
       >
-        {/* Identity verification process in progress. */}
         {t("electronic.step61")}
       </Typography>
 
@@ -285,8 +231,6 @@ export const Step6 = ({
         marginTop="10px"
         textAlign={"center"}
       >
-        {/* Please do not close this page. After your identity is verified, next
-    step will open automatically. */}
         {t("electronic.step62")}
       </Typography>
       {direction && (
@@ -306,8 +250,7 @@ export const Step6 = ({
           ref={webcamRef}
           // mirrored={true}
           autoPlay={true}
-          audio={false} // Vô hiệu hóa âm thanh để tránh lỗi trong một số trình duyệt
-          // style={{ display: "none" }}
+          audio={false}
           style={{ zIndex: -100 }}
           videoConstraints={{
             width: 440, //469
@@ -315,15 +258,6 @@ export const Step6 = ({
           }}
         />
         <canvas className="step6" width={440} height={300} ref={canvasRef} />
-        {/* <button
-    onClick={() => {
-      const image = captureFace(prediction.current);
-      handleNext();
-      console.log("Captured image:", image);
-    }}
-  >
-    Chụp ảnh
-  </button> */}
       </Box>
     </Box>
   );

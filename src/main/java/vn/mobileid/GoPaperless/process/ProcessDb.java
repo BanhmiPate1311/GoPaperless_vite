@@ -902,6 +902,33 @@ public class ProcessDb {
         return convrtr;
     }
 
+    public String USP_GW_PPL_WORKFLOW_UPDATE_QR_TOKEN(String pSIGNING_TOKEN, String pQR_TOKEN, String pLAST_MODIFIED_BY)
+            throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_UPDATE_QR_TOKEN(?,?,?,?) }");
+
+            proc_stmt.setString("pSIGNING_TOKEN", pSIGNING_TOKEN);
+            proc_stmt.setString("pQR_TOKEN", pQR_TOKEN);
+            proc_stmt.setString("pLAST_MODIFIED_BY", pLAST_MODIFIED_BY);
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+            // System.out.println("USP_PPL_WORKFLOW_UPDATE_STATUS: " +
+            // proc_stmt.toString());
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+        return convrtr;
+    }
+
     // public String USP_GW_PPL_FILE_DETAIL_GET_FROM_UPLOAD_TOKEN(String
     // pUPLOAD_TOKEN, List<PplFileDetail> listPplFileDetail) throws Exception {
     // String convrtr = "1";

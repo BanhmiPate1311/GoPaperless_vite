@@ -6,27 +6,12 @@ export const getSignature = (value, signerId, workflowId) => {
   );
 };
 
-// export const checkIsPosition = (metaInf1) => {
-//   if (metaInf1.pdf && metaInf1.pdf.annotation) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
-
 export const getSigner = (workFlow) => {
   const signer = workFlow?.participants?.find(
     (item) => item.signerToken === workFlow.signerToken
   );
   return signer;
 };
-
-// export const getSignerId = (workFlow) => {
-//   const signer = workFlow?.participants?.find(
-//     (item) => item.signerToken === workFlow.signerToken
-//   );
-//   return signer?.signerId;
-// };
 
 export const checkIsPosition = (workFlow) => {
   if (!workFlow) return false;
@@ -286,7 +271,7 @@ export const checkEseal = (cert) => {
 };
 
 export const debounce = (fn, delay = 1000) => {
-  let timerId = null;
+  let timerId;
   return (...args) => {
     clearTimeout(timerId);
     timerId = setTimeout(() => fn(...args), delay);

@@ -23,7 +23,6 @@ const ToggleButtonStyle = styled(ToggleButton)({
     border: "2px solid #0f6dca !important",
   },
   "&:not(.Mui-selected)": {
-    // Đặt kiểu cho các phần tử không được chọn
     color: "#111", // tắt chức năng làm mờ của Mui
   },
   marginBottom: "4px",
@@ -175,8 +174,8 @@ export const Step13 = ({
             sx={{
               overflowY: "auto",
               maxHeight: 300,
-              opacity: value !== "certs" ? 0.5 : 1, // Thay đổi opacity tùy thuộc vào giá trị của value
-              pointerEvents: value !== "certs" ? "none" : "auto", // Vô hiệu hóa sự kiện chạm và click tùy thuộc vào giá trị của value
+              opacity: value !== "certs" ? 0.5 : 1,
+              pointerEvents: value !== "certs" ? "none" : "auto",
             }}
             disabled={value !== "certs"}
           >

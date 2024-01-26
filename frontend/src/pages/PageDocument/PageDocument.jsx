@@ -1,6 +1,6 @@
+// import "@/assets/style/documents.css";
 import { SigningContent } from "@/components/SigningContent";
 import { Cookie } from "@/components/cookie";
-import { useCommonHook } from "@/hook";
 import { apiService } from "@/services/api_service";
 import { checkWorkflowStatus } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
@@ -12,29 +12,27 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
-import { NotFound } from "../NotFound";
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "@/assets/style/documents.css";
-
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+import { NotFound } from "../NotFound";
 
 export const PageDocument = () => {
   const { t } = useTranslation();
-  const [signingToken, setSigningToken] = useState()
-  const [checkEnable, setCheckEnable] = useState(0)
+  const [signingToken, setSigningToken] = useState();
+  const [checkEnable, setCheckEnable] = useState(0);
 
   const { qr } = useParams();
-  console.log("param: ", qr)
+  console.log("param: ", qr);
 
   // const { signingToken, signerToken } = useCommonHook();
-  console.log("signingToken: ", signingToken)
+  console.log("signingToken: ", signingToken);
 
   const getView = async () => {
     try {
       const response = await apiService.getView({ qr });
-      setSigningToken(response.data)
-      console.log("response: ",response)
+      setSigningToken(response.data);
+      console.log("response: ", response);
     } catch (error) {
       console.error(error);
     }
@@ -47,12 +45,12 @@ export const PageDocument = () => {
   }, []);
 
   useEffect(() => {
-    if (signingToken && signingToken !== '') {
+    if (signingToken && signingToken !== "") {
       setCheckEnable(1);
     }
   }, [signingToken]);
-  
-  console.log("checkEnable: ",checkEnable)
+
+  console.log("checkEnable: ", checkEnable);
 
   const workFlow = useQuery({
     queryKey: ["getWorkFlow"],
@@ -86,11 +84,10 @@ export const PageDocument = () => {
       };
     },
   });
-  
 
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
 
-  if (signingToken === '') {
+  if (signingToken === "") {
     return <NotFound />;
   } else {
     return (
@@ -126,7 +123,6 @@ export const PageDocument = () => {
                 component="div"
                 sx={{ flexGrow: 1, textTransform: "uppercase" }}
               >
-
                 {workFlow?.data?.documentName}
               </Typography>
               <Chip
@@ -165,10 +161,9 @@ export const PageDocument = () => {
             height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
           }}
         >
-          {workFlow.data && <SigningContent 
-                              workFlow={workFlow.data}
-                              page="document"
-                            />}
+          {workFlow.data && (
+            <SigningContent workFlow={workFlow.data} page="document" />
+          )}
         </Container>
         <Cookie />
       </Stack>

@@ -33,6 +33,7 @@ public class RsspRequest {
     private List<String> signatures;
     private int workFlowId;
     private String assurance;
+    private List<TextField> textField;
 
     public CertChain getCertChain() {
         return certChain;
@@ -273,4 +274,14 @@ public class RsspRequest {
     public void setAssurance(String assurance) {
         this.assurance = assurance;
     }
+
+    public List<TextField> getTextField() {
+        return textField;
+    }
+
+    public void setTextField(List<TextField> textField) {
+        this.textField = textField;
+    }
+
+
 }

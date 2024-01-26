@@ -21,7 +21,13 @@ import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
 
 /* eslint-disable react/prop-types */
-export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+export const Signature = ({
+  index,
+  pdfPage,
+  signatureData,
+  workFlow,
+  textField,
+}) => {
   // console.log("pdfPage: ", pdfPage);
   // console.log("pdfPage: ", pdfPage);
   // console.log("workFlow: ", workFlow);
@@ -92,20 +98,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   const maxPosibleResizeHeight =
     (pdfPage.height * (100 - signatureData.dimension?.y)) / 100;
 
-  // const putSignature = useMutation({
-  //   mutationFn: ({ body, field }) => {
-  //     return fpsService.putSignature(
-  //       { documentId: workFlow.documentId },
-  //       body,
-  //       field
-  //     );
-  //   },
-  // });
-
   const putSignature = UseUpdateSig();
 
   useEffect(() => {
-    // const metaInf1 = signer.metaInformation;
     setIsSetPos(checkIsPosition(workFlow));
   }, [workFlow]);
 
@@ -231,11 +226,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
     console.log("remove");
     // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
-    // setSignature(null);
   };
 
   const TopBar = ({ signatureData }) => {
-    // console.log("signatureData: ", signatureData);
     return (
       <div
         style={{
@@ -294,17 +287,12 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   };
 
   const handleDrag = (type) => {
-    // Sử dụng getElementsByClassName để lấy HTMLCollection
     const elements = document.getElementsByClassName(`rauria-${index}`);
 
-    // Lặp qua các phần tử trong HTMLCollection và đặt thuộc tính style.display
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.display = type;
     }
   };
-
-  // if (signatureData.page !== null && signatureData.page !== pdfPage.currentPage)
-  //   return null;
 
   return (
     <>
@@ -334,38 +322,27 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             `pdf-view-${pdfPage.currentPage - 1}`
           );
 
-          // Lấy kích thước của containerComponent
           const containerRect = containerComponent.getBoundingClientRect();
 
-          // Lấy kích thước của draggableComponent
           const draggableRect = draggableComponent.getBoundingClientRect();
 
-          // Kiểm tra xem draggableComponent có ra khỏi phạm vi của containerComponent không
           if (
             draggableRect.right > containerRect.right ||
             draggableRect.left < containerRect.left ||
             draggableRect.bottom > containerRect.bottom ||
             draggableRect.top < containerRect.top
           ) {
-            // console.log(
-            //   "draggableComponent đã ra khỏi phạm vi của containerComponent"
-            // );
             return;
-          } else {
-            // console.log(
-            //   "draggableComponent nằm trong phạm vi của containerComponent"
-            // );
           }
           let isOverTarget = false;
 
           targetComponents.forEach((targetComponent) => {
-            if (isOverTarget) return; // Nếu đã thoát khỏi vòng lặp, không kiểm tra phần tử tiếp theo
+            if (isOverTarget) return;
 
             const targetRect = targetComponent.getBoundingClientRect();
 
             if (draggableComponent === targetComponent) return;
 
-            // Kiểm tra xem component có đè lên target không
             if (
               draggableRect.left < targetRect.right &&
               draggableRect.right > targetRect.left &&
@@ -378,7 +355,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           });
 
           if (isOverTarget) {
-            // Đặt lại vị trí về ban đầu nếu đè lên một phần tử khác
             return;
           } else {
             if (dragPosition?.x === data.x && dragPosition?.y === data.y) {
@@ -386,13 +362,11 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             }
             setDragPosition({ x: data.x, y: data.y });
             const rectComp = containerComponent.getBoundingClientRect();
-            // console.log("rectComp: ", rectComp);
 
             const rectItem = draggableComponent.getBoundingClientRect();
-            // console.log("rectItem: ", rectItem);
 
             const x =
-              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width; // Xác định vị trí x dựa trên vị trí của chuột
+              (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width;
 
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
@@ -440,20 +414,10 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           }
           style={{
             position: "absolute",
-            // top: signatureData.dimension?.y + "%",
-            // left: signatureData.dimension?.x + "%",
             zIndex: 100,
-            opacity: signatureData.verification === undefined ? 1 : 0.1,
+            opacity: signatureData.verification === undefined ? 1 : 0,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
-          // minConstraints={[
-          //   signatureData.dimension?.width * (pdfPage.width / 100),
-          //   signatureData.dimension?.height * (pdfPage.height / 100),
-          // ]}
-          // maxConstraints={[
-          //   signatureData.dimension?.width * (pdfPage.width / 100),
-          //   signatureData.dimension?.height * (pdfPage.height / 100),
-          // ]}
           minConstraints={[
             isSetPos ||
             signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
@@ -486,21 +450,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               ? maxPosibleResizeHeight
               : 200,
           ]}
-          onResize={(e, { size }) => {
-            // setShowTopbar(false);
-            // setSignature({
-            //   ...signatureData,
-            //   dimension: {
-            //     ...signatureData.dimension,
-            //     width: (size.width / pdfPage.width) * 100,
-            //     height: (size.height / pdfPage.height) * 100,
-            //   },
-            // });
-          }}
-          // onClick={(e) => {
-          //   console.log("e: ", e);
-          //   return;
-          // }}
+          onResize={(e, { size }) => {}}
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);
             if (
@@ -578,9 +528,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
-            // onClick={(e) => {
-            //   console.log("e: ", e);
-            // }}
             onClick={(e) => {
               if (signatureData.verification) {
                 console.log("show signature verification");
@@ -601,7 +548,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                 e.target.parentElement?.id === "drag" ||
                 e.target.id === "click-duoc"
               ) {
-                // Your existing logic for opening the signing form...
                 handleOpenSigningForm(index);
               }
             }}
@@ -651,7 +597,6 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
                     width: "15px",
                     height: "15px",
                     color: "#545454",
-                    // cursor: "pointer",
                   }}
                   // onClick={() => handleOpenSigningForm(index)}
                 />
@@ -718,7 +663,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <ModalSmartid
           open={isShowModalSmartid[index]}
           onClose={() => handleCloseModalSmartid(index)}
-          dataSigning={dataSigning}
+          dataSigning={{ ...dataSigning, textField }}
         />
       )}
 
@@ -726,8 +671,9 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <ModalUsb
           open={isShowModalUsb[index]}
           onClose={() => handleCloseModalUsb(index)}
-          dataSigning={dataSigning}
+          dataSigning={{ ...dataSigning, textField }}
           setDataSigning={setDataSigning}
+          textField={textField}
         />
       )}
 
@@ -735,7 +681,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
         <ModalEidSign
           open={isShowEidModalSign[index]}
           onClose={() => handleCloseEidModalSign(index)}
-          dataSigning={dataSigning}
+          dataSigning={{ ...dataSigning, textField }}
           setDataSigning={setDataSigning}
           signatureData={signatureData}
         />

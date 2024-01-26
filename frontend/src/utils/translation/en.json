@@ -175,6 +175,9 @@
     "usb1": "By signing, i agree to the transfer of my name and personal identification code to the service provide.",
     "usb2": "Enter PIN for signing",
 
+    "initmodal_title": "Apply initial",
+    "initmodal_1": "Apply to all fields in this document",
+
     "modal1_title": "Edit signature field",
     "modal1_1": "Authenticate signer via OTP",
     "modal1_2": "OTP authentication (SMS)",

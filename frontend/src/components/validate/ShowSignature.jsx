@@ -40,45 +40,7 @@ export const ShowSignature = ({
     ? ", " + signDetail.certificate?.issuer?.C[0]
     : "";
 
-  // const signTitle = signType + " is valid";
-  // const subTitle = "Electronic " + signType;
-
-  // const [isOpen, setIsOpen] = useState([false]);
-  // // console.log("isOpen: ", isOpen);
-  // const toggleDrawer = (index) => {
-  //   const newIsOpen = [...isOpen];
-  //   newIsOpen[index] = !newIsOpen[index];
-  //   setIsOpen(newIsOpen);
-  // };
-  // const handleClose = () => {
-  //   setIsOpen(false);
-  // };
-
   const signArray = {
-    // signing: [
-    //   {
-    //     title: t("validation.sigReason"),
-    //     subtitle: signDetail.signing_reason ? signDetail.signing_reason : null,
-    //   },
-    //   {
-    //     title: t("validation.sigTime"),
-    //     subtitle: signDetail.signing_time
-    //       ? convertTime(signDetail.signing_time)
-    //       : null,
-    //   },
-    //   {
-    //     title: t("validation.sigTimestamp"),
-    //     subtitle: signDetail.timestamp_time ? signDetail.timestamp_time : null,
-    //   },
-    //   {
-    //     title: t("validation.sigFormat"),
-    //     subtitle: signDetail.format ? signDetail.format : null,
-    //   },
-    //   {
-    //     title: t("validation.sigScope"),
-    //     subtitle: signDetail.scope.name ? signDetail.scope.name : null,
-    //   },
-    // ].filter((item) => item.subtitle !== null),
     certificated: [
       {
         title: t("0-common.Signing Time"),

@@ -70,10 +70,6 @@ export const ModalSigningImage2 = ({
   handleShowmodal,
 }) => {
   const { t } = useTranslation();
-  // console.log("dataSigning: ", dataSigning);
-  // console.log("signer: ", signer);
-  // console.log("open: ", open);
-  // set value for tabs
 
   const { signing_token: signingToken } = useParams();
   const [value, setValue] = useState(0);
@@ -109,26 +105,6 @@ export const ModalSigningImage2 = ({
     }
   }, [open]);
 
-  // async function getWeather(latitude, longitude) {
-  //   let res = await api.get(
-  //     `http://api.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=trunkey2003`
-  //   );
-  //   console.log(res.data);
-  //   // console.log(res.data.location.name);
-
-  //   setDataSigning({
-  //     ...dataSigning,
-  //     country: signer.metaInformation?.country
-  //       ? signer.metaInformation?.country
-  //       : res.data.countryCode,
-  //     countryRealtime: res.data.countryCode,
-  //     signingPurpose: signer.signingPurpose
-  //       ? signer.signingPurpose
-  //       : "signature",
-  //     reason: signer.customReason ? signer.customReason : "Purpose: signature",
-  //   });
-  // }
-
   const { address } = useCountry();
   useEffect(() => {
     setDataSigning({
@@ -143,18 +119,6 @@ export const ModalSigningImage2 = ({
       reason: signer.customReason ? signer.customReason : "Purpose: signature",
     });
   }, [address]);
-  // console.log("address: ", address);
-  // setDataSigning({
-  //   ...dataSigning,
-  //   country: signer.metaInformation?.country
-  //     ? signer.metaInformation?.country
-  //     : address,
-  //   countryRealtime: address,
-  //   signingPurpose: signer.signingPurpose
-  //     ? signer.signingPurpose
-  //     : "signature",
-  //   reason: signer.customReason ? signer.customReason : "Purpose: signature",
-  // });
 
   const currentDatetime = new Date();
   const options = {
@@ -376,9 +340,6 @@ export const ModalSigningImage2 = ({
         <Button
           variant="contained"
           disabled={isSubmitDisabled}
-          //   startIcon={
-          //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          //   }
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={handleSubmitClick}
           type="button"

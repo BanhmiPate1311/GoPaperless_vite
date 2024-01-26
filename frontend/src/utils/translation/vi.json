@@ -175,6 +175,9 @@
     "usb1": "Bằng việc ký tên, tôi đồng ý chuyển tên và mã số nhận dạng cá nhân của mình cho đơn vị cung cấp dịch vụ.",
     "usb2": "Nhập mã PIN để ký",
 
+    "initmodal_title": "Áp dụng ban đầu",
+    "initmodal_1": "Áp dụng cho tất cả các trường trong tài liệu này",
+
     "modal1_title": "Chỉnh sửa trường chữ ký",
     "modal1_1": "Xác thực người ký qua OTP",
     "modal1_2": "Xác thực OTP (SMS)",

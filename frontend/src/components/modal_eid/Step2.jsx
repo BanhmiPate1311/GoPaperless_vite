@@ -14,13 +14,11 @@ export const Step2 = ({ onDisableSubmit }) => {
   const { t } = useTranslation();
   const handleCheckbox1Change = (event) => {
     setIsChecked1(event.target.checked);
-    // Truyền giá trị isSubmitDisabled lên component cha
     onDisableSubmit(!(event.target.checked && isChecked2));
   };
 
   const handleCheckbox2Change = (event) => {
     setIsChecked2(event.target.checked);
-    // Truyền giá trị isSubmitDisabled lên component cha
     onDisableSubmit(!(event.target.checked && isChecked1));
   };
 

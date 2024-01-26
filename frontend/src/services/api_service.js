@@ -20,7 +20,6 @@ export const apiService = {
     });
   },
   getSignedInfo: async ({ firstFileId }) => {
-    // return api.post("/uiApi/getSignedInfo", { fileId: firstFileId });
     const response = await api.post("/uiApi/getSignedInfo", {
       fileId: firstFileId,
     });
@@ -40,5 +39,15 @@ export const apiService = {
   },
   getView: ({ qr }) => {
     return api.post("/uiApi/getFromQR", { qr });
+  },
+
+  updateQr: async (data) => {
+    const response = await api.post("/uiApi/updateQr", data);
+    return response.data;
+  },
+
+  getCertDetail: async ({ cert }) => {
+    const response = await api.post("/uiApi/getCertDetail", { cert });
+    return response.data;
   },
 };

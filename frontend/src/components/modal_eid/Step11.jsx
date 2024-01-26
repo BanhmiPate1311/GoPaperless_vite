@@ -6,14 +6,14 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import FormControl from "@mui/material/FormControl";
 
 export const Step11 = ({
   onDisableSubmit,
@@ -30,7 +30,6 @@ export const Step11 = ({
 
   const handleCheckbox1Change = (event) => {
     setIsChecked1(event.target.checked);
-    // Truyền giá trị isSubmitDisabled lên component cha
     onDisableSubmit(
       !(event.target.checked && isChecked2 && selectedOption !== "")
     );
@@ -38,7 +37,6 @@ export const Step11 = ({
 
   const handleCheckbox2Change = (event) => {
     setIsChecked2(event.target.checked);
-    // Truyền giá trị isSubmitDisabled lên component cha
     onDisableSubmit(
       !(event.target.checked && isChecked1 && selectedOption !== "")
     );
@@ -54,9 +52,6 @@ export const Step11 = ({
     providerSelected.current = event.target.value;
   };
 
-  // useEffect(() => {
-  //   getConnectorName("SMART_ID_SIGNING");
-  // }, []);
   useEffect(() => {
     onDisableSubmit(true);
   }, []);
