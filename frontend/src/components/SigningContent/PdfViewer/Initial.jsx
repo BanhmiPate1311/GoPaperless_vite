@@ -3,6 +3,7 @@ import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
 import { InitialsField } from "@/components/modalField";
+import InitialsFieldSetting from "@/components/modalField/InitialsFieldSetting";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
@@ -21,6 +22,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
+  const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
 
   const newPos = useRef({ x: null, y: null });
 
@@ -63,6 +65,17 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
     const newValue = [...isOpenSigningForm];
     newValue[index] = false;
     setOpenSigningForm(newValue);
+  };
+  const handleOpenModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = true;
+    setIsOpenModalSetting(newValue);
+  };
+
+  const handleCloseModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = false;
+    setIsOpenModalSetting(newValue);
   };
 
   const handleRemoveSignature = async () => {
@@ -111,7 +124,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             cursor: "pointer",
             mx: "5px",
           }}
-          //   onClick={() => handleOpenModalSetting(index)}
+          onClick={() => handleOpenModalSetting(index)}
         />
         <SvgIcon
           component={GarbageIcon}
@@ -400,6 +413,12 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
           signer={signer}
           initData={initData}
           workFlow={workFlow}
+        />
+      )}
+      {isOpenModalSetting[index] && (
+        <InitialsFieldSetting
+          open={isOpenModalSetting[index]}
+          onClose={() => handleCloseModalSetting(index)}
         />
       )}
     </>

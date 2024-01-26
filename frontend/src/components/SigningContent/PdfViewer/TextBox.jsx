@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
+import TextBoxSettingField from "@/components/modalField/TextBoxSettingField";
+
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
@@ -14,7 +16,7 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
 export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
-  // console.log("index: ", index);
+  console.log("index: ", index);
   // console.log("textData: ", textData.value);
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
@@ -24,6 +26,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
 
   const [textValue, setTextValue] = useState(textData.value);
   const [isControlled, setIsControlled] = useState(false);
+  const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
   // console.log("isControlled: ", isControlled);
   const [showTopbar, setShowTopbar] = useState(false);
   const [dragPosition, setDragPosition] = useState({
@@ -87,7 +90,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             color: "#545454",
             cursor: "pointer",
           }}
-          //   onClick={() => handleOpenModalSetting(index)}
+          onClick={() => handleOpenModalSetting(index)}
         />
         <SvgIcon
           component={GarbageIcon}
@@ -123,6 +126,17 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
       case "COMPANY":
         return "Company";
     }
+  };
+  const handleOpenModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = true;
+    setIsOpenModalSetting(newValue);
+  };
+
+  const handleCloseModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = false;
+    setIsOpenModalSetting(newValue);
   };
 
   const valueRef = useRef(null);
@@ -413,6 +427,13 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           </Box>
         </ResizableBox>
       </Draggable>
+      {isOpenModalSetting[index] && (
+        <TextBoxSettingField
+          open={isOpenModalSetting[index]}
+          type={textData.type}
+          onClose={() => handleCloseModalSetting(index)}
+        />
+      )}
     </>
   );
 };
