@@ -227,16 +227,25 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
                 : t("modal.smartid5")}
             </Typography>
             <Box p="25px" textAlign={"center"} mb={"10px"}>
-              <Typography fontSize={"48px"} height={"59px"} fontWeight={"bold"}>
-                {dataSigning.codeEnable === false ? (
-                  t("modal.smartid6")
-                ) : vcode ? (
-                  vcode
-                ) : (
-                  <CircularProgress />
-                )}
-                {/* {vcode ? vcode : <CircularProgress />} */}
-              </Typography>
+              {dataSigning.codeEnable === false ? (
+                <Typography
+                  fontSize={"24px"}
+                  height={"29px"}
+                  fontWeight={"bold"}
+                >
+                  {t("modal.smartid6")}
+                </Typography>
+              ) : vcode ? (
+                <Typography
+                  fontSize={"48px"}
+                  height={"59px"}
+                  fontWeight={"bold"}
+                >
+                  {vcode}
+                </Typography>
+              ) : (
+                <CircularProgress />
+              )}
             </Box>
             <Typography variant="h6" mb={"10px"}>
               {dataSigning.codeEnable

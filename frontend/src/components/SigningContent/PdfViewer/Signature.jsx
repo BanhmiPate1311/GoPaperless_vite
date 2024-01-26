@@ -421,7 +421,7 @@ export const Signature = ({
           style={{
             position: "absolute",
             zIndex: 100,
-            opacity: signatureData.verification === undefined ? 1 : 0,
+            opacity: signatureData.process_status === "PROCESSED" ? 0 : 1,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           minConstraints={[
@@ -499,7 +499,7 @@ export const Signature = ({
             id={`sigDrag-${index}`}
             sx={{
               backgroundColor:
-                signatureData.verification ||
+                signatureData.process_status === "PROCESSED" ||
                 signerId +
                   "_" +
                   signatureData.type +
@@ -518,7 +518,7 @@ export const Signature = ({
 
               border: "2px dashed",
               borderColor:
-                signatureData.verification ||
+                signatureData.process_status === "PROCESSED" ||
                 signerId +
                   "_" +
                   signatureData.type +
@@ -535,7 +535,7 @@ export const Signature = ({
               setShowTopbar(false);
             }}
             onClick={(e) => {
-              if (signatureData.verification) {
+              if (signatureData.process_status === "PROCESSED") {
                 console.log("show signature verification");
                 toggleSigDetail(index);
               } else if (

@@ -121,7 +121,7 @@ export const ReviewSign = forwardRef(
             ]}
             onResize={(e, { size }) => {}}
             onResizeStop={(e, { size }) => {
-              console.log("e: ", e);
+              // console.log("e: ", e);
               if (
                 isSetPos ||
                 signerId +
@@ -158,43 +158,45 @@ export const ReviewSign = forwardRef(
             }}
             className={`sig choioi-${index}`}
           >
-            {value == 0 && (
-              <TextSignForm
-                ref={textElement}
-                dataSigning={dataSigning}
-                headerFooter={headerFooter}
-                formattedDatetime={formattedDatetime}
-                onDisableSubmit={onDisableSubmit}
-                watch={watch}
-                control={control}
-                showInput={true}
-              />
-            )}
-            {value == 1 && (
-              <DrawSignForm
-                ref={textElement}
-                dataSigning={dataSigning}
-                headerFooter={headerFooter}
-                formattedDatetime={formattedDatetime}
-                onDisableSubmit={onDisableSubmit}
-                watch={watch}
-                control={control}
-                showInput={true}
-              />
-            )}
+            <>
+              {value == 0 && (
+                <TextSignForm
+                  ref={textElement}
+                  dataSigning={dataSigning}
+                  headerFooter={headerFooter}
+                  formattedDatetime={formattedDatetime}
+                  onDisableSubmit={onDisableSubmit}
+                  watch={watch}
+                  control={control}
+                  showInput={true}
+                />
+              )}
+              {value == 1 && (
+                <DrawSignForm
+                  ref={textElement}
+                  dataSigning={dataSigning}
+                  headerFooter={headerFooter}
+                  formattedDatetime={formattedDatetime}
+                  onDisableSubmit={onDisableSubmit}
+                  watch={watch}
+                  control={control}
+                  showInput={true}
+                />
+              )}
 
-            {value == 2 && (
-              <UploadSignForm
-                ref={textElement}
-                dataSigning={dataSigning}
-                headerFooter={headerFooter}
-                formattedDatetime={formattedDatetime}
-                onDisableSubmit={onDisableSubmit}
-                watch={watch}
-                control={control}
-                showInput={true}
-              />
-            )}
+              {value == 2 && (
+                <UploadSignForm
+                  ref={textElement}
+                  dataSigning={dataSigning}
+                  headerFooter={headerFooter}
+                  formattedDatetime={formattedDatetime}
+                  onDisableSubmit={onDisableSubmit}
+                  watch={watch}
+                  control={control}
+                  showInput={true}
+                />
+              )}
+            </>
           </ResizableBox>
         </>
       );
@@ -240,7 +242,7 @@ export const ReviewSign = forwardRef(
             }}
           >
             {/* {title} */}
-            {t("Review Signature")}
+            {t("0-common.review")}
           </Typography>
         </DialogTitle>
 
@@ -282,14 +284,16 @@ export const ReviewSign = forwardRef(
             }}
             type="button"
             onClick={() => {
-              html2canvas(textElement.current).then((canvas) => {
-                const data64 = canvas.toDataURL();
-                setImgBase64(data64);
-                handleOpenResize(false);
-              });
+              html2canvas(textElement.current, { backgroundColor: null }).then(
+                (canvas) => {
+                  const data64 = canvas.toDataURL();
+                  setImgBase64(data64);
+                  handleOpenResize(false);
+                }
+              );
             }}
           >
-            SAVE
+            {t("0-common.save")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -23,7 +23,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
 import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextInitForm } from ".";
 import DrawInitForm from "./DrawInitForm";
@@ -114,6 +114,7 @@ export const InitialsField = ({
     html2canvas(textElement.current, { backgroundColor: null }).then(
       (canvas) => {
         const data64 = canvas.toDataURL();
+        console.log("data64: ", data64);
         fillInit.mutate(
           {
             body: {
@@ -282,7 +283,13 @@ export const InitialsField = ({
           </Box>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox name="apply" control={control} />}
+              control={
+                <Controller
+                  name="apply"
+                  control={control}
+                  render={({ field }) => <Checkbox {...field} />}
+                />
+              }
               label={t("modal.initmodal_1")}
             />
           </FormGroup>

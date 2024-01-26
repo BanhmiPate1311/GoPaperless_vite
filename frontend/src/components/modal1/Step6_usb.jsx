@@ -1,5 +1,6 @@
 import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { UseGetCertDetail } from "@/hook/use-apiService";
 import { convertTime } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
 import Alert from "@mui/material/Alert";
@@ -14,7 +15,6 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ModalCertInfor } from ".";
-import { UseGetCertDetail } from "@/hook/use-apiService";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -38,6 +38,7 @@ export const Step6_usb = ({
   provider,
 }) => {
   const { t } = useTranslation();
+  // console.log("data: ", data);
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
   const getCertDetail = UseGetCertDetail();
@@ -82,7 +83,7 @@ export const Step6_usb = ({
               onClick={() => {
                 getCertDetail.mutate(
                   {
-                    cert: value.cert,
+                    cert: value.value,
                   },
                   {
                     onSuccess: () => {

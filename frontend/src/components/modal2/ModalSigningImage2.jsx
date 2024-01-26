@@ -116,7 +116,7 @@ export const ModalSigningImage2 = ({
       signingPurpose: signer.signingPurpose
         ? signer.signingPurpose
         : "signature",
-      reason: signer.customReason ? signer.customReason : "Purpose: signature",
+      reason: signer.customReason ? signer.customReason : "signature",
     });
   }, [address]);
 

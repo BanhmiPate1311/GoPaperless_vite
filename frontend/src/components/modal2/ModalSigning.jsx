@@ -87,7 +87,7 @@ export const ModalSigning = ({
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       text:
-        typeof dataSigning.certChain.subject === "string"
+        typeof dataSigning?.certChain?.subject === "string"
           ? dataSigning.certChain.subject
           : dataSigning.certChain.subject.commonName,
       drawUrl: "",
@@ -132,7 +132,7 @@ export const ModalSigning = ({
       signingPurpose: signer.signingPurpose
         ? signer.signingPurpose
         : "signature",
-      reason: signer.customReason ? signer.customReason : "Purpose: signature",
+      reason: signer.customReason ? signer.customReason : "signature",
     });
   }, [address]);
 
@@ -426,7 +426,7 @@ export const ModalSigning = ({
             handleOpenResize(true);
           }}
         >
-          {t("Review")}
+          {t("0-common.review")}
         </Button>
         <Button
           variant="contained"
