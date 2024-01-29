@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const GeneralTextBoxForm = () => {
   const { t } = useTranslation();
@@ -31,7 +30,7 @@ export const GeneralTextBoxForm = () => {
     >
       <Box>
         <Typography variant="h6" mb="10px">
-          Assigned to
+          {t("modal.assigned_to")}
         </Typography>
         <FormControl fullWidth>
           <Select
@@ -43,7 +42,7 @@ export const GeneralTextBoxForm = () => {
             value={assign}
             sx={{
               my: 0,
-              height: "44px",
+              height: "45px",
               backgroundColor: "signingWFBackground.main",
               fontSize: "14px",
               "& .MuiMenuItem-root": {
@@ -53,7 +52,7 @@ export const GeneralTextBoxForm = () => {
             IconComponent={ExpandMoreIcon}
             onChange={(e) => handleChangeSelect(e, setAssign)}
           >
-            <MenuItem value={"Select Participant"}></MenuItem>
+            <MenuItem value={t("modal.select_participant")}></MenuItem>
             <MenuItem value={1}>assign1</MenuItem>
             <MenuItem value={2}>assign2</MenuItem>
             <MenuItem value={3}>assign3</MenuItem>
@@ -62,7 +61,7 @@ export const GeneralTextBoxForm = () => {
       </Box>
       <Box>
         <Typography variant="h6" mb="10px">
-          Validation
+          {t("modal.validation")}
         </Typography>
 
         <FormControl fullWidth>
@@ -74,7 +73,7 @@ export const GeneralTextBoxForm = () => {
             defaultValue={1}
             sx={{
               my: 0,
-              height: "44px",
+              height: "45px",
               backgroundColor: "signingWFBackground.main",
               fontSize: "14px",
             }}
@@ -89,7 +88,7 @@ export const GeneralTextBoxForm = () => {
       </Box>
       <Box>
         <Typography variant="h6" mb="10px">
-          Allowed Length
+          {t("modal.allowed_length")}
         </Typography>
 
         <TextField
@@ -98,11 +97,11 @@ export const GeneralTextBoxForm = () => {
           margin="normal"
           // name={name}
           // defaultValue={signer.lastName + " " + signer.firstName}
-          sx={{ my: 0, height: "44px" }}
+          sx={{ my: 0, height: "45px" }}
           InputProps={{
             //   readOnly: true,
             sx: {
-              height: "44px",
+              height: "45px",
               backgroundColor: "signingWFBackground.main",
               fontSize: "14px",
             },
@@ -111,7 +110,7 @@ export const GeneralTextBoxForm = () => {
       </Box>
       <Box>
         <Typography variant="h6" mb="10px">
-          Placeholder
+          {t("modal.placeholder")}
         </Typography>
         <TextField
           fullWidth
@@ -119,7 +118,7 @@ export const GeneralTextBoxForm = () => {
           margin="normal"
           // name={name}
           // defaultValue={signer.lastName + " " + signer.firstName}
-          sx={{ my: 0, height: "44px" }}
+          sx={{ my: 0, height: "45px" }}
           InputProps={{
             //   readOnly: true,
             sx: {
@@ -131,23 +130,23 @@ export const GeneralTextBoxForm = () => {
         />
       </Box>
       <Box sx={{ display: "flex", gap: "20px" }}>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ width: "50%" }}>
           <Typography variant="h6" mb="10px">
-            Font Type
+            {t("modal.font_type")}
           </Typography>
           <FormControl fullWidth>
-            <InputLabel size="small" sx={{ fontSize: "14px", mt: "4px" }}>
+            {/* <InputLabel size="small" sx={{ fontSize: "14px", mt: "4px" }}>
               Select Font
-            </InputLabel>
+            </InputLabel> */}
             <Select
               fullWidth
               size="small"
               margin="normal"
               value={fontType}
-              label="  Select Font"
+              // label="  Select Font"
               sx={{
                 my: 0,
-                height: "44px",
+                height: "45px",
                 backgroundColor: "signingWFBackground.main",
                 fontSize: "14px",
               }}
@@ -160,9 +159,9 @@ export const GeneralTextBoxForm = () => {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ width: "50%" }}>
           <Typography variant="h6" mb="10px">
-            Font Size
+            {t("modal.font_size")}
           </Typography>
           <FormControl fullWidth>
             <Select
@@ -173,7 +172,7 @@ export const GeneralTextBoxForm = () => {
               //   label="Select Font"
               sx={{
                 my: 0,
-                height: "44px",
+                height: "45px",
                 backgroundColor: "signingWFBackground.main",
                 fontSize: "14px",
               }}

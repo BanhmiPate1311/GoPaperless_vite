@@ -6,7 +6,7 @@ import { UploadField } from "../form";
 import { useTranslation } from "react-i18next";
 import { DialogFile } from "../modal2";
 
-const UploadInitForm = forwardRef(
+export const UploadInitForm = forwardRef(
   ({ watch, control, onDisableSubmit }, ref) => {
     const { t } = useTranslation();
     const [openCrop, setOpenCrop] = useState(false);

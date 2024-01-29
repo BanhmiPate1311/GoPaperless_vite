@@ -1,8 +1,10 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Box, Grid, TextField, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "transparent",

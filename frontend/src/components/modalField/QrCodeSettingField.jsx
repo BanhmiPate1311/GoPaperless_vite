@@ -101,7 +101,7 @@ export const QrCodeSettingField = ({ open, onClose }) => {
             paddingBottom: "5px",
           }}
         >
-          EDIT QR code
+          {t("modal.edit_qr")}
         </Typography>
       </DialogTitle>
 
@@ -152,7 +152,7 @@ export const QrCodeSettingField = ({ open, onClose }) => {
                 <Tab
                   // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
-                  label="Details"
+                  label={t("0-common.details")}
                   {...a11yProps(1)}
                   sx={{
                     height: "45px",
@@ -192,7 +192,7 @@ export const QrCodeSettingField = ({ open, onClose }) => {
           }}
           type="button"
         >
-          Save
+          {t("0-common.save")}
         </Button>
       </DialogActions>
     </Dialog>

@@ -103,7 +103,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
             paddingBottom: "5px",
           }}
         >
-          EDIT initials
+          {t("modal.edit_initials")}
         </Typography>
       </DialogTitle>
 
@@ -143,7 +143,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
                 <Tab
                   // icon={<KeyboardIcon fontSize="small" />}
                   iconPosition="start"
-                  label="General"
+                  label={t("0-common.general")}
                   {...a11yProps(0)}
                   sx={{
                     height: "45px",
@@ -154,7 +154,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
                 <Tab
                   // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
-                  label="Details"
+                  label={t("0-common.details")}
                   {...a11yProps(1)}
                   sx={{
                     height: "45px",
@@ -165,7 +165,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
                 <Tab
                   // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
-                  label="Replicate Initials"
+                  label={t("modal.replicate_initials")}
                   {...a11yProps(1)}
                   sx={{
                     height: "45px",
@@ -177,7 +177,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
               <TabPanel value={value} index={0}>
                 <Box>
                   <Typography variant="h6" mb="10px">
-                    Participants
+                    {t("0-common.participants")}
                   </Typography>
 
                   <TextField
@@ -230,7 +230,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
           }}
           type="button"
         >
-          Save
+          {t("0-common.save")}
         </Button>
       </DialogActions>
     </Dialog>

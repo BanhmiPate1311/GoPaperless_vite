@@ -23,7 +23,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
       value: validFile.filter((sig) => sig.indication === "INDETERMINATE"),
       icon: (
         <SvgIcon viewBox={"0 0 40 40"}>
-          <InValidIcon height={40} width={40} color="#EB6A00" />
+          <WarningWFIcon height={35} width={35} />
         </SvgIcon>
       ),
 
@@ -34,7 +34,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
       value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
       icon: (
         <SvgIcon viewBox={"0 0 35 35"}>
-          <WarningWFIcon height={35} width={35} />
+          <InValidIcon height={40} width={40} color="#EB6A00" />
         </SvgIcon>
       ),
 
@@ -92,5 +92,6 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
 Signatures.propTypes = {
   validFile: PropTypes.array,
   signType: PropTypes.string,
+  signIcon: PropTypes.node,
 };
 export default Signatures;

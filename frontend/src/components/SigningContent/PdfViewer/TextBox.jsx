@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import TextBoxSettingField from "@/components/modalField/TextBoxSettingField";
-
+import { TextBoxSettingField } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
