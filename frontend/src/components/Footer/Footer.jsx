@@ -31,6 +31,7 @@ export const Footer = ({ headerFooter }) => {
         px: 5,
         background: check ? metaData.footerBackgroundColor : "#0b95e5",
         color: check ? metaData.footerTextColor : "#FFF",
+        display: "flex",
       }}
     >
       <Stack
