@@ -705,6 +705,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                         margin: "0",
                       },
                     }}
+                    className="hover-underline-animation"
                     onClick={() => downloadCertFromPEM(pemValue())}
                     icon={
                       <SaveAltIcon fontSize="small" color="borderColor.light" />

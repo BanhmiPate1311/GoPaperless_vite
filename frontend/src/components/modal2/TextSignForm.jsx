@@ -79,8 +79,8 @@ export const TextSignForm = forwardRef(
           sx={{
             height: showInput ? "100%" : "170px",
             overflow: "hidden",
-            borderRadius: "6px",
-            border: !imgBase64 ? "2px solid #357EEB" : "none",
+            // borderRadius: "6px",
+            // border: !imgBase64 ? "2px solid #357EEB" : "none",
             position: "relative",
             "&:before": watch("logo")
               ? {

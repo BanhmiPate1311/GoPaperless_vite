@@ -34,6 +34,7 @@ export const Document = ({
     zoom: props.scale,
     actualHeight: props.height / props.scale,
     actualWidth: props.width / props.scale,
+    rotate: props.rotation,
   };
 
   const handleValidateSignature = (

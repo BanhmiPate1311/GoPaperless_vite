@@ -1,5 +1,6 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 import { ReactComponent as InValidIcon } from "@/assets/images/svg/error.svg";
 import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningError.svg";
 import { Box, Divider, Stack, Typography } from "@mui/material";
@@ -9,47 +10,66 @@ import { SignDetail } from ".";
 import Avatar from "@mui/material/Avatar";
 import SvgIcon from "@mui/material/SvgIcon";
 export const Signatures = ({ validFile, signType, signIcon }) => {
+  console.log("validFile: ", validFile);
   const { t } = useTranslation();
 
   const valueSign = [
     {
-      name: t("validation.sigValidTitle"),
+      name:
+        signType == "Signature"
+          ? t("validation.sigValidTitle")
+          : t("validation.sealValidTitle"),
       value: validFile.filter((sig) => sig.indication === "TOTAL_PASSED"),
       icon: signIcon,
-      title: t("signing.signature_valid"),
+      title:
+        signType == "Signature"
+          ? t("signing.signature_valid")
+          : t("validation.sealValidTitle2"),
     },
     {
       name: t("validation.indeterminateTitle"),
       value: validFile.filter((sig) => sig.indication === "INDETERMINATE"),
       icon: (
         <SvgIcon viewBox={"0 0 40 40"}>
-          <InValidIcon height={40} width={40} color="#EB6A00" />
-        </SvgIcon>
-      ),
-
-      title: t("signing.indeterminate signatures"),
-    },
-    {
-      name: t("validation.invalidSig"),
-      value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
-      icon: (
-        <SvgIcon viewBox={"0 0 35 35"}>
           <WarningWFIcon height={35} width={35} />
         </SvgIcon>
       ),
 
-      title: t("signing.invalid signatures"),
+      title:
+        signType == "Signature"
+          ? t("signing.indeterminate signatures")
+          : t("validation.indeterminateSeal"),
+    },
+    {
+      name:
+        signType == "Signature"
+          ? t("validation.invalidSig")
+          : t("validation.invalidSeal"),
+      value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
+      icon: (
+        <SvgIcon viewBox={"0 0 35 35"}>
+          <InValidIcon height={40} width={40} color="#EB6A00" />
+        </SvgIcon>
+      ),
+
+      title:
+        signType == "Signature"
+          ? t("signing.invalid signatures")
+          : t("validation.invalidSeal"),
     },
   ];
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
+  console.log("newSign: ", newSign);
 
   return (
     <>
       <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <SignatureIcon />
+          {signType == "Signature" ? <SignatureIcon /> : <SealIcon />}
           <Typography variant="h3" sx={{ fontWeight: "550" }}>
-            {t("0-common.signatures")}
+            {signType == "Signature"
+              ? t("0-common.signatures")
+              : t("0-common.seals")}
           </Typography>
           <Avatar
             sx={{
@@ -59,7 +79,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
               fontSize: "10px",
             }}
           >
-            {newSign.length}
+            {validFile.length}
           </Avatar>
         </Stack>
       </Stack>
@@ -92,5 +112,6 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
 Signatures.propTypes = {
   validFile: PropTypes.array,
   signType: PropTypes.string,
+  signIcon: PropTypes.node,
 };
 export default Signatures;

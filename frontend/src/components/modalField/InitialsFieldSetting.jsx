@@ -1,31 +1,21 @@
-import { usePending } from "@/hook";
-import { UseFillInit } from "@/hook/use-fpsService";
-import { removeBase64Prefix } from "@/utils/commonFunction";
-import DrawIcon from "@mui/icons-material/Draw";
-import KeyboardIcon from "@mui/icons-material/Keyboard";
-import UploadIcon from "@mui/icons-material/Upload";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import { useQueryClient } from "@tanstack/react-query";
-import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { DrawInitForm, TextInitForm, UploadInitForm } from ".";
+import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
+import TextField from "@mui/material/TextField";
+import { ReplicateForm } from ".";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -65,78 +55,13 @@ function a11yProps(index) {
   };
 }
 
-export const InitialsField = ({
-  open,
-  onClose,
-  signer,
-  initData,
-  workFlow,
-}) => {
+export const InitialsFieldSetting = ({ open, onClose }) => {
   // console.log("initData: ", initData);
   // console.log("signer: ", signer);
   const { t } = useTranslation();
-
-  const { control, handleSubmit, watch } = useForm({
-    defaultValues: {
-      text: signer.lastName + " " + signer.firstName,
-      drawUrl: "",
-      fileUrl: "",
-      imageScrop: "",
-      apply: false,
-    },
-  });
-
-  const queryClient = useQueryClient();
-  const isPending = usePending();
-
-  const fillInit = UseFillInit();
-
   const [value, setValue] = useState(0);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-
-  const textElement = useRef();
-  const formRef = useRef();
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handleDisableSubmit = (disabled) => {
-    setIsSubmitDisabled(disabled);
-  };
-
-  const handleFormSubmit = (data) => {
-    console.log("data: ", data);
-
-    html2canvas(textElement.current, { backgroundColor: null }).then(
-      (canvas) => {
-        const data64 = canvas.toDataURL();
-        console.log("data64: ", data64);
-        fillInit.mutate(
-          {
-            body: {
-              field_name: initData.field_name,
-              apply_to_all: data.apply,
-              initial_pages: [initData.page],
-              image: removeBase64Prefix(data64),
-            },
-
-            documentId: workFlow.documentId,
-          },
-          {
-            onSuccess: () => {
-              queryClient.invalidateQueries({ queryKey: ["getField"] });
-              queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
-              onClose();
-            },
-          }
-        );
-      }
-    );
-  };
-
-  const handleSubmitClick = () => {
-    formRef.current.requestSubmit();
   };
   return (
     <Dialog
@@ -178,7 +103,7 @@ export const InitialsField = ({
             paddingBottom: "5px",
           }}
         >
-          {t("modal.initmodal_title")}
+          {t("modal.edit_initials")}
         </Typography>
       </DialogTitle>
 
@@ -193,14 +118,12 @@ export const InitialsField = ({
         }}
       >
         <DialogContentText
-          ref={formRef}
           component="form"
           id="scroll-dialog-description"
           tabIndex={-1}
           sx={{
             height: "100%",
           }}
-          onSubmit={handleSubmit(handleFormSubmit)}
         >
           <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
             <AppBar position="static" elevation={0}>
@@ -218,9 +141,9 @@ export const InitialsField = ({
                 }}
               >
                 <Tab
-                  icon={<KeyboardIcon fontSize="small" />}
+                  // icon={<KeyboardIcon fontSize="small" />}
                   iconPosition="start"
-                  label={t("0-common.text")}
+                  label={t("0-common.general")}
                   {...a11yProps(0)}
                   sx={{
                     height: "45px",
@@ -229,9 +152,9 @@ export const InitialsField = ({
                   }} //set height for tabs and tab
                 />
                 <Tab
-                  icon={<DrawIcon fontSize="small" />}
+                  // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
-                  label={t("0-common.draw")}
+                  label={t("0-common.details")}
                   {...a11yProps(1)}
                   sx={{
                     height: "45px",
@@ -240,9 +163,9 @@ export const InitialsField = ({
                   }} //set height for tabs and tab
                 />
                 <Tab
-                  icon={<UploadIcon fontSize="small" />}
+                  // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
-                  label={t("0-common.upload")}
+                  label={t("modal.replicate_initials")}
                   {...a11yProps(1)}
                   sx={{
                     height: "45px",
@@ -252,44 +175,38 @@ export const InitialsField = ({
                 />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <TextInitForm
-                  ref={textElement}
-                  watch={watch}
-                  control={control}
-                  onDisableSubmit={handleDisableSubmit}
-                />
-                {/* text */}
+                <Box>
+                  <Typography variant="h6" mb="10px">
+                    {t("0-common.participants")}
+                  </Typography>
+
+                  <TextField
+                    fullWidth
+                    size="small"
+                    margin="normal"
+                    // name={name}
+                    defaultValue={"Vu Phan"}
+                    sx={{ my: 0, height: "44px" }}
+                    disabled
+                    InputProps={{
+                      readOnly: true,
+                      sx: {
+                        height: "44px",
+                        backgroundColor: "signingWFBackground.main",
+                        fontSize: "14px",
+                      },
+                    }}
+                  />
+                </Box>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DrawInitForm
-                  ref={textElement}
-                  watch={watch}
-                  control={control}
-                  onDisableSubmit={handleDisableSubmit}
-                />
+                <DetailsTextBoxForm />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <UploadInitForm
-                  ref={textElement}
-                  watch={watch}
-                  control={control}
-                  onDisableSubmit={handleDisableSubmit}
-                />
+                <ReplicateForm />
               </TabPanel>
             </AppBar>
           </Box>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="apply"
-                  control={control}
-                  render={({ field }) => <Checkbox {...field} />}
-                />
-              }
-              label={t("modal.initmodal_1")}
-            />
-          </FormGroup>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
@@ -302,31 +219,28 @@ export const InitialsField = ({
         </Button>
         <Button
           variant="contained"
-          disabled={isPending || isSubmitDisabled}
-          startIcon={
-            isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          }
+          // disabled={isPending || isSubmitDisabled}
+          // startIcon={
+          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
+          // }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",
             marginLeft: "20px !important",
           }}
-          onClick={handleSubmitClick}
           type="button"
         >
-          {t("0-common.sign")}
+          {t("0-common.save")}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-InitialsField.propTypes = {
+InitialsFieldSetting.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  signer: PropTypes.object,
-  initData: PropTypes.object,
-  workFlow: PropTypes.object,
+  type: PropTypes.string,
 };
 
-export default InitialsField;
+export default InitialsFieldSetting;

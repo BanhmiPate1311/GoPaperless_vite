@@ -62,9 +62,9 @@ export const TabDocument = ({ validFile }) => {
   }, [validFile]);
 
   // const sigList = validFile.signatures;
-  console.log("sigList: ", sigList);
+  // console.log("sigList: ", sigList);
 
-  console.log("sigList: ", eSealList);
+  // console.log("eSealList: ", eSealList);
 
   const [value, setValue] = useState(0);
 

@@ -89,8 +89,8 @@ const DrawSignForm = forwardRef(
           sx={{
             height: showInput ? "100%" : "170px",
             overflow: "hidden",
-            borderRadius: "6px",
-            border: !imgBase64 ? "2px solid #357EEB" : "none",
+            // borderRadius: "6px",
+            // border: !imgBase64 ? "2px solid #357EEB" : "none",
             position: "relative",
             // backgroundColor: "white",
             "&:before": watch("logo")

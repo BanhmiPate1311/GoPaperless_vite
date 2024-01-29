@@ -11,6 +11,7 @@ import { PdfViewerDocument } from "./PdfViewer";
 import { TabBar } from "./TabBar";
 
 export const SigningContent = ({ workFlow, page }) => {
+  console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("workFlow: ", workFlow);
   // eslint-disable-next-line no-unused-vars

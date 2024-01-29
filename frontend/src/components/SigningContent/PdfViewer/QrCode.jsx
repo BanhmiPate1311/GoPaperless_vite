@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
+import { QrCodeSettingField } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
@@ -21,6 +22,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
 
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
+  const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
 
   const [dragPosition, setDragPosition] = useState({
     x: (qrData.dimension?.x * pdfPage.width) / 100,
@@ -32,6 +34,17 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
   const maxPosibleResizeHeight =
     (pdfPage.height * (100 - qrData.dimension?.y)) / 100;
 
+  const handleOpenModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = true;
+    setIsOpenModalSetting(newValue);
+  };
+
+  const handleCloseModalSetting = (index) => {
+    const newValue = [...isOpenModalSetting];
+    newValue[index] = false;
+    setIsOpenModalSetting(newValue);
+  };
   const removeSignature = useMutation({
     mutationFn: () => {
       return fpsService.removeSignature(
@@ -72,7 +85,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
             color: "#545454",
             cursor: "pointer",
           }}
-          //   onClick={() => handleOpenModalSetting(index)}
+          onClick={() => handleOpenModalSetting(index)}
         />
         <SvgIcon
           component={GarbageIcon}
@@ -100,172 +113,92 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
   if (qrData.page !== null && qrData.page !== pdfPage.currentPage) return null;
 
   return (
-    <Draggable
-      handle={`#qrDrag-${index}`}
-      // bounds="parent"
-      onDrag={() => handleDrag("block")}
-      position={dragPosition}
-      cancel=".topBar"
-      onStart={(e, data) => {
-        setDragPosition({ x: data.x, y: data.y });
-        setIsControlled(false);
-      }}
-      onStop={(e, data) => {
-        e.preventDefault();
-        setIsControlled(true);
-        handleDrag("none");
-        const draggableComponent = document.querySelector(`.qrbox-${index}`);
-        const targetComponents = document.querySelectorAll(".sig");
-        const containerComponent = document.getElementById(
-          `pdf-view-${pdfPage.currentPage - 1}`
-        );
-
-        const containerRect = containerComponent.getBoundingClientRect();
-
-        const draggableRect = draggableComponent.getBoundingClientRect();
-
-        if (
-          draggableRect.right > containerRect.right ||
-          draggableRect.left < containerRect.left ||
-          draggableRect.bottom > containerRect.bottom ||
-          draggableRect.top < containerRect.top
-        ) {
-          return;
-        }
-        let isOverTarget = false;
-
-        targetComponents.forEach((targetComponent) => {
-          if (isOverTarget) return;
-
-          const targetRect = targetComponent.getBoundingClientRect();
-
-          if (draggableComponent === targetComponent) return;
-
-          if (
-            draggableRect.left < targetRect.right &&
-            draggableRect.right > targetRect.left &&
-            draggableRect.top < targetRect.bottom &&
-            draggableRect.bottom > targetRect.top
-          ) {
-            isOverTarget = true;
-            console.log("Draggable component is over the target component");
-          }
-        });
-
-        if (
-          (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
-          isOverTarget
-        ) {
-          return;
-        }
-        setDragPosition({ x: data.x, y: data.y });
-        const rectComp = containerComponent.getBoundingClientRect();
-        // console.log("rectComp: ", rectComp);
-
-        const rectItem = draggableComponent.getBoundingClientRect();
-        // console.log("rectItem: ", rectItem);
-
-        const x =
-          (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width;
-
-        const y =
-          (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
-
-        putSignature.mutate(
-          {
-            body: {
-              field_name: qrData.field_name,
-              page: pdfPage.currentPage,
-              dimension: {
-                x: x,
-                y: y,
-                width: -1,
-                height: -1,
-              },
-              visible_enabled: true,
-            },
-            field: "initial",
-            documentId: workFlow.documentId,
-          },
-          {
-            onSuccess: () => {
-              queryClient.invalidateQueries({ queryKey: ["getField"] });
-            },
-          }
-        );
-      }}
-      disabled={
-        signerId + "_" + qrData.type + "_" + qrData.suffix !== qrData.field_name
-      }
-    >
-      <ResizableBox
-        width={
-          qrData.dimension?.width
-            ? qrData.dimension?.width * (pdfPage.width / 100)
-            : Infinity
-        }
-        height={
-          qrData.dimension?.height
-            ? qrData.dimension?.height * (pdfPage.height / 100)
-            : 150
-        }
-        style={{
-          position: "absolute",
-          zIndex: 100,
-          transition: isControlled ? `transform 0.3s` : `none`,
+    <>
+      <Draggable
+        handle={`#qrDrag-${index}`}
+        // bounds="parent"
+        onDrag={() => handleDrag("block")}
+        position={dragPosition}
+        cancel=".topBar"
+        onStart={(e, data) => {
+          setDragPosition({ x: data.x, y: data.y });
+          setIsControlled(false);
         }}
-        minConstraints={[
-          signerId + "_" + qrData.type + "_" + qrData.suffix !==
-          qrData.field_name
-            ? qrData.dimension?.width * (pdfPage.width / 100)
-            : pdfPage
-            ? 120
-            : 200,
+        onStop={(e, data) => {
+          e.preventDefault();
+          setIsControlled(true);
+          handleDrag("none");
+          const draggableComponent = document.querySelector(`.qrbox-${index}`);
+          const targetComponents = document.querySelectorAll(".sig");
+          const containerComponent = document.getElementById(
+            `pdf-view-${pdfPage.currentPage - 1}`
+          );
 
-          signerId + "_" + qrData.type + "_" + qrData.suffix !==
-          qrData.field_name
-            ? qrData.dimension?.height * (pdfPage.height / 100)
-            : pdfPage
-            ? 120
-            : 50,
-        ]}
-        maxConstraints={[
-          signerId + "_" + qrData.type + "_" + qrData.suffix !==
-          qrData.field_name
-            ? qrData.dimension?.width * (pdfPage.width / 100)
-            : pdfPage
-            ? maxPosibleResizeWidth
-            : 200,
+          const containerRect = containerComponent.getBoundingClientRect();
 
-          signerId + "_" + qrData.type + "_" + qrData.suffix !==
-          qrData.field_name
-            ? qrData.dimension?.height * (pdfPage.height / 100)
-            : pdfPage
-            ? maxPosibleResizeHeight
-            : 200,
-        ]}
-        onResize={(e, { size }) => {}}
-        onResizeStop={(e, { size }) => {
-          // console.log("e: ", e);
+          const draggableRect = draggableComponent.getBoundingClientRect();
+
           if (
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-          )
+            draggableRect.right > containerRect.right ||
+            draggableRect.left < containerRect.left ||
+            draggableRect.bottom > containerRect.bottom ||
+            draggableRect.top < containerRect.top
+          ) {
             return;
+          }
+          let isOverTarget = false;
+
+          targetComponents.forEach((targetComponent) => {
+            if (isOverTarget) return;
+
+            const targetRect = targetComponent.getBoundingClientRect();
+
+            if (draggableComponent === targetComponent) return;
+
+            if (
+              draggableRect.left < targetRect.right &&
+              draggableRect.right > targetRect.left &&
+              draggableRect.top < targetRect.bottom &&
+              draggableRect.bottom > targetRect.top
+            ) {
+              isOverTarget = true;
+              console.log("Draggable component is over the target component");
+            }
+          });
+
+          if (
+            (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
+            isOverTarget
+          ) {
+            return;
+          }
+          setDragPosition({ x: data.x, y: data.y });
+          const rectComp = containerComponent.getBoundingClientRect();
+          // console.log("rectComp: ", rectComp);
+
+          const rectItem = draggableComponent.getBoundingClientRect();
+          // console.log("rectItem: ", rectItem);
+
+          const x =
+            (Math.abs(rectItem.left - rectComp.left) * 100) / rectComp.width;
+
+          const y =
+            (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
+
           putSignature.mutate(
             {
               body: {
                 field_name: qrData.field_name,
                 page: pdfPage.currentPage,
                 dimension: {
-                  x: -1,
-                  y: -1,
-                  width: (size.width / pdfPage.width) * 100,
-                  height: (size.height / pdfPage.height) * 100,
+                  x: x,
+                  y: y,
+                  width: -1,
+                  height: -1,
                 },
                 visible_enabled: true,
               },
-              field: "text",
+              field: "initial",
               documentId: workFlow.documentId,
             },
             {
@@ -275,60 +208,149 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
             }
           );
         }}
-        className={`sig qrbox-${index}`}
+        disabled={
+          signerId + "_" + qrData.type + "_" + qrData.suffix !==
+          qrData.field_name
+        }
       >
-        <Box
-          id={`qrDrag-${index}`}
-          sx={{
-            height: "100%",
-            position: "relative",
-            // padding: "10px",
-            // zIndex: 100,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+        <ResizableBox
+          width={
+            qrData.dimension?.width
+              ? qrData.dimension?.width * (pdfPage.width / 100)
+              : Infinity
+          }
+          height={
+            qrData.dimension?.height
+              ? qrData.dimension?.height * (pdfPage.height / 100)
+              : 150
+          }
+          style={{
+            position: "absolute",
+            zIndex: 100,
+            transition: isControlled ? `transform 0.3s` : `none`,
+          }}
+          minConstraints={[
+            signerId + "_" + qrData.type + "_" + qrData.suffix !==
+            qrData.field_name
+              ? qrData.dimension?.width * (pdfPage.width / 100)
+              : pdfPage
+              ? 120
+              : 200,
 
-            border: "2px solid",
-            borderColor: "#e1e1e1",
+            signerId + "_" + qrData.type + "_" + qrData.suffix !==
+            qrData.field_name
+              ? qrData.dimension?.height * (pdfPage.height / 100)
+              : pdfPage
+              ? 120
+              : 50,
+          ]}
+          maxConstraints={[
+            signerId + "_" + qrData.type + "_" + qrData.suffix !==
+            qrData.field_name
+              ? qrData.dimension?.width * (pdfPage.width / 100)
+              : pdfPage
+              ? maxPosibleResizeWidth
+              : 200,
+
+            signerId + "_" + qrData.type + "_" + qrData.suffix !==
+            qrData.field_name
+              ? qrData.dimension?.height * (pdfPage.height / 100)
+              : pdfPage
+              ? maxPosibleResizeHeight
+              : 200,
+          ]}
+          onResize={(e, { size }) => {}}
+          onResizeStop={(e, { size }) => {
+            // console.log("e: ", e);
+            if (
+              signerId + "_" + qrData.type + "_" + qrData.suffix !==
+              qrData.field_name
+            )
+              return;
+            putSignature.mutate(
+              {
+                body: {
+                  field_name: qrData.field_name,
+                  page: pdfPage.currentPage,
+                  dimension: {
+                    x: -1,
+                    y: -1,
+                    width: (size.width / pdfPage.width) * 100,
+                    height: (size.height / pdfPage.height) * 100,
+                  },
+                  visible_enabled: true,
+                },
+                field: "text",
+                documentId: workFlow.documentId,
+              },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: ["getField"] });
+                },
+              }
+            );
           }}
-          onMouseMove={(e) => {
-            setShowTopbar(true);
-          }}
-          onMouseLeave={(e) => {
-            setShowTopbar(false);
-          }}
+          className={`sig qrbox-${index}`}
         >
-          {showTopbar && <TopBar qrData={qrData} />}
-          <span
-            className={`qrrauria-${index} topline`}
-            style={{ display: "none" }}
-          ></span>
-          <span
-            className={`qrrauria-${index} rightline`}
-            style={{ display: "none" }}
-          ></span>
-          <span
-            className={`qrrauria-${index} botline`}
-            style={{ display: "none" }}
-          ></span>
-          <span
-            className={`qrrauria-${index} leftline`}
-            style={{ display: "none" }}
-          ></span>
           <Box
+            id={`qrDrag-${index}`}
             sx={{
               height: "100%",
-              width: "100%",
-              backgroundImage: `url(data:image/png;base64,${qrData.image_qr})`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
+              position: "relative",
+              // padding: "10px",
+              // zIndex: 100,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+
+              border: "2px solid",
+              borderColor: "#e1e1e1",
             }}
-            alt="The house from the offer."
-          />
-        </Box>
-      </ResizableBox>
-    </Draggable>
+            onMouseMove={(e) => {
+              setShowTopbar(true);
+            }}
+            onMouseLeave={(e) => {
+              setShowTopbar(false);
+            }}
+          >
+            {showTopbar && <TopBar qrData={qrData} />}
+            <span
+              className={`qrrauria-${index} topline`}
+              style={{ display: "none" }}
+            ></span>
+            <span
+              className={`qrrauria-${index} rightline`}
+              style={{ display: "none" }}
+            ></span>
+            <span
+              className={`qrrauria-${index} botline`}
+              style={{ display: "none" }}
+            ></span>
+            <span
+              className={`qrrauria-${index} leftline`}
+              style={{ display: "none" }}
+            ></span>
+            <Box
+              sx={{
+                height: "100%",
+                width: "100%",
+                backgroundImage: `url(data:image/png;base64,${qrData.image_qr})`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
+              alt="The house from the offer."
+            />
+          </Box>
+        </ResizableBox>
+      </Draggable>
+      {isOpenModalSetting[index] && (
+        <QrCodeSettingField
+          open={isOpenModalSetting[index]}
+          onClose={() => handleCloseModalSetting(index)}
+        />
+      )}
+    </>
   );
 };
 

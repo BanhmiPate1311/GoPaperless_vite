@@ -29,7 +29,6 @@ export const Signature = ({
   textField,
 }) => {
   // console.log("pdfPage: ", pdfPage);
-  // console.log("pdfPage: ", pdfPage);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("index: ", index);
