@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
 import vn.mobileid.GoPaperless.model.fpsModel.BasicFieldAttribute;
 import vn.mobileid.GoPaperless.model.fpsModel.Signature;
 import vn.mobileid.GoPaperless.process.ProcessDb;
@@ -84,6 +86,13 @@ public class FpsController {
     public ResponseEntity<?> fillInit(@PathVariable int documentId, @RequestBody BasicFieldAttribute data) throws Exception {
 
         String response = fpsService.fillInit(documentId, data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/{documentId}/fillForm")
+    public ResponseEntity<?> fillForm(@PathVariable int documentId, @RequestBody RsspRequest data) throws Exception {
+        List<TextField> textFields = data.getTextField();
+        String response = fpsService.fillForm(documentId, textFields);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

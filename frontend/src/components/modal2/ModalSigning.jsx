@@ -87,7 +87,7 @@ export const ModalSigning = ({
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       text:
-        typeof dataSigning.certChain.subject === "string"
+        typeof dataSigning?.certChain?.subject === "string"
           ? dataSigning.certChain.subject
           : dataSigning.certChain.subject.commonName,
       drawUrl: "",
@@ -132,7 +132,7 @@ export const ModalSigning = ({
       signingPurpose: signer.signingPurpose
         ? signer.signingPurpose
         : "signature",
-      reason: signer.customReason ? signer.customReason : "Purpose: signature",
+      reason: signer.customReason ? signer.customReason : "signature",
     });
   }, [address]);
 
@@ -162,46 +162,52 @@ export const ModalSigning = ({
   const handleFormSubmit = (data) => {
     switch (value) {
       case 0:
-        html2canvas(textElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
-          // console.log("data64: ", data64);
+        html2canvas(textElement.current, { backgroundColor: null }).then(
+          (canvas) => {
+            const data64 = canvas.toDataURL();
+            // console.log("data64: ", data64);
 
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(data64),
+            });
+            onClose();
+            handleShowmodal();
+          }
+        );
         break;
       case 1:
-        html2canvas(drawElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
-          // console.log("data64: ", canvas);
+        html2canvas(drawElement.current, { backgroundColor: null }).then(
+          (canvas) => {
+            const data64 = canvas.toDataURL();
+            // console.log("data64: ", canvas);
 
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(data64),
+            });
+            onClose();
+            handleShowmodal();
+          }
+        );
         break;
       case 2:
-        html2canvas(fileElement.current).then((canvas) => {
-          const data64 = canvas.toDataURL();
+        html2canvas(fileElement.current, { backgroundColor: null }).then(
+          (canvas) => {
+            const data64 = canvas.toDataURL();
 
-          // console.log(data64);
-          setDataSigning({
-            ...dataSigning,
-            contactInfor: data.contactInfor,
-            imageBase64: removeBase64Prefix(data64),
-          });
-          onClose();
-          handleShowmodal();
-        });
+            // console.log(data64);
+            setDataSigning({
+              ...dataSigning,
+              contactInfor: data.contactInfor,
+              imageBase64: removeBase64Prefix(data64),
+            });
+            onClose();
+            handleShowmodal();
+          }
+        );
         break;
     }
   };
@@ -420,7 +426,7 @@ export const ModalSigning = ({
             handleOpenResize(true);
           }}
         >
-          {t("Review")}
+          {t("0-common.review")}
         </Button>
         <Button
           variant="contained"

@@ -66,7 +66,8 @@
     "subject": "Subject",
     "subjectDN": "Subject DN",
     "valid_from": "Valid from",
-    "valid_to": "Valid to"
+    "valid_to": "Valid to",
+    "review": "Review"
   },
   "batch": {
     "collapse": "Collapse all",
@@ -168,6 +169,9 @@
     "smartid2": "Your verification code will expire in",
     "smartid3": "seconds",
     "smartid4": "If the code above matches the one you see on your device screen, please authenticate your SmartID.",
+    "smartid5": "Authentication request",
+    "smartid6": "Waiting for your approval...",
+    "smartid7": "Please check notification on your Smart-ID and approve the signing request.",
     "subtitle1": "By choosing the certificate, I agree to the transfer of my name and personal identification code to the service provider",
     "title1": "Select a certificate",
     "upload1": "Keep original",
@@ -177,6 +181,12 @@
 
     "initmodal_title": "Apply initial",
     "initmodal_1": "Apply to all fields in this document",
+
+    "certDetail_1": "This certificate is intended for the following purposes(s):",
+    "certDetail_2": "Proves your identity to a remote computer",
+    "certDetail_3": "Protects e-mail messages",
+    "certDetail_4": "Issued to",
+    "certDetail_5": "Issued by",
 
     "modal1_title": "Edit signature field",
     "modal1_1": "Authenticate signer via OTP",

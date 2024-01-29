@@ -277,3 +277,14 @@ export const debounce = (fn, delay = 1000) => {
     timerId = setTimeout(() => fn(...args), delay);
   };
 };
+
+export const downloadCertFromPEM = (data) => {
+  const blob = new Blob([data], { type: "application/x-x509-ca-cert" });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", "certificate.cer");
+  document.body.appendChild(link);
+  link.click();
+  // console.log("data: ", data);
+};

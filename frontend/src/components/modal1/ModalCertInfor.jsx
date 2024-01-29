@@ -1,84 +1,98 @@
+import { convertTime, downloadCertFromPEM } from "@/utils/commonFunction";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { Chip } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import Grow from "@mui/material/Grow";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Tabs from "@mui/material/Tabs";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Grow from "@mui/material/Grow";
-import TextField from "@mui/material/TextField";
-import { Box } from "@mui/material";
-import { convertTime } from "@/utils/commonFunction";
-import forge from "node-forge";
+// import forge from "node-forge";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box
+          sx={{
+            p: "10px 0",
+            backgroundColor: "dialogBackground.main",
+            color: "black",
+          }}
+        >
+          <Box>{children}</Box>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
+  };
+}
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Grow ref={ref} {...props} />;
 });
 
-export const ModalCertInfor = ({ open, onClose, data, provider }) => {
-  console.log("data: ", data);
+export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
+  // console.log("certData: ", certData);
+  // console.log("data: ", data);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    // Đoạn mã PEM (đã bị lược bỏ BEGIN CERTIFICATE và END CERTIFICATE)
+  const [value, setValue] = useState(0);
+  // console.log("value: ", value);
 
-    // Thêm "BEGIN CERTIFICATE" và "END CERTIFICATE"
-    const completePemData = `-----BEGIN CERTIFICATE-----\n${data?.cert}\n-----END CERTIFICATE-----`;
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-    // Tạo đối tượng x509 certificate từ PEM
-    const certificate = forge.pki.certificateFromPem(completePemData);
+  const [type, setType] = useState("all");
+  // console.log("type: ", type);
 
-    // Lấy các giá trị cần thiết từ chứng chỉ
-    const version = certificate.extensions;
-    const serialNumber = certificate.serialNumber;
-    const signatureAlgorithm = certificate.signatureAlgorithm;
-    const signatureHashAlgorithm = certificate.signature.algorithm;
-    const issuer = certificate.issuer;
-    const validFrom = certificate.validity.notBefore;
-    const validTo = certificate.validity.notAfter;
-    const subject = certificate.subject;
-    const publicKey = certificate.publicKey;
-    const publicKeyParams = publicKey.n.toString();
-    const authorityInfoAccess = certificate.extensions.authorityInfoAccess;
-    const subjectKeyIdentifier = certificate.extensions.subjectKeyIdentifier;
-    const authorityKeyIdentifier =
-      certificate.extensions.authorityKeyIdentifier;
-    const crlDistributionPoints = certificate.extensions.crlDistributionPoints;
-    const enhancedKeyUsage = certificate.extensions.extKeyUsage;
-    const subjectAltName = certificate.extensions.subjectAltName;
-    const basicConstraints = certificate.extensions.basicConstraints;
-    const keyUsage = certificate.extensions.keyUsage;
-    // const thumbprint = forge.md.sha1
-    //   .create()
-    //   .update(certificate.raw)
-    //   .digest()
-    //   .toHex();
+  const [typeValue, setTypeValue] = useState(0);
 
-    // In ra các giá trị
-    console.log("Version:", version);
-    console.log("Serial number:", serialNumber);
-    console.log("Signature algorithm:", signatureAlgorithm);
-    console.log("Signature hash algorithm:", signatureHashAlgorithm);
-    console.log("Issuer:", issuer);
-    console.log("Valid from:", validFrom);
-    console.log("Valid to:", validTo);
-    console.log("Subject:", subject);
-    console.log("Public key:", publicKey);
-    console.log("Public key parameters:", publicKeyParams);
-    console.log("Authority Info Access:", authorityInfoAccess);
-    console.log("Subject Key Identifier:", subjectKeyIdentifier);
-    console.log("Authority Key Identifier:", authorityKeyIdentifier);
-    console.log("CRL Distribution Points:", crlDistributionPoints);
-    console.log("Enhanced Key Usage:", enhancedKeyUsage);
-    console.log("Subject Alternative Name:", subjectAltName);
-    console.log("Basic Constraints:", basicConstraints);
-    console.log("Key Usage:", keyUsage);
-    // console.log("Thumbprint:", thumbprint);
-  }, [open]);
+  const handleSelectChange = (event) => {
+    setType(event.target.value);
+  };
 
   const issuer = () => {
     switch (provider) {
@@ -86,6 +100,15 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
         return data.issuer.commonName;
       default:
         return data.issuer;
+    }
+  };
+
+  const pemValue = () => {
+    switch (provider) {
+      case "USB_TOKEN_SIGNING":
+        return data.value;
+      default:
+        return data.cert;
     }
   };
 
@@ -98,27 +121,14 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
     }
   };
 
-  const subjectDN = () => {
-    switch (provider) {
-      case "USB_TOKEN_SIGNING":
-        return data.name;
-      default:
-        return data.subjectDN;
-    }
-  };
-
   const certificate = [
     {
-      title: t("0-common.issuer"),
-      value: issuer(),
-    },
-    {
-      title: t("signing.common_name"),
+      title: t("modal.certDetail_4"),
       value: subject(),
     },
     {
-      title: t("0-common.subjectDN"),
-      value: subjectDN(),
+      title: t("modal.certDetail_5"),
+      value: issuer(),
     },
     {
       title: t("0-common.valid_from"),
@@ -129,6 +139,259 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
       value: data.validTo ? convertTime(data.validTo) : null,
     },
   ].filter((item) => item.value !== null);
+
+  const selectData = [
+    {
+      value: "all",
+      label: "<All>",
+    },
+    {
+      value: "field",
+      label: "Version 1 Fields Only",
+    },
+    {
+      value: "ext",
+      label: "Extensions Only",
+    },
+    {
+      value: "crit",
+      label: "Critical Extensions Only",
+    },
+    {
+      value: "proper",
+      label: "Properties Only",
+    },
+  ];
+
+  const columns = [{ label: "Field" }, { label: "Details" }];
+
+  const all = [
+    {
+      key: "version",
+      label: "Version",
+      value: certData?.version,
+    },
+    {
+      key: "serialNumber",
+      label: "Serial number",
+      value: certData?.serialNumber,
+    },
+    {
+      key: "sigAlgName",
+      label: "Signature algorithm",
+      value: certData?.sigAlgName,
+    },
+    {
+      key: "sigHashAlgName",
+      label: "Signature hash algorithm",
+      value: certData?.algorithm,
+    },
+    {
+      key: "issuer",
+      label: "Issuer",
+      value: certData?.issuerDN,
+    },
+    {
+      key: "validFrom",
+      label: "Valid from",
+      value: certData?.validFrom,
+    },
+    {
+      key: "validTo",
+      label: "Valid to",
+      value: certData?.validTo,
+    },
+    {
+      key: "subject",
+      label: "Subject",
+      value: certData?.subjectDN,
+    },
+    {
+      key: "publicKey",
+      label: "Public key",
+      value: certData?.publicKey?.split("\n")[0],
+    },
+    {
+      key: "authInfoAccess",
+      label: "Authority information access",
+      value: certData?.authorityInformationAccess,
+    },
+    {
+      key: "subjectKeyIdentifier",
+      label: "Subject key identifier",
+      value: certData?.subjectKeyIdentifier?.replace("0414", ""),
+    },
+    {
+      key: "authorityKeyIdentifier",
+      label: "Authority key identifier",
+      value: certData?.authorityKeyIdentifier,
+    },
+    {
+      key: "crlDistributionPoints",
+      label: "CRL distribution point",
+      value: certData?.crlDistributionPoints,
+    },
+    {
+      key: "EnhancedkeyUsage",
+      label: "Enhanced key usage",
+      value: certData?.enhancedKeyUsage,
+    },
+    {
+      key: "subjectAlternativeName",
+      label: "Subject alternative name",
+      value: certData?.subjectAlternativeName,
+    },
+    {
+      key: "basicConstraints",
+      label: "Basic Constraints",
+      value: certData?.basicConstraints,
+    },
+    {
+      key: "keyUsage",
+      label: "Key usage",
+      value: certData?.keyUsage,
+    },
+    {
+      key: "thumbprint",
+      label: "Thumbprint",
+      value: certData?.thumbprint,
+    },
+  ].filter((item) => item.value !== null && item.value !== "");
+
+  const field = [
+    {
+      key: "version",
+      label: "Version",
+      value: certData?.version,
+    },
+    {
+      key: "serialNumber",
+      label: "Serial number",
+      value: certData?.serialNumber,
+    },
+    {
+      key: "sigAlgName",
+      label: "Signature algorithm",
+      value: certData?.sigAlgName,
+    },
+    {
+      key: "sigHashAlgName",
+      label: "Signature hash algorithm",
+      value: certData?.algorithm,
+    },
+    {
+      key: "issuer",
+      label: "Issuer",
+      value: certData?.issuerDN,
+    },
+    {
+      key: "validFrom",
+      label: "Valid from",
+      value: certData?.validFrom,
+    },
+    {
+      key: "validTo",
+      label: "Valid to",
+      value: certData?.validTo,
+    },
+    {
+      key: "subject",
+      label: "Subject",
+      value: certData?.subjectDN,
+    },
+    {
+      key: "publicKey",
+      label: "Public key",
+      value: certData?.publicKey?.split("\n")[0],
+    },
+  ].filter((item) => item.value !== null && item.value !== "");
+
+  const ext = [
+    {
+      key: "authInfoAccess",
+      label: "Authority information access",
+      value: certData?.authorityInformationAccess,
+    },
+    {
+      key: "subjectKeyIdentifier",
+      label: "Subject key identifier",
+      value: certData?.subjectKeyIdentifier?.replace("0414", ""),
+    },
+    {
+      key: "authorityKeyIdentifier",
+      label: "Authority key identifier",
+      value: certData?.authorityKeyIdentifier,
+    },
+    {
+      key: "crlDistributionPoints",
+      label: "CRL distribution point",
+      value: certData?.crlDistributionPoints,
+    },
+    {
+      key: "EnhancedkeyUsage",
+      label: "Enhanced key usage",
+      value: certData?.enhancedKeyUsage,
+    },
+    {
+      key: "subjectAlternativeName",
+      label: "Subject alternative name",
+      value: certData?.subjectAlternativeName,
+    },
+    {
+      key: "basicConstraints",
+      label: "Basic Constraints",
+      value: certData?.basicConstraints,
+    },
+    {
+      key: "keyUsage",
+      label: "Key usage",
+      value: certData?.keyUsage,
+    },
+    {
+      key: "thumbprint",
+      label: "Thumbprint",
+      value: certData?.thumbprint,
+    },
+  ].filter((item) => item.value !== null && item.value !== "");
+
+  const crit = [
+    {
+      key: "basicConstraints",
+      label: "Basic Constraints",
+      value: certData?.basicConstraints,
+    },
+    {
+      key: "keyUsage",
+      label: "Key usage",
+      value: certData?.keyUsage,
+    },
+  ].filter((item) => item.value !== null && item.value !== "");
+
+  const proper = [
+    {
+      key: "thumbprint",
+      label: "Thumbprint",
+      value: certData?.thumbprint,
+    },
+  ].filter((item) => item.value !== null && item.value !== "");
+
+  const rowData = {
+    all,
+    field,
+    ext,
+    crit,
+    proper,
+  };
+
+  // console.log("rowData: ", rowData);
+
+  useEffect(() => {
+    setTypeValue(0);
+  }, [type]);
+
+  const handleRowClick = (value) => {
+    setTypeValue(value);
+  };
 
   return (
     <Dialog
@@ -192,42 +455,266 @@ export const ModalCertInfor = ({ open, onClose, data, provider }) => {
             height: "100%",
           }}
         >
-          <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
-            {certificate.map((item, index) => (
-              <Box key={index} mb="10px">
-                <Typography
-                  variant="h6"
-                  height="17px"
-                  fontWeight={600}
-                  mb="10px"
-                >
-                  {item.title}
-                </Typography>
-                <TextField
-                  fullWidth
-                  size="small"
-                  margin="normal"
-                  multiline
-                  defaultValue={item.value}
+          <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
+            <AppBar position="static" elevation={0}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                // textColor="inherit"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+                sx={{
+                  height: "45px",
+                  minHeight: "45px",
+                  backgroundColor: "dialogBackground.main",
+                }}
+              >
+                <Tab
+                  label={t("0-common.general")}
+                  {...a11yProps(0)}
                   sx={{
-                    my: 0,
-                    "& .MuiInputBase-root": {
-                      minHeight: "45px",
-                      height: "auto !important",
-                    },
-                  }}
-                  InputProps={{
-                    readOnly: true,
-                    sx: {
-                      backgroundColor: "signingWFBackground.main",
-                    },
+                    minHeight: "45px",
+                    height: "45px",
+                    textTransform: "none",
                   }}
                 />
+                <Tab
+                  label={t("0-common.details")}
+                  {...a11yProps(1)}
+                  sx={{
+                    minHeight: "45px",
+                    height: "45px",
+                    textTransform: "none",
+                  }}
+                />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={value} index={0}>
+              <Box width={"100%"}>
+                <Typography variant="h6">{t("modal.certDetail_1")}</Typography>
+                <Box p={"10px 20px"}>
+                  <ul style={{ margin: 0 }}>
+                    <li>
+                      <Typography variant="h6">
+                        {t("modal.certDetail_2")}
+                      </Typography>
+                    </li>
+                    <li>
+                      <Typography variant="h6">
+                        {t("modal.certDetail_3")}
+                      </Typography>
+                    </li>
+                  </ul>
+                </Box>
+                {certificate.map((item, index) => (
+                  <Box key={index} mb="10px">
+                    <Typography
+                      variant="h6"
+                      height="17px"
+                      fontWeight={600}
+                      mb="10px"
+                    >
+                      {item.title}
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      margin="normal"
+                      multiline
+                      defaultValue={item.value}
+                      sx={{
+                        my: 0,
+                        "& .MuiInputBase-root": {
+                          minHeight: "45px",
+                          height: "auto !important",
+                        },
+                      }}
+                      disabled={true}
+                      InputProps={{
+                        // readOnly: true,
+                        sx: {
+                          backgroundColor: "#EFEFEF",
+                        },
+                      }}
+                    />
+                  </Box>
+                ))}
               </Box>
-            ))}
-
-            {/* {unavail && <Alert severity="error">{unavail}</Alert>} */}
-          </Stack>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Stack direction="column" sx={{ height: "513px" }}>
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  width={"100%"}
+                  mb={"10px"}
+                >
+                  <Typography variant="h4" sx={{ mr: 1 }}>
+                    Show:
+                  </Typography>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      labelId="demo-simple-select1-label"
+                      id="demo-simple-select"
+                      value={type}
+                      onChange={handleSelectChange}
+                      sx={{
+                        "& .MuiListItemSecondaryAction-root": {
+                          right: "30px",
+                          display: "flex",
+                        },
+                        backgroundColor: "signingWFBackground.main",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {selectData?.map((item, index) => (
+                        <MenuItem
+                          key={index}
+                          value={item.value}
+                          sx={{ fontSize: "12px" }}
+                        >
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Stack>
+                <Box flexGrow={1} alignSelf={"stretch"}>
+                  <TableContainer
+                    component={Paper}
+                    sx={{
+                      maxHeight: 300,
+                      mb: "10px",
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    <Table
+                      sx={{
+                        width: "100%",
+                        tableLayout: "fixed",
+                        overflow: "auto",
+                      }}
+                      stickyHeader
+                      aria-label="simple table"
+                    >
+                      <TableHead>
+                        <TableRow
+                          sx={{ height: "30px", backgroundColor: "#F9FAFB" }}
+                        >
+                          {columns.map((column, index) => (
+                            <TableCell
+                              key={index}
+                              align={column.align}
+                              sx={{
+                                p: "0 20px",
+                                width: "50%",
+                                fontSize: "12px",
+                                backgroundColor: "#F9FAFB",
+                              }}
+                            >
+                              {column.label}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rowData[type]?.map((row, index) => (
+                          <TableRow
+                            key={index}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                              height: "30px",
+                              backgroundColor:
+                                index === typeValue ? "#A6D1FF" : "",
+                            }}
+                            onClick={() => handleRowClick(index)}
+                          >
+                            {/* <TableCell component="th" scope="row">
+                          {row.name}
+                        </TableCell> */}
+                            <TableCell sx={{ p: "0 20px", fontSize: "12px" }}>
+                              {row.label}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                p: "0 20px",
+                                fontSize: "12px",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {row.value}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+                <Box
+                  width={"100%"}
+                  height={"120px"}
+                  bgcolor={"white"}
+                  border={"1px solid #E5E7EB"}
+                  borderRadius={"6px"}
+                  p={"10px"}
+                  fontSize={"12px"}
+                  sx={{
+                    wordBreak: "break-all",
+                    overflow: "auto",
+                    // textOverflow: "ellipsis",
+                  }}
+                >
+                  {rowData[type]?.[typeValue]?.key !== "publicKey"
+                    ? rowData[type]?.[typeValue]?.value
+                    : certData.publicKeyHex}
+                  {/* {rowData[type]?.[typeValue]?.value} */}
+                </Box>
+                {/* <Typography
+                  variant="h4"
+                  sx={{ mt: "10px" }}
+                  onClick={() => downloadCertFromPEM(data.cert)}
+                >
+                  click
+                </Typography> */}
+                <Stack
+                  width={"100%"}
+                  height={"19px"}
+                  direction={"row"}
+                  justifyContent={"flex-end"}
+                  alignItems={"center"}
+                  mt={"9px"}
+                >
+                  <Chip
+                    label={t("modal.download")}
+                    component="div"
+                    sx={{
+                      // padding: "8px 16px",
+                      height: "19px",
+                      // fontWeight: "500",
+                      // borderRadius: "25px",
+                      backgroundColor: "transparent",
+                      color: "blue",
+                      gap: "10px",
+                      "& span": {
+                        padding: "0",
+                      },
+                      "& svg.MuiChip-icon": {
+                        margin: "0",
+                      },
+                    }}
+                    onClick={() => downloadCertFromPEM(pemValue())}
+                    icon={
+                      <SaveAltIcon fontSize="small" color="borderColor.light" />
+                    }
+                    clickable
+                  />
+                </Stack>
+              </Stack>
+            </TabPanel>
+          </Box>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
@@ -248,6 +735,7 @@ ModalCertInfor.propTypes = {
   onClose: PropTypes.func,
   data: PropTypes.object,
   provider: PropTypes.string,
+  certData: PropTypes.object,
 };
 
 export default ModalCertInfor;

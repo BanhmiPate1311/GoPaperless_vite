@@ -162,7 +162,7 @@ input[type="number"] {
   border: 1px solid black;
 }
 
-#toolbar {
+.toolbar {
   background: #e1e1e1;
 }
 
@@ -216,4 +216,8 @@ input[type="number"] {
 
 .ql-toolbar.ql-snow {
   border-bottom: none;
+}
+
+.rpv-toolbar__item button[data-testid="toolbar__more-actions-popover-target"] {
+  display: none;
 }

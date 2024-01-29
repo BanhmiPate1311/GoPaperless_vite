@@ -1,5 +1,6 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
+import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
 import { ReactComponent as InValidIcon } from "@/assets/images/svg/error.svg";
 import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningError.svg";
 import { Box, Divider, Stack, Typography } from "@mui/material";
@@ -13,10 +14,16 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
 
   const valueSign = [
     {
-      name: t("validation.sigValidTitle"),
+      name:
+        signType == "Signature"
+          ? t("validation.sigValidTitle")
+          : t("validation.sealValidTitle"),
       value: validFile.filter((sig) => sig.indication === "TOTAL_PASSED"),
       icon: signIcon,
-      title: t("signing.signature_valid"),
+      title:
+        signType == "Signature"
+          ? t("signing.signature_valid")
+          : t("validation.sealValidTitle2"),
     },
     {
       name: t("validation.indeterminateTitle"),
@@ -27,10 +34,16 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
         </SvgIcon>
       ),
 
-      title: t("signing.indeterminate signatures"),
+      title:
+        signType == "Signature"
+          ? t("signing.indeterminate signatures")
+          : t("validation.indeterminateSeal"),
     },
     {
-      name: t("validation.invalidSig"),
+      name:
+        signType == "Signature"
+          ? t("validation.invalidSig")
+          : t("validation.invalidSeal"),
       value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
       icon: (
         <SvgIcon viewBox={"0 0 35 35"}>
@@ -38,7 +51,10 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
         </SvgIcon>
       ),
 
-      title: t("signing.invalid signatures"),
+      title:
+        signType == "Signature"
+          ? t("signing.invalid signatures")
+          : t("validation.invalidSeal"),
     },
   ];
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
@@ -47,7 +63,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
     <>
       <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <SignatureIcon />
+          {signType == "Signature" ? <SignatureIcon /> : <SealIcon />}
           <Typography variant="h3" sx={{ fontWeight: "550" }}>
             {t("0-common.signatures")}
           </Typography>

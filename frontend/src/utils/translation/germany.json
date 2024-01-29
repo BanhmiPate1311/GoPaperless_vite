@@ -168,6 +168,9 @@
     "smartid2": "Ihr Bestätigungscode läuft in ab",
     "smartid3": "Sekunden",
     "smartid4": "Wenn der obige Code mit dem übereinstimmt, den Sie auf dem Bildschirm Ihres Geräts sehen, authentifizieren Sie bitte Ihre SmartID.",
+    "smartid5": "Authentifizierungsanfrage",
+    "smartid6": "Warten auf Ihre Zustimmung...",
+    "smartid7": "Bitte überprüfen Sie die Benachrichtigung auf Ihrer Smart-ID und genehmigen Sie die Signaturanfrage.",
     "subtitle1": "Mit der Auswahl des Zertifikats erkläre ich mich mit der Übermittlung meines Namens und meines persönlichen Identifikationscodes an den Dienstleister einverstanden",
     "title1": "Wählen Sie ein Zertifikat aus",
     "upload1": "Bleib Original",
@@ -177,6 +180,12 @@
 
     "initmodal_title": "Erst anwenden",
     "initmodal_1": "Auf alle Felder in diesem Dokument anwenden",
+
+    "certDetail_1": "Dieses Zertifikat wird für folgende Zwecke verwendet:",
+    "certDetail_2": "Weisen Sie dem Remote-Computer Ihre Identität nach",
+    "certDetail_3": "E-Mail schützen",
+    "certDetail_4": "Lautend auf",
+    "certDetail_5": "Ausgestellt von",
 
     "modal1_title": "Signaturfeld bearbeiten",
     "modal1_1": "Authentifizieren Sie den Unterzeichner über OTP",

@@ -1,5 +1,6 @@
 import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { UseGetCertDetail } from "@/hook/use-apiService";
 import { convertTime } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
 import Alert from "@mui/material/Alert";
@@ -37,8 +38,10 @@ export const Step6_usb = ({
   provider,
 }) => {
   const { t } = useTranslation();
+  // console.log("data: ", data);
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
+  const getCertDetail = UseGetCertDetail();
 
   useEffect(() => {
     if (certSelected === null) {
@@ -78,7 +81,16 @@ export const Step6_usb = ({
                 // mx: 2,
               }}
               onClick={() => {
-                handleShowCertInfor(index);
+                getCertDetail.mutate(
+                  {
+                    cert: value.value,
+                  },
+                  {
+                    onSuccess: () => {
+                      handleShowCertInfor(index);
+                    },
+                  }
+                );
               }}
             />
           </Box>
@@ -106,6 +118,7 @@ export const Step6_usb = ({
         open={isShowCertInfor[index]}
         onClose={() => handleCloseCertInfor(index)}
         data={value}
+        certData={getCertDetail.data}
         provider={provider}
       />
     </ToggleButtonStyle>

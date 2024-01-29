@@ -74,8 +74,13 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           padding: "5px",
           top: -25,
           right: -2,
+          display:
+            signerId + "_" + textData.type + "_" + textData.suffix !==
+              textData.field_name || textData.process_status === "PROCESSED"
+              ? "none"
+              : "flex",
           zIndex: 10,
-          display: "flex",
+          // display: "flex",
           backgroundColor: "#D9DFE4",
           gap: "5px",
         }}
@@ -170,6 +175,9 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
       );
     }, 1000);
   };
+
+  if (textData.page !== null && textData.page !== pdfPage.currentPage)
+    return null;
 
   return (
     <>
@@ -272,7 +280,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
         }}
         disabled={
           signerId + "_" + textData.type + "_" + textData.suffix !==
-          textData.field_name
+            textData.field_name || textData.process_status === "PROCESSED"
         }
       >
         <ResizableBox
@@ -293,14 +301,14 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           }}
           minConstraints={[
             signerId + "_" + textData.type + "_" + textData.suffix !==
-            textData.field_name
+              textData.field_name || textData.process_status === "PROCESSED"
               ? textData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? (pdfPage.width * 20) / 100
               : 200,
 
             signerId + "_" + textData.type + "_" + textData.suffix !==
-            textData.field_name
+              textData.field_name || textData.process_status === "PROCESSED"
               ? textData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? (pdfPage.height * 5) / 100
@@ -308,14 +316,14 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           ]}
           maxConstraints={[
             signerId + "_" + textData.type + "_" + textData.suffix !==
-            textData.field_name
+              textData.field_name || textData.process_status === "PROCESSED"
               ? textData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? maxPosibleResizeWidth
               : 200,
 
             signerId + "_" + textData.type + "_" + textData.suffix !==
-            textData.field_name
+              textData.field_name || textData.process_status === "PROCESSED"
               ? textData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? maxPosibleResizeHeight
@@ -326,7 +334,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             // console.log("e: ", e);
             if (
               signerId + "_" + textData.type + "_" + textData.suffix !==
-              textData.field_name
+                textData.field_name ||
+              textData.process_status === "PROCESSED"
             )
               return;
             putSignature.mutate(

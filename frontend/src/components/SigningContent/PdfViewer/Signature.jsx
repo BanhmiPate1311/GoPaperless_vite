@@ -52,7 +52,10 @@ export const Signature = ({
   const [isShowSigDetail, setIsShowSigDetail] = useState([false]);
 
   const queryClient = useQueryClient();
-  const newPos = useRef({ x: null, y: null });
+  const newPos = useRef({
+    x: (signatureData.dimension?.x * pdfPage.width) / 100,
+    y: (signatureData.dimension?.y * pdfPage.height) / 100,
+  });
   // console.log("currentPos: ", newPos.current);
   const [dataSigning, setDataSigning] = useState({});
 
@@ -80,7 +83,7 @@ export const Signature = ({
         return { isSigned: true, ...item.value };
       });
 
-    const newSig2 = workFlow.participants
+    const newSig2 = workFlow?.participants
       ?.filter(
         (item) =>
           item.certificate &&
@@ -294,6 +297,9 @@ export const Signature = ({
     }
   };
 
+  if (signatureData.page !== null && signatureData.page !== pdfPage.currentPage)
+    return null;
+
   return (
     <>
       <Draggable
@@ -415,7 +421,7 @@ export const Signature = ({
           style={{
             position: "absolute",
             zIndex: 100,
-            opacity: signatureData.verification === undefined ? 1 : 0,
+            opacity: signatureData.process_status === "PROCESSED" ? 0 : 1,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           minConstraints={[
@@ -493,7 +499,7 @@ export const Signature = ({
             id={`sigDrag-${index}`}
             sx={{
               backgroundColor:
-                signatureData.verification ||
+                signatureData.process_status === "PROCESSED" ||
                 signerId +
                   "_" +
                   signatureData.type +
@@ -512,7 +518,7 @@ export const Signature = ({
 
               border: "2px dashed",
               borderColor:
-                signatureData.verification ||
+                signatureData.process_status === "PROCESSED" ||
                 signerId +
                   "_" +
                   signatureData.type +
@@ -529,7 +535,7 @@ export const Signature = ({
               setShowTopbar(false);
             }}
             onClick={(e) => {
-              if (signatureData.verification) {
+              if (signatureData.process_status === "PROCESSED") {
                 console.log("show signature verification");
                 toggleSigDetail(index);
               } else if (
@@ -542,6 +548,7 @@ export const Signature = ({
                 (newPos.current.x !== dragPosition.x &&
                   newPos.current.y !== dragPosition.y)
               ) {
+                console.log("true");
                 return;
               } else if (
                 e.target.id === `sigDrag-${index}` ||

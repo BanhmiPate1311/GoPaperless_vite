@@ -1,5 +1,6 @@
 import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { UseGetCertDetail } from "@/hook/use-apiService";
 import { convertTime } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
@@ -11,12 +12,12 @@ import Stack from "@mui/material/Stack";
 import SvgIcon from "@mui/material/SvgIcon";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ModalCertInfor } from "../modal1";
-import Tooltip from "@mui/material/Tooltip";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -43,6 +44,7 @@ export const Step13 = ({
   const [value, setValue] = useState("certs");
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
+  const getCertDetail = UseGetCertDetail();
 
   const handleChangeRadio = (event) => {
     setValue(event.target.value);
@@ -89,7 +91,16 @@ export const Step13 = ({
                 // mx: 2,
               }}
               onClick={() => {
-                handleShowCertInfor(index);
+                getCertDetail.mutate(
+                  {
+                    cert: value.cert,
+                  },
+                  {
+                    onSuccess: () => {
+                      handleShowCertInfor(index);
+                    },
+                  }
+                );
               }}
             />
           </Box>
@@ -119,6 +130,7 @@ export const Step13 = ({
         open={isShowCertInfor[index]}
         onClose={() => handleCloseCertInfor(index)}
         data={value}
+        certData={getCertDetail.data}
         provider={provider}
       />
     </ToggleButtonStyle>

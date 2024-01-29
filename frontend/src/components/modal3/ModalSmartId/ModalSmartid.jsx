@@ -92,6 +92,7 @@ function CircularProgressWithLabel(props) {
 }
 
 export const ModalSmartid = ({ open, onClose, dataSigning }) => {
+  console.log("dataSigning: ", dataSigning);
   const { t } = useTranslation();
 
   const queryClient = useQueryClient();
@@ -220,14 +221,37 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
           }}
         >
           <Stack sx={{ mt: 0, mb: 1, height: "100%" }}>
-            <Typography variant="h6">{t("modal.smartid1")}</Typography>
+            <Typography variant="h6">
+              {dataSigning.codeEnable
+                ? t("modal.smartid1")
+                : t("modal.smartid5")}
+            </Typography>
             <Box p="25px" textAlign={"center"} mb={"10px"}>
-              <Typography fontSize={"48px"} height={"59px"} fontWeight={"bold"}>
-                {vcode ? vcode : <CircularProgress />}
-              </Typography>
+              {dataSigning.codeEnable === false ? (
+                <Typography
+                  fontSize={"24px"}
+                  height={"29px"}
+                  fontWeight={"bold"}
+                >
+                  {t("modal.smartid6")}
+                </Typography>
+              ) : vcode ? (
+                <Typography
+                  fontSize={"48px"}
+                  height={"59px"}
+                  fontWeight={"bold"}
+                >
+                  {vcode}
+                </Typography>
+              ) : (
+                <CircularProgress />
+              )}
             </Box>
             <Typography variant="h6" mb={"10px"}>
-              {t("modal.smartid4")}
+              {dataSigning.codeEnable
+                ? t("modal.smartid4")
+                : t("modal.smartid7")}
+              {/* {t("modal.smartid4")} */}
             </Typography>
             <Box textAlign="center" my="10px" flexGrow={1}>
               <CircularProgressWithLabel size={150} value={progress} />

@@ -1,5 +1,6 @@
 import { ReactComponent as CardIcon } from "@/assets/images/svg/card.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { UseGetCertDetail } from "@/hook/use-apiService";
 import { convertTime } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
 import Alert from "@mui/material/Alert";
@@ -14,7 +15,6 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ModalCertInfor } from ".";
-import { UseGetCertDetail } from "@/hook/use-apiService";
 
 const ToggleButtonStyle = styled(ToggleButton)({
   "&.Mui-selected, &.Mui-selected:hover": {
@@ -42,6 +42,7 @@ export const Step5_smart = ({
 
   const [isShowCertInfor, setShowCertInfor] = useState([false]);
   const getCertDetail = UseGetCertDetail();
+  // console.log("getCertDetail: ", getCertDetail.data);
 
   useEffect(() => {
     if (certSelected === null) {
@@ -87,11 +88,10 @@ export const Step5_smart = ({
                   },
                   {
                     onSuccess: () => {
-                      // queryClient.invalidateQueries({ queryKey: ["getField"] });
+                      handleShowCertInfor(index);
                     },
                   }
                 );
-                // handleShowCertInfor(index);
               }}
             />
           </Box>
@@ -117,12 +117,15 @@ export const Step5_smart = ({
           </Typography>
         </Box>
       </Stack>
-      <ModalCertInfor
-        open={isShowCertInfor[index]}
-        onClose={() => handleCloseCertInfor(index)}
-        data={value}
-        provider={provider}
-      />
+      {isShowCertInfor[index] && (
+        <ModalCertInfor
+          open={isShowCertInfor[index]}
+          onClose={() => handleCloseCertInfor(index)}
+          data={value}
+          certData={getCertDetail.data}
+          provider={provider}
+        />
+      )}
     </ToggleButtonStyle>
   ));
 

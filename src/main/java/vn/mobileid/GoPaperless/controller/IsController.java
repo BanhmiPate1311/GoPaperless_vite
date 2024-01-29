@@ -33,6 +33,6 @@ public class IsController {
     public ResponseEntity<?> packFile(@RequestBody RsspRequest data, HttpServletRequest request) throws Exception {
         System.out.println("packFile");
         String response = isService.packFile(data, request);
-        return new ResponseEntity<>("response", HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

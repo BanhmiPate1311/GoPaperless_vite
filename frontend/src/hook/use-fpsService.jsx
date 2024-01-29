@@ -3,9 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 
 export const UseAddSig = () => {
   const { mutate, data, isLoading, isPending, error } = useMutation({
-    mutationFn: async ({ body, field, documentId }) => {
-      const response = await fpsService.addSignature(body, field, documentId);
-      return response.data;
+    mutationFn: ({ body, field, documentId }) => {
+      return fpsService.addSignature(body, field, documentId);
     },
   });
   return { mutate, data, isLoading, isPending, error };
@@ -13,9 +12,8 @@ export const UseAddSig = () => {
 
 export const UseUpdateSig = () => {
   const { mutate, data, isLoading, isPending, error } = useMutation({
-    mutationFn: async ({ body, field, documentId }) => {
-      const response = await fpsService.putSignature(body, field, documentId);
-      return response.data;
+    mutationFn: ({ body, field, documentId }) => {
+      return fpsService.putSignature(body, field, documentId);
     },
   });
   return { mutate, data, isLoading, isPending, error };
@@ -23,9 +21,8 @@ export const UseUpdateSig = () => {
 
 export const UseAddTextField = () => {
   const { mutate, data, isLoading, isPending, error } = useMutation({
-    mutationFn: async ({ body, field, documentId }) => {
-      const response = await fpsService.addTextBox(body, field, documentId);
-      return response.data;
+    mutationFn: ({ body, field, documentId }) => {
+      return fpsService.addTextBox(body, field, documentId);
     },
   });
   return { mutate, data, isLoading, isPending, error };
@@ -33,9 +30,8 @@ export const UseAddTextField = () => {
 
 export const UseFillInit = () => {
   const { mutate, data, isLoading, isPending, error } = useMutation({
-    mutationFn: async ({ body, documentId }) => {
-      const response = await fpsService.fillInit(body, documentId);
-      return response.data;
+    mutationFn: ({ body, documentId }) => {
+      return fpsService.fillInit(body, documentId);
     },
   });
   return { mutate, data, isLoading, isPending, error };
@@ -43,9 +39,8 @@ export const UseFillInit = () => {
 
 export const UseFillForm = () => {
   const { mutate, data, isLoading, isPending, error } = useMutation({
-    mutationFn: async ({ body, documentId }) => {
-      const response = await fpsService.fillForm(body, documentId);
-      return response.data;
+    mutationFn: ({ body, documentId }) => {
+      return fpsService.fillForm(body, documentId);
     },
   });
   return { mutate, data, isLoading, isPending, error };

@@ -160,7 +160,9 @@ export const ShowSignature = ({
                 {sign.title}
               </Typography>
               <Typography variant="h2">
-                {t("validation.signSubTitle")}
+                {signType == "Seal"
+                  ? t("validation.sealSubTitle")
+                  : t("validation.signSubTitle")}
                 {/* {sign.name} */}
               </Typography>
             </Box>

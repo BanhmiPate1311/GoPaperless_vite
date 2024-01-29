@@ -20,18 +20,22 @@ import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.model.apiModel.*;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.service.FpsService;
-import vn.mobileid.GoPaperless.utils.CommonFunction;
-import vn.mobileid.GoPaperless.utils.Difinitions;
-import vn.mobileid.GoPaperless.utils.LoadParamSystem;
+import vn.mobileid.GoPaperless.utils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static vn.mobileid.GoPaperless.utils.GetFeatureCertificate2.getCRLDistributionPoints;
 
 @RestController
 @RequestMapping("/uiApi")
@@ -355,7 +359,78 @@ public class ApiController {
 
     @PostMapping("/getFromQR")
     public String getView(@RequestBody Map<String, String> request) throws Exception {
+        System.out.println("qr: " + request.get("qr"));
         System.out.println("res: " + connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr")));
         return connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr"));
+    }
+
+    @PostMapping("/getCertDetail")
+    public ResponseEntity<?> getCertDetail(@RequestBody Map<String, String> request) throws Exception {
+//        System.out.println("cert: " + request.get("cert").length());
+        String certificate = request.get("cert");
+
+        String pemData = "-----BEGIN CERTIFICATE-----\n" + certificate + "-----END CERTIFICATE-----";
+        CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+        X509Certificate cert = (X509Certificate) certFactory.generateCertificate(
+                new java.io.ByteArrayInputStream(pemData.getBytes())
+        );
+
+        BigInteger bi = new BigInteger(cert.getSerialNumber().toString());
+        System.out.println("SN: " + bi.toString(16));
+        PublicKey publicKey = cert.getPublicKey();
+
+        // Convert the public key to a byte array
+//        byte[] publicKeyBytes = publicKey.getEncoded();
+
+// Convert the byte array to a hexadecimal string
+//        String publicKeyHex = DatatypeConverter.printHexBinary(publicKeyBytes);
+
+//        sComponent[0] = "0";
+        String version = "V" + cert.getVersion();
+        String serialNumber = bi.toString(16);
+        String sigAlgName = cert.getSigAlgName();
+        String algorithm = publicKey.getAlgorithm();
+        String issuerDN = cert.getIssuerDN().toString();
+        String validFrom = cert.getNotBefore().toString();
+        String validTo = cert.getNotAfter().toString();
+        String subjectDN = cert.getSubjectDN().toString();
+        String authorityInformationAccess  = GetFeatureCertificate2.getAccessLocation(cert);
+        String keyUsage = GenFeatureCertificate.getKeyUsage(pemData        );
+        String enhancedKeyUsage = cert.getExtendedKeyUsage() == null ? "" : cert.getExtendedKeyUsage().toString();
+        String subjectKeyIdentifier = GetFeatureCertificate2.getSubjectKeyID(cert);
+        String authorityKeyIdentifier = GetFeatureCertificate2.getAuthorityKeyIdentifier(cert);
+        String certificatePolicies = GetFeatureCertificate2.getCertificatePolicyId(cert, 0, 0);
+        List<String> sCRL = getCRLDistributionPoints(cert);
+        String crlDistributionPoints = sCRL.toString();
+        String basicConstraints = GetFeatureCertificate2.getSubjectType(cert);
+        String subjectAlternativeName = cert.getSubjectAlternativeNames() == null ? "" : cert.getSubjectAlternativeNames().toString();
+//            String thumbprintAlgorithm = confWs.GetPropertybyCode(Definitions.CONFIG_REPORT_NEAC_THUMBPRINT_ALGORITHM_API);
+//        sComponent[13] = "SHA-1";
+        String thumbprint = GetFeatureCertificate2.getThumprintCert(cert, "SHA-1");
+        String publicKeyHex = javax.xml.bind.DatatypeConverter.printHexBinary(publicKey.getEncoded());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("version", version);
+        response.put("serialNumber", serialNumber);
+        response.put("sigAlgName", sigAlgName);
+        response.put("algorithm", algorithm);
+        response.put("issuerDN", issuerDN);
+        response.put("validFrom", validFrom);
+        response.put("validTo", validTo);
+        response.put("subjectDN", subjectDN);
+        response.put("publicKey", publicKey.toString());
+        response.put("authorityInformationAccess", authorityInformationAccess);
+        response.put("keyUsage", keyUsage);
+        response.put("enhancedKeyUsage", enhancedKeyUsage);
+        response.put("subjectKeyIdentifier", subjectKeyIdentifier);
+        response.put("authorityKeyIdentifier", authorityKeyIdentifier);
+        response.put("certificatePolicies", certificatePolicies);
+        response.put("crlDistributionPoints", crlDistributionPoints);
+        response.put("basicConstraints", basicConstraints);
+        response.put("subjectAlternativeName", subjectAlternativeName);
+        response.put("thumbprint", thumbprint);
+        response.put("publicKeyHex", publicKeyHex);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

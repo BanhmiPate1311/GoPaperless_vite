@@ -149,6 +149,13 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
       elements[i].style.display = type;
     }
   };
+
+  if (
+    (initData.page !== null && initData.page !== pdfPage.currentPage) ||
+    initData.process_status === "PROCESSED"
+  )
+    return null;
+
   return (
     <>
       <Draggable
