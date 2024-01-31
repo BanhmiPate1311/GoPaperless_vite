@@ -367,6 +367,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                 onChange={() => {
                   setErrorApi(null);
                 }}
+                disabled={isPending}
               />
             </Box>
             <Stack width={"100%"}>

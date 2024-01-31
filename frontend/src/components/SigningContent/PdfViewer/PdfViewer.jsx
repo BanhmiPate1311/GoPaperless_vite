@@ -166,8 +166,8 @@ export const PdfViewer = ({ workFlow }) => {
       dimension: {
         x: signInfo.x,
         y: signInfo.y,
-        width: 22,
-        height: 5,
+        width: 15,
+        height: 2,
       },
       suffix: Number(field.textbox.length + 1),
     };
@@ -226,8 +226,8 @@ export const PdfViewer = ({ workFlow }) => {
       dimension: {
         x: signInfo.x,
         y: signInfo.y,
-        width: 22,
-        height: 5,
+        width: 6,
+        height: 4,
       },
       suffix: Number(field.initial.length + 1),
     };
@@ -247,7 +247,10 @@ export const PdfViewer = ({ workFlow }) => {
 
   const qrCode = (value) => {
     // console.log("qr: ", field?.qr);
-    if (field?.qr?.length > 0) return;
+    if (field?.qr?.length > 0) {
+      alert("You can not add multiple QR Codes");
+      return;
+    }
     const qrToken = uuidv4();
     const newInitField = {
       field_name: signerId + "_" + value + "_" + Number(field.qr.length + 1),

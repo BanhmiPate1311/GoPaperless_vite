@@ -27,8 +27,9 @@ export const Signature = ({
   signatureData,
   workFlow,
   textField,
+  initial,
 }) => {
-  // console.log("pdfPage: ", pdfPage);
+  // console.log("initial: ", initial);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("index: ", index);
@@ -66,6 +67,13 @@ export const Signature = ({
 
   const [sigDetail, setSigDetail] = useState([]);
   // console.log("sigDetail: ", sigDetail);
+
+  const checkInit = initial.findIndex(
+    (item) =>
+      item.process_status === "UN_PROCESSED" &&
+      item.field_name.includes(signerId)
+  );
+  // console.log("checkInit: ", checkInit);
 
   useEffect(() => {
     setDragPosition({
@@ -548,6 +556,11 @@ export const Signature = ({
                   newPos.current.y !== dragPosition.y)
               ) {
                 console.log("true");
+                return;
+              } else if (checkInit !== -1) {
+                alert(
+                  "You must complete your initials before you sign the document"
+                );
                 return;
               } else if (
                 e.target.id === `sigDrag-${index}` ||

@@ -197,20 +197,20 @@ input[type="number"] {
 }
 
 /* Set content for sizes */
-.ql-size-extra-small,
-.ql-size span[data-value="extra-small"]::before {
+.ql-size-13,
+.ql-size span[data-value="13"]::before {
   font-size: 13px !important;
 }
-.ql-size-small,
-.ql-size span[data-value="small"]::before {
+.ql-size-14,
+.ql-size span[data-value="14"]::before {
   font-size: 14px !important;
 }
-.ql-size-medium,
-.ql-size span[data-value="medium"]::before {
+.ql-size-18,
+.ql-size span[data-value="18"]::before {
   font-size: 18px !important;
 }
-.ql-size-large,
-.ql-size span[data-value="large"]::before {
+.ql-size-20,
+.ql-size span[data-value="20"]::before {
   font-size: 20px !important;
 }
 

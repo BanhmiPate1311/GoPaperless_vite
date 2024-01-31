@@ -52,7 +52,11 @@ export const UploadField = ({
       {...rest}
     >
       {label}
-      <VisuallyHiddenInput type="file" onChange={handleUploadImage} />
+      <VisuallyHiddenInput
+        type="file"
+        accept="image/*"
+        onChange={handleUploadImage}
+      />
     </Button>
   );
 };
