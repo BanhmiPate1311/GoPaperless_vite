@@ -86,7 +86,7 @@ export const getLang = () => {
   }
   // let lang = localStorage.getItem("language");
   switch (lang) {
-    case "Vietnamese":
+    case "Việt Nam":
       lang = "VN";
       break;
     default:

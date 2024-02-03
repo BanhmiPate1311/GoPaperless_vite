@@ -422,6 +422,8 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
         <InitialsFieldSetting
           open={isOpenModalSetting[index]}
           onClose={() => handleCloseModalSetting(index)}
+          signer={signer}
+          initData={initData}
         />
       )}
     </>

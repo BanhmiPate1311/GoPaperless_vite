@@ -69,7 +69,8 @@
     "subject": "主题",
     "subjectDN": "主题DN",
     "valid_from": "有效期自",
-    "valid_to": "有效"
+    "valid_to": "有效",
+    "preview": "预览"
   },
   "batch": {
     "collapse": "全 部 收 縮",
@@ -236,7 +237,9 @@
     "no_cert_found": "没有找到证书",
     "tax_code": "税法",
     "common_name": "通用名",
-    "cert_tooltip": "证书详情"
+    "cert_tooltip": "证书详情",
+    "init_warning": "在签署文件之前，您必须填写姓名首字母缩写",
+    "qr_warning": "您无法添加多个二维码"
   },
   "signingForm": {
     "step1": "选择远程签名服务提供商",

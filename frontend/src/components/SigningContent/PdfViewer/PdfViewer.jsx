@@ -18,9 +18,11 @@ import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
+import { useTranslation } from "react-i18next";
 
 export const PdfViewer = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
@@ -248,7 +250,7 @@ export const PdfViewer = ({ workFlow }) => {
   const qrCode = (value) => {
     // console.log("qr: ", field?.qr);
     if (field?.qr?.length > 0) {
-      alert("You can not add multiple QR Codes");
+      alert(t("signing.qr_warning"));
       return;
     }
     const qrToken = uuidv4();

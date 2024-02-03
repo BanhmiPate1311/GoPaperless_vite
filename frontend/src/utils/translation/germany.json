@@ -69,7 +69,8 @@
     "subject": "Thema",
     "subjectDN": "BetreffDN",
     "valid_from": "Gültig ab",
-    "valid_to": "Gültig bis"
+    "valid_to": "Gültig bis",
+    "preview": "Vorschau"
   },
   "batch": {
     "collapse": "Alles kollabieren",
@@ -236,7 +237,9 @@
     "no_cert_found": "Kein Zertifikat gefunden",
     "tax_code": "Steuer-Code",
     "common_name": "Gemeinsamen Namen",
-    "cert_tooltip": "Details zum Zertifikat"
+    "cert_tooltip": "Details zum Zertifikat",
+    "init_warning": "Sie müssen Ihre Initialen vervollständigen, bevor Sie das Dokument unterschreiben",
+    "qr_warning": "Sie können nicht mehrere QR-Codes hinzufügen"
   },
   "signingForm": {
     "step1": "Wählen Sie Remote Signing Service Provider aus",

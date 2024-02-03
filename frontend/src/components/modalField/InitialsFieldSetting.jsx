@@ -55,9 +55,9 @@ function a11yProps(index) {
   };
 }
 
-export const InitialsFieldSetting = ({ open, onClose }) => {
+export const InitialsFieldSetting = ({ open, onClose, signer, initData }) => {
   // console.log("initData: ", initData);
-  // console.log("signer: ", signer);
+  console.log("signer: ", signer);
   const { t } = useTranslation();
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -185,7 +185,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
                     size="small"
                     margin="normal"
                     // name={name}
-                    defaultValue={"Vu Phan"}
+                    defaultValue={signer.lastName + " " + signer.firstName}
                     sx={{ my: 0, height: "44px" }}
                     disabled
                     InputProps={{
@@ -200,7 +200,7 @@ export const InitialsFieldSetting = ({ open, onClose }) => {
                 </Box>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DetailsTextBoxForm />
+                <DetailsTextBoxForm initData={initData} />
               </TabPanel>
               <TabPanel value={value} index={2}>
                 <ReplicateForm />
@@ -241,6 +241,8 @@ InitialsFieldSetting.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   type: PropTypes.string,
+  signer: PropTypes.object,
+  initData: PropTypes.object,
 };
 
 export default InitialsFieldSetting;

@@ -47,7 +47,7 @@ export const LanguageSelect = ({ color = "white" }) => {
         case "English":
           i18n.changeLanguage("en");
           break;
-        case "Vietnamese":
+        case "Việt Nam":
           i18n.changeLanguage("vi");
           break;
         case "Germany":
@@ -75,7 +75,7 @@ export const LanguageSelect = ({ color = "white" }) => {
       case "English":
         i18n.changeLanguage("en");
         break;
-      case "Vietnamese":
+      case "Việt Nam":
         i18n.changeLanguage("vi");
         break;
       case "Germany":
@@ -117,9 +117,7 @@ export const LanguageSelect = ({ color = "white" }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => handleLanguage("Vietnamese")}>
-          Vietnamese
-        </MenuItem>
+        <MenuItem onClick={() => handleLanguage("Việt Nam")}>Việt Nam</MenuItem>
         <MenuItem onClick={() => handleLanguage("English")}>English</MenuItem>
         <MenuItem onClick={() => handleLanguage("Germany")}>Germany</MenuItem>
         <MenuItem onClick={() => handleLanguage("China")}>China</MenuItem>

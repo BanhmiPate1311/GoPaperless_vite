@@ -53,7 +53,7 @@ function a11yProps(index) {
   };
 }
 
-export const QrCodeSettingField = ({ open, onClose }) => {
+export const QrCodeSettingField = ({ open, onClose, qrData }) => {
   // console.log("initData: ", initData);
   // console.log("signer: ", signer);
   const { t } = useTranslation();
@@ -165,7 +165,7 @@ export const QrCodeSettingField = ({ open, onClose }) => {
                 <GeneralTextBoxForm />
               </TabPanel> */}
               <TabPanel value={value} index={0}>
-                <DetailsTextBoxForm />
+                <DetailsTextBoxForm data={qrData} />
               </TabPanel>
             </AppBar>
           </Box>
@@ -203,6 +203,7 @@ QrCodeSettingField.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   type: PropTypes.string,
+  qrData: PropTypes.object,
 };
 
 export default QrCodeSettingField;

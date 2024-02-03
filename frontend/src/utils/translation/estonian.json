@@ -69,7 +69,8 @@
     "subject": "Teema",
     "subjectDN": "SubjectDN",
     "valid_from": "Kehtib alates",
-    "valid_to": "Kehtib kuni"
+    "valid_to": "Kehtib kuni",
+    "preview": "Eelvaade"
   },
   "batch": {
     "collapse": "Ahenda kõik",
@@ -236,7 +237,9 @@
     "no_cert_found": "Sertifikaadi ei leitud",
     "tax_code": "Maksukood",
     "common_name": "Üldnimetus",
-    "cert_tooltip": "Sertifikaadi üksikasjad"
+    "cert_tooltip": "Sertifikaadi üksikasjad",
+    "init_warning": "Enne dokumendi allkirjastamist peate täitma oma initsiaalid",
+    "qr_warning": "Te ei saa lisada mitut QR-koodi"
   },
   "signingForm": {
     "step1": "Valige Remote Signing Service Provider",
