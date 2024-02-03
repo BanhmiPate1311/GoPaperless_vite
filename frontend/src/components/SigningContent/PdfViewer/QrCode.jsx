@@ -110,7 +110,11 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
     }
   };
 
-  if (qrData.page !== null && qrData.page !== pdfPage.currentPage) return null;
+  if (
+    (qrData.page !== null && qrData.page !== pdfPage.currentPage) ||
+    qrData.process_status === "PROCESSED"
+  )
+    return null;
 
   return (
     <>
@@ -259,6 +263,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
               ? maxPosibleResizeHeight
               : 200,
           ]}
+          lockAspectRatio={true}
           onResize={(e, { size }) => {}}
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);

@@ -13,7 +13,7 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 const Size = Quill.import("formats/size");
-Size.whitelist = ["extra-small", "small", "medium", "large"];
+Size.whitelist = ["13", "14", "18", "20"];
 Quill.register(Size, true);
 
 const Font = Quill.import("formats/font");
@@ -53,13 +53,13 @@ const CustomToolbar = ({ handleSave, handleRemove, index }) => {
       </select>
       <button className="ql-bold" />
       <button className="ql-italic" />
-      <button className="ql-underline" />
-      <button className="ql-strike" />
+      {/* <button className="ql-underline" />
+      <button className="ql-strike" /> */}
       <select className="ql-size">
-        <option value="extra-small">Size 1</option>
-        <option value="small">Size 2</option>
-        <option value="medium">Size 3</option>
-        <option value="large">Size 4</option>
+        <option value="13">Size 1</option>
+        <option value="14">Size 2</option>
+        <option value="18">Size 3</option>
+        <option value="20">Size 4</option>
       </select>
       <button>
         <SvgIcon
@@ -105,7 +105,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
 
   const [isControlled, setIsControlled] = useState(false);
   const [state, setState] = useState({ value: "" });
-  // console.log("state: ", state);
+  console.log("state: ", state);
 
   const signer = getSigner(workFlow);
   const signerId = signer.signerId;
@@ -142,6 +142,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
           {
             field_name: addTextData.field_name,
             value: state.value,
+            content: state,
           },
         ],
         documentId: workFlow.documentId,
@@ -196,8 +197,18 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
     "code-block",
   ];
 
-  const handleChange = (value) => {
-    setState({ value });
+  const handleChange = (value, delta, source, editor) => {
+    const content = editor.getContents();
+    console.log("editor: ", editor.getContents());
+
+    setState({
+      value,
+      text: content.ops[0].insert,
+      fontFamily: content.ops[0].attributes?.font || "Arial",
+      fontSize: content.ops[0].attributes?.size || 13,
+      fontWeight: content.ops[0].attributes?.bold || false,
+      fontStyle: content.ops[0].attributes?.italic || false,
+    });
   };
 
   if (

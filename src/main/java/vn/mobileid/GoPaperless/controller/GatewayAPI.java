@@ -200,6 +200,7 @@ public class GatewayAPI {
 //            JsonNode jsonNode = objectMapper.readTree(responseBody);
 //
 //            return jsonNode.get("signature_id").asText();
+            System.out.println("responseGet Data to update DB: " + response.getBody());
             return response.getBody();
         } catch (HttpClientErrorException e) {
             HttpStatus statusCode = e.getStatusCode();

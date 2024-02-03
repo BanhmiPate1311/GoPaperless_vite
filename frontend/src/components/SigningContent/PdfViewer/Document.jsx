@@ -17,7 +17,7 @@ export const Document = ({
   textField,
   addText,
 }) => {
-  // console.log("props: ", props);
+  // console.log("initial: ", initial);
 
   const queryClient = useQueryClient();
   let isSetPos;
@@ -130,6 +130,7 @@ export const Document = ({
             signatureData={signatureData}
             workFlow={workFlow}
             textField={textField}
+            initial={initial}
           />
         );
       })}

@@ -74,78 +74,86 @@ export const TextSignForm = forwardRef(
             sx={{ m: "0 0 10px" }}
           />
         </Box>
-        <Stack
-          ref={ref}
+        <Box
           sx={{
-            height: showInput ? "100%" : "170px",
-            overflow: "hidden",
-            // borderRadius: "6px",
-            // border: !imgBase64 ? "2px solid #357EEB" : "none",
-            position: "relative",
-            "&:before": watch("logo")
-              ? {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  opacity: 0.2,
-                  zIndex: 1,
-                  backgroundImage: !imgBase64 ? `url(${logoValue})` : "none",
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                }
-              : {},
+            borderRadius: "6px",
+            border: !imgBase64 ? "2px solid #357EEB" : "none",
+            p: 1,
           }}
         >
-          {imgBase64 && (
-            <img src={imgBase64} style={{ width: "auto", height: "100%" }} />
-          )}
-          {!imgBase64 && (
-            <Stack
-              direction={
-                watch("alignment") === "auto" || watch("alignment") === "left"
-                  ? "row"
-                  : "row-reverse"
-              }
-              sx={{
-                display: "flex",
-                width: "100%",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
-              <Box
+          <Stack
+            ref={ref}
+            sx={{
+              height: showInput ? "100%" : "170px",
+              overflow: "hidden",
+              // borderRadius: "6px",
+              // border: !imgBase64 ? "2px solid #357EEB" : "none",
+              position: "relative",
+              "&:before": watch("logo")
+                ? {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    opacity: 0.2,
+                    zIndex: 1,
+                    backgroundImage: !imgBase64 ? `url(${logoValue})` : "none",
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }
+                : {},
+            }}
+          >
+            {imgBase64 && (
+              <img src={imgBase64} style={{ width: "auto", height: "100%" }} />
+            )}
+            {!imgBase64 && (
+              <Stack
+                direction={
+                  watch("alignment") === "auto" || watch("alignment") === "left"
+                    ? "row"
+                    : "row-reverse"
+                }
                 sx={{
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  width: direction ? "50%" : "100%",
-                  fontSize: "36px",
-                  textAlign: "center",
-                  textTransform: "capitalize",
-                  fontWeight: "bold",
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                  height: "100%",
                 }}
-                className="font-moon-dance"
               >
-                {watch("text") || ""}
-              </Box>
-              <ContentRight
-                direction={direction}
-                subtitle={subtitle}
-                watch={watch}
-              />
-            </Stack>
-          )}
-          {/* <Box
+                <Box
+                  sx={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    width: direction ? "50%" : "100%",
+                    fontSize: "36px",
+                    textAlign: "center",
+                    textTransform: "capitalize",
+                    fontWeight: "bold",
+                  }}
+                  className="font-moon-dance"
+                >
+                  {watch("text") || ""}
+                </Box>
+                <ContentRight
+                  direction={direction}
+                  subtitle={subtitle}
+                  watch={watch}
+                />
+              </Stack>
+            )}
+            {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",
               height: "20px",
             }}
           ></Box> */}
-        </Stack>
+          </Stack>
+        </Box>
       </Box>
     );
   }

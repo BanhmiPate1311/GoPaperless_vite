@@ -6,6 +6,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import vn.mobileid.GoPaperless.dto.fpsDto.AccessTokenDto;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
@@ -484,10 +485,14 @@ public class FpsService {
             System.out.println("HTTP Status Code: " + statusCode.value());
             if (statusCode.value() == 401) {
                 getAccessToken();
-                return hashSignatureField(documentId, data);
+                return getBase64ImagePdf(documentId);
             } else {
                 throw new Exception(e.getMessage());
             }
+        } catch (HttpServerErrorException e) {
+            // Bắt các lỗi 5xx và hiển thị thông báo chung
+            System.out.println("Server error: " + e.getRawStatusCode());
+            throw new Exception("Server error occurred. Please try again later.");
         }
     }
 
@@ -523,10 +528,14 @@ public class FpsService {
             System.out.println("HTTP Status Code: " + statusCode.value());
             if (statusCode.value() == 401) {
                 getAccessToken();
-                return signDocument(documentId, data);
+                return getBase64ImagePdf(documentId);
             } else {
                 throw new Exception(e.getMessage());
             }
+        } catch (HttpServerErrorException e) {
+            // Bắt các lỗi 5xx và hiển thị thông báo chung
+            System.out.println("Server error: " + e.getRawStatusCode());
+            throw new Exception("Server error occurred. Please try again later.");
         }
     }
 
