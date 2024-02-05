@@ -100,7 +100,7 @@ const UploadSignForm = forwardRef(
           <Stack
             ref={ref}
             sx={{
-              height: showInput ? "100%" : "170px",
+              height: showInput ? "100%" : "154px",
               overflow: "hidden",
               // borderRadius: "6px",
               // border: !imgBase64 ? "2px solid #357EEB" : "none",
@@ -164,6 +164,7 @@ const UploadSignForm = forwardRef(
                       sx={{
                         maxWidth: "70%",
                         maxHeight: "100%",
+                        zIndex: 1,
                       }}
                       alt="The house from the offer."
                       src={watch("imageScrop")}

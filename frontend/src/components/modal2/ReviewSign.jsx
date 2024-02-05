@@ -250,7 +250,7 @@ export const ReviewSign = forwardRef(
             }}
           >
             {/* {title} */}
-            {t("0-common.review")}
+            {t("0-common.preview")}
           </Typography>
         </DialogTitle>
 

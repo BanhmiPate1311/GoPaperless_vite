@@ -162,7 +162,11 @@ export const PageDocument = () => {
           }}
         >
           {workFlow.data && (
-            <SigningContent workFlow={workFlow.data} page="document" />
+            <SigningContent
+              workFlow={workFlow.data}
+              page="document"
+              qrSigning={signingToken}
+            />
           )}
         </Container>
         <Cookie />

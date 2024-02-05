@@ -30,6 +30,7 @@ export const Signature = ({
   textField,
   initial,
 }) => {
+  // console.log("textField: ", textField);
   // console.log("initial: ", initial);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
@@ -112,7 +113,7 @@ export const Signature = ({
     const newSig1 =
       sigInfor
         ?.filter((item) => item.value.field_name === signatureData.field_name)
-        ?.map((item) => ({ isSigned: true, ...item.value })) || [];
+        ?.map((item) => ({ isSigned: true, ...item.value })) || null;
 
     const newSig2 =
       workFlow?.participants
@@ -121,7 +122,7 @@ export const Signature = ({
             item.certificate &&
             item.certificate.field_name === signatureData.field_name
         )
-        ?.map((item) => ({ isSigned: false, ...item.certificate })) || [];
+        ?.map((item) => ({ isSigned: false, ...item.certificate })) || null;
 
     setSigDetail([...newSig1, ...newSig2]);
   }, [signatureData, workFlow, queryClient]);
@@ -730,7 +731,7 @@ export const Signature = ({
       {isShowSigDetail[index] && (
         <SigDetail
           open={isShowSigDetail[index]}
-          signDetail={sigDetail}
+          signDetail={sigDetail[0]}
           handleClose={() => toggleSigDetail(index)}
         />
       )}

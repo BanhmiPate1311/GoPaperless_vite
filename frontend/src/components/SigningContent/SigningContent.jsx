@@ -10,8 +10,8 @@ import { PdfViewer } from "./PdfViewer";
 import { PdfViewerDocument } from "./PdfViewer";
 import { TabBar } from "./TabBar";
 
-export const SigningContent = ({ workFlow, page }) => {
-  console.log("workFlow: ", workFlow);
+export const SigningContent = ({ workFlow, page, qrSigning }) => {
+  // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("workFlow: ", workFlow);
   // eslint-disable-next-line no-unused-vars
@@ -74,7 +74,11 @@ export const SigningContent = ({ workFlow, page }) => {
         width={{ xs: "100%", lg: "28%" }}
         // height={{ xs: "100%", lg: "100%" }}
       >
-        <TabBar workFlow={workFlow} signedInfo={signedInfo} />
+        <TabBar
+          workFlow={workFlow}
+          signedInfo={signedInfo}
+          qrSigning={qrSigning}
+        />
       </Box>
     </Container>
   );
@@ -90,6 +94,7 @@ SigningContent.propTypes = {
     fileName: PropTypes.string,
   }),
   page: PropTypes.string,
+  qrSigning: PropTypes.string,
 };
 
 export default SigningContent;

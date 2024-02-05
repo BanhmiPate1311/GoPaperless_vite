@@ -105,7 +105,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
 
   const [isControlled, setIsControlled] = useState(false);
   const [state, setState] = useState({ value: "" });
-  console.log("state: ", state);
+  // console.log("state: ", state);
 
   const signer = getSigner(workFlow);
   const signerId = signer.signerId;

@@ -45,7 +45,7 @@ function a11yProps(index) {
 }
 
 // eslint-disable-next-line react/prop-types
-export const TabBar = ({ workFlow, signedInfo }) => {
+export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
   // console.log("workFlow: ", workFlow);
   // console.log("signedInfo: ", signedInfo);
   const { t } = useTranslation();
@@ -180,7 +180,7 @@ export const TabBar = ({ workFlow, signedInfo }) => {
         />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <OverView workFlow={workFlow} />
+        <OverView workFlow={workFlow} qrSigning={qrSigning} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Participant

@@ -154,7 +154,7 @@ export const AddSubtitle = ({ control }) => {
             />
           </Box>
         </Box>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", mt: "10px" }}>
           <Box width={"50%"}>
             <FormLabel
               component="legend"
