@@ -69,7 +69,8 @@
     "subject": "Chủ thể",
     "subjectDN": "Chủ thể DN",
     "valid_from": "Có hiệu lực từ",
-    "valid_to": "Có hiệu lực đến"
+    "valid_to": "Có hiệu lực đến",
+    "preview": "Xem trước"
   },
   "batch": {
     "collapse": "Thu gọn tất cả",
@@ -236,7 +237,9 @@
     "no_cert_found": "Không tìm thấy chứng thư số",
     "tax_code": "Mã số thuế",
     "common_name": "Tên gọi chung",
-    "cert_tooltip": "Chi tiết chứng thư số"
+    "cert_tooltip": "Chi tiết chứng thư số",
+    "init_warning": "Bạn phải điền đầy đủ tên viết tắt của mình trước khi ký vào tài liệu",
+    "qr_warning": "Bạn không thể thêm nhiều Mã QR"
   },
   "signingForm": {
     "step1": "Chọn nhà cung cấp dịch vụ ký từ xa",

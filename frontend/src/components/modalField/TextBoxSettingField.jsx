@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -54,7 +55,13 @@ function a11yProps(index) {
   };
 }
 
-export const TextBoxSettingField = ({ open, onClose, type }) => {
+export const TextBoxSettingField = ({
+  open,
+  onClose,
+  type,
+  signer,
+  textData,
+}) => {
   // console.log("initData: ", initData);
   // console.log("signer: ", signer);
   const { t } = useTranslation();
@@ -181,7 +188,7 @@ export const TextBoxSettingField = ({ open, onClose, type }) => {
                 {/* text */}
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DetailsTextBoxForm />
+                <DetailsTextBoxForm data={textData} />
               </TabPanel>
             </AppBar>
           </Box>
@@ -219,6 +226,8 @@ TextBoxSettingField.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   type: PropTypes.string,
+  signer: PropTypes.object,
+  textData: PropTypes.object,
 };
 
 export default TextBoxSettingField;

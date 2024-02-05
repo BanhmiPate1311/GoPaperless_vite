@@ -51,7 +51,7 @@ export const Validation = () => {
           break;
         case "vi":
           i18n.changeLanguage("1");
-          localStorage.setItem("language", "Vietnamese");
+          localStorage.setItem("language", "Việt Nam");
           break;
         default:
           break;

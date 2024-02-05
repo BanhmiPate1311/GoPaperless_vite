@@ -353,6 +353,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
         <QrCodeSettingField
           open={isOpenModalSetting[index]}
           onClose={() => handleCloseModalSetting(index)}
+          qrData={qrData}
         />
       )}
     </>

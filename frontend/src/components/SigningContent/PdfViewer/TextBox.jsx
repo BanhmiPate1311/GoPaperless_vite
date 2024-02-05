@@ -439,6 +439,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           open={isOpenModalSetting[index]}
           type={textData.type}
           onClose={() => handleCloseModalSetting(index)}
+          signer={signer}
+          textData={textData}
         />
       )}
     </>
