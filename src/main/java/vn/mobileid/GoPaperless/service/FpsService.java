@@ -206,9 +206,32 @@ public class FpsService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
-        requestData.put("dimension", data.getDimension());
+
+        System.out.println("x: " + data.getDimension().getX());
+        System.out.println("y: " + data.getDimension().getY());
+        System.out.println("width: " + data.getDimension().getWidth());
+        System.out.println("height: " + data.getDimension().getHeight());
+
+        Map<String, Object> dimension = new HashMap<>();
+        if(data.getDimension().getX() != -1) {
+            dimension.put("x", data.getDimension().getX());
+        }
+        if(data.getDimension().getY() != -1) {
+            dimension.put("y", data.getDimension().getY());
+        }
+        if(data.getDimension().getWidth() != -1) {
+            dimension.put("width", data.getDimension().getWidth());
+        }
+        if(data.getDimension().getHeight() != -1) {
+            dimension.put("height", data.getDimension().getHeight());
+        }
+
+        requestData.put("dimension", dimension);
         if(data.getValue() != null) {
             requestData.put("value", data.getValue());
+        }
+        if(data.getFont() != null) {
+            requestData.put("font", data.getFont());
         }
         requestData.put("visible_enabled", data.getVisibleEnabled());
 
@@ -218,9 +241,9 @@ public class FpsService {
 //        System.out.println("height: " + data.getDimension().getHeight());
 //        System.out.println("putSignature: " + requestData);
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String requestDataJson = objectMapper.writeValueAsString(data);
-//        System.out.println("Request Data as JSON: " + requestDataJson);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestDataJson = objectMapper.writeValueAsString(requestData);
+        System.out.println("Request Data put signature: " + requestDataJson);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 

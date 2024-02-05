@@ -94,7 +94,7 @@ const DrawSignForm = forwardRef(
           <Stack
             ref={ref}
             sx={{
-              height: showInput ? "100%" : "170px",
+              height: showInput ? "100%" : "154px",
               overflow: "hidden",
               // borderRadius: "6px",
               // border: !imgBase64 ? "2px solid #357EEB" : "none",

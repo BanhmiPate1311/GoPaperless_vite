@@ -31,7 +31,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
 
   const signType = signDetail.is_seal === true ? "eseal" : "Signature";
 
-  const name = signDetail.certificate.subject.CN[0];
+  const name = signDetail.certificate?.subject?.CN[0];
   // const warnings = signDetail.warnings;
   // const errors = signDetail.errors;
 
@@ -65,7 +65,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
           signType === "Signature"
             ? t("validation.sigScope")
             : t("validation.sealScope"),
-        subtitle: signDetail.scope.name,
+        subtitle: signDetail.scope?.name,
       },
       {
         title: t("0-common.Certificate Owner"),
@@ -78,9 +78,9 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
       {
         title: t("0-common.Certificate validity period"),
         subtitle:
-          convertTime(signDetail.certificate.valid_from) +
+          convertTime(signDetail.certificate?.valid_from) +
           " - " +
-          convertTime(signDetail.certificate.valid_to),
+          convertTime(signDetail.certificate?.valid_to),
       },
     ].filter((item) => item.subtitle !== null),
   };
@@ -261,7 +261,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
           </Stack>
         </Stack>
         {/* <Divider sx={{ borderColor: "borderColor.main" }} /> */}
-        {signDetail.warnings.length > 0 && (
+        {signDetail.warnings?.length > 0 && (
           <Accordion
             disableGutters
             expanded={expanded === "warnings"}
@@ -315,7 +315,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
           </Accordion>
         )}
 
-        {signDetail.errors.length > 0 && (
+        {signDetail.errors?.length > 0 && (
           <Accordion
             disableGutters
             expanded={expanded === "error"}

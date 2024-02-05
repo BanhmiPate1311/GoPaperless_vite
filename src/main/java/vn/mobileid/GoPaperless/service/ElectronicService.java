@@ -573,14 +573,29 @@ public class ElectronicService {
 
             CommonFunction.VoidCertificateComponents(certChain, info1, time, intRes);
             if (intRes[0] == 0) {
+//                CertResponse certResponse = new CertResponse();
+//                certResponse.setSubject(CommonFunction.getCommonnameInDN(info1[0].toString()));
+//                certResponse.setIssuer(CommonFunction.getCommonnameInDN(info1[1].toString()));
+//                certResponse.setValidFrom(time[0]);
+//                certResponse.setValidTo(time[1]);
+//                certResponse.setCert(certChain);
+//                certResponse.setCredentialID(credentialID);
+////                        certResponse.setCodeNumber(codeNumber);
+//                return certResponse;
+
                 CertResponse certResponse = new CertResponse();
+                certResponse.setSubjectDN(info1[0].toString());
+                System.out.println("subjectDN: " + info1[0].toString());
                 certResponse.setSubject(CommonFunction.getCommonnameInDN(info1[0].toString()));
                 certResponse.setIssuer(CommonFunction.getCommonnameInDN(info1[1].toString()));
                 certResponse.setValidFrom(time[0]);
                 certResponse.setValidTo(time[1]);
                 certResponse.setCert(certChain);
                 certResponse.setCredentialID(credentialID);
+                String uid = CommonFunction.getUID(info1[0].toString());
+                certResponse.setSeal(CommonFunction.isSeal(uid));
 //                        certResponse.setCodeNumber(codeNumber);
+
                 return certResponse;
             }
         }

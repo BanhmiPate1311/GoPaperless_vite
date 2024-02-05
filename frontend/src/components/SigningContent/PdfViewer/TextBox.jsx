@@ -299,9 +299,14 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           minConstraints={[
-            0,
-
-            0,
+            signerId + "_" + textData.type + "_" + textData.suffix !==
+              textData.field_name || textData.process_status === "PROCESSED"
+              ? textData.dimension?.width * (pdfPage.width / 100)
+              : 0,
+            signerId + "_" + textData.type + "_" + textData.suffix !==
+              textData.field_name || textData.process_status === "PROCESSED"
+              ? textData.dimension?.height * (pdfPage.height / 100)
+              : 0,
           ]}
           maxConstraints={[
             signerId + "_" + textData.type + "_" + textData.suffix !==
@@ -359,7 +364,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
                 textData.verification ||
                 signerId + "_" + textData.type + "_" + textData.suffix !==
                   textData.field_name
-                  ? "rgba(217, 223, 228, 0.7)"
+                  ? "rgba(217, 223, 228, 1)"
                   : "rgba(254, 240, 138, 1)",
               height: "100%",
               position: "relative",

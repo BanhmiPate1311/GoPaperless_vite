@@ -171,9 +171,9 @@ input[type="number"] {
 }
 
 /* Set content for font-families */
-.ql-font-arial,
-.ql-font span[data-value="arial"]::before {
-  font-family: Arial, sans-serif;
+.ql-font-verdana,
+.ql-font span[data-value="verdana"]::before {
+  font-family: Verdana, sans-serif;
 }
 .ql-font-comic-sans,
 .ql-font span[data-value="comic-sans"]::before {

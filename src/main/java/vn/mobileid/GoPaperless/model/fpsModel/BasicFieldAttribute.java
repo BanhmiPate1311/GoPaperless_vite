@@ -34,6 +34,7 @@ public class BasicFieldAttribute {
     private String signingToken;
     private String formatType;
     private List<Integer> initial_pages;
+    private AddTextValue font;
 }
 
 
