@@ -48,7 +48,10 @@ export const PdfViewer = ({ workFlow }) => {
       // console.log("data: ", data);
       const newData = { ...data };
       const textField = data.textbox
-        .filter((item) => item.type !== "TEXT_FIELD")
+        .filter(
+          (item) =>
+            item.type !== "TEXT_FIELD" && item.process_status !== "PROCESSED"
+        )
         .map((item) => {
           return {
             field_name: item.field_name,

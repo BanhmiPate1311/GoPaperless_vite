@@ -207,7 +207,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
       },
     });
   };
-  console.log("hash error: ", usbHash.error);
+  // console.log("hash error: ", usbHash.error);
 
   useEffect(() => {
     const error1 =
