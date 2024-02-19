@@ -28,7 +28,7 @@ import { useTranslation } from "react-i18next";
 
 export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
   // console.log("dataSigning: ", dataSigning);
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, reset } = useForm({
     defaultValues: {
       pin: "",
     },
@@ -85,6 +85,12 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
         },
       });
       return data;
+    },
+    onError: () => {
+      console.log("pin sai");
+      reset({
+        pin: "",
+      });
     },
   });
 

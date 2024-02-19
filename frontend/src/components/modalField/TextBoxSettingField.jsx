@@ -11,10 +11,12 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GeneralTextBoxForm } from ".";
 import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
+import { useForm } from "react-hook-form";
+import { UseUpdateSig } from "@/hook/use-fpsService";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -61,10 +63,38 @@ export const TextBoxSettingField = ({
   type,
   signer,
   textData,
+  participants,
 }) => {
   // console.log("initData: ", initData);
-  // console.log("signer: ", signer);
+  console.log("signer: ", signer);
   const { t } = useTranslation();
+
+  const putSignature = UseUpdateSig();
+
+  const signerIndex = participants.findIndex(
+    (participant) => participant.signerId === signer.signerId
+  );
+
+  console.log("signerIndex: ", signerIndex);
+
+  const { control, handleSubmit, watch } = useForm({
+    defaultValues: {
+      assign: signerIndex,
+      valid: false,
+      length: 1000,
+      placeHolder: textData.type,
+      font: "vernada",
+      fontSize: 13,
+      fieldName: textData.field_name,
+      left: textData.dimension.x,
+      top: textData.dimension.y,
+      width: textData.dimension.width,
+      height: textData.dimension.height,
+    },
+  });
+
+  const formRef = useRef();
+
   console.log(type);
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -83,6 +113,41 @@ export const TextBoxSettingField = ({
     }
   };
   // console.log(handletype(type));
+
+  const handleSubmitClick = () => {
+    formRef.current.requestSubmit();
+  };
+
+  const handleFormSubmit = (data) => {
+    console.log("data: ", data);
+    // putSignature.mutate(
+    //   {
+    //     body: {
+    //       field_name: textData.field_name,
+    //       dimension: {
+    //         x: -1,
+    //         y: -1,
+    //         width: -1,
+    //         height: -1,
+    //       },
+    //       font: {
+    //         name: font + bold + italic,
+    //         size: size || 13,
+    //       },
+    //       visible_enabled: true,
+    //       value: "",
+    //     },
+    //     field: "text",
+    //     documentId: workFlow.documentId,
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       queryClient.invalidateQueries({ queryKey: ["getField"] });
+    //     },
+    //   }
+    // );
+  };
+
   return (
     <Dialog
       // keepMounted={false}
@@ -138,12 +203,14 @@ export const TextBoxSettingField = ({
         }}
       >
         <DialogContentText
+          ref={formRef}
           component="form"
           id="scroll-dialog-description"
           tabIndex={-1}
           sx={{
             height: "100%",
           }}
+          onSubmit={handleSubmit(handleFormSubmit)}
         >
           <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
             <AppBar position="static" elevation={0}>
@@ -184,11 +251,14 @@ export const TextBoxSettingField = ({
                 />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <GeneralTextBoxForm />
+                <GeneralTextBoxForm
+                  participants={participants}
+                  control={control}
+                />
                 {/* text */}
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DetailsTextBoxForm data={textData} />
+                <DetailsTextBoxForm control={control} />
               </TabPanel>
             </AppBar>
           </Box>
@@ -213,6 +283,7 @@ export const TextBoxSettingField = ({
             borderColor: "borderColor.main",
             marginLeft: "20px !important",
           }}
+          onClick={handleSubmitClick}
           type="button"
         >
           {t("0-common.save")}
@@ -228,6 +299,7 @@ TextBoxSettingField.propTypes = {
   type: PropTypes.string,
   signer: PropTypes.object,
   textData: PropTypes.object,
+  participants: PropTypes.array,
 };
 
 export default TextBoxSettingField;
