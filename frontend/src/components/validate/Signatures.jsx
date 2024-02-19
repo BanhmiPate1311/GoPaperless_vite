@@ -58,14 +58,16 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
     },
   ];
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
-
+  console.log("newSign: ", valueSign);
   return (
     <>
       <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
         <Stack direction="row" spacing={1} alignItems="center">
           {signType == "Signature" ? <SignatureIcon /> : <SealIcon />}
           <Typography variant="h3" sx={{ fontWeight: "550" }}>
-            {t("0-common.signatures")}
+            {signType == "Signature"
+              ? t("0-common.signatures")
+              : t("0-common.seals")}
           </Typography>
           <Avatar
             sx={{

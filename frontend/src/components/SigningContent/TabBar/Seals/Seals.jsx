@@ -89,7 +89,7 @@ export const Seals = ({ eSealList1, eSealList2 }) => {
   ];
 
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
-  // console.log("newSign: ", newSign);
+  console.log("newSign: ", newSign);
 
   return (
     <Box sx={{ height: "100%" }}>
