@@ -21,6 +21,8 @@ export const PasswordField = ({
     <TextField
       fullWidth
       error={!!error}
+      value={value}
+      name={name}
       size="small"
       id="pinNumber"
       // label="Password"

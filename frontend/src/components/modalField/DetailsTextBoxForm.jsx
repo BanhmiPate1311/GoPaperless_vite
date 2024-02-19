@@ -1,11 +1,11 @@
-/* eslint-disable react/prop-types */
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
+import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import { InputField } from "../form";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "transparent",
@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "left",
   // color: theme.palette.text.secondary,
 }));
-export const DetailsTextBoxForm = ({ data }) => {
+export const DetailsTextBoxForm = ({ control }) => {
   const { t } = useTranslation();
   return (
     <>
@@ -22,7 +22,26 @@ export const DetailsTextBoxForm = ({ data }) => {
         <Typography variant="h6" mb="10px">
           {t("0-common.field name")}
         </Typography>
-        <TextField
+        <InputField
+          label=""
+          name="fieldName"
+          control={control}
+          InputLabelProps={{
+            sx: {
+              backgroundColor: "signingWFBackground.main",
+            },
+          }}
+          inputProps={{
+            sx: {
+              py: "10.5px",
+              backgroundColor: "signingWFBackground.main",
+            },
+          }}
+          sx={{ my: 0, height: "45px" }}
+        />
+        {/* <TextField
+          control={control}
+          name="fieldName"
           fullWidth
           size="small"
           margin="normal"
@@ -37,7 +56,7 @@ export const DetailsTextBoxForm = ({ data }) => {
               fontSize: "14px",
             },
           }}
-        />
+        /> */}
       </Box>
       <Box sx={{ width: "100%" }}>
         <Grid
@@ -82,7 +101,24 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.left")}
               </Typography>
-              <TextField
+              <InputField
+                label=""
+                name="left"
+                control={control}
+                InputLabelProps={{
+                  sx: {
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
+              />
+              {/* <TextField
                 fullWidth
                 size="small"
                 margin="normal"
@@ -97,7 +133,7 @@ export const DetailsTextBoxForm = ({ data }) => {
                     fontSize: "14px",
                   },
                 }}
-              />
+              /> */}
             </Item>
           </Grid>
           <Grid item xs={6} pt={0}>
@@ -105,7 +141,24 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.left")}
               </Typography>
-              <TextField
+              <InputField
+                label=""
+                name="left"
+                control={control}
+                InputLabelProps={{
+                  sx: {
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
+              />
+              {/* <TextField
                 fullWidth
                 size="small"
                 margin="normal"
@@ -120,7 +173,7 @@ export const DetailsTextBoxForm = ({ data }) => {
                     fontSize: "14px",
                   },
                 }}
-              />
+              /> */}
             </Item>
           </Grid>
 
@@ -129,7 +182,24 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.top")}
               </Typography>
-              <TextField
+              <InputField
+                label=""
+                name="top"
+                control={control}
+                InputLabelProps={{
+                  sx: {
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
+              />
+              {/* <TextField
                 fullWidth
                 size="small"
                 margin="normal"
@@ -144,7 +214,7 @@ export const DetailsTextBoxForm = ({ data }) => {
                     fontSize: "14px",
                   },
                 }}
-              />
+              /> */}
             </Item>
           </Grid>
           <Grid item xs={6} pt={0}>
@@ -152,7 +222,24 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.top")}
               </Typography>
-              <TextField
+              <InputField
+                label=""
+                name="top"
+                control={control}
+                InputLabelProps={{
+                  sx: {
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
+              />
+              {/* <TextField
                 fullWidth
                 size="small"
                 margin="normal"
@@ -167,7 +254,7 @@ export const DetailsTextBoxForm = ({ data }) => {
                     fontSize: "14px",
                   },
                 }}
-              />
+              /> */}
             </Item>
           </Grid>
 
@@ -176,21 +263,22 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.width")}
               </Typography>
-              <TextField
-                fullWidth
-                size="small"
-                margin="normal"
-                // name={name}
-                defaultValue={data.dimension.width}
-                sx={{ my: 0, height: "44px" }}
-                InputProps={{
-                  // readOnly: true,
+              <InputField
+                label=""
+                name="width"
+                control={control}
+                InputLabelProps={{
                   sx: {
-                    height: "44px",
                     backgroundColor: "signingWFBackground.main",
-                    fontSize: "14px",
                   },
                 }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
               />
             </Item>
           </Grid>
@@ -199,21 +287,22 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.width")}
               </Typography>
-              <TextField
-                fullWidth
-                size="small"
-                margin="normal"
-                // name={name}
-                defaultValue={data.dimension.width}
-                sx={{ my: 0, height: "44px" }}
-                InputProps={{
-                  disabled: true,
+              <InputField
+                label=""
+                name="width"
+                control={control}
+                InputLabelProps={{
                   sx: {
-                    height: "44px",
                     backgroundColor: "signingWFBackground.main",
-                    fontSize: "14px",
                   },
                 }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
               />
             </Item>
           </Grid>
@@ -223,21 +312,22 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.height")}
               </Typography>
-              <TextField
-                fullWidth
-                size="small"
-                margin="normal"
-                // name={name}
-                defaultValue={data.dimension.height}
-                sx={{ my: 0, height: "44px" }}
-                InputProps={{
-                  // readOnly: true,
+              <InputField
+                label=""
+                name="height"
+                control={control}
+                InputLabelProps={{
                   sx: {
-                    height: "44px",
                     backgroundColor: "signingWFBackground.main",
-                    fontSize: "14px",
                   },
                 }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
               />
             </Item>
           </Grid>
@@ -246,21 +336,22 @@ export const DetailsTextBoxForm = ({ data }) => {
               <Typography variant="h6" mb="10px" height={"17px"}>
                 {t("0-common.height")}
               </Typography>
-              <TextField
-                fullWidth
-                size="small"
-                margin="normal"
-                // name={name}
-                defaultValue={data.dimension.height}
-                sx={{ my: 0, height: "44px" }}
-                InputProps={{
-                  disabled: true,
+              <InputField
+                label=""
+                name="height"
+                control={control}
+                InputLabelProps={{
                   sx: {
-                    height: "44px",
                     backgroundColor: "signingWFBackground.main",
-                    fontSize: "14px",
                   },
                 }}
+                inputProps={{
+                  sx: {
+                    py: "10.5px",
+                    backgroundColor: "signingWFBackground.main",
+                  },
+                }}
+                sx={{ my: 0, height: "45px" }}
               />
             </Item>
           </Grid>
@@ -268,4 +359,8 @@ export const DetailsTextBoxForm = ({ data }) => {
       </Box>
     </>
   );
+};
+DetailsTextBoxForm.propTypes = {
+  data: PropTypes.object,
+  control: PropTypes.object,
 };

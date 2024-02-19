@@ -1,4 +1,4 @@
-import { MenuItem, Typography } from "@mui/material";
+import { MenuItem, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
@@ -61,13 +61,15 @@ export const AddSubtitle = ({ control }) => {
       </FormLabel>
       <FormGroup sx={{ flexDirection: "collumn" }}>
         <Box sx={{ display: "flex" }}>
-          <Box width={"50%"}>
+          <Stack width={"50%"} gap={0}>
             <CheckBoxField
               name="name"
               control={control}
               label={t("0-common.name")}
               sx={{
+                color: "signingtext1.main",
                 width: "100%",
+                height: "21px",
                 "& .MuiCheckbox-root": {
                   padding: "0 9px",
                 },
@@ -79,6 +81,7 @@ export const AddSubtitle = ({ control }) => {
               label={t("0-common.date")}
               sx={{
                 width: "100%",
+                height: "21px",
                 "& .MuiCheckbox-root": {
                   padding: "0 9px",
                 },
@@ -90,6 +93,7 @@ export const AddSubtitle = ({ control }) => {
               label={t("0-common.logo")}
               sx={{
                 width: "100%",
+                height: "21px",
                 "& .MuiCheckbox-root": {
                   padding: "0 9px",
                 },
@@ -101,19 +105,21 @@ export const AddSubtitle = ({ control }) => {
               label={t("0-common.Reason")}
               sx={{
                 width: "100%",
+                height: "21px",
                 "& .MuiCheckbox-root": {
                   padding: "0 9px",
                 },
               }}
             />
-          </Box>
-          <Box width={"50%"}>
+          </Stack>
+          <Stack width={"50%"} gap={0}>
             <CheckBoxField
               name="dn"
               control={control}
               label={t("0-common.distinguished name")}
               sx={{
                 width: "100%",
+                height: "21px",
                 "& .MuiCheckbox-root": {
                   padding: "0 9px",
                 },
@@ -136,6 +142,7 @@ export const AddSubtitle = ({ control }) => {
               label={t("0-common.Location")}
               sx={{
                 width: "100%",
+                height: "21px",
                 "& .MuiCheckbox-root": {
                   padding: "0 9px",
                 },
@@ -147,12 +154,13 @@ export const AddSubtitle = ({ control }) => {
               label={t("0-common.labels")}
               sx={{
                 width: "100%",
+                height: "21px",
                 "& .MuiCheckbox-root": {
                   padding: "0 9px",
                 },
               }}
             />
-          </Box>
+          </Stack>
         </Box>
         <Box sx={{ display: "flex", mt: "10px" }}>
           <Box width={"50%"}>

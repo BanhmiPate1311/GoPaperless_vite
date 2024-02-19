@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import useCountry from "@/hook/use-country";
 import { apiService } from "@/services/api_service";
 import { removeBase64Prefix } from "@/utils/commonFunction";

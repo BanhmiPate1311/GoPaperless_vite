@@ -75,7 +75,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
   // console.log("certData: ", certData);
-  // console.log("data: ", data);
+  console.log("data: ", data);
   const { t } = useTranslation();
 
   const [value, setValue] = useState(0);
@@ -709,7 +709,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                       },
                     }}
                     className="hover-underline-animation"
-                    onClick={() => downloadCertFromPEM(pemValue())}
+                    onClick={() => downloadCertFromPEM(pemValue(), subject())}
                     icon={
                       <SaveAltIcon fontSize="small" color="borderColor.light" />
                     }

@@ -15,6 +15,7 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
 export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
+  console.log("workFlow: ", workFlow);
   // console.log("index: ", index);
   // console.log("textData: ", textData.value);
   const queryClient = useQueryClient();
@@ -441,6 +442,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           onClose={() => handleCloseModalSetting(index)}
           signer={signer}
           textData={textData}
+          participants={workFlow.participants}
         />
       )}
     </>
