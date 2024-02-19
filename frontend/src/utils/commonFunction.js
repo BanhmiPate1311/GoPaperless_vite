@@ -278,12 +278,12 @@ export const debounce = (fn, delay = 1000) => {
   };
 };
 
-export const downloadCertFromPEM = (data) => {
+export const downloadCertFromPEM = (data, name) => {
   const blob = new Blob([data], { type: "application/x-x509-ca-cert" });
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.setAttribute("download", "certificate.cer");
+  link.setAttribute("download", `${name}.cer`);
   document.body.appendChild(link);
   link.click();
   // console.log("data: ", data);

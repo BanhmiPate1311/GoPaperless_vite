@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import PropTypes from "prop-types";
@@ -19,7 +18,7 @@ export const SelectField = ({
 }) => {
   const {
     field: { onChange, value, ref },
-    fieldState: { error },
+    // fieldState: { error },
   } = useController({ name, control });
   return (
     <FormControl sx={{ width: "100%" }} size="small">
@@ -38,9 +37,9 @@ export const SelectField = ({
       >
         {content}
       </Select>
-      <FormHelperText sx={{ color: "error.main" }}>
+      {/* <FormHelperText sx={{ color: "error.main" }}>
         {error?.message}
-      </FormHelperText>
+      </FormHelperText> */}
     </FormControl>
   );
 };
