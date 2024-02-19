@@ -7,23 +7,23 @@ import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 const Size = Quill.import("formats/size");
-Size.whitelist = ["extra-small", "small", "medium", "large"];
+Size.whitelist = ["13", "14", "18", "20"];
 Quill.register(Size, true);
 
 const Font = Quill.import("formats/font");
 Font.whitelist = [
-  "arial",
-  "comic-sans",
-  "courier-new",
-  "georgia",
-  "helvetica",
-  "lucida",
+  "verdana",
+  // "comic-sans",
+  // "courier-new",
+  // "georgia",
+  // "helvetica",
+  // "lucida",
 ];
 Quill.register(Font, true);
 
@@ -44,22 +44,22 @@ const CustomToolbar = ({ handleSave, handleRemove, index }) => {
         }}
       />
       <select className="ql-font">
-        <option value="arial">Arial</option>
-        <option value="comic-sans">Comic Sans</option>
+        <option value="verdana">Verdana</option>
+        {/* <option value="comic-sans">Comic Sans</option>
         <option value="courier-new">Courier New</option>
         <option value="georgia">Georgia</option>
         <option value="helvetica">Helvetica</option>
-        <option value="lucida">Lucida</option>
+        <option value="lucida">Lucida</option> */}
       </select>
       <button className="ql-bold" />
       <button className="ql-italic" />
-      <button className="ql-underline" />
-      <button className="ql-strike" />
+      {/* <button className="ql-underline" />
+      <button className="ql-strike" /> */}
       <select className="ql-size">
-        <option value="extra-small">Size 1</option>
-        <option value="small">Size 2</option>
-        <option value="medium">Size 3</option>
-        <option value="large">Size 4</option>
+        <option value="13">Size 1</option>
+        <option value="14">Size 2</option>
+        <option value="18">Size 3</option>
+        <option value="20">Size 4</option>
       </select>
       <button>
         <SvgIcon
@@ -141,7 +141,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
         body: [
           {
             field_name: addTextData.field_name,
-            value: state.value,
+            value: state.text,
           },
         ],
         documentId: workFlow.documentId,
@@ -196,8 +196,60 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
     "code-block",
   ];
 
-  const handleChange = (value) => {
-    setState({ value });
+  const valueRef = useRef(null);
+
+  const handleChange = (value, delta, source, editor) => {
+    const content = editor.getContents();
+    console.log("editor: ", editor.getContents());
+
+    setState({
+      value,
+      text: content.ops[0].insert,
+      // fontFamily: content.ops[0].attributes?.font || "Venada",
+      // fontSize: content.ops[0].attributes?.size || 13,
+      // fontWeight: content.ops[0].attributes?.bold || false,
+      // fontStyle: content.ops[0].attributes?.italic || false,
+    });
+
+    if (valueRef.current) clearTimeout(valueRef.current);
+    valueRef.current = setTimeout(() => {
+      console.log("content.ops[0].insert: ", content.ops[0].insert);
+      const font = content.ops[0].attributes?.font || "vernada";
+      // console.log("font: ", font);
+      const bold = content.ops[0].attributes?.bold ? "_bold" : "";
+      // console.log("bold: ", bold);
+      const italic = content.ops[0].attributes?.italic ? "_italic" : "";
+      // console.log("italic: ", italic);
+      const size = content.ops[0].attributes?.size;
+      // console.log("size: ", size);
+      putSignature.mutate(
+        {
+          body: {
+            field_name: addTextData.field_name,
+            page: pdfPage.currentPage,
+            dimension: {
+              x: -1,
+              y: -1,
+              width: -1,
+              height: -1,
+            },
+            font: {
+              name: font + bold + italic,
+              size: size || 13,
+            },
+            visible_enabled: true,
+            value: "",
+          },
+          field: "text",
+          documentId: workFlow.documentId,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["getField"] });
+          },
+        }
+      );
+    }, 1000);
   };
 
   if (

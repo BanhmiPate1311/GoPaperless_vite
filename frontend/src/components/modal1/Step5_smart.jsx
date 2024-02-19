@@ -45,12 +45,12 @@ export const Step5_smart = ({
   // console.log("getCertDetail: ", getCertDetail.data);
 
   useEffect(() => {
-    if (certSelected === null) {
+    if (certSelected === null || data?.length === 0) {
       onDisableSubmit(true);
     } else {
       onDisableSubmit(false);
     }
-  }, [certSelected, onDisableSubmit]);
+  }, [certSelected, onDisableSubmit, data]);
 
   const content = data?.map((value, index) => (
     <ToggleButtonStyle

@@ -84,94 +84,102 @@ const DrawSignForm = forwardRef(
             {t("0-common.draw")}
           </Button>
         </Box>
-        <Stack
-          ref={ref}
+        <Box
           sx={{
-            height: showInput ? "100%" : "170px",
-            overflow: "hidden",
             borderRadius: "6px",
             border: !imgBase64 ? "2px solid #357EEB" : "none",
-            position: "relative",
-            // backgroundColor: "white",
-            "&:before": watch("logo")
-              ? {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  opacity: 0.2,
-                  zIndex: 1,
-                  backgroundImage: !imgBase64 ? `url(${logoValue})` : "none",
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  backgroundColor: "rgba(255, 255, 255, 0.5)",
-                }
-              : {},
+            p: 1,
           }}
         >
-          {imgBase64 && (
-            <img src={imgBase64} style={{ width: "auto", height: "100%" }} />
-          )}
-          {!imgBase64 && (
-            <Stack
-              direction={
-                watch("alignment") === "auto" || watch("alignment") === "left"
-                  ? "row"
-                  : "row-reverse"
-              }
-              sx={{
-                display: "flex",
-                width: "100%",
-                alignItems: "center",
-                // height: "150px",
-                height: "100%",
-              }}
-            >
+          <Stack
+            ref={ref}
+            sx={{
+              height: showInput ? "100%" : "154px",
+              overflow: "hidden",
+              // borderRadius: "6px",
+              // border: !imgBase64 ? "2px solid #357EEB" : "none",
+              position: "relative",
+              // backgroundColor: "white",
+              "&:before": watch("logo")
+                ? {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    opacity: 0.2,
+                    zIndex: 1,
+                    backgroundImage: !imgBase64 ? `url(${logoValue})` : "none",
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                  }
+                : {},
+            }}
+          >
+            {imgBase64 && (
+              <img src={imgBase64} style={{ width: "auto", height: "100%" }} />
+            )}
+            {!imgBase64 && (
               <Stack
-                direction="row"
-                justifyContent={"center"}
-                alignItems="center"
+                direction={
+                  watch("alignment") === "auto" || watch("alignment") === "left"
+                    ? "row"
+                    : "row-reverse"
+                }
                 sx={{
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  width: direction ? "50%" : "100%",
-                  fontSize: "2rem",
-                  textAlign: "center",
-                  textTransform: "capitalize",
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                  // height: "150px",
+                  height: "100%",
                 }}
               >
-                {/* {watch("drawUrl") || ""} */}
-                {watch("drawUrl") ? (
-                  <Box
-                    component="img"
-                    sx={{
-                      // height: "100%",
-                      maxWidth: "70%",
-                    }}
-                    alt="The house from the offer."
-                    src={watch("drawUrl")}
-                  />
-                ) : null}
-              </Stack>
+                <Stack
+                  direction="row"
+                  justifyContent={"center"}
+                  alignItems="center"
+                  sx={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    width: direction ? "50%" : "100%",
+                    fontSize: "2rem",
+                    textAlign: "center",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {/* {watch("drawUrl") || ""} */}
+                  {watch("drawUrl") ? (
+                    <Box
+                      component="img"
+                      sx={{
+                        // height: "100%",
+                        maxWidth: "70%",
+                      }}
+                      alt="The house from the offer."
+                      src={watch("drawUrl")}
+                    />
+                  ) : null}
+                </Stack>
 
-              <ContentRight
-                direction={direction}
-                subtitle={subtitle}
-                watch={watch}
-              />
-            </Stack>
-          )}
-          {/* <Box
+                <ContentRight
+                  direction={direction}
+                  subtitle={subtitle}
+                  watch={watch}
+                />
+              </Stack>
+            )}
+            {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",
               height: "20px",
             }}
           ></Box> */}
-        </Stack>
+          </Stack>
+        </Box>
 
         <DialogDraw
           name="drawUrl"

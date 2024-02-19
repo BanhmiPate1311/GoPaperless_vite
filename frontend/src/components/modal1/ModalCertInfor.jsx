@@ -529,6 +529,9 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                           minHeight: "45px",
                           height: "auto !important",
                         },
+                        "& .MuiInputBase-input.Mui-disabled": {
+                          WebkitTextFillColor: "#1F2937",
+                        },
                       }}
                       disabled={true}
                       InputProps={{
@@ -705,6 +708,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                         margin: "0",
                       },
                     }}
+                    className="hover-underline-animation"
                     onClick={() => downloadCertFromPEM(pemValue())}
                     icon={
                       <SaveAltIcon fontSize="small" color="borderColor.light" />

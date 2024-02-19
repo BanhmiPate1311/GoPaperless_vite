@@ -82,6 +82,11 @@ export const DialogFile = ({ open, handleClose, name, control, data }) => {
           onClick={() => {
             getCropData();
           }}
+          sx={{
+            // borderRadius: "10px",
+            // borderColor: "borderColor.main",
+            marginLeft: "20px !important",
+          }}
         >
           {t("modal.upload2")}
         </Button>

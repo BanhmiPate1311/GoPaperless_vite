@@ -190,24 +190,32 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
 
   const handleFormSubmit = (data1) => {
     // console.log("data: ", data1);
-    usbHash.mutateAsync(dataSigning, {
-      onSuccess: (data) => {
-        // console.log("data: ", data);
-        setDataSigning({
-          ...dataSigning,
-          pin: data1.pin,
-          dtbsHash: data.hashPG,
-          hashList: data.hash,
-        });
-        const request = {
-          dtbsHash: data.hashPG,
-          pin: data1.pin,
-        };
-        getCertificate.mutateAsync(request);
-      },
-    });
+    if (dataSigning.dtbsHash) {
+      const request = {
+        dtbsHash: dataSigning.dtbsHash,
+        pin: data1.pin,
+      };
+      getCertificate.mutateAsync(request);
+    } else {
+      usbHash.mutateAsync(dataSigning, {
+        onSuccess: (data) => {
+          // console.log("data: ", data);
+          setDataSigning({
+            ...dataSigning,
+            pin: data1.pin,
+            dtbsHash: data.hashPG,
+            hashList: data.hash,
+          });
+          const request = {
+            dtbsHash: data.hashPG,
+            pin: data1.pin,
+          };
+          getCertificate.mutateAsync(request);
+        },
+      });
+    }
   };
-  console.log("hash error: ", usbHash.error);
+  // console.log("hash error: ", usbHash.error);
 
   useEffect(() => {
     const error1 =
@@ -367,6 +375,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                 onChange={() => {
                   setErrorApi(null);
                 }}
+                disabled={isPending}
               />
             </Box>
             <Stack width={"100%"}>

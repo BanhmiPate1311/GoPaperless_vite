@@ -17,7 +17,7 @@ export const Document = ({
   textField,
   addText,
 }) => {
-  // console.log("props: ", props);
+  // console.log("textField: ", textField);
 
   const queryClient = useQueryClient();
   let isSetPos;
@@ -34,6 +34,7 @@ export const Document = ({
     zoom: props.scale,
     actualHeight: props.height / props.scale,
     actualWidth: props.width / props.scale,
+    rotate: props.rotation,
   };
 
   const handleValidateSignature = (
@@ -129,6 +130,7 @@ export const Document = ({
             signatureData={signatureData}
             workFlow={workFlow}
             textField={textField}
+            initial={initial}
           />
         );
       })}

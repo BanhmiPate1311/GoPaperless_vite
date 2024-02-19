@@ -19,6 +19,7 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
+import { useTranslation } from "react-i18next";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({
@@ -27,13 +28,17 @@ export const Signature = ({
   signatureData,
   workFlow,
   textField,
+  initial,
 }) => {
-  // console.log("pdfPage: ", pdfPage);
-  // console.log("pdfPage: ", pdfPage);
+  // console.log("textField: ", textField);
+  // console.log("initial: ", initial);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("index: ", index);
   // console.log("signatureData: ", signatureData);
+
+  const { t } = useTranslation();
+
   const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
   const [isShowModalSignImage, setShowModalSignImage] = useState([false]);
@@ -68,6 +73,13 @@ export const Signature = ({
   const [sigDetail, setSigDetail] = useState([]);
   // console.log("sigDetail: ", sigDetail);
 
+  const checkInit = initial.findIndex(
+    (item) =>
+      item.process_status === "UN_PROCESSED" &&
+      item.field_name.includes(signerId)
+  );
+  // console.log("checkInit: ", checkInit);
+
   useEffect(() => {
     setDragPosition({
       x: (signatureData.dimension?.x * pdfPage.width) / 100,
@@ -75,26 +87,45 @@ export const Signature = ({
     });
   }, [signatureData]);
 
+  // useEffect(() => {
+  //   const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
+  //   const newSig1 = sigInfor
+  //     ?.filter((item) => item.value.field_name === signatureData.field_name)
+  //     .map((item) => {
+  //       return { isSigned: true, ...item.value };
+  //     });
+
+  //   const newSig2 = workFlow?.participants
+  //     ?.filter(
+  //       (item) =>
+  //         item.certificate &&
+  //         item.certificate.field_name === signatureData.field_name
+  //     )
+  //     .map((item) => {
+  //       return { isSigned: false, ...item.certificate };
+  //     });
+
+  //   setSigDetail(...newSig1, ...newSig2);
+  // }, [signatureData, workFlow, queryClient]);
+
   useEffect(() => {
     const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
-    const newSig1 = sigInfor
-      ?.filter((item) => item.value.field_name === signatureData.field_name)
-      .map((item) => {
-        return { isSigned: true, ...item.value };
-      });
+    const newSig1 =
+      sigInfor
+        ?.filter((item) => item.value.field_name === signatureData.field_name)
+        ?.map((item) => ({ isSigned: true, ...item.value })) || null;
 
-    const newSig2 = workFlow?.participants
-      ?.filter(
-        (item) =>
-          item.certificate &&
-          item.certificate.field_name === signatureData.field_name
-      )
-      .map((item) => {
-        return { isSigned: false, ...item.certificate };
-      });
+    const newSig2 =
+      workFlow?.participants
+        ?.filter(
+          (item) =>
+            item.certificate &&
+            item.certificate.field_name === signatureData.field_name
+        )
+        ?.map((item) => ({ isSigned: false, ...item.certificate })) || null;
 
-    setSigDetail(...newSig1, ...newSig2);
-  }, [signatureData]);
+    setSigDetail([...newSig1, ...newSig2]);
+  }, [signatureData, workFlow, queryClient]);
 
   const maxPosibleResizeWidth =
     (pdfPage.width * (100 - signatureData.dimension?.x)) / 100;
@@ -550,6 +581,9 @@ export const Signature = ({
               ) {
                 console.log("true");
                 return;
+              } else if (checkInit !== -1) {
+                alert(t("signing.init_warning"));
+                return;
               } else if (
                 e.target.id === `sigDrag-${index}` ||
                 e.target.parentElement?.id === "drag" ||
@@ -697,7 +731,7 @@ export const Signature = ({
       {isShowSigDetail[index] && (
         <SigDetail
           open={isShowSigDetail[index]}
-          signDetail={sigDetail}
+          signDetail={sigDetail[0]}
           handleClose={() => toggleSigDetail(index)}
         />
       )}

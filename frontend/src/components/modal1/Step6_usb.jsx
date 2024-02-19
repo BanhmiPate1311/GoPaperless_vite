@@ -44,12 +44,12 @@ export const Step6_usb = ({
   const getCertDetail = UseGetCertDetail();
 
   useEffect(() => {
-    if (certSelected === null) {
+    if (certSelected === null || data?.length === 0) {
       onDisableSubmit(true);
     } else {
       onDisableSubmit(false);
     }
-  }, [certSelected, onDisableSubmit]);
+  }, [certSelected, onDisableSubmit, data]);
 
   const content = data?.map((value, index) => (
     <ToggleButtonStyle

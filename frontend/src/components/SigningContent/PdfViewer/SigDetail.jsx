@@ -6,14 +6,10 @@ import { ReactComponent as ValidSealWFIcon } from "@/assets/images/svg/sealwf.sv
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
 import { ReactComponent as ValidSigIcon } from "@/assets/images/svg/valid.svg";
 import { ReactComponent as WarningIcon2 } from "@/assets/images/svg/warning2_icon.svg";
-import {
-  ReactComponent as InValidIcon,
-  ReactComponent as WarningIcon,
-} from "@/assets/images/svg/warningError.svg";
-import {
-  ReactComponent as InValidWFIcon,
-  ReactComponent as WarningWFIcon,
-} from "@/assets/images/svg/warningErrorwf.svg";
+import { ReactComponent as WarningIcon } from "@/assets/images/svg/warningError.svg";
+import { ReactComponent as InValidIcon } from "@/assets/images/svg/error.svg";
+import { ReactComponent as WarningWFIcon } from "@/assets/images/svg/warningErrorwf.svg";
+import { ReactComponent as InValidWFIcon } from "@/assets/images/svg/errorwf.svg";
 import { convertTime } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -35,7 +31,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
 
   const signType = signDetail.is_seal === true ? "eseal" : "Signature";
 
-  const name = signDetail.certificate.subject.CN[0];
+  const name = signDetail.certificate?.subject?.CN[0];
   // const warnings = signDetail.warnings;
   // const errors = signDetail.errors;
 
@@ -69,7 +65,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
           signType === "Signature"
             ? t("validation.sigScope")
             : t("validation.sealScope"),
-        subtitle: signDetail.scope.name,
+        subtitle: signDetail.scope?.name,
       },
       {
         title: t("0-common.Certificate Owner"),
@@ -82,9 +78,9 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
       {
         title: t("0-common.Certificate validity period"),
         subtitle:
-          convertTime(signDetail.certificate.valid_from) +
+          convertTime(signDetail.certificate?.valid_from) +
           " - " +
-          convertTime(signDetail.certificate.valid_to),
+          convertTime(signDetail.certificate?.valid_to),
       },
     ].filter((item) => item.subtitle !== null),
   };
@@ -265,7 +261,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
           </Stack>
         </Stack>
         {/* <Divider sx={{ borderColor: "borderColor.main" }} /> */}
-        {signDetail.warnings.length > 0 && (
+        {signDetail.warnings?.length > 0 && (
           <Accordion
             disableGutters
             expanded={expanded === "warnings"}
@@ -319,7 +315,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
           </Accordion>
         )}
 
-        {signDetail.errors.length > 0 && (
+        {signDetail.errors?.length > 0 && (
           <Accordion
             disableGutters
             expanded={expanded === "error"}

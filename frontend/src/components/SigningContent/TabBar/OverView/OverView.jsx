@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { convertTime } from "@/utils/commonFunction";
 
-export const OverView = ({ workFlow }) => {
+export const OverView = ({ workFlow, qrSigning }) => {
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const { signingToken } = useCommonHook();
@@ -19,9 +19,9 @@ export const OverView = ({ workFlow }) => {
 
   const { data: headerFooter } = useQuery({
     queryKey: ["checkHeader"],
-    queryFn: () => apiService.checkHeaderFooter(signingToken), //code a Cường
+    queryFn: () => apiService.checkHeaderFooter(signingToken || qrSigning), //code a Cường
     // queryFn: () => apiService.checkHeaderFooter(workFlow?.signingToken),
-    enabled: signingToken !== undefined, //chỉ gọi api khi có giá trị id // Code a Cường
+    enabled: signingToken !== undefined || qrSigning !== undefined, //chỉ gọi api khi có giá trị id // Code a Cường
     // enabled: workFlow?.signingToken !== undefined, //chỉ gọi api khi có giá trị id
   });
   // console.log("headerFooter: ", headerFooter?.data);
@@ -101,5 +101,6 @@ export const OverView = ({ workFlow }) => {
 };
 OverView.propTypes = {
   workFlow: PropTypes.object,
+  qrSigning: PropTypes.string,
 };
 export default OverView;

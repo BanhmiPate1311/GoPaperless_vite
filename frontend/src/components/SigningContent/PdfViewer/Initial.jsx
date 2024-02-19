@@ -277,21 +277,7 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
             opacity: initData.verification === undefined ? 1 : 0.1,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
-          minConstraints={[
-            signerId + "_" + initData.type + "_" + initData.suffix !==
-            initData.field_name
-              ? initData.dimension?.width * (pdfPage.width / 100)
-              : pdfPage
-              ? (pdfPage.width * 20) / 100
-              : 200,
-
-            signerId + "_" + initData.type + "_" + initData.suffix !==
-            initData.field_name
-              ? initData.dimension?.height * (pdfPage.height / 100)
-              : pdfPage
-              ? (pdfPage.height * 5) / 100
-              : 50,
-          ]}
+          minConstraints={[0, 0]}
           maxConstraints={[
             signerId + "_" + initData.type + "_" + initData.suffix !==
             initData.field_name
@@ -407,6 +393,16 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
                 className={`initRauria-${index} leftline`}
                 style={{ display: "none" }}
               ></span>
+              <span
+                style={{
+                  position: "absolute",
+                  right: "2px",
+                  top: "-2px",
+                  color: "#EAB308",
+                }}
+              >
+                *
+              </span>
               Initials
             </div>
           </Box>
@@ -426,6 +422,8 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
         <InitialsFieldSetting
           open={isOpenModalSetting[index]}
           onClose={() => handleCloseModalSetting(index)}
+          signer={signer}
+          initData={initData}
         />
       )}
     </>

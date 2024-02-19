@@ -1,5 +1,6 @@
 {
   "0-common": {
+    "action": "Action",
     "addtext": "Add text",
     "apply": "Apply",
     "auto": "Auto",
@@ -16,6 +17,7 @@
     "custom": "Custom",
     "date": "Date",
     "deadline": "Deadline",
+    "delete": "Delete",
     "digits format": "Digits format",
     "distinguished name": "Distinguished name",
     "draw": "Draw",
@@ -29,6 +31,7 @@
     "logo": "Logo",
     "name": "Name",
     "overview": "Overview",
+    "page": "Page",
     "parallel": "Parallel",
     "participants": "Participants",
     "Position": "Position",
@@ -67,7 +70,7 @@
     "subjectDN": "Subject DN",
     "valid_from": "Valid from",
     "valid_to": "Valid to",
-    "review": "Review"
+    "preview": "Preview"
   },
   "batch": {
     "collapse": "Collapse all",
@@ -162,9 +165,26 @@
     "title": "Electronic video base identification"
   },
   "modal": {
+    "assigned_to": "Assigned to",
+    "validation": "Validation",
+    "allowed_length": "Allowed length",
+    "placeholder": "Placeholder",
+    "font_type": "Font type",
+    "font_size": "Font size",
+    "select_participant": "Select participant",
     "checkidwarning": "Required software is missing or not available. ",
     "content1": "Digitally signed by",
     "download": "Download here",
+    "edit_initials": "Edit initials",
+    "edit_name": "Edit name",
+    "edit_email": "Edit email",
+    "edit_jobtitle": "Edit job title",
+    "edit_company": "Edit company",
+    "edit_qr": "Edit Qr code",
+    "replicate_initials": "Replicate Initials",
+    "replicate_to_pages": "Replicate to Pages",
+    "document_name": "Document name",
+    "select_pages": "Select pages",
     "smartid1": "Your verification code is:",
     "smartid2": "Your verification code will expire in",
     "smartid3": "seconds",
@@ -217,7 +237,9 @@
     "no_cert_found": "No certificate found",
     "tax_code": "Tax code",
     "common_name": "Common name",
-    "cert_tooltip": "Certificate details"
+    "cert_tooltip": "Certificate details",
+    "init_warning": "You must complete your initials before you sign the document",
+    "qr_warning": "You can not add multiple QR Codes"
   },
   "signingForm": {
     "step1": "Select remote signing service provider",

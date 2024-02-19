@@ -25,10 +25,7 @@ import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { TextInitForm } from ".";
-import DrawInitForm from "./DrawInitForm";
-import UploadInitForm from "./UploadInitForm";
-
+import { DrawInitForm, TextInitForm, UploadInitForm } from ".";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 

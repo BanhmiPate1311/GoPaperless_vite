@@ -1,19 +1,18 @@
-import { Typography } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import FormControl from "@mui/material/FormControl";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const ReplicateForm = () => {
   const { t } = useTranslation();
@@ -44,7 +43,7 @@ export const ReplicateForm = () => {
     <Box>
       <Box mb="10px">
         <Typography variant="h6" mb="10px">
-          Replicate to Pages
+          {t("modal.replicate_to_pages")}
         </Typography>
         <FormControl fullWidth>
           <Select
@@ -76,10 +75,10 @@ export const ReplicateForm = () => {
         <Table sx={{ tableLayout: "fixed" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Initials</TableCell>
-              <TableCell align="center">Document Name</TableCell>
-              <TableCell align="center">Page</TableCell>
-              <TableCell align="center">Action</TableCell>
+              <TableCell>{t("0-common.initials")}</TableCell>
+              <TableCell align="center">{t("modal.document_name")}</TableCell>
+              <TableCell align="center">{t("0-common.page")}</TableCell>
+              <TableCell align="center">{t("0-common.action")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -94,7 +93,7 @@ export const ReplicateForm = () => {
                 <TableCell align="center">{row.documentName}</TableCell>
                 <TableCell align="center">{row.page}</TableCell>
                 <TableCell align="center">
-                  <Button>Delete</Button>
+                  <Button>{t("0-common.delete")}</Button>
                 </TableCell>
               </TableRow>
             ))}

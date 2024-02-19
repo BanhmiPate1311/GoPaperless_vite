@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import QrCodeSettingField from "@/components/modalField/QrCodeSettingField";
+import { QrCodeSettingField } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
@@ -110,7 +110,11 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
     }
   };
 
-  if (qrData.page !== null && qrData.page !== pdfPage.currentPage) return null;
+  if (
+    (qrData.page !== null && qrData.page !== pdfPage.currentPage) ||
+    qrData.process_status === "PROCESSED"
+  )
+    return null;
 
   return (
     <>
@@ -259,6 +263,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
               ? maxPosibleResizeHeight
               : 200,
           ]}
+          lockAspectRatio={true}
           onResize={(e, { size }) => {}}
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);
@@ -348,6 +353,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
         <QrCodeSettingField
           open={isOpenModalSetting[index]}
           onClose={() => handleCloseModalSetting(index)}
+          qrData={qrData}
         />
       )}
     </>

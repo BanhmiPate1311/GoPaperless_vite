@@ -426,7 +426,7 @@ export const ModalSigning = ({
             handleOpenResize(true);
           }}
         >
-          {t("0-common.review")}
+          {t("0-common.preview")}
         </Button>
         <Button
           variant="contained"

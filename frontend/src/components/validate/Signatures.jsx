@@ -10,6 +10,7 @@ import { SignDetail } from ".";
 import Avatar from "@mui/material/Avatar";
 import SvgIcon from "@mui/material/SvgIcon";
 export const Signatures = ({ validFile, signType, signIcon }) => {
+  console.log("validFile: ", validFile);
   const { t } = useTranslation();
 
   const valueSign = [
@@ -30,7 +31,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
       value: validFile.filter((sig) => sig.indication === "INDETERMINATE"),
       icon: (
         <SvgIcon viewBox={"0 0 40 40"}>
-          <InValidIcon height={40} width={40} color="#EB6A00" />
+          <WarningWFIcon height={35} width={35} />
         </SvgIcon>
       ),
 
@@ -47,7 +48,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
       value: validFile.filter((sig) => sig.indication === "TOTAL_FAILED"),
       icon: (
         <SvgIcon viewBox={"0 0 35 35"}>
-          <WarningWFIcon height={35} width={35} />
+          <InValidIcon height={40} width={40} color="#EB6A00" />
         </SvgIcon>
       ),
 
@@ -58,7 +59,8 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
     },
   ];
   const newSign = valueSign.filter((sig) => sig.value.length > 0);
-  console.log("newSign: ", valueSign);
+  console.log("newSign: ", newSign);
+
   return (
     <>
       <Stack direction="row" sx={{ px: "20px", height: "50px" }}>
@@ -77,7 +79,7 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
               fontSize: "10px",
             }}
           >
-            {newSign.length}
+            {validFile.length}
           </Avatar>
         </Stack>
       </Stack>
@@ -110,5 +112,6 @@ export const Signatures = ({ validFile, signType, signIcon }) => {
 Signatures.propTypes = {
   validFile: PropTypes.array,
   signType: PropTypes.string,
+  signIcon: PropTypes.node,
 };
 export default Signatures;

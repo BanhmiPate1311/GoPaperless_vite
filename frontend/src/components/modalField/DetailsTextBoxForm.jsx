@@ -1,8 +1,11 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Box, Grid, TextField, Typography } from "@mui/material";
+/* eslint-disable react/prop-types */
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "transparent",
@@ -11,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "left",
   // color: theme.palette.text.secondary,
 }));
-export const DetailsTextBoxForm = () => {
+export const DetailsTextBoxForm = ({ data }) => {
   const { t } = useTranslation();
   return (
     <>
@@ -24,7 +27,7 @@ export const DetailsTextBoxForm = () => {
           size="small"
           margin="normal"
           // name={name}
-          defaultValue={123123123}
+          defaultValue={data.field_name}
           sx={{ my: 0, height: "44px" }}
           InputProps={{
             readOnly: true,
@@ -84,7 +87,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123}
+                defaultValue={data.dimension.x}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   // readOnly: true,
@@ -107,7 +110,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123}
+                defaultValue={data.dimension.x}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   disabled: true,
@@ -131,7 +134,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123123}
+                defaultValue={data.dimension.y}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   // readOnly: true,
@@ -154,7 +157,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123123}
+                defaultValue={data.dimension.y}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   disabled: true,
@@ -178,7 +181,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123123}
+                defaultValue={data.dimension.width}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   // readOnly: true,
@@ -201,7 +204,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123123}
+                defaultValue={data.dimension.width}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   disabled: true,
@@ -225,7 +228,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123123}
+                defaultValue={data.dimension.height}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   // readOnly: true,
@@ -248,7 +251,7 @@ export const DetailsTextBoxForm = () => {
                 size="small"
                 margin="normal"
                 // name={name}
-                defaultValue={123123123}
+                defaultValue={data.dimension.height}
                 sx={{ my: 0, height: "44px" }}
                 InputProps={{
                   disabled: true,

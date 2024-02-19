@@ -18,9 +18,11 @@ import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
+import { useTranslation } from "react-i18next";
 
 export const PdfViewer = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
@@ -48,7 +50,12 @@ export const PdfViewer = ({ workFlow }) => {
       // console.log("data: ", data);
       const newData = { ...data };
       const textField = data.textbox
-        .filter((item) => item.type !== "TEXT_FIELD")
+        .filter(
+          (item) =>
+            item.type !== "TEXT_FIELD" &&
+            item.process_status !== "PROCESSED" &&
+            item.value !== ""
+        )
         .map((item) => {
           return {
             field_name: item.field_name,
@@ -166,8 +173,8 @@ export const PdfViewer = ({ workFlow }) => {
       dimension: {
         x: signInfo.x,
         y: signInfo.y,
-        width: 22,
-        height: 5,
+        width: 15,
+        height: 2,
       },
       suffix: Number(field.textbox.length + 1),
     };
@@ -226,8 +233,8 @@ export const PdfViewer = ({ workFlow }) => {
       dimension: {
         x: signInfo.x,
         y: signInfo.y,
-        width: 22,
-        height: 5,
+        width: 6,
+        height: 4,
       },
       suffix: Number(field.initial.length + 1),
     };
@@ -247,7 +254,10 @@ export const PdfViewer = ({ workFlow }) => {
 
   const qrCode = (value) => {
     // console.log("qr: ", field?.qr);
-    if (field?.qr?.length > 0) return;
+    if (field?.qr?.length > 0) {
+      alert(t("signing.qr_warning"));
+      return;
+    }
     const qrToken = uuidv4();
     const newInitField = {
       field_name: signerId + "_" + value + "_" + Number(field.qr.length + 1),

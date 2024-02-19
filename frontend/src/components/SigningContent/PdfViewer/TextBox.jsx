@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import TextBoxSettingField from "@/components/modalField/TextBoxSettingField";
-
+import { TextBoxSettingField } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
@@ -16,7 +15,7 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
 export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
-  console.log("index: ", index);
+  // console.log("index: ", index);
   // console.log("textData: ", textData.value);
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
@@ -303,16 +302,11 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             signerId + "_" + textData.type + "_" + textData.suffix !==
               textData.field_name || textData.process_status === "PROCESSED"
               ? textData.dimension?.width * (pdfPage.width / 100)
-              : pdfPage
-              ? (pdfPage.width * 20) / 100
-              : 200,
-
+              : 0,
             signerId + "_" + textData.type + "_" + textData.suffix !==
               textData.field_name || textData.process_status === "PROCESSED"
               ? textData.dimension?.height * (pdfPage.height / 100)
-              : pdfPage
-              ? (pdfPage.height * 5) / 100
-              : 50,
+              : 0,
           ]}
           maxConstraints={[
             signerId + "_" + textData.type + "_" + textData.suffix !==
@@ -370,8 +364,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
                 textData.verification ||
                 signerId + "_" + textData.type + "_" + textData.suffix !==
                   textData.field_name
-                  ? "rgba(217, 223, 228, 0.7)"
-                  : "rgba(254, 240, 138, 0.7)",
+                  ? "rgba(217, 223, 228, 1)"
+                  : "rgba(254, 240, 138, 1)",
               height: "100%",
               position: "relative",
               // padding: "10px",
@@ -430,8 +424,12 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
                 },
                 "& fieldset": { border: "none" },
                 // backgroundColor: "rgba(254, 240, 138, 0.7)",
+                fontWeight: "bold",
               }}
               onChange={handleChange}
+              inputProps={{
+                sx: { fontWeight: 600, padding: 0 }, // Sử dụng style để đặt fontWeight và padding
+              }}
             />
           </Box>
         </ResizableBox>
@@ -441,6 +439,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           open={isOpenModalSetting[index]}
           type={textData.type}
           onClose={() => handleCloseModalSetting(index)}
+          signer={signer}
+          textData={textData}
         />
       )}
     </>

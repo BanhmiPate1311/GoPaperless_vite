@@ -1,9 +1,9 @@
-import DrawIcon from "@mui/icons-material/Draw";
-import KeyboardIcon from "@mui/icons-material/Keyboard";
-import UploadIcon from "@mui/icons-material/Upload";
+/* eslint-disable no-unused-vars */
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -13,8 +13,6 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
 import { GeneralTextBoxForm } from ".";
 import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
 
@@ -57,7 +55,13 @@ function a11yProps(index) {
   };
 }
 
-export const TextBoxSettingField = ({ open, onClose, type }) => {
+export const TextBoxSettingField = ({
+  open,
+  onClose,
+  type,
+  signer,
+  textData,
+}) => {
   // console.log("initData: ", initData);
   // console.log("signer: ", signer);
   const { t } = useTranslation();
@@ -69,16 +73,16 @@ export const TextBoxSettingField = ({ open, onClose, type }) => {
   const handletype = (type) => {
     switch (type) {
       case "NAME":
-        return "Name";
+        return t("modal.edit_name");
       case "EMAIL":
-        return "Email";
+        return t("modal.edit_email");
       case "JOB_TITLE":
-        return "Job Title";
+        return t("modal.edit_jobtitle");
       case "COMPANY":
-        return "Company";
+        return t("modal.edit_company");
     }
   };
-  console.log(handletype(type));
+  // console.log(handletype(type));
   return (
     <Dialog
       // keepMounted={false}
@@ -119,7 +123,7 @@ export const TextBoxSettingField = ({ open, onClose, type }) => {
             paddingBottom: "5px",
           }}
         >
-          EDIT {handletype(type)}
+          {handletype(type)}
         </Typography>
       </DialogTitle>
 
@@ -159,7 +163,7 @@ export const TextBoxSettingField = ({ open, onClose, type }) => {
                 <Tab
                   // icon={<KeyboardIcon fontSize="small" />}
                   iconPosition="start"
-                  label="General"
+                  label={t("0-common.general")}
                   {...a11yProps(0)}
                   sx={{
                     height: "45px",
@@ -170,7 +174,7 @@ export const TextBoxSettingField = ({ open, onClose, type }) => {
                 <Tab
                   // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
-                  label="Details"
+                  label={t("0-common.details")}
                   {...a11yProps(1)}
                   sx={{
                     height: "45px",
@@ -184,7 +188,7 @@ export const TextBoxSettingField = ({ open, onClose, type }) => {
                 {/* text */}
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DetailsTextBoxForm />
+                <DetailsTextBoxForm data={textData} />
               </TabPanel>
             </AppBar>
           </Box>
@@ -211,7 +215,7 @@ export const TextBoxSettingField = ({ open, onClose, type }) => {
           }}
           type="button"
         >
-          Save
+          {t("0-common.save")}
         </Button>
       </DialogActions>
     </Dialog>
@@ -222,6 +226,8 @@ TextBoxSettingField.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   type: PropTypes.string,
+  signer: PropTypes.object,
+  textData: PropTypes.object,
 };
 
 export default TextBoxSettingField;

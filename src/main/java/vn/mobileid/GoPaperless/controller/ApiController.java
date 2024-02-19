@@ -321,8 +321,8 @@ public class ApiController {
         if (lastFile.getLastPplFileName() == null || lastFile.getLastPplFileName().isEmpty()) {
             return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
         }
-        String fileName = lastFile.getLastPplFileName().replace(".pdf", "");
-        System.out.println("fileName: " + fileName);
+//        String fileName = lastFile.getLastPplFileName().replace(".pdf", "");
+//        System.out.println("fileName: " + fileName);
 
         InputStream response = fpsService.getImagePdf(lastFile.getDocumentId());
         if (response != null) {
@@ -330,7 +330,8 @@ public class ApiController {
             // length để browser hiểu
             HttpHeaders headers = new HttpHeaders();
             // headers.add("Content-Disposition", "attachment; filename=" + "file.pdf");
-            String encodedFileName = URLEncoder.encode(fileName + ".pdf", StandardCharsets.UTF_8.toString());
+            String encodedFileName = URLEncoder.encode(lastFile.getLastPplFileName(), StandardCharsets.UTF_8.toString())
+                    .replace("+", "%20");
             headers.add("Content-Disposition", "attachment; filename=" + encodedFileName);
             // headers.add("Content-Disposition", "attachment; filename=" + fileName +
             // ".pdf");
