@@ -87,6 +87,8 @@ export const ModalSigning = ({
   setDragPosition,
   handleDrag,
   newPos,
+  openResize,
+  setOpenResize,
 }) => {
   const { t } = useTranslation();
 
@@ -229,7 +231,7 @@ export const ModalSigning = ({
   // handle resize signature
   const [imgBase64, setImgBase64] = useState(null);
   // console.log("data64: ", imgBase64);
-  const [openResize, setOpenResize] = useState(false);
+
   const handleOpenResize = (status) => {
     setOpenResize(status);
   };

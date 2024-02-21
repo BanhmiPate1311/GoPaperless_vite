@@ -16,6 +16,8 @@ export const Document = ({
   qr,
   textField,
   addText,
+  openResize,
+  setOpenResize,
 }) => {
   // console.log("textField: ", textField);
 
@@ -133,6 +135,8 @@ export const Document = ({
             textbox={textbox}
             initial={initial}
             props={props}
+            openResize={openResize}
+            setOpenResize={setOpenResize}
           />
         );
       })}

@@ -26,6 +26,7 @@ export const PdfViewer = ({ workFlow }) => {
   const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
+  const [openResize, setOpenResize] = useState(false);
 
   const signerId = getSigner(workFlow).signerId;
 
@@ -78,7 +79,8 @@ export const PdfViewer = ({ workFlow }) => {
   // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
-    // console.log("page: ", page);
+    console.log("page: ", event);
+    if (openResize) return;
     if (
       checkSignerStatus(signer, signerToken) === 2 ||
       (event.target.className !== "rpv-core__text-layer" &&
@@ -331,7 +333,6 @@ export const PdfViewer = ({ workFlow }) => {
           handleClose={handleClose}
           handleClickMenu={handleClickMenu}
         />
-
         <Document
           props={props}
           workFlow={workFlow}
@@ -341,6 +342,8 @@ export const PdfViewer = ({ workFlow }) => {
           qr={field?.qr}
           textField={field?.textField}
           addText={field?.textbox?.filter((item) => item.type === "TEXTFIELD")}
+          openResize={openResize}
+          setOpenResize={setOpenResize}
         />
       </div>
     );

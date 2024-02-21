@@ -9,7 +9,15 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 export const PDFViewer = ({ base64, renderPage, pageLayout }) => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   return (
-    <Box height="100%" width="100%">
+    <Box
+      height="100%"
+      width="100%"
+      className="review_pdf"
+      onContextMenu={(event) => {
+        console.log("event: ", event);
+        event.preventDefault();
+      }}
+    >
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
         <Viewer
           fileUrl={`data:application/pdf;base64,${base64}`}
