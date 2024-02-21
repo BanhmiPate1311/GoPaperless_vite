@@ -96,7 +96,7 @@ export const PdfViewer = ({ workFlow }) => {
       width: 22,
       height: 5,
       page: page.pageIndex + 1,
-      totalPage: page.doc._pdfInfo.numPages,
+      // totalPage: page.doc._pdfInfo.numPages,
     };
 
     event.preventDefault();
@@ -341,7 +341,6 @@ export const PdfViewer = ({ workFlow }) => {
           qr={field?.qr}
           textField={field?.textField}
           addText={field?.textbox?.filter((item) => item.type === "TEXTFIELD")}
-          pdfInfo={signInfo}
         />
       </div>
     );

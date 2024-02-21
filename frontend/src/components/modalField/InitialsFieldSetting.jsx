@@ -61,7 +61,7 @@ export const InitialsFieldSetting = ({
   onClose,
   signer,
   initData,
-  pdfInfo,
+  totalPages,
   initList,
 }) => {
   // console.log("initData: ", initData);
@@ -238,7 +238,7 @@ export const InitialsFieldSetting = ({
                 <ReplicateForm
                   control={control}
                   name="replicate"
-                  pdfInfo={pdfInfo}
+                  totalPages={totalPages}
                   initList={initList}
                 />
               </TabPanel>
@@ -281,7 +281,7 @@ InitialsFieldSetting.propTypes = {
   type: PropTypes.string,
   signer: PropTypes.object,
   initData: PropTypes.object,
-  pdfInfo: PropTypes.object,
+  totalPages: PropTypes.number,
   initList: PropTypes.array,
 };
 
