@@ -78,7 +78,7 @@ export const PdfViewer = ({ workFlow }) => {
   // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
-    console.log("page: ", page);
+    // console.log("page: ", page);
     if (
       checkSignerStatus(signer, signerToken) === 2 ||
       (event.target.className !== "rpv-core__text-layer" &&
@@ -341,6 +341,7 @@ export const PdfViewer = ({ workFlow }) => {
           qr={field?.qr}
           textField={field?.textField}
           addText={field?.textbox?.filter((item) => item.type === "TEXTFIELD")}
+          pdfInfo={signInfo}
         />
       </div>
     );

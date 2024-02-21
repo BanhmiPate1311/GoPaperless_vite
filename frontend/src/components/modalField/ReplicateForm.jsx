@@ -1,10 +1,13 @@
-import { MenuProps, options } from "@/hook/utils";
-import { Checkbox, ListItemIcon, ListItemText } from "@mui/material";
+import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
+import { MenuProps } from "@/hook/utils";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import SvgIcon from "@mui/material/SvgIcon";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,16 +16,28 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-export const ReplicateForm = ({ control, name }) => {
+export const ReplicateForm = ({ control, name, pdfInfo, initList }) => {
   const { t } = useTranslation();
 
   const {
     field: { onChange, value },
     // fieldState: { error },
   } = useController({ name, control });
+
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    setOptions(Array.from(Array(pdfInfo?.totalPage), (_, index) => index + 1));
+  }, [pdfInfo]);
+
+  // const options = Array.from(
+  //   Array(pdfInfo?.totalPage),
+  //   (_, index) => index + 1
+  // );
 
   // const [selected, setSelected] = useState([]);
   const isAllSelected =
@@ -38,23 +53,25 @@ export const ReplicateForm = ({ control, name }) => {
     onChange(value1);
   };
 
-  const rows = [
-    {
-      initials: "Initials 1",
-      documentName: "File PDF 01",
-      page: 1,
-    },
-    {
-      initials: "Initials 1",
-      documentName: "File PDF 01",
-      page: 1,
-    },
-    {
-      initials: "Initials 1",
-      documentName: "File PDF 01",
-      page: 1,
-    },
-  ];
+  const options2 = initList.map((item) => item?.field_name);
+
+  const [selected2, setSelected2] = useState([]);
+  const isAllSelected2 =
+    options2.length > 0 && selected2.length === options2.length;
+
+  const handleChange2 = (event) => {
+    const value2 = event.target.value;
+    console.log(value);
+    if (value2 === "all") {
+      setSelected2(selected2.length === options2.length ? [] : options2);
+      return;
+    }
+    // added below code to update selected options
+    const list = [...selected2];
+    const index = list.indexOf(value2);
+    index === -1 ? list.push(value2) : list.splice(index, 1);
+    setSelected2(list);
+  };
 
   return (
     <Box>
@@ -112,25 +129,57 @@ export const ReplicateForm = ({ control, name }) => {
         <Table sx={{ tableLayout: "fixed" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>{t("0-common.initials")}</TableCell>
-              <TableCell align="center">{t("modal.document_name")}</TableCell>
-              <TableCell align="center">{t("0-common.page")}</TableCell>
-              <TableCell align="center">{t("0-common.action")}</TableCell>
+              <TableCell sx={{ width: "116px" }}>
+                {t("0-common.initials")} ({initList.length})
+              </TableCell>
+              <TableCell align="center" sx={{ width: "208px" }}>
+                {t("modal.document_name")}
+              </TableCell>
+              <TableCell align="center" sx={{ width: "77px" }}>
+                {t("0-common.page")}
+              </TableCell>
+              <TableCell align="center">
+                <SvgIcon
+                  component={GarbageIcon}
+                  inheritViewBox
+                  sx={{
+                    width: "15px",
+                    height: "15px",
+                    color: "#545454",
+                    cursor: "pointer",
+                  }}
+                  // onClick={() => handleRemoveSignature(index)}
+                />
+                <Checkbox
+                  value="all"
+                  onChange={handleChange2}
+                  checked={isAllSelected2}
+                  indeterminate={
+                    selected2.length > 0 && selected2.length < options2.length
+                  }
+                  // sx={{ "& .MuiSvgIcon-root": { fontSize: 24 } }}
+                  disableRipple
+                />
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {initList.map((row, index) => (
               <TableRow
                 key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.initials}
+                  Initials {index + 1}
                 </TableCell>
                 <TableCell align="center">{row.documentName}</TableCell>
                 <TableCell align="center">{row.page}</TableCell>
                 <TableCell align="center">
-                  <Button>{t("0-common.delete")}</Button>
+                  <Checkbox
+                    value={row.field_name}
+                    onChange={handleChange2}
+                    checked={selected2.includes(row.field_name)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -142,7 +191,7 @@ export const ReplicateForm = ({ control, name }) => {
 };
 ReplicateForm.propTypes = {
   control: PropTypes.object,
-  selected: PropTypes.array,
-  setSelected: PropTypes.func,
   name: PropTypes.string,
+  pdfInfo: PropTypes.object,
+  initList: PropTypes.array,
 };

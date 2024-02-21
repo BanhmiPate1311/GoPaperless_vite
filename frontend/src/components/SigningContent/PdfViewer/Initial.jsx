@@ -15,7 +15,14 @@ import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
-export const Initial = ({ index, pdfPage, initData, workFlow }) => {
+export const Initial = ({
+  index,
+  pdfPage,
+  initData,
+  workFlow,
+  pdfInfo,
+  initList,
+}) => {
   const queryClient = useQueryClient();
 
   const [dragPosition, setDragPosition] = useState(null);
@@ -424,6 +431,8 @@ export const Initial = ({ index, pdfPage, initData, workFlow }) => {
           onClose={() => handleCloseModalSetting(index)}
           signer={signer}
           initData={initData}
+          pdfInfo={pdfInfo}
+          initList={initList}
         />
       )}
     </>
@@ -435,6 +444,8 @@ Initial.propTypes = {
   pdfPage: PropTypes.object,
   initData: PropTypes.object,
   workFlow: PropTypes.object,
+  pdfInfo: PropTypes.object,
+  initList: PropTypes.array,
 };
 
 export default Initial;

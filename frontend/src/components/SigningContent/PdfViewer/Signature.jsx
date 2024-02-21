@@ -586,22 +586,25 @@ export const Signature = ({
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
+            onMouseDown={(e) => {
+              setTimeout(() => {
+                setShowTopbar(false);
+              }, 500);
+            }}
             onClick={(e) => {
               console.log("e: ", e);
               if (signatureData.process_status === "PROCESSED") {
                 console.log("show signature verification");
                 toggleSigDetail(index);
               } else if (
-                !(
-                  signerId +
-                    "_" +
-                    signatureData.type +
-                    "_" +
-                    signatureData.suffix ===
-                    signatureData.field_name ||
-                  (newPos.current.x === dragPosition.x &&
-                    newPos.current.y === dragPosition.y)
-                )
+                signerId +
+                  "_" +
+                  signatureData.type +
+                  "_" +
+                  signatureData.suffix !==
+                  signatureData.field_name ||
+                (newPos.current.x !== dragPosition.x &&
+                  newPos.current.y !== dragPosition.y)
               ) {
                 console.log("true");
                 return;
