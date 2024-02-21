@@ -95,6 +95,8 @@ const UploadSignForm = forwardRef(
             borderRadius: "6px",
             border: !imgBase64 ? "2px solid #357EEB" : "none",
             p: 1,
+            height: "100%",
+            width: "100%",
           }}
         >
           <Stack
