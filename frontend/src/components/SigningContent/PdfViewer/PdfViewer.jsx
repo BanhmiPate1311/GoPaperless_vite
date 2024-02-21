@@ -34,7 +34,7 @@ export const PdfViewer = ({ workFlow }) => {
   const { signingToken, signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
-  console.log("signInfo: ", signInfo);
+  // console.log("signInfo: ", signInfo);
 
   const isSetPosRef = useRef(checkIsPosition(workFlow));
   // const isSetPos = isSetPosRef.current;

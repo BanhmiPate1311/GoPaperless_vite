@@ -21,7 +21,7 @@ import { useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 export const ReplicateForm = ({ control, name, totalPages, initList }) => {
-  console.log("pdfInfo: ", totalPages);
+  // console.log("totalPages: ", totalPages);
   const { t } = useTranslation();
 
   const {
