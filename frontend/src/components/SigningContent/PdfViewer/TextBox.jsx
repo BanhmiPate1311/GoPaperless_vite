@@ -15,9 +15,9 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
 export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
-  console.log("workFlow: ", workFlow);
+  // console.log("workFlow: ", workFlow);
   // console.log("index: ", index);
-  // console.log("textData: ", textData.value);
+  // console.log("textData: ", textData);
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
 
@@ -126,7 +126,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
         return "Name";
       case "EMAIL":
         return "Email";
-      case "JOB_TITLE":
+      case "JOBTITLE":
         return "Job Title";
       case "COMPANY":
         return "Company";
@@ -416,7 +416,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               // value={code}
               value={textValue}
               autoComplete="off"
-              placeholder={handlePlaceHolder(textData.type)}
+              placeholder={textData.place_holder}
               sx={{
                 my: 0,
                 "& .MuiInputBase-root": {
@@ -432,6 +432,18 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
                 sx: { fontWeight: 600, padding: 0 }, // Sử dụng style để đặt fontWeight và padding
               }}
             />
+            {textData.required && (
+              <span
+                style={{
+                  position: "absolute",
+                  right: "2px",
+                  top: "-2px",
+                  color: "#EAB308",
+                }}
+              >
+                *
+              </span>
+            )}
           </Box>
         </ResizableBox>
       </Draggable>
@@ -443,6 +455,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           signer={signer}
           textData={textData}
           participants={workFlow.participants}
+          workFlow={workFlow}
         />
       )}
     </>

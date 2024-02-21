@@ -32,6 +32,7 @@ export const DetailsTextBoxForm = ({ control }) => {
             },
           }}
           inputProps={{
+            readOnly: true,
             sx: {
               py: "10.5px",
               backgroundColor: "signingWFBackground.main",
@@ -145,6 +146,7 @@ export const DetailsTextBoxForm = ({ control }) => {
                 label=""
                 name="left"
                 control={control}
+                disabled
                 InputLabelProps={{
                   sx: {
                     backgroundColor: "signingWFBackground.main",
@@ -226,6 +228,7 @@ export const DetailsTextBoxForm = ({ control }) => {
                 label=""
                 name="top"
                 control={control}
+                disabled
                 InputLabelProps={{
                   sx: {
                     backgroundColor: "signingWFBackground.main",
@@ -291,6 +294,7 @@ export const DetailsTextBoxForm = ({ control }) => {
                 label=""
                 name="width"
                 control={control}
+                disabled
                 InputLabelProps={{
                   sx: {
                     backgroundColor: "signingWFBackground.main",
@@ -340,6 +344,7 @@ export const DetailsTextBoxForm = ({ control }) => {
                 label=""
                 name="height"
                 control={control}
+                disabled
                 InputLabelProps={{
                   sx: {
                     backgroundColor: "signingWFBackground.main",

@@ -239,7 +239,8 @@
     "common_name": "Tên gọi chung",
     "cert_tooltip": "Chi tiết chứng thư số",
     "init_warning": "Bạn phải điền đầy đủ tên viết tắt của mình trước khi ký vào tài liệu",
-    "qr_warning": "Bạn không thể thêm nhiều Mã QR"
+    "qr_warning": "Bạn không thể thêm nhiều Mã QR",
+    "text_warning": "Điền vào các trường biểu mẫu được chỉ định của bạn"
   },
   "signingForm": {
     "step1": "Chọn nhà cung cấp dịch vụ ký từ xa",

@@ -158,6 +158,7 @@ public class FpsService {
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
         requestData.put("visible_enabled", data.getVisibleEnabled());
+
         System.out.println("requestData: " + requestData);
         List<String> list = new ArrayList<>();
         list.add("cades signature");
@@ -205,7 +206,10 @@ public class FpsService {
 
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
-        requestData.put("page", data.getPage());
+        if(data.getPage() != null) {
+            requestData.put("page", data.getPage());
+        }
+//        requestData.put("page", data.getPage());
 
         System.out.println("x: " + data.getDimension().getX());
         System.out.println("y: " + data.getDimension().getY());
@@ -233,6 +237,19 @@ public class FpsService {
         if(data.getFont() != null) {
             requestData.put("font", data.getFont());
         }
+        if(data.getPlaceHolder() != null) {
+            requestData.put("place_holder", data.getPlaceHolder());
+        }
+        if(data.getRequired() != null) {
+            requestData.put("required", data.getRequired());
+        }
+        if(data.getRenamedAs() != null) {
+            requestData.put("renamed_as", data.getRenamedAs());
+        }
+        if(data.getMaxLength() != null) {
+            requestData.put("max_length", data.getMaxLength());
+        }
+//        requestData.put("max_length", data.getMaxLength());
         requestData.put("visible_enabled", data.getVisibleEnabled());
 
 //        System.out.println("x: " + data.getDimension().getX());
@@ -296,7 +313,9 @@ public class FpsService {
         if(data.getFormatType() != null) {
             requestData.put("format_type", data.getFormatType());
         }
-
+        if(data.getPlaceHolder() != null) {
+            requestData.put("place_holder", data.getPlaceHolder());
+        }
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
 //        requestData.put("visible_enabled", data.getVisibleEnabled());

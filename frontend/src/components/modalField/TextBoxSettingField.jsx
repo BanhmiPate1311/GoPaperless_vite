@@ -17,6 +17,7 @@ import { GeneralTextBoxForm } from ".";
 import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
 import { useForm } from "react-hook-form";
 import { UseUpdateSig } from "@/hook/use-fpsService";
+import { useQueryClient } from "@tanstack/react-query";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,27 +65,29 @@ export const TextBoxSettingField = ({
   signer,
   textData,
   participants,
+  workFlow,
 }) => {
   // console.log("initData: ", initData);
-  console.log("signer: ", signer);
+  // console.log("textData: ", textData);
   const { t } = useTranslation();
 
+  const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
 
-  const signerIndex = participants.findIndex(
-    (participant) => participant.signerId === signer.signerId
-  );
+  // const signerIndex = participants.findIndex(
+  //   (participant) => participant.signerId === signer.signerId
+  // );
 
-  console.log("signerIndex: ", signerIndex);
+  // console.log("signerIndex: ", signerIndex);
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
-      assign: signerIndex,
-      valid: false,
-      length: 1000,
-      placeHolder: textData.type,
-      font: "vernada",
-      fontSize: 13,
+      assign: signer.signerId,
+      valid: textData.required,
+      length: textData.max_length || 1000,
+      placeHolder: textData.place_holder,
+      font: textData.font?.name || "vernada",
+      fontSize: textData.font?.size || 13,
       fieldName: textData.field_name,
       left: textData.dimension.x,
       top: textData.dimension.y,
@@ -95,7 +98,6 @@ export const TextBoxSettingField = ({
 
   const formRef = useRef();
 
-  console.log(type);
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -106,7 +108,7 @@ export const TextBoxSettingField = ({
         return t("modal.edit_name");
       case "EMAIL":
         return t("modal.edit_email");
-      case "JOB_TITLE":
+      case "JOBTITLE":
         return t("modal.edit_jobtitle");
       case "COMPANY":
         return t("modal.edit_company");
@@ -120,32 +122,51 @@ export const TextBoxSettingField = ({
 
   const handleFormSubmit = (data) => {
     console.log("data: ", data);
-    // putSignature.mutate(
-    //   {
-    //     body: {
-    //       field_name: textData.field_name,
-    //       dimension: {
-    //         x: -1,
-    //         y: -1,
-    //         width: -1,
-    //         height: -1,
-    //       },
-    //       font: {
-    //         name: font + bold + italic,
-    //         size: size || 13,
-    //       },
-    //       visible_enabled: true,
-    //       value: "",
-    //     },
-    //     field: "text",
-    //     documentId: workFlow.documentId,
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       queryClient.invalidateQueries({ queryKey: ["getField"] });
-    //     },
-    //   }
-    // );
+    const newDimension = {
+      x: data.left !== textData.dimension.x ? parseFloat(data.left) : -1,
+      y: data.top !== textData.dimension.y ? parseFloat(data.top) : -1,
+      width:
+        data.width !== textData.dimension.width ? parseFloat(data.width) : -1,
+      height:
+        data.height !== textData.dimension.height
+          ? parseFloat(data.height)
+          : -1,
+    };
+    const secondLastUnderscoreIndex = textData.field_name.lastIndexOf(
+      "_",
+      textData.field_name.lastIndexOf("_") - 1
+    );
+    const suffixString = textData.field_name.substring(
+      secondLastUnderscoreIndex
+    );
+    const replacedString = data.assign + suffixString;
+
+    putSignature.mutate(
+      {
+        body: {
+          field_name: textData.field_name,
+          dimension: newDimension,
+          font: {
+            name: data.font,
+            size: data.fontSize,
+          },
+          visible_enabled: true,
+          required: data.valid,
+          max_length: data.length,
+          place_holder: data.placeHolder,
+          renamed_as:
+            textData.field_name !== replacedString ? replacedString : null,
+        },
+        field: "text",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+          onClose();
+        },
+      }
+    );
   };
 
   return (
@@ -300,6 +321,7 @@ TextBoxSettingField.propTypes = {
   signer: PropTypes.object,
   textData: PropTypes.object,
   participants: PropTypes.array,
+  workFlow: PropTypes.object,
 };
 
 export default TextBoxSettingField;

@@ -30,7 +30,7 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
     {
       icon: <JobTitle />,
       label: t("0-common.jobtitle"),
-      value: "JOB_TITLE",
+      value: "JOBTITLE",
     },
     {
       icon: <Company />,

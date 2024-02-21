@@ -27,11 +27,12 @@ export const Signature = ({
   pdfPage,
   signatureData,
   workFlow,
+  textbox,
   textField,
   initial,
   props,
 }) => {
-  // console.log("textField: ", textField);
+  // console.log("textbox: ", textbox);
   // console.log("initial: ", initial);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
@@ -80,6 +81,14 @@ export const Signature = ({
       item.field_name.includes(signerId)
   );
   // console.log("checkInit: ", checkInit);
+
+  const checkTextBox = textbox.findIndex(
+    (item) =>
+      item.field_name.includes(signerId) &&
+      item.value === "" &&
+      item.required === true
+  );
+  // console.log("checkTextBox: ", checkTextBox);
 
   useEffect(() => {
     setDragPosition({
@@ -291,7 +300,17 @@ export const Signature = ({
             color: "#545454",
             cursor: "pointer",
           }}
-          onClick={() => handleOpenSigningForm(index)}
+          onClick={() => {
+            if (checkInit !== -1) {
+              alert(t("signing.init_warning"));
+              return;
+            } else if (checkTextBox !== -1) {
+              alert(t("signing.text_warning"));
+              return;
+            } else {
+              handleOpenSigningForm(index);
+            }
+          }}
         />
         <SvgIcon
           component={SettingIcon}
@@ -568,26 +587,35 @@ export const Signature = ({
               setShowTopbar(false);
             }}
             onClick={(e) => {
+              console.log("e: ", e);
               if (signatureData.process_status === "PROCESSED") {
                 console.log("show signature verification");
                 toggleSigDetail(index);
               } else if (
-                signerId +
-                  "_" +
-                  signatureData.type +
-                  "_" +
-                  signatureData.suffix !==
-                  signatureData.field_name ||
-                (newPos.current.x !== dragPosition.x &&
-                  newPos.current.y !== dragPosition.y)
+                !(
+                  signerId +
+                    "_" +
+                    signatureData.type +
+                    "_" +
+                    signatureData.suffix ===
+                    signatureData.field_name ||
+                  (newPos.current.x === dragPosition.x &&
+                    newPos.current.y === dragPosition.y)
+                )
               ) {
                 console.log("true");
                 return;
-              } else if (checkInit !== -1) {
-                alert(t("signing.init_warning"));
-                return;
+              } else if (e.target.id === `sigDrag-${index}`) {
+                if (checkInit !== -1) {
+                  alert(t("signing.init_warning"));
+                  return;
+                }
+                if (checkTextBox !== -1) {
+                  alert(t("signing.text_warning"));
+                  return;
+                }
+                handleOpenSigningForm(index);
               } else if (
-                e.target.id === `sigDrag-${index}` ||
                 e.target.parentElement?.id === "drag" ||
                 e.target.id === "click-duoc"
               ) {

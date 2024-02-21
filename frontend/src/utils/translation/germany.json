@@ -239,7 +239,8 @@
     "common_name": "Gemeinsamen Namen",
     "cert_tooltip": "Details zum Zertifikat",
     "init_warning": "Sie müssen Ihre Initialen vervollständigen, bevor Sie das Dokument unterschreiben",
-    "qr_warning": "Sie können nicht mehrere QR-Codes hinzufügen"
+    "qr_warning": "Sie können nicht mehrere QR-Codes hinzufügen",
+    "text_warning": "Füllen Sie die Ihnen zugewiesenen Formularfelder aus"
   },
   "signingForm": {
     "step1": "Wählen Sie Remote Signing Service Provider aus",
