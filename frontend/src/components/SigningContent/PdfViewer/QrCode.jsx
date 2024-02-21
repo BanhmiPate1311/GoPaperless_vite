@@ -317,6 +317,11 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
+            onMouseDown={(e) => {
+              setTimeout(() => {
+                setShowTopbar(false);
+              }, 500);
+            }}
           >
             {showTopbar && <TopBar qrData={qrData} />}
             <span
