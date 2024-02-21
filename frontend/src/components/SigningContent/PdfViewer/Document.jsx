@@ -171,6 +171,9 @@ export const Document = ({
             initData={initData}
             workFlow={workFlow}
             pdfInfo={pdfInfo}
+            initList={initial.map((item) => {
+              return { ...item, documentName: workFlow.documentName };
+            })}
           />
         );
       })}

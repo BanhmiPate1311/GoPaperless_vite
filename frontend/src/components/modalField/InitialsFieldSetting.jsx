@@ -62,6 +62,7 @@ export const InitialsFieldSetting = ({
   signer,
   initData,
   pdfInfo,
+  initList,
 }) => {
   // console.log("initData: ", initData);
   // console.log("signer: ", signer);
@@ -238,6 +239,7 @@ export const InitialsFieldSetting = ({
                   control={control}
                   name="replicate"
                   pdfInfo={pdfInfo}
+                  initList={initList}
                 />
               </TabPanel>
             </AppBar>
@@ -280,6 +282,7 @@ InitialsFieldSetting.propTypes = {
   signer: PropTypes.object,
   initData: PropTypes.object,
   pdfInfo: PropTypes.object,
+  initList: PropTypes.array,
 };
 
 export default InitialsFieldSetting;

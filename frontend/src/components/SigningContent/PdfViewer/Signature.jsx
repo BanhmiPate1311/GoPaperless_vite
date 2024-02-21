@@ -586,6 +586,11 @@ export const Signature = ({
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
+            onMouseDown={(e) => {
+              setTimeout(() => {
+                setShowTopbar(false);
+              }, 500);
+            }}
             onClick={(e) => {
               console.log("e: ", e);
               if (signatureData.process_status === "PROCESSED") {
