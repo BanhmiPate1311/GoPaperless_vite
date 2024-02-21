@@ -1,5 +1,6 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { MenuProps } from "@/hook/utils";
+import { Margin } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
@@ -143,28 +144,37 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
               <TableCell align="center" sx={{ width: "77px" }}>
                 {t("0-common.page")}
               </TableCell>
-              <TableCell align="center">
-                <SvgIcon
-                  component={GarbageIcon}
-                  inheritViewBox
-                  sx={{
-                    width: "15px",
-                    height: "15px",
-                    color: "#545454",
-                    cursor: "pointer",
-                  }}
-                  onClick={handleRemoveInit}
-                />
-                <Checkbox
-                  value="all"
-                  onChange={handleChange2}
-                  checked={isAllSelected2}
-                  indeterminate={
-                    selected2.length > 0 && selected2.length < options2.length
-                  }
-                  // sx={{ "& .MuiSvgIcon-root": { fontSize: 24 } }}
-                  disableRipple
-                />
+              <TableCell
+                align="center"
+                sx={{
+                  padding: "16px 14px 16px 2px",
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <SvgIcon
+                    component={GarbageIcon}
+                    inheritViewBox
+                    sx={{
+                      width: "15px",
+                      height: "15px",
+                      color: "#545454",
+                      cursor: "pointer",
+                      margin: "0 4px 2px",
+                    }}
+                    // onClick={() => handleRemoveSignature(index)}
+                  />
+                  <Checkbox
+                    value="all"
+                    onChange={handleChange2}
+                    checked={isAllSelected2}
+                    indeterminate={
+                      selected2.length > 0 && selected2.length < options2.length
+                    }
+                    size="small"
+                    sx={{ padding: "0" }}
+                    disableRipple
+                  />{" "}
+                </Box>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -184,6 +194,8 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
                     value={row.field_name}
                     onChange={handleChange2}
                     checked={selected2.includes(row.field_name)}
+                    size="small"
+                    disableRipple
                   />
                 </TableCell>
               </TableRow>
