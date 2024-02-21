@@ -159,7 +159,7 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
                       height: "15px",
                       color: "#545454",
                       cursor: "pointer",
-                      margin: "0 4px 0px",
+                      margin: "0 4px 2px",
                     }}
                     // onClick={() => handleRemoveSignature(index)}
                   />
