@@ -239,7 +239,8 @@
     "common_name": "Üldnimetus",
     "cert_tooltip": "Sertifikaadi üksikasjad",
     "init_warning": "Enne dokumendi allkirjastamist peate täitma oma initsiaalid",
-    "qr_warning": "Te ei saa lisada mitut QR-koodi"
+    "qr_warning": "Te ei saa lisada mitut QR-koodi",
+    "text_warning": "Täitke määratud vormiväljad"
   },
   "signingForm": {
     "step1": "Valige Remote Signing Service Provider",

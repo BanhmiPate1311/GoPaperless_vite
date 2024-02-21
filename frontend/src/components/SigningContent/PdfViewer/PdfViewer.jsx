@@ -34,6 +34,7 @@ export const PdfViewer = ({ workFlow }) => {
   const { signingToken, signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
+  console.log("signInfo: ", signInfo);
 
   const isSetPosRef = useRef(checkIsPosition(workFlow));
   // const isSetPos = isSetPosRef.current;
@@ -52,7 +53,7 @@ export const PdfViewer = ({ workFlow }) => {
       const textField = data.textbox
         .filter(
           (item) =>
-            item.type !== "TEXT_FIELD" &&
+            item.type !== "TEXTFIELD" &&
             item.process_status !== "PROCESSED" &&
             item.value !== ""
         )
@@ -77,6 +78,7 @@ export const PdfViewer = ({ workFlow }) => {
   // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
+    console.log("page: ", page);
     if (
       checkSignerStatus(signer, signerToken) === 2 ||
       (event.target.className !== "rpv-core__text-layer" &&
@@ -94,6 +96,7 @@ export const PdfViewer = ({ workFlow }) => {
       width: 22,
       height: 5,
       page: page.pageIndex + 1,
+      totalPage: page.doc._pdfInfo.numPages,
     };
 
     event.preventDefault();
@@ -151,7 +154,7 @@ export const PdfViewer = ({ workFlow }) => {
         return signer.lastName + " " + signer.firstName;
       case "EMAIL":
         return signer.email;
-      case "JOB_TITLE":
+      case "JOBTITLE":
         return signer.metaInformation?.position || "";
       case "COMPANY":
         return signer.metaInformation?.company || "";
@@ -176,6 +179,7 @@ export const PdfViewer = ({ workFlow }) => {
         width: 15,
         height: 2,
       },
+      place_holder: value,
       suffix: Number(field.textbox.length + 1),
     };
     addTextBox.mutate(
@@ -195,9 +199,9 @@ export const PdfViewer = ({ workFlow }) => {
   const addTextField = (value) => {
     console.log("value: ", value);
     const newTextField = {
-      type: "TEXT_FIELD",
+      type: "TEXTFIELD",
       field_name:
-        signerId + "_" + "TEXT_FIELD" + "_" + Number(field.textbox.length + 1),
+        signerId + "_" + "TEXTFIELD" + "_" + Number(field.textbox.length + 1),
       page: signInfo.page,
       value: handleValue(value),
       read_only: false,
@@ -296,7 +300,7 @@ export const PdfViewer = ({ workFlow }) => {
         break;
       case "NAME":
       case "EMAIL":
-      case "JOB_TITLE":
+      case "JOBTITLE":
       case "COMPANY":
         textField(value);
         break;
@@ -332,11 +336,11 @@ export const PdfViewer = ({ workFlow }) => {
           props={props}
           workFlow={workFlow}
           signatures={field?.signature}
-          textbox={field?.textbox?.filter((item) => item.type !== "TEXT_FIELD")}
+          textbox={field?.textbox?.filter((item) => item.type !== "TEXTFIELD")}
           initial={field?.initial}
           qr={field?.qr}
           textField={field?.textField}
-          addText={field?.textbox?.filter((item) => item.type === "TEXT_FIELD")}
+          addText={field?.textbox?.filter((item) => item.type === "TEXTFIELD")}
         />
       </div>
     );

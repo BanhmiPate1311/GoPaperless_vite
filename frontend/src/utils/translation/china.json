@@ -239,7 +239,8 @@
     "common_name": "通用名",
     "cert_tooltip": "证书详情",
     "init_warning": "在签署文件之前，您必须填写姓名首字母缩写",
-    "qr_warning": "您无法添加多个二维码"
+    "qr_warning": "您无法添加多个二维码",
+    "text_warning": "填写指定的表单字段"
   },
   "signingForm": {
     "step1": "选择远程签名服务提供商",

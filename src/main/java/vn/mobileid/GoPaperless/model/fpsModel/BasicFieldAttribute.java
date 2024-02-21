@@ -14,13 +14,15 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class BasicFieldAttribute {
     private String fieldName;
-    private int page;
+    private Integer page;
     private int suffix;
+    private Integer maxLength;
     private String type;
     private String embedded;
     private String processStatus;
     private String processOn;
     private String processBy;
+    private String placeHolder;
     private Dimension dimension;
     private Boolean visibleEnabled;
     private Boolean required;

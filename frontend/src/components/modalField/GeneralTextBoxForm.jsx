@@ -60,8 +60,8 @@ export const GeneralTextBoxForm = ({ participants, control }) => {
     },
   ];
 
-  const data1 = participants?.map((item, index) => (
-    <MenuItem key={item.id} value={index}>
+  const data1 = participants?.map((item) => (
+    <MenuItem key={item.id} value={item.signerId}>
       {item.lastName + " " + item.firstName}
     </MenuItem>
   ));

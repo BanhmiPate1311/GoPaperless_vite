@@ -1,4 +1,5 @@
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { MenuProps, options } from "@/hook/utils";
+import { Checkbox, ListItemIcon, ListItemText } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
@@ -11,17 +12,32 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import PropTypes from "prop-types";
+import { useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-export const ReplicateForm = () => {
+export const ReplicateForm = ({ control, name }) => {
   const { t } = useTranslation();
 
-  //   Begin: Select
-  const [assign, setAssign] = useState("Select Pages");
-  const handleChangeSelect = (event, setSelect) => {
-    setSelect(event.target.value);
+  const {
+    field: { onChange, value },
+    // fieldState: { error },
+  } = useController({ name, control });
+
+  // const [selected, setSelected] = useState([]);
+  const isAllSelected =
+    options?.length > 0 && value?.length === options?.length;
+
+  const handleChange = (event) => {
+    // console.log("event: ", event);
+    const value1 = event.target.value;
+    if (value1[value1?.length - 1] === "all") {
+      onChange(value?.length === options?.length ? [] : options);
+      return;
+    }
+    onChange(value1);
   };
+
   const rows = [
     {
       initials: "Initials 1",
@@ -39,6 +55,7 @@ export const ReplicateForm = () => {
       page: 1,
     },
   ];
+
   return (
     <Box>
       <Box mb="10px">
@@ -46,28 +63,48 @@ export const ReplicateForm = () => {
           {t("modal.replicate_to_pages")}
         </Typography>
         <FormControl fullWidth>
+          {/* <InputLabel id="mutiple-select-label">Multiple Select</InputLabel> */}
           <Select
-            fullWidth
-            size="small"
-            margin="normal"
-            renderValue={(value) => `${value}`}
-            displayEmpty
-            value={assign}
-            sx={{
-              my: 0,
-              height: "44px",
-              backgroundColor: "signingWFBackground.main",
-              fontSize: "14px",
-              "& .MuiMenuItem-root": {
-                height: "36px",
-              },
+            labelId="mutiple-select-label"
+            multiple
+            // name="replicate"
+            control={control}
+            value={value}
+            onChange={handleChange}
+            renderValue={(value) => {
+              return value.length === options.length
+                ? "Select All"
+                : value.join(", ");
             }}
-            IconComponent={ExpandMoreIcon}
-            onChange={(e) => handleChangeSelect(e, setAssign)}
+            MenuProps={MenuProps}
+            sx={{
+              backgroundColor: "signingWFBackground.main",
+              height: "45px",
+            }}
           >
-            <MenuItem value={"Select Pages"}></MenuItem>
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
+            <MenuItem value="all">
+              <ListItemIcon>
+                <Checkbox
+                  // classes={{ indeterminate: classes.indeterminateColor }}
+                  checked={isAllSelected}
+                  indeterminate={
+                    value.length > 0 && value.length < options.length
+                  }
+                />
+              </ListItemIcon>
+              <ListItemText
+                // classes={{ primary: classes.selectAllText }}
+                primary="Select All"
+              />
+            </MenuItem>
+            {options.map((option) => (
+              <MenuItem key={option} value={option}>
+                <ListItemIcon>
+                  <Checkbox checked={value.indexOf(option) > -1} />
+                </ListItemIcon>
+                <ListItemText primary={option} />
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
@@ -82,9 +119,9 @@ export const ReplicateForm = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows.map((row, index) => (
               <TableRow
-                key={row.name}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
@@ -102,4 +139,10 @@ export const ReplicateForm = () => {
       </TableContainer>
     </Box>
   );
+};
+ReplicateForm.propTypes = {
+  control: PropTypes.object,
+  selected: PropTypes.array,
+  setSelected: PropTypes.func,
+  name: PropTypes.string,
 };

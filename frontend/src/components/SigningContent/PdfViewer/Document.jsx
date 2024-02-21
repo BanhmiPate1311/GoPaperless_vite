@@ -130,6 +130,7 @@ export const Document = ({
             signatureData={signatureData}
             workFlow={workFlow}
             textField={textField}
+            textbox={textbox}
             initial={initial}
           />
         );

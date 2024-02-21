@@ -8,13 +8,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
-import TextField from "@mui/material/TextField";
 import { ReplicateForm } from ".";
+import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,8 +58,30 @@ function a11yProps(index) {
 
 export const InitialsFieldSetting = ({ open, onClose, signer, initData }) => {
   // console.log("initData: ", initData);
-  console.log("signer: ", signer);
+  // console.log("signer: ", signer);
   const { t } = useTranslation();
+
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      fieldName: initData.field_name,
+      left: initData.dimension.x,
+      top: initData.dimension.y,
+      width: initData.dimension.width,
+      height: initData.dimension.height,
+      replicate: [],
+    },
+  });
+
+  const formRef = useRef();
+
+  const handleSubmitClick = () => {
+    formRef.current.requestSubmit();
+  };
+
+  const handleFormSubmit = (data) => {
+    console.log("data: ", data);
+  };
+
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -118,12 +141,14 @@ export const InitialsFieldSetting = ({ open, onClose, signer, initData }) => {
         }}
       >
         <DialogContentText
+          ref={formRef}
           component="form"
           id="scroll-dialog-description"
           tabIndex={-1}
           sx={{
             height: "100%",
           }}
+          onSubmit={handleSubmit(handleFormSubmit)}
         >
           <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
             <AppBar position="static" elevation={0}>
@@ -200,10 +225,10 @@ export const InitialsFieldSetting = ({ open, onClose, signer, initData }) => {
                 </Box>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DetailsTextBoxForm initData={initData} />
+                <DetailsTextBoxForm initData={initData} control={control} />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <ReplicateForm />
+                <ReplicateForm control={control} name="replicate" />
               </TabPanel>
             </AppBar>
           </Box>
@@ -228,6 +253,7 @@ export const InitialsFieldSetting = ({ open, onClose, signer, initData }) => {
             borderColor: "borderColor.main",
             marginLeft: "20px !important",
           }}
+          onClick={handleSubmitClick}
           type="button"
         >
           {t("0-common.save")}
