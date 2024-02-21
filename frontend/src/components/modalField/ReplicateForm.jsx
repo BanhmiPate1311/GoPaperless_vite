@@ -1,4 +1,4 @@
-import { MenuProps, options } from "@/hook/utils";
+import { MenuProps } from "@/hook/utils";
 import { Checkbox, ListItemIcon, ListItemText } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -16,13 +16,15 @@ import PropTypes from "prop-types";
 import { useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-export const ReplicateForm = ({ control, name }) => {
+export const ReplicateForm = ({ control, name, pdfInfo }) => {
   const { t } = useTranslation();
 
   const {
     field: { onChange, value },
     // fieldState: { error },
   } = useController({ name, control });
+
+  const options = Array.from(Array(pdfInfo.totalPage), (_, index) => index + 1);
 
   // const [selected, setSelected] = useState([]);
   const isAllSelected =
@@ -142,7 +144,6 @@ export const ReplicateForm = ({ control, name }) => {
 };
 ReplicateForm.propTypes = {
   control: PropTypes.object,
-  selected: PropTypes.array,
-  setSelected: PropTypes.func,
   name: PropTypes.string,
+  pdfInfo: PropTypes.object,
 };

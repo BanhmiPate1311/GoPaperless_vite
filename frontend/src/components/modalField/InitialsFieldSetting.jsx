@@ -56,7 +56,13 @@ function a11yProps(index) {
   };
 }
 
-export const InitialsFieldSetting = ({ open, onClose, signer, initData }) => {
+export const InitialsFieldSetting = ({
+  open,
+  onClose,
+  signer,
+  initData,
+  pdfInfo,
+}) => {
   // console.log("initData: ", initData);
   // console.log("signer: ", signer);
   const { t } = useTranslation();
@@ -228,7 +234,11 @@ export const InitialsFieldSetting = ({ open, onClose, signer, initData }) => {
                 <DetailsTextBoxForm initData={initData} control={control} />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <ReplicateForm control={control} name="replicate" />
+                <ReplicateForm
+                  control={control}
+                  name="replicate"
+                  pdfInfo={pdfInfo}
+                />
               </TabPanel>
             </AppBar>
           </Box>
@@ -269,6 +279,7 @@ InitialsFieldSetting.propTypes = {
   type: PropTypes.string,
   signer: PropTypes.object,
   initData: PropTypes.object,
+  pdfInfo: PropTypes.object,
 };
 
 export default InitialsFieldSetting;

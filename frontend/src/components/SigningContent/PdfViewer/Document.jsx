@@ -16,6 +16,7 @@ export const Document = ({
   qr,
   textField,
   addText,
+  pdfInfo,
 }) => {
   // console.log("textField: ", textField);
 
@@ -169,6 +170,7 @@ export const Document = ({
             pdfPage={pdfPage}
             initData={initData}
             workFlow={workFlow}
+            pdfInfo={pdfInfo}
           />
         );
       })}
