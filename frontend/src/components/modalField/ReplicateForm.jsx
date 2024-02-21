@@ -20,7 +20,8 @@ import { useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-export const ReplicateForm = ({ control, name, pdfInfo, initList }) => {
+export const ReplicateForm = ({ control, name, totalPages, initList }) => {
+  console.log("pdfInfo: ", totalPages);
   const { t } = useTranslation();
 
   const {
@@ -31,8 +32,8 @@ export const ReplicateForm = ({ control, name, pdfInfo, initList }) => {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    setOptions(Array.from(Array(pdfInfo?.totalPage), (_, index) => index + 1));
-  }, [pdfInfo]);
+    setOptions(Array.from(Array(totalPages), (_, index) => index + 1));
+  }, [totalPages]);
 
   // const options = Array.from(
   //   Array(pdfInfo?.totalPage),
@@ -71,6 +72,10 @@ export const ReplicateForm = ({ control, name, pdfInfo, initList }) => {
     const index = list.indexOf(value2);
     index === -1 ? list.push(value2) : list.splice(index, 1);
     setSelected2(list);
+  };
+
+  const handleRemoveInit = () => {
+    console.log("selected2: ", selected2);
   };
 
   return (
@@ -148,7 +153,7 @@ export const ReplicateForm = ({ control, name, pdfInfo, initList }) => {
                     color: "#545454",
                     cursor: "pointer",
                   }}
-                  // onClick={() => handleRemoveSignature(index)}
+                  onClick={handleRemoveInit}
                 />
                 <Checkbox
                   value="all"
@@ -192,6 +197,6 @@ export const ReplicateForm = ({ control, name, pdfInfo, initList }) => {
 ReplicateForm.propTypes = {
   control: PropTypes.object,
   name: PropTypes.string,
-  pdfInfo: PropTypes.object,
+  totalPages: PropTypes.number,
   initList: PropTypes.array,
 };

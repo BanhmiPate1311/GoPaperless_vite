@@ -20,7 +20,7 @@ export const Initial = ({
   pdfPage,
   initData,
   workFlow,
-  pdfInfo,
+  totalPages,
   initList,
 }) => {
   const queryClient = useQueryClient();
@@ -364,6 +364,11 @@ export const Initial = ({
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
+            onMouseDown={(e) => {
+              setTimeout(() => {
+                setShowTopbar(false);
+              }, 500);
+            }}
             onClick={(e) => {
               if (
                 signerId + "_" + initData.type + "_" + initData.suffix !==
@@ -431,7 +436,7 @@ export const Initial = ({
           onClose={() => handleCloseModalSetting(index)}
           signer={signer}
           initData={initData}
-          pdfInfo={pdfInfo}
+          totalPages={totalPages}
           initList={initList}
         />
       )}
@@ -444,7 +449,7 @@ Initial.propTypes = {
   pdfPage: PropTypes.object,
   initData: PropTypes.object,
   workFlow: PropTypes.object,
-  pdfInfo: PropTypes.object,
+  totalPages: PropTypes.number,
   initList: PropTypes.array,
 };
 

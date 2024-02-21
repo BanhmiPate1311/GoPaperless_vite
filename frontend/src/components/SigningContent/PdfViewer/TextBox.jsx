@@ -389,6 +389,11 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
             onMouseLeave={(e) => {
               setShowTopbar(false);
             }}
+            onMouseDown={(e) => {
+              setTimeout(() => {
+                setShowTopbar(false);
+              }, 500);
+            }}
           >
             {showTopbar && <TopBar textData={textData} />}
             <span
