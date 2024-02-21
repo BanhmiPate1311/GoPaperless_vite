@@ -55,7 +55,7 @@ export const ReviewSign = forwardRef(
     const putSignature = UseUpdateSig();
     const queryClient = useQueryClient();
     const textElement = useRef(null);
-
+    console.log("signatureData: ", signatureData);
     const renderPage = (props) => {
       return (
         <div
