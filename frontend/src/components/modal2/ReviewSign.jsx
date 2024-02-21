@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,7 +11,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import html2canvas from "html2canvas";
-import { forwardRef, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
+import Draggable from "react-draggable";
 import { useTranslation } from "react-i18next";
 import { ResizableBox } from "react-resizable";
 import { TextSignForm } from "../modal2/TextSignForm";
@@ -40,6 +42,12 @@ export const ReviewSign = forwardRef(
       maxPosibleResizeHeight,
       workFlow,
       setImgBase64,
+      setIsControlled,
+      dragPosition,
+      setDragPosition,
+      handleDrag,
+      newPos,
+      handleSubmitClick,
     },
     ref
   ) => {
@@ -47,85 +55,169 @@ export const ReviewSign = forwardRef(
     const putSignature = UseUpdateSig();
     const queryClient = useQueryClient();
     const textElement = useRef(null);
+
     const renderPage = (props) => {
-      // console.log("props: ", props);
       return (
-        <>
+        <div
+          id={`pdf-view1-${props.pageIndex}`}
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "relative",
+            cursor: `url(${mouse}), auto`,
+            overflow: "hidden",
+          }}
+        >
           {props.canvasLayer.children}
           {signatureData.page !== null &&
             signatureData.page === props.pageIndex + 1 && (
-              <ResizableBox
-                width={
-                  signatureData.dimension?.width
-                    ? signatureData.dimension?.width * (pdfPage.width / 100)
-                    : Infinity
-                }
-                height={
-                  signatureData.dimension?.height
-                    ? signatureData.dimension?.height * (pdfPage.height / 100)
-                    : 150
-                }
-                style={{
-                  position: "absolute",
-                  // borderRadius: "6px",
-                  top: signatureData.dimension?.y + "%",
-                  left: signatureData.dimension?.x + "%",
-                  zIndex: 100,
-                  opacity: signatureData.verification === undefined ? 1 : 0,
-                  transition: isControlled ? `transform 0.3s` : `none`,
+              <Draggable
+                handle={`#sigDrag1-${index}`}
+                // bounds="parent"
+                onDrag={() => handleDrag("block")}
+                position={dragPosition}
+                cancel=".topBar"
+                onStart={(e, data) => {
+                  setDragPosition({ x: data.x, y: data.y });
+                  newPos.current.x = data.x;
+                  newPos.current.y = data.y;
+                  setIsControlled(false);
                 }}
-                minConstraints={[
-                  isSetPos ||
-                  signerId +
-                    "_" +
-                    signatureData.type +
-                    "_" +
-                    signatureData.suffix !==
-                    signatureData.field_name
-                    ? signatureData.dimension?.width * (pdfPage.width / 100)
-                    : pdfPage
-                    ? (pdfPage.width * 20) / 100
-                    : 200,
-                  isSetPos ||
-                  signerId +
-                    "_" +
-                    signatureData.type +
-                    "_" +
-                    signatureData.suffix !==
-                    signatureData.field_name
-                    ? signatureData.dimension?.height * (pdfPage.height / 100)
-                    : pdfPage
-                    ? (pdfPage.height * 5) / 100
-                    : 50,
-                ]}
-                maxConstraints={[
-                  isSetPos ||
-                  signerId +
-                    "_" +
-                    signatureData.type +
-                    "_" +
-                    signatureData.suffix !==
-                    signatureData.field_name
-                    ? signatureData.dimension?.width * (pdfPage.width / 100)
-                    : pdfPage
-                    ? maxPosibleResizeWidth
-                    : 200,
-                  isSetPos ||
-                  signerId +
-                    "_" +
-                    signatureData.type +
-                    "_" +
-                    signatureData.suffix !==
-                    signatureData.field_name
-                    ? signatureData.dimension?.height * (pdfPage.height / 100)
-                    : pdfPage
-                    ? maxPosibleResizeHeight
-                    : 200,
-                ]}
-                onResize={(e, { size }) => {}}
-                onResizeStop={(e, { size }) => {
+                onStop={(e, data) => {
+                  // console.log("data: ", data);
                   // console.log("e: ", e);
+
+                  setIsControlled(true);
+                  handleDrag("none");
+                  const draggableComponent = document.querySelector(
+                    `.choioi-${index}`
+                  );
+                  const targetComponents = document.querySelectorAll(".sig1");
+                  const containerComponent = document.getElementById(
+                    `pdf-view1-${pdfPage.currentPage - 1}`
+                  );
+
+                  const containerRect =
+                    containerComponent.getBoundingClientRect();
+
+                  const draggableRect =
+                    draggableComponent.getBoundingClientRect();
+                  console.log("draggableRect: ", draggableRect);
+                  console.log("containerRect: ", containerRect);
+                  console.log(
+                    draggableRect.right > containerRect.right ||
+                      draggableRect.left < containerRect.left ||
+                      draggableRect.bottom > containerRect.bottom ||
+                      draggableRect.top < containerRect.top
+                  );
                   if (
+                    draggableRect.right > containerRect.right ||
+                    draggableRect.left < containerRect.left ||
+                    draggableRect.bottom > containerRect.bottom ||
+                    draggableRect.top < containerRect.top
+                  ) {
+                    return;
+                  }
+                  let isOverTarget = false;
+
+                  targetComponents.forEach((targetComponent) => {
+                    if (isOverTarget) return;
+
+                    const targetRect = targetComponent.getBoundingClientRect();
+                    if (draggableComponent === targetComponent) return;
+
+                    if (
+                      draggableRect.left < targetRect.right &&
+                      draggableRect.right > targetRect.left &&
+                      draggableRect.top < targetRect.bottom &&
+                      draggableRect.bottom > targetRect.top
+                    ) {
+                      isOverTarget = true;
+                      console.log(
+                        "Draggable component is over the target component"
+                      );
+                    }
+                  });
+
+                  if (isOverTarget) {
+                    return;
+                  } else {
+                    if (
+                      dragPosition?.x === data.x &&
+                      dragPosition?.y === data.y
+                    ) {
+                      return;
+                    }
+                    setDragPosition({ x: data.x, y: data.y });
+                    const rectComp = containerComponent.getBoundingClientRect();
+
+                    const rectItem = draggableComponent.getBoundingClientRect();
+
+                    const x =
+                      (Math.abs(rectItem.left - rectComp.left) * 100) /
+                      rectComp.width;
+
+                    const y =
+                      (Math.abs(rectItem.top - rectComp.top) * 100) /
+                      rectComp.height;
+
+                    putSignature.mutate(
+                      {
+                        body: {
+                          field_name: signatureData.field_name,
+                          page: pdfPage.currentPage,
+                          dimension: {
+                            x: x,
+                            y: y,
+                            width: -1,
+                            height: -1,
+                          },
+                          visible_enabled: true,
+                        },
+                        field: signatureData.type.toLowerCase(),
+                        documentId: workFlow.documentId,
+                      },
+                      {
+                        onSuccess: () => {
+                          queryClient.invalidateQueries({
+                            queryKey: ["getField"],
+                          });
+                        },
+                      }
+                    );
+                  }
+                }}
+                disabled={
+                  isSetPos ||
+                  signerId +
+                    "_" +
+                    signatureData.type +
+                    "_" +
+                    signatureData.suffix !==
+                    signatureData.field_name
+                }
+              >
+                <ResizableBox
+                  width={
+                    signatureData.dimension?.width
+                      ? signatureData.dimension?.width * (pdfPage.width / 100)
+                      : Infinity
+                  }
+                  height={
+                    signatureData.dimension?.height
+                      ? signatureData.dimension?.height * (pdfPage.height / 100)
+                      : 150
+                  }
+                  style={{
+                    position: "absolute",
+                    // borderRadius: "6px",
+                    top: 0,
+                    left: 0,
+                    zIndex: 100,
+                    opacity: signatureData.verification === undefined ? 1 : 0,
+                    transition: isControlled ? `transform 0.3s` : `none`,
+                  }}
+                  minConstraints={[
                     isSetPos ||
                     signerId +
                       "_" +
@@ -133,82 +225,146 @@ export const ReviewSign = forwardRef(
                       "_" +
                       signatureData.suffix !==
                       signatureData.field_name
-                  )
-                    return;
-                  console.log(size, pdfPage, size.width / pdfPage.width);
-                  putSignature.mutate(
-                    {
-                      body: {
-                        field_name: signatureData.field_name,
-                        page: pdfPage.currentPage,
-                        dimension: {
-                          x: signatureData.dimension.x,
-                          y: signatureData.dimension.y,
-                          width: (size.width / pdfPage.width) * 100,
-                          height: (size.height / pdfPage.height) * 100,
+                      ? signatureData.dimension?.width * (pdfPage.width / 100)
+                      : pdfPage
+                      ? (pdfPage.width * 20) / 100
+                      : 200,
+                    isSetPos ||
+                    signerId +
+                      "_" +
+                      signatureData.type +
+                      "_" +
+                      signatureData.suffix !==
+                      signatureData.field_name
+                      ? signatureData.dimension?.height * (pdfPage.height / 100)
+                      : pdfPage
+                      ? (pdfPage.height * 5) / 100
+                      : 50,
+                  ]}
+                  maxConstraints={[
+                    isSetPos ||
+                    signerId +
+                      "_" +
+                      signatureData.type +
+                      "_" +
+                      signatureData.suffix !==
+                      signatureData.field_name
+                      ? signatureData.dimension?.width * (pdfPage.width / 100)
+                      : pdfPage
+                      ? maxPosibleResizeWidth
+                      : 200,
+                    isSetPos ||
+                    signerId +
+                      "_" +
+                      signatureData.type +
+                      "_" +
+                      signatureData.suffix !==
+                      signatureData.field_name
+                      ? signatureData.dimension?.height * (pdfPage.height / 100)
+                      : pdfPage
+                      ? maxPosibleResizeHeight
+                      : 200,
+                  ]}
+                  onResize={(e, { size }) => {}}
+                  onResizeStop={(e, { size }) => {
+                    // console.log("e: ", e);
+                    if (
+                      isSetPos ||
+                      signerId +
+                        "_" +
+                        signatureData.type +
+                        "_" +
+                        signatureData.suffix !==
+                        signatureData.field_name
+                    )
+                      return;
+                    putSignature.mutate(
+                      {
+                        body: {
+                          field_name: signatureData.field_name,
+                          page: pdfPage.currentPage,
+                          dimension: {
+                            x: signatureData.dimension.x,
+                            y: signatureData.dimension.y,
+                            width: (size.width / pdfPage.width) * 100,
+                            height: (size.height / pdfPage.height) * 100,
+                          },
+                          visible_enabled: true,
                         },
-                        visible_enabled: true,
+                        field: signatureData.type.toLowerCase(),
+                        documentId: workFlow.documentId,
                       },
-                      field: signatureData.type.toLowerCase(),
-                      documentId: workFlow.documentId,
-                    },
-                    {
-                      onSuccess: () => {
-                        queryClient.invalidateQueries({
-                          queryKey: ["getField"],
-                        });
-                      },
-                    }
-                  );
-                }}
-                className={`sig choioi-${index}`}
-              >
-                <>
-                  {value == 0 && (
-                    <TextSignForm
-                      ref={textElement}
-                      dataSigning={dataSigning}
-                      headerFooter={headerFooter}
-                      formattedDatetime={formattedDatetime}
-                      onDisableSubmit={onDisableSubmit}
-                      watch={watch}
-                      control={control}
-                      showInput={true}
-                    />
-                  )}
-                  {value == 1 && (
-                    <DrawSignForm
-                      ref={textElement}
-                      dataSigning={dataSigning}
-                      headerFooter={headerFooter}
-                      formattedDatetime={formattedDatetime}
-                      onDisableSubmit={onDisableSubmit}
-                      watch={watch}
-                      control={control}
-                      showInput={true}
-                    />
-                  )}
+                      {
+                        onSuccess: () => {
+                          queryClient.invalidateQueries({
+                            queryKey: ["getField"],
+                          });
+                        },
+                      }
+                    );
+                  }}
+                  className={`sig1 choioi-${index}`}
+                >
+                  <Box
+                    id={`sigDrag1-${index}`}
+                    sx={{ width: "100%", height: "100%" }}
+                  >
+                    {value == 0 && (
+                      <TextSignForm
+                        ref={textElement}
+                        dataSigning={dataSigning}
+                        headerFooter={headerFooter}
+                        formattedDatetime={formattedDatetime}
+                        onDisableSubmit={onDisableSubmit}
+                        watch={watch}
+                        control={control}
+                        showInput={true}
+                      />
+                    )}
+                    {value == 1 && (
+                      <DrawSignForm
+                        ref={textElement}
+                        dataSigning={dataSigning}
+                        headerFooter={headerFooter}
+                        formattedDatetime={formattedDatetime}
+                        onDisableSubmit={onDisableSubmit}
+                        watch={watch}
+                        control={control}
+                        showInput={true}
+                      />
+                    )}
 
-                  {value == 2 && (
-                    <UploadSignForm
-                      ref={textElement}
-                      dataSigning={dataSigning}
-                      headerFooter={headerFooter}
-                      formattedDatetime={formattedDatetime}
-                      onDisableSubmit={onDisableSubmit}
-                      watch={watch}
-                      control={control}
-                      showInput={true}
-                    />
-                  )}
-                </>
-              </ResizableBox>
+                    {value == 2 && (
+                      <UploadSignForm
+                        ref={textElement}
+                        dataSigning={dataSigning}
+                        headerFooter={headerFooter}
+                        formattedDatetime={formattedDatetime}
+                        onDisableSubmit={onDisableSubmit}
+                        watch={watch}
+                        control={control}
+                        showInput={true}
+                      />
+                    )}
+                  </Box>
+                </ResizableBox>
+              </Draggable>
             )}
           {props.annotationLayer.children}
           <div style={{ userSelect: "none" }}>{props.textLayer.children}</div>
-        </>
+        </div>
       );
     };
+    useEffect(() => {
+      console.log(11);
+      html2canvas(textElement?.current, { backgroundColor: null }).then(
+        (canvas) => {
+          const data64 = canvas.toDataURL();
+          setImgBase64(data64);
+          console.log(12);
+        }
+      );
+    }, [signatureData]);
     const pageLayout = {
       transformSize: ({ size }) => ({
         height: size.height + 30,
@@ -222,7 +378,7 @@ export const ReviewSign = forwardRef(
         aria-describedby="alert-dialog-description"
         sx={{
           "& .MuiPaper-root": {
-            maxWidth: "1300px",
+            maxWidth: "70%",
             width: "100%",
           },
         }}
@@ -292,16 +448,11 @@ export const ReviewSign = forwardRef(
             }}
             type="button"
             onClick={() => {
-              html2canvas(textElement.current, { backgroundColor: null }).then(
-                (canvas) => {
-                  const data64 = canvas.toDataURL();
-                  setImgBase64(data64);
-                  handleOpenResize(false);
-                }
-              );
+              handleOpenResize(false);
+              handleSubmitClick();
             }}
           >
-            {t("0-common.save")}
+            {t("0-common.continue")}
           </Button>
         </DialogActions>
       </Dialog>

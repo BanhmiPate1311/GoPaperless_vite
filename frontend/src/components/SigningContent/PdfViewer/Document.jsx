@@ -131,6 +131,7 @@ export const Document = ({
             workFlow={workFlow}
             textField={textField}
             initial={initial}
+            props={props}
           />
         );
       })}

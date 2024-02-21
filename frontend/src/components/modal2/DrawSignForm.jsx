@@ -46,7 +46,6 @@ const DrawSignForm = forwardRef(
     };
 
     useEffect(() => {
-      //   console.log("drawUrl: ", watch("drawUrl"));
       if (watch("drawUrl") === "" || watch("email") === "") {
         onDisableSubmit(true);
       } else {
@@ -89,6 +88,8 @@ const DrawSignForm = forwardRef(
             borderRadius: "6px",
             border: !imgBase64 ? "2px solid #357EEB" : "none",
             p: 1,
+            height: "100%",
+            width: "100%",
           }}
         >
           <Stack

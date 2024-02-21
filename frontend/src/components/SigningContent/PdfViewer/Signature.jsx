@@ -29,6 +29,7 @@ export const Signature = ({
   workFlow,
   textField,
   initial,
+  props,
 }) => {
   // console.log("textField: ", textField);
   // console.log("initial: ", initial);
@@ -362,7 +363,8 @@ export const Signature = ({
           const containerRect = containerComponent.getBoundingClientRect();
 
           const draggableRect = draggableComponent.getBoundingClientRect();
-
+          console.log("draggableRect: ", draggableRect);
+          console.log("containerRect: ", containerRect);
           if (
             draggableRect.right > containerRect.right ||
             draggableRect.left < containerRect.left ||
@@ -697,6 +699,12 @@ export const Signature = ({
           maxPosibleResizeWidth={maxPosibleResizeWidth}
           maxPosibleResizeHeight={maxPosibleResizeHeight}
           workFlow={workFlow}
+          setIsControlled={setIsControlled}
+          dragPosition={dragPosition}
+          setDragPosition={setDragPosition}
+          handleDrag={handleDrag}
+          newPos={newPos}
+          props={props}
         />
       )}
 

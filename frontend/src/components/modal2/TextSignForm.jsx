@@ -31,8 +31,6 @@ export const TextSignForm = forwardRef(
     const logoValue = headerFooter.loGo ? headerFooter.loGo : logo1;
     const location = dataSigning.countryRealtime;
 
-    console.log("dataSigning: ", dataSigning);
-
     const subtitle = {
       labelText: false,
       nameText: nameValue,
@@ -80,6 +78,8 @@ export const TextSignForm = forwardRef(
           sx={{
             borderRadius: "6px",
             border: !imgBase64 ? "2px solid #357EEB" : "none",
+            height: "100%",
+            width: "100%",
             p: 1,
             // maxHeight: "100%",
             overflow: "hidden",

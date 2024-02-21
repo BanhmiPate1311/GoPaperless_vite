@@ -82,6 +82,11 @@ export const ModalSigning = ({
   maxPosibleResizeWidth,
   maxPosibleResizeHeight,
   workFlow,
+  setIsControlled,
+  dragPosition,
+  setDragPosition,
+  handleDrag,
+  newPos,
 }) => {
   const { t } = useTranslation();
 
@@ -166,12 +171,13 @@ export const ModalSigning = ({
         html2canvas(textElement.current, { backgroundColor: null }).then(
           (canvas) => {
             const data64 = canvas.toDataURL();
-            // console.log("data64: ", data64);
 
             setDataSigning({
               ...dataSigning,
               contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(data64),
+              imageBase64: imgBase64
+                ? removeBase64Prefix(imgBase64)
+                : removeBase64Prefix(data64),
             });
             onClose();
             handleShowmodal();
@@ -187,7 +193,9 @@ export const ModalSigning = ({
             setDataSigning({
               ...dataSigning,
               contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(data64),
+              imageBase64: imgBase64
+                ? removeBase64Prefix(imgBase64)
+                : removeBase64Prefix(data64),
             });
             onClose();
             handleShowmodal();
@@ -203,7 +211,9 @@ export const ModalSigning = ({
             setDataSigning({
               ...dataSigning,
               contactInfor: data.contactInfor,
-              imageBase64: removeBase64Prefix(data64),
+              imageBase64: imgBase64
+                ? removeBase64Prefix(imgBase64)
+                : removeBase64Prefix(data64),
             });
             onClose();
             handleShowmodal();
@@ -218,6 +228,7 @@ export const ModalSigning = ({
   };
   // handle resize signature
   const [imgBase64, setImgBase64] = useState(null);
+  // console.log("data64: ", imgBase64);
   const [openResize, setOpenResize] = useState(false);
   const handleOpenResize = (status) => {
     setOpenResize(status);
@@ -465,6 +476,12 @@ export const ModalSigning = ({
         workFlow={workFlow}
         handleFormSubmit={handleFormSubmit}
         setImgBase64={setImgBase64}
+        setIsControlled={setIsControlled}
+        dragPosition={dragPosition}
+        setDragPosition={setDragPosition}
+        handleDrag={handleDrag}
+        newPos={newPos}
+        handleSubmitClick={handleSubmitClick}
       />
     </Dialog>
   );
