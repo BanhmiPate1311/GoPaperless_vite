@@ -64,6 +64,8 @@ export const ModalEid = ({
   const [certificateList, setCertificateList] = useState([]);
   const [newListCert, setNewListCert] = useState([]);
   const [certificate, setCertificate] = useState(null);
+  const [taxInformation, setTaxInformation] = useState(null);
+  console.log("taxInformation: ", taxInformation);
   const [assurance, setAssurance] = useState("");
   const [certSelected, setCertSelected] = useState(null);
 
@@ -449,7 +451,7 @@ export const ModalEid = ({
     try {
       const response = await electronicService.createCertificate(data);
       setIsFetching(false);
-      setCertificate(response.data);
+      // setCertificate(response.data);
       setDataSigning({
         ...workFlow,
         connectorName: "MOBILE_ID_IDENTITY",
@@ -461,6 +463,27 @@ export const ModalEid = ({
 
       onClose();
       handleShowModalSignImage();
+    } catch (error) {
+      setIsFetching(false);
+      console.log("error", error);
+      setErrorPG(error.response.data.message);
+    }
+  };
+
+  const getInformation = async () => {
+    setIsFetching(true);
+
+    const data = {
+      lang: lang,
+      // code: workFlow.code,
+      code: "048080000061",
+    };
+
+    try {
+      const response = await electronicService.getInformation(data);
+      setIsFetching(false);
+      setTaxInformation(response.data);
+      setActiveStep(14);
     } catch (error) {
       setIsFetching(false);
       console.log("error", error);
@@ -531,7 +554,8 @@ export const ModalEid = ({
               );
               setActiveStep(13);
             } else {
-              setActiveStep(14);
+              getInformation();
+              // setActiveStep(14);
             }
             break;
         }
@@ -550,7 +574,8 @@ export const ModalEid = ({
           onClose();
           handleShowModalSignImage();
         } else {
-          createCertificate();
+          getInformation();
+          // setActiveStep(14);
         }
         break;
       case 14:
@@ -645,6 +670,7 @@ export const ModalEid = ({
       onDisableSubmit={handleDisableSubmit}
       handleSubmit={handleSubmitClick}
       isSubmitDisabled={isSubmitDisabled}
+      taxInformation={taxInformation}
     />,
   ];
 

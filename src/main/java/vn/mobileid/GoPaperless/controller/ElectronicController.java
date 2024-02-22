@@ -94,6 +94,13 @@ public class ElectronicController {
         return new ResponseEntity<>(getSubjectDto, HttpStatus.OK);
     }
 
+    @PostMapping("/getInformation")
+    public ResponseEntity<?> getInformation(
+            @RequestBody TaxInformationRequest data) throws Exception {
+        String response = electronicIdService.getInformation(data);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/faceAndCreate")
     public ResponseEntity<?> faceAndCreate(
             @RequestBody FaceAndCreateRequest faceAndCreateRequest) throws Exception {

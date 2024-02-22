@@ -9,8 +9,11 @@ export const Step14 = ({
   onDisableSubmit,
   handleSubmit,
   isSubmitDisabled,
+  taxInformation,
 }) => {
   const { t } = useTranslation();
+
+  console.log("taxInformation: ", taxInformation);
 
   const handleTax = (e) => {
     tax.current = e.target.value;
@@ -73,6 +76,7 @@ Step14.propTypes = {
   onDisableSubmit: PropTypes.func,
   handleSubmit: PropTypes.func,
   isSubmitDisabled: PropTypes.bool,
+  taxInformation: PropTypes.object,
 };
 
 export default Step14;

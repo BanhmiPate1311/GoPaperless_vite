@@ -22,6 +22,9 @@ export const electronicService = {
   createCertificate: (data) => {
     return api.post("/elec/createCertificate", data);
   },
+  getInformation: (data) => {
+    return api.post("/elec/getInformation", data);
+  },
   credentialOTP: (data) => {
     return api.post("/elec/credentialOTP", data);
   },
