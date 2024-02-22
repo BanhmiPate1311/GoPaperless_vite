@@ -16,10 +16,10 @@ import SvgIcon from "@mui/material/SvgIcon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
+import { useTranslation } from "react-i18next";
 import { ResizableBox } from "react-resizable";
 import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
-import { useTranslation } from "react-i18next";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({
@@ -384,8 +384,8 @@ export const Signature = ({
           const containerRect = containerComponent.getBoundingClientRect();
 
           const draggableRect = draggableComponent.getBoundingClientRect();
-          console.log("draggableRect: ", draggableRect);
-          console.log("containerRect: ", containerRect);
+          // console.log("draggableRect: ", draggableRect);
+          // console.log("containerRect: ", containerRect);
           if (
             draggableRect.right > containerRect.right ||
             draggableRect.left < containerRect.left ||

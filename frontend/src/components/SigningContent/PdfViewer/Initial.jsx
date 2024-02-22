@@ -25,7 +25,10 @@ export const Initial = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const [dragPosition, setDragPosition] = useState(null);
+  const [dragPosition, setDragPosition] = useState({
+    x: (initData.dimension?.x * pdfPage.width) / 100,
+    y: (initData.dimension?.y * pdfPage.height) / 100,
+  });
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
   const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
@@ -86,7 +89,7 @@ export const Initial = ({
   };
 
   const handleRemoveSignature = async () => {
-    console.log("remove");
+    // console.log("remove");
     // if (isSetPos || signerId !== signatureData.field_name) return;
     removeSignature.mutate();
   };
@@ -437,6 +440,7 @@ export const Initial = ({
           signer={signer}
           initData={initData}
           totalPages={totalPages}
+          workFlow={workFlow}
           initList={initList}
         />
       )}

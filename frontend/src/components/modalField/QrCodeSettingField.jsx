@@ -10,9 +10,12 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
+import { useForm } from "react-hook-form";
+import { UseUpdateSig } from "@/hook/use-fpsService";
+import { useQueryClient } from "@tanstack/react-query";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,14 +56,67 @@ function a11yProps(index) {
   };
 }
 
-export const QrCodeSettingField = ({ open, onClose, qrData }) => {
+export const QrCodeSettingField = ({ open, onClose, qrData, workFlow }) => {
   // console.log("initData: ", initData);
   // console.log("signer: ", signer);
   const { t } = useTranslation();
+
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      fieldName: qrData.field_name,
+      left: qrData.dimension.x,
+      top: qrData.dimension.y,
+      width: qrData.dimension.width,
+      height: qrData.dimension.height,
+    },
+  });
+
+  const formRef = useRef();
+
+  const queryClient = useQueryClient();
+  const putSignature = UseUpdateSig();
+
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handleSubmitClick = () => {
+    formRef.current.requestSubmit();
+  };
+
+  const handleFormSubmit = (data) => {
+    console.log("data: ", data);
+
+    const newDimension = {
+      x: data.left !== qrData.dimension.x ? parseFloat(data.left) : -1,
+      y: data.top !== qrData.dimension.y ? parseFloat(data.top) : -1,
+      width:
+        data.width !== qrData.dimension.width ? parseFloat(data.width) : -1,
+      height:
+        data.height !== qrData.dimension.height ? parseFloat(data.height) : -1,
+    };
+
+    putSignature.mutate(
+      {
+        body: {
+          field_name: qrData.field_name,
+          dimension: newDimension,
+
+          visible_enabled: true,
+        },
+        field: "text",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+          onClose();
+        },
+      }
+    );
+  };
+
   return (
     <Dialog
       // keepMounted={false}
@@ -116,12 +172,14 @@ export const QrCodeSettingField = ({ open, onClose, qrData }) => {
         }}
       >
         <DialogContentText
+          ref={formRef}
           component="form"
           id="scroll-dialog-description"
           tabIndex={-1}
           sx={{
             height: "100%",
           }}
+          onSubmit={handleSubmit(handleFormSubmit)}
         >
           <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
             <AppBar position="static" elevation={0}>
@@ -138,17 +196,6 @@ export const QrCodeSettingField = ({ open, onClose, qrData }) => {
                   backgroundColor: "dialogBackground.main",
                 }}
               >
-                {/* <Tab
-                  // icon={<KeyboardIcon fontSize="small" />}
-                  iconPosition="start"
-                  label="General"
-                  {...a11yProps(0)}
-                  sx={{
-                    height: "45px",
-                    minHeight: "45px", //set height for tabs and tab
-                    textTransform: "none",
-                  }} //set height for tabs and tab
-                /> */}
                 <Tab
                   // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
@@ -161,11 +208,9 @@ export const QrCodeSettingField = ({ open, onClose, qrData }) => {
                   }} //set height for tabs and tab
                 />
               </Tabs>
-              {/* <TabPanel value={value} index={0}>
-                <GeneralTextBoxForm />
-              </TabPanel> */}
+
               <TabPanel value={value} index={0}>
-                <DetailsTextBoxForm data={qrData} />
+                <DetailsTextBoxForm control={control} />
               </TabPanel>
             </AppBar>
           </Box>
@@ -190,6 +235,7 @@ export const QrCodeSettingField = ({ open, onClose, qrData }) => {
             borderColor: "borderColor.main",
             marginLeft: "20px !important",
           }}
+          onClick={handleSubmitClick}
           type="button"
         >
           {t("0-common.save")}
@@ -204,6 +250,7 @@ QrCodeSettingField.propTypes = {
   onClose: PropTypes.func,
   type: PropTypes.string,
   qrData: PropTypes.object,
+  workFlow: PropTypes.object,
 };
 
 export default QrCodeSettingField;

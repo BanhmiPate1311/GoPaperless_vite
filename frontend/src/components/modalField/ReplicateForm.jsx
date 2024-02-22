@@ -1,6 +1,7 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { MenuProps } from "@/hook/utils";
-import { Margin } from "@mui/icons-material";
+import { fpsService } from "@/services/fps_service";
+import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
@@ -16,19 +17,40 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-export const ReplicateForm = ({ control, name, totalPages, initList }) => {
-  console.log("pdfInfo: ", totalPages);
+export const ReplicateForm = ({
+  control,
+  name,
+  totalPages,
+  initList,
+  workFlow,
+}) => {
+  // console.log("totalPages: ", totalPages);
   const { t } = useTranslation();
 
   const {
     field: { onChange, value },
     // fieldState: { error },
   } = useController({ name, control });
+
+  const queryClient = useQueryClient();
+
+  const removeSignature = useMutation({
+    mutationFn: ({ field_name }) => {
+      return fpsService.removeSignature(
+        { documentId: workFlow.documentId },
+        field_name
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getField"] });
+    },
+  });
 
   const [options, setOptions] = useState([]);
 
@@ -63,7 +85,7 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
 
   const handleChange2 = (event) => {
     const value2 = event.target.value;
-    console.log(value);
+    // console.log(value);
     if (value2 === "all") {
       setSelected2(selected2.length === options2.length ? [] : options2);
       return;
@@ -76,7 +98,13 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
   };
 
   const handleRemoveInit = () => {
-    console.log("selected2: ", selected2);
+    // console.log("selected2: ", selected2);
+    if (selected2.length === 0) {
+      return;
+    }
+    for (const item of selected2) {
+      removeSignature.mutateAsync({ field_name: item });
+    }
   };
 
   return (
@@ -93,6 +121,7 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
             // name="replicate"
             control={control}
             value={value}
+            placeholder="Select pages"
             onChange={handleChange}
             renderValue={(value) => {
               return value.length === options.length
@@ -105,7 +134,7 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
               height: "45px",
             }}
           >
-            <MenuItem value="all">
+            <MenuItem value="all" sx={{ py: 0 }}>
               <ListItemIcon>
                 <Checkbox
                   // classes={{ indeterminate: classes.indeterminateColor }}
@@ -120,8 +149,14 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
                 primary="Select All"
               />
             </MenuItem>
+            <Divider
+              sx={{ mx: "20px" }}
+              // variant="middle"
+              // orientation="horizontal"
+              // flexItem={true}
+            />
             {options.map((option) => (
-              <MenuItem key={option} value={option}>
+              <MenuItem key={option} value={option} sx={{ py: 0 }}>
                 <ListItemIcon>
                   <Checkbox checked={value.indexOf(option) > -1} />
                 </ListItemIcon>
@@ -161,7 +196,7 @@ export const ReplicateForm = ({ control, name, totalPages, initList }) => {
                       cursor: "pointer",
                       margin: "0 4px 2px",
                     }}
-                    // onClick={() => handleRemoveSignature(index)}
+                    onClick={handleRemoveInit}
                   />
                   <Checkbox
                     value="all"
@@ -211,4 +246,5 @@ ReplicateForm.propTypes = {
   name: PropTypes.string,
   totalPages: PropTypes.number,
   initList: PropTypes.array,
+  workFlow: PropTypes.object,
 };
