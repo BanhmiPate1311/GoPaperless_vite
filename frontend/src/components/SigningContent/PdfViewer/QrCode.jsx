@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
@@ -33,6 +33,13 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
     (pdfPage.width * (100 - qrData.dimension?.x)) / 100;
   const maxPosibleResizeHeight =
     (pdfPage.height * (100 - qrData.dimension?.y)) / 100;
+
+  useEffect(() => {
+    setDragPosition({
+      x: (qrData.dimension?.x * pdfPage.width) / 100,
+      y: (qrData.dimension?.y * pdfPage.height) / 100,
+    });
+  }, [qrData]);
 
   const handleOpenModalSetting = (index) => {
     const newValue = [...isOpenModalSetting];
@@ -359,6 +366,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           open={isOpenModalSetting[index]}
           onClose={() => handleCloseModalSetting(index)}
           qrData={qrData}
+          workFlow={workFlow}
         />
       )}
     </>

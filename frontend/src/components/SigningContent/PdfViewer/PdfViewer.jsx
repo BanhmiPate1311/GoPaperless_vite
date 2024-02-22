@@ -15,10 +15,10 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
-import { useTranslation } from "react-i18next";
 
 export const PdfViewer = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);

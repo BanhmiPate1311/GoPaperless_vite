@@ -62,6 +62,7 @@ export const InitialsFieldSetting = ({
   signer,
   initData,
   totalPages,
+  workFlow,
   initList,
 }) => {
   // console.log("initData: ", initData);
@@ -232,13 +233,14 @@ export const InitialsFieldSetting = ({
                 </Box>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <DetailsTextBoxForm initData={initData} control={control} />
+                <DetailsTextBoxForm control={control} />
               </TabPanel>
               <TabPanel value={value} index={2}>
                 <ReplicateForm
                   control={control}
                   name="replicate"
                   totalPages={totalPages}
+                  workFlow={workFlow}
                   initList={initList}
                 />
               </TabPanel>
@@ -282,6 +284,7 @@ InitialsFieldSetting.propTypes = {
   signer: PropTypes.object,
   initData: PropTypes.object,
   totalPages: PropTypes.number,
+  workFlow: PropTypes.object,
   initList: PropTypes.array,
 };
 
