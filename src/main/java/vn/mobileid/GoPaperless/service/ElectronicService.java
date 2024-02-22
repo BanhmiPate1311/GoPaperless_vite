@@ -30,6 +30,7 @@ import vn.mobileid.GoPaperless.utils.LoadParamSystem;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -331,6 +332,51 @@ public class ElectronicService {
         return processId;
     }
 
+    public String getInformation(TaxInformationRequest data) throws Exception {
+        String bearerToken = "Bearer " + accessToken;
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("document_type", "TAX");
+        request.put("owner_id_card_number", data.getCode());
+
+        List<String> tax_states = new ArrayList<>();
+        tax_states.add("OPERATED");
+        tax_states.add("STOPPED_TAX_PAID");
+
+        request.put("tax_states", tax_states);
+        request.put("lang", data.getLang());
+
+        String bodyRequest = gson.toJson(request);
+        System.out.println("getInforRequest: " + bodyRequest);
+
+        String getInforUrl = PadesConstants.BASE_URL + "/v2/e-identity/utility/info/document/get";
+
+        aWSCall = new AWSCall(
+                getInforUrl,
+                "POST",
+                PadesConstants.ACCESSKEY,
+                PadesConstants.SECRETKEY,
+                PadesConstants.REGIONNAME,
+                PadesConstants.SERVICENAME,
+                50000,
+                PadesConstants.XAPIKEY,
+                contentType,
+                null);
+
+        String response = HttpUtilsAWS.invokeHttpRequest(
+                new URL(getInforUrl),
+                "POST",
+                50000,
+                aWSCall.getAWSV4AuthForFormData(bodyRequest, bearerToken, null),
+                bodyRequest);
+        System.out.println("SubjectResponse: " + response);
+        JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
+//        if (jsonObject.get("status").getAsInt() != 0) {
+//            throw new Exception(jsonObject.get("message").getAsString());
+//        }
+        return response;
+    }
+
     public PerformResponse processPerForm(String lang, String code, String type, String otp, String subject_id, String process_id, String imageFace) throws Exception {
         String bearerToken = "Bearer " + accessToken;
 
@@ -601,6 +647,8 @@ public class ElectronicService {
         }
         return null;
     }
+
+
 
     public String credentialOTP(CheckCertificateRequest checkCertificateRequest) throws Throwable {
         return rsspService.sendOTP(checkCertificateRequest.getLang(), checkCertificateRequest.getCredentialID());

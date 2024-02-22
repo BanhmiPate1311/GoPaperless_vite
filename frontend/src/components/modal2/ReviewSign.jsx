@@ -176,14 +176,14 @@ export const ReviewSign = forwardRef(
                         },
                         field: signatureData.type.toLowerCase(),
                         documentId: workFlow.documentId,
-                      },
-                      {
-                        onSuccess: () => {
-                          queryClient.invalidateQueries({
-                            queryKey: ["getField"],
-                          });
-                        },
                       }
+                      // {
+                      //   onSuccess: () => {
+                      //     queryClient.invalidateQueries({
+                      //       queryKey: ["getField"],
+                      //     });
+                      //   },
+                      // }
                     );
                   }
                 }}
@@ -293,14 +293,14 @@ export const ReviewSign = forwardRef(
                         },
                         field: signatureData.type.toLowerCase(),
                         documentId: workFlow.documentId,
-                      },
-                      {
-                        onSuccess: () => {
-                          queryClient.invalidateQueries({
-                            queryKey: ["getField"],
-                          });
-                        },
                       }
+                      // {
+                      //   onSuccess: () => {
+                      //     queryClient.invalidateQueries({
+                      //       queryKey: ["getField"],
+                      //     });
+                      //   },
+                      // }
                     );
                   }}
                   className={`sig1 choioi-${index}`}
