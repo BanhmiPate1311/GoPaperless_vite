@@ -80,7 +80,7 @@ export const TextSignForm = forwardRef(
             border: !imgBase64 ? "2px solid #357EEB" : "none",
             height: "100%",
             width: "100%",
-            p: 1,
+            p: "3px",
             // maxHeight: "100%",
             overflow: "hidden",
           }}
@@ -138,6 +138,7 @@ export const TextSignForm = forwardRef(
                     textAlign: "center",
                     textTransform: "capitalize",
                     fontWeight: "bold",
+                    wordBreak: "break-word",
                   }}
                   className="font-moon-dance"
                 >
