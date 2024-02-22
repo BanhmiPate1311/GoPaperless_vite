@@ -31,6 +31,8 @@ export const Signature = ({
   textField,
   initial,
   props,
+  openResize,
+  setOpenResize,
 }) => {
   // console.log("textbox: ", textbox);
   // console.log("initial: ", initial);
@@ -736,6 +738,8 @@ export const Signature = ({
           handleDrag={handleDrag}
           newPos={newPos}
           props={props}
+          openResize={openResize}
+          setOpenResize={setOpenResize}
         />
       )}
 
