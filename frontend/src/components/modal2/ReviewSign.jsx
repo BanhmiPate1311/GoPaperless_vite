@@ -11,7 +11,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import html2canvas from "html2canvas";
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { useTranslation } from "react-i18next";
 import { ResizableBox } from "react-resizable";
@@ -44,7 +44,6 @@ export const ReviewSign = forwardRef(
       setImgBase64,
       setIsControlled,
       dragPosition,
-      setDragPosition,
       handleDrag,
       newPos,
       handleSubmitClick,
@@ -55,7 +54,34 @@ export const ReviewSign = forwardRef(
     const putSignature = UseUpdateSig();
     const queryClient = useQueryClient();
     const textElement = useRef(null);
-    console.log("signatureData: ", signatureData);
+    const [location, setLocation] = useState(dragPosition);
+    const [dimension, setDimension] = useState({
+      x: signatureData.dimension.x,
+      y: signatureData.dimension.y,
+      width: -1,
+      height: -1,
+    });
+    useEffect(() => {
+      setDimension({
+        x: signatureData.dimension.x,
+        y: signatureData.dimension.y,
+        width: -1,
+        height: -1,
+      });
+    }, [open]);
+    console.log("dimension: ", dimension);
+    function handleSign() {
+      putSignature.mutate({
+        body: {
+          field_name: signatureData.field_name,
+          page: pdfPage.currentPage,
+          dimension: dimension,
+          visible_enabled: true,
+        },
+        field: signatureData.type.toLowerCase(),
+        documentId: workFlow.documentId,
+      });
+    }
     const renderPage = (props) => {
       return (
         <div
@@ -75,10 +101,10 @@ export const ReviewSign = forwardRef(
                 handle={`#sigDrag1-${index}`}
                 // bounds="parent"
                 onDrag={() => handleDrag("block")}
-                position={dragPosition}
+                position={location}
                 cancel=".topBar"
                 onStart={(e, data) => {
-                  setDragPosition({ x: data.x, y: data.y });
+                  setLocation({ x: data.x, y: data.y });
                   newPos.current.x = data.x;
                   newPos.current.y = data.y;
                   setIsControlled(false);
@@ -102,8 +128,6 @@ export const ReviewSign = forwardRef(
 
                   const draggableRect =
                     draggableComponent.getBoundingClientRect();
-                  console.log("draggableRect: ", draggableRect);
-                  console.log("containerRect: ", containerRect);
                   console.log(
                     draggableRect.right > containerRect.right ||
                       draggableRect.left < containerRect.left ||
@@ -148,7 +172,7 @@ export const ReviewSign = forwardRef(
                     ) {
                       return;
                     }
-                    setDragPosition({ x: data.x, y: data.y });
+                    setLocation({ x: data.x, y: data.y });
                     const rectComp = containerComponent.getBoundingClientRect();
 
                     const rectItem = draggableComponent.getBoundingClientRect();
@@ -160,31 +184,31 @@ export const ReviewSign = forwardRef(
                     const y =
                       (Math.abs(rectItem.top - rectComp.top) * 100) /
                       rectComp.height;
-
-                    putSignature.mutate(
-                      {
-                        body: {
-                          field_name: signatureData.field_name,
-                          page: pdfPage.currentPage,
-                          dimension: {
-                            x: x,
-                            y: y,
-                            width: -1,
-                            height: -1,
-                          },
-                          visible_enabled: true,
-                        },
-                        field: signatureData.type.toLowerCase(),
-                        documentId: workFlow.documentId,
-                      }
-                      // {
-                      //   onSuccess: () => {
-                      //     queryClient.invalidateQueries({
-                      //       queryKey: ["getField"],
-                      //     });
-                      //   },
-                      // }
-                    );
+                    setDimension({ ...dimension, x: x, y: y });
+                    // putSignature.mutate(
+                    //   {
+                    //     body: {
+                    //       field_name: signatureData.field_name,
+                    //       page: pdfPage.currentPage,
+                    //       dimension: {
+                    //         x: x,
+                    //         y: y,
+                    //         width: -1,
+                    //         height: -1,
+                    //       },
+                    //       visible_enabled: true,
+                    //     },
+                    //     field: signatureData.type.toLowerCase(),
+                    //     documentId: workFlow.documentId,
+                    //   }
+                    // {
+                    //   onSuccess: () => {
+                    //     queryClient.invalidateQueries({
+                    //       queryKey: ["getField"],
+                    //     });
+                    //   },
+                    // }
+                    // );
                   }
                 }}
                 disabled={
@@ -278,30 +302,36 @@ export const ReviewSign = forwardRef(
                         signatureData.field_name
                     )
                       return;
-                    putSignature.mutate(
-                      {
-                        body: {
-                          field_name: signatureData.field_name,
-                          page: pdfPage.currentPage,
-                          dimension: {
-                            x: signatureData.dimension.x,
-                            y: signatureData.dimension.y,
-                            width: (size.width / pdfPage.width) * 100,
-                            height: (size.height / pdfPage.height) * 100,
-                          },
-                          visible_enabled: true,
-                        },
-                        field: signatureData.type.toLowerCase(),
-                        documentId: workFlow.documentId,
-                      }
-                      // {
-                      //   onSuccess: () => {
-                      //     queryClient.invalidateQueries({
-                      //       queryKey: ["getField"],
-                      //     });
-                      //   },
-                      // }
-                    );
+                    setDimension({
+                      ...dimension,
+                      width: (size.width / pdfPage.width) * 100,
+                      height: (size.height / pdfPage.height) * 100,
+                    });
+
+                    // putSignature.mutate(
+                    //   {
+                    //     body: {
+                    //       field_name: signatureData.field_name,
+                    //       page: pdfPage.currentPage,
+                    //       dimension: {
+                    //         x: signatureData.dimension.x,
+                    //         y: signatureData.dimension.y,
+                    //         width: (size.width / pdfPage.width) * 100,
+                    //         height: (size.height / pdfPage.height) * 100,
+                    //       },
+                    //       visible_enabled: true,
+                    //     },
+                    //     field: signatureData.type.toLowerCase(),
+                    //     documentId: workFlow.documentId,
+                    //   }
+                    //   // {
+                    //   //   onSuccess: () => {
+                    //   //     queryClient.invalidateQueries({
+                    //   //       queryKey: ["getField"],
+                    //   //     });
+                    //   //   },
+                    //   // }
+                    // );
                   }}
                   className={`sig1 choioi-${index}`}
                 >
@@ -355,6 +385,7 @@ export const ReviewSign = forwardRef(
         </div>
       );
     };
+
     useEffect(() => {
       console.log(11);
       html2canvas(textElement?.current, { backgroundColor: null }).then(
@@ -433,6 +464,8 @@ export const ReviewSign = forwardRef(
             variant="outlined"
             sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
             onClick={() => {
+              setLocation(dragPosition);
+
               handleOpenResize(false);
               setImgBase64(null);
             }}
@@ -448,8 +481,11 @@ export const ReviewSign = forwardRef(
             }}
             type="button"
             onClick={() => {
+              handleSign();
               handleOpenResize(false);
-              handleSubmitClick();
+              setTimeout(() => {
+                handleSubmitClick();
+              }, 1000);
             }}
           >
             {t("0-common.continue")}
