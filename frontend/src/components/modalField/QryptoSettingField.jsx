@@ -8,16 +8,15 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ReplicateForm } from ".";
-import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
-import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { UseUpdateSig } from "@/hook/use-fpsService";
+import { useQueryClient } from "@tanstack/react-query";
+import { DetailsTextBoxForm } from ".";
+import QryptoField from "./QryptoField";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,34 +57,33 @@ function a11yProps(index) {
   };
 }
 
-export const InitialsFieldSetting = ({
-  open,
-  onClose,
-  signer,
-  initData,
-  totalPages,
-  workFlow,
-  initList,
-}) => {
-  // console.log("initData: ", initData);
-  // console.log("signer: ", signer);
+export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
+  console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      fieldName: initData.field_name,
-      left: initData.dimension.x,
-      top: initData.dimension.y,
-      width: initData.dimension.width,
-      height: initData.dimension.height,
-      replicate: [],
+      workFlowName: workFlow.documentName,
+      fileName:
+        workFlow.fileName.substring(0, workFlow.fileName.lastIndexOf(".")) ||
+        workFlow.fileName,
+      fieldName: qryptoData.field_name,
+      left: qryptoData.dimension.x,
+      top: qryptoData.dimension.y,
+      width: qryptoData.dimension.width,
+      height: qryptoData.dimension.height,
     },
   });
 
   const formRef = useRef();
 
-  const queryClient = useQueryClient();
-  const putSignature = UseUpdateSig();
+  // const queryClient = useQueryClient();
+  // const putSignature = UseUpdateSig();
+
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const handleSubmitClick = () => {
     formRef.current.requestSubmit();
@@ -93,50 +91,8 @@ export const InitialsFieldSetting = ({
 
   const handleFormSubmit = (data) => {
     console.log("data: ", data);
-    const newDimension = {
-      x: data.left !== initData.dimension.x ? parseFloat(data.left) : -1,
-      y: data.top !== initData.dimension.y ? parseFloat(data.top) : -1,
-      width:
-        data.width !== initData.dimension.width ? parseFloat(data.width) : -1,
-      height:
-        data.height !== initData.dimension.height
-          ? parseFloat(data.height)
-          : -1,
-    };
-
-    putSignature.mutate(
-      {
-        body: {
-          field_name: initData.field_name,
-          dimension: newDimension,
-          font: {
-            name: data.font,
-            size: data.fontSize,
-          },
-          visible_enabled: true,
-          replicate_all_pages:
-            data.replicate.length === totalPages ? true : null,
-          replicate:
-            data.replicate.length === totalPages || data.replicate.length === 0
-              ? null
-              : data.replicate,
-        },
-        field: "text",
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
-          onClose();
-        },
-      }
-    );
   };
 
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   return (
     <Dialog
       // keepMounted={false}
@@ -177,7 +133,7 @@ export const InitialsFieldSetting = ({
             paddingBottom: "5px",
           }}
         >
-          {t("modal.edit_initials")}
+          {t("modal.edit_qr")}
         </Typography>
       </DialogTitle>
 
@@ -217,7 +173,7 @@ export const InitialsFieldSetting = ({
                 }}
               >
                 <Tab
-                  // icon={<KeyboardIcon fontSize="small" />}
+                  // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
                   label={t("0-common.general")}
                   {...a11yProps(0)}
@@ -238,54 +194,13 @@ export const InitialsFieldSetting = ({
                     textTransform: "none",
                   }} //set height for tabs and tab
                 />
-                <Tab
-                  // icon={<DrawIcon fontSize="small" />}
-                  iconPosition="start"
-                  label={t("modal.replicate_initials")}
-                  {...a11yProps(1)}
-                  sx={{
-                    height: "45px",
-                    minHeight: "45px", //set height for tabs and tab
-                    textTransform: "none",
-                  }} //set height for tabs and tab
-                />
               </Tabs>
-              <TabPanel value={value} index={0}>
-                <Box>
-                  <Typography variant="h6" mb="10px">
-                    {t("0-common.participants")}
-                  </Typography>
 
-                  <TextField
-                    fullWidth
-                    size="small"
-                    margin="normal"
-                    // name={name}
-                    defaultValue={signer.lastName + " " + signer.firstName}
-                    sx={{ my: 0, height: "44px" }}
-                    disabled
-                    InputProps={{
-                      readOnly: true,
-                      sx: {
-                        height: "44px",
-                        backgroundColor: "signingWFBackground.main",
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
-                </Box>
+              <TabPanel value={value} index={0}>
+                <QryptoField control={control} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <DetailsTextBoxForm control={control} />
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <ReplicateForm
-                  control={control}
-                  name="replicate"
-                  totalPages={totalPages}
-                  workFlow={workFlow}
-                  initList={initList}
-                />
               </TabPanel>
             </AppBar>
           </Box>
@@ -320,15 +235,12 @@ export const InitialsFieldSetting = ({
   );
 };
 
-InitialsFieldSetting.propTypes = {
+QryptoSettingField.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   type: PropTypes.string,
-  signer: PropTypes.object,
-  initData: PropTypes.object,
-  totalPages: PropTypes.number,
+  qryptoData: PropTypes.object,
   workFlow: PropTypes.object,
-  initList: PropTypes.array,
 };
 
-export default InitialsFieldSetting;
+export default QryptoSettingField;

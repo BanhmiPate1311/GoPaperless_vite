@@ -11,6 +11,7 @@ import { ReactComponent as Name } from "@/assets/images/contextmenu/name.svg";
 import { ReactComponent as QRCode } from "@/assets/images/contextmenu/qrcode.svg";
 import { ReactComponent as Signature } from "@/assets/images/contextmenu/signature.svg";
 import { ReactComponent as AddText } from "@/assets/images/contextmenu/addtext.svg";
+import { ReactComponent as QrQrypto } from "@/assets/images/contextmenu/qrypto.svg";
 
 export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
   const { t } = useTranslation();
@@ -43,6 +44,7 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
     // { icon: <RadioButton />, label: "Radio Button" },
     // { icon: <CheckBox />, label: "Check Box" },
     { icon: <QRCode />, label: t("0-common.qrcode"), value: "QR" },
+    { icon: <QrQrypto />, label: "QR Qrypto", value: "QRYPTO" },
     {
       icon: <AddText />,
       label: t("0-common.addtext"),

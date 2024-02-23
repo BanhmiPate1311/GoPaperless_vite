@@ -10,3 +10,4 @@ export * from "./TextBox";
 export * from "./Initial";
 export * from "./PdfViewerDocument";
 export * from "./QrCode";
+export * from "./Qrypto";

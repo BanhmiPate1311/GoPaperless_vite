@@ -1,19 +1,20 @@
 /* eslint-disable no-unused-vars */
+import React from "react";
+import PropTypes from "prop-types";
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import { QrCodeSettingField } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
+import { QryptoSettingField } from "@/components/modalField";
 
-export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
+export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
 
@@ -25,21 +26,21 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
   const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
 
   const [dragPosition, setDragPosition] = useState({
-    x: (qrData.dimension?.x * pdfPage.width) / 100,
-    y: (qrData.dimension?.y * pdfPage.height) / 100,
+    x: (qryptoData.dimension?.x * pdfPage.width) / 100,
+    y: (qryptoData.dimension?.y * pdfPage.height) / 100,
   });
 
   const maxPosibleResizeWidth =
-    (pdfPage.width * (100 - qrData.dimension?.x)) / 100;
+    (pdfPage.width * (100 - qryptoData.dimension?.x)) / 100;
   const maxPosibleResizeHeight =
-    (pdfPage.height * (100 - qrData.dimension?.y)) / 100;
+    (pdfPage.height * (100 - qryptoData.dimension?.y)) / 100;
 
   useEffect(() => {
     setDragPosition({
-      x: (qrData.dimension?.x * pdfPage.width) / 100,
-      y: (qrData.dimension?.y * pdfPage.height) / 100,
+      x: (qryptoData.dimension?.x * pdfPage.width) / 100,
+      y: (qryptoData.dimension?.y * pdfPage.height) / 100,
     });
-  }, [qrData, pdfPage]);
+  }, [qryptoData, pdfPage]);
 
   const handleOpenModalSetting = (index) => {
     const newValue = [...isOpenModalSetting];
@@ -56,7 +57,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
     mutationFn: () => {
       return fpsService.removeSignature(
         { documentId: workFlow.documentId },
-        qrData.field_name
+        qryptoData.field_name
       );
     },
     onSuccess: () => {
@@ -118,8 +119,8 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
   };
 
   if (
-    (qrData.page !== null && qrData.page !== pdfPage.currentPage) ||
-    qrData.process_status === "PROCESSED"
+    (qryptoData.page !== null && qryptoData.page !== pdfPage.currentPage) ||
+    qryptoData.process_status === "PROCESSED"
   )
     return null;
 
@@ -199,7 +200,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           putSignature.mutate(
             {
               body: {
-                field_name: qrData.field_name,
+                field_name: qryptoData.field_name,
                 page: pdfPage.currentPage,
                 dimension: {
                   x: x,
@@ -209,7 +210,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
                 },
                 visible_enabled: true,
               },
-              field: "qrcode",
+              field: "qrcode-qrypto",
               documentId: workFlow.documentId,
             },
             {
@@ -220,19 +221,19 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           );
         }}
         disabled={
-          signerId + "_" + qrData.type + "_" + qrData.suffix !==
-          qrData.field_name
+          signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+          qryptoData.field_name
         }
       >
         <ResizableBox
           width={
-            qrData.dimension?.width
-              ? qrData.dimension?.width * (pdfPage.width / 100)
+            qryptoData.dimension?.width
+              ? qryptoData.dimension?.width * (pdfPage.width / 100)
               : Infinity
           }
           height={
-            qrData.dimension?.height
-              ? qrData.dimension?.height * (pdfPage.height / 100)
+            qryptoData.dimension?.height
+              ? qryptoData.dimension?.height * (pdfPage.height / 100)
               : 150
           }
           style={{
@@ -241,31 +242,31 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           minConstraints={[
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.width * (pdfPage.width / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? 120
               : 200,
 
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.height * (pdfPage.height / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? 120
               : 50,
           ]}
           maxConstraints={[
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.width * (pdfPage.width / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? maxPosibleResizeWidth
               : 200,
 
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.height * (pdfPage.height / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? maxPosibleResizeHeight
               : 200,
@@ -275,14 +276,14 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);
             if (
-              signerId + "_" + qrData.type + "_" + qrData.suffix !==
-              qrData.field_name
+              signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+              qryptoData.field_name
             )
               return;
             putSignature.mutate(
               {
                 body: {
-                  field_name: qrData.field_name,
+                  field_name: qryptoData.field_name,
                   page: pdfPage.currentPage,
                   dimension: {
                     x: -1,
@@ -292,7 +293,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
                   },
                   visible_enabled: true,
                 },
-                field: "qrcode",
+                field: "qrcode-qrypto",
                 documentId: workFlow.documentId,
               },
               {
@@ -330,7 +331,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
               }, 500);
             }}
           >
-            {showTopbar && <TopBar qrData={qrData} />}
+            {showTopbar && <TopBar qryptoData={qryptoData} />}
             <span
               className={`qrrauria-${index} topline`}
               style={{ display: "none" }}
@@ -351,7 +352,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
               sx={{
                 height: "100%",
                 width: "100%",
-                backgroundImage: `url(data:image/png;base64,${qrData.image_qr})`,
+                backgroundImage: `url(data:image/png;base64,${qryptoData.image_qr})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -362,10 +363,10 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
         </ResizableBox>
       </Draggable>
       {isOpenModalSetting[index] && (
-        <QrCodeSettingField
+        <QryptoSettingField
           open={isOpenModalSetting[index]}
           onClose={() => handleCloseModalSetting(index)}
-          qrData={qrData}
+          qryptoData={qryptoData}
           workFlow={workFlow}
         />
       )}
@@ -373,11 +374,11 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
   );
 };
 
-QrCode.propTypes = {
+Qrypto.propTypes = {
   index: PropTypes.number,
   pdfPage: PropTypes.object,
-  qrData: PropTypes.object,
+  qryptoData: PropTypes.object,
   workFlow: PropTypes.object,
 };
 
-export default QrCode;
+export default Qrypto;

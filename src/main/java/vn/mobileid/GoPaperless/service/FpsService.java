@@ -196,6 +196,9 @@ public class FpsService {
     public String putSignature(int documentId, String field, BasicFieldAttribute data) throws Exception {
         System.out.println("putSignature");
         String putSignatureUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/" + field;
+        System.out.println("putSignatureUrl: " + putSignatureUrl);
+        System.out.println("replicate_all_pages: " + data.getReplicateAllPages());
+        System.out.println("replicate: " + data.getReplicate());
 
 //        RestTemplate restTemplate = new RestTemplate();
 
@@ -248,6 +251,12 @@ public class FpsService {
         }
         if(data.getMaxLength() != null) {
             requestData.put("max_length", data.getMaxLength());
+        }
+        if(data.getReplicateAllPages() != null) {
+            requestData.put("replicate_all_pages", data.getReplicateAllPages());
+        }
+        if(data.getReplicate() != null) {
+            requestData.put("replicate", data.getReplicate());
         }
 //        requestData.put("max_length", data.getMaxLength());
         requestData.put("visible_enabled", data.getVisibleEnabled());
