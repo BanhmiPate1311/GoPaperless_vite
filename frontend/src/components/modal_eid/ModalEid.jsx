@@ -25,6 +25,7 @@ import {
   Step12,
   Step13,
   Step14,
+  Step15,
   Step2,
   Step3,
   Step4,
@@ -68,10 +69,11 @@ export const ModalEid = ({
   console.log("taxInformation: ", taxInformation);
   const [assurance, setAssurance] = useState("");
   const [certSelected, setCertSelected] = useState(null);
+  const [taxIndex, setTaxIndex] = useState(null);
 
   const sdk = useRef(null);
   const emailRef = useRef(null);
-  const taxRef = useRef(null);
+  const [taxCode, setTaxCode] = useState(null);
   const dialCode = useRef("");
   const providerSelected = useRef(null);
 
@@ -446,7 +448,7 @@ export const ModalEid = ({
       enterpriseId: workFlow.enterpriseId,
       workFlowId: workFlow.workFlowId,
       assurance: assurance,
-      taxCode: taxRef.current,
+      taxCode: taxCode,
     };
     try {
       const response = await electronicService.createCertificate(data);
@@ -460,9 +462,12 @@ export const ModalEid = ({
         certChain: response.data,
         assurance: assurance,
       });
-
-      onClose();
-      handleShowModalSignImage();
+      setFaceSuccess(t("electronic.createCertSuccess"));
+      setTimeout(() => {
+        onClose();
+        handleShowModalSignImage();
+        setFaceSuccess(null);
+      }, 3000);
     } catch (error) {
       setIsFetching(false);
       console.log("error", error);
@@ -666,11 +671,18 @@ export const ModalEid = ({
     />,
     <Step14
       key={"step14"}
-      tax={taxRef}
       onDisableSubmit={handleDisableSubmit}
       handleSubmit={handleSubmitClick}
       isSubmitDisabled={isSubmitDisabled}
       taxInformation={taxInformation}
+      workFlow={workFlow}
+      setActiveStep={setActiveStep}
+      setTaxIndex={setTaxIndex}
+      setTaxCode={setTaxCode}
+    />,
+    <Step15
+      key="step15"
+      taxInformation={taxInformation?.document_data?.tax_informations[taxIndex]}
     />,
   ];
 
@@ -714,7 +726,7 @@ export const ModalEid = ({
             paddingBottom: "5px",
           }}
         >
-          {t("electronic.title")}
+          {activeStep === 15 ? t("validation.tab4") : t("electronic.title")}
         </Typography>
       </DialogTitle>
 
@@ -779,7 +791,11 @@ export const ModalEid = ({
         <Button
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
-          onClick={activeStep === 2 || activeStep === 3 ? handleBack : onClose}
+          onClick={
+            activeStep === 2 || activeStep === 3 || activeStep === 15
+              ? handleBack
+              : onClose
+          }
         >
           {activeStep === 2 || activeStep === 3
             ? t("0-common.back")
@@ -806,6 +822,7 @@ export const ModalEid = ({
             borderRadius: "10px",
             borderColor: "borderColor.main",
             marginLeft: "20px !important",
+            display: activeStep === 15 ? "none" : "flex",
           }}
           onClick={handleSubmitClick}
           type="button"
