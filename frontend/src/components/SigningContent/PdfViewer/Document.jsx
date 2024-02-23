@@ -3,7 +3,7 @@
 import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { checkIsPosition } from "@/utils/commonFunction";
 import { useQueryClient } from "@tanstack/react-query";
-import { Initial, QrCode, TextBox } from ".";
+import { Initial, QrCode, Qrypto, TextBox } from ".";
 import AddText from "./AddText";
 import Signature from "./Signature";
 // import Signature from "./Signature";
@@ -14,6 +14,7 @@ export const Document = ({
   textbox,
   initial,
   qr,
+  qrypto,
   textField,
   addText,
   openResize,
@@ -188,6 +189,18 @@ export const Document = ({
             index={index}
             pdfPage={pdfPage}
             qrData={qrData}
+            workFlow={workFlow}
+          />
+        );
+      })}
+      {qrypto?.map((qryptoData, index) => {
+        if (qryptoData.page !== props.pageIndex + 1) return null;
+        return (
+          <Qrypto
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            qryptoData={qryptoData}
             workFlow={workFlow}
           />
         );
