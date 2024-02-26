@@ -198,7 +198,7 @@ public class FpsService {
         String putSignatureUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/" + field;
         System.out.println("putSignatureUrl: " + putSignatureUrl);
         System.out.println("replicate_all_pages: " + data.getReplicateAllPages());
-        System.out.println("replicate: " + data.getReplicate());
+        System.out.println("font: " + data.getFont());
 
 //        RestTemplate restTemplate = new RestTemplate();
 
@@ -220,6 +220,8 @@ public class FpsService {
         System.out.println("height: " + data.getDimension().getHeight());
 
         Map<String, Object> dimension = new HashMap<>();
+
+
         if(data.getDimension().getX() != -1) {
             dimension.put("x", data.getDimension().getX());
         }
@@ -233,11 +235,14 @@ public class FpsService {
             dimension.put("height", data.getDimension().getHeight());
         }
 
-        requestData.put("dimension", dimension);
+        if(data.getDimension().getX() != -1 || data.getDimension().getY() != -1 || data.getDimension().getWidth() != -1 || data.getDimension().getHeight() != -1) {
+            requestData.put("dimension", dimension);
+        }
+
         if(data.getValue() != null) {
             requestData.put("value", data.getValue());
         }
-        if(data.getFont() != null) {
+        if(data.getFont() != null && data.getFont().getName() != null) {
             requestData.put("font", data.getFont());
         }
         if(data.getPlaceHolder() != null) {

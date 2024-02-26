@@ -13,9 +13,10 @@ export const PDFViewer = ({ base64, renderPage, pageLayout }) => {
       height="100%"
       width="100%"
       className="review_pdf"
-      onContextMenu={(event) => {
-        console.log("event: ", event);
-        event.preventDefault();
+      onContextMenu={() => {
+        // console.log("event: ", event);
+        return;
+        // event.preventDefault();
       }}
     >
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">

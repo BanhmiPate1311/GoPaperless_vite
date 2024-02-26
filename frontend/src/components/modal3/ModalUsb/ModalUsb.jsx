@@ -27,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
-  // console.log("dataSigning: ", dataSigning);
+  console.log("dataSigning: ", dataSigning);
   const { control, handleSubmit, watch, reset } = useForm({
     defaultValues: {
       pin: "",
@@ -196,30 +196,22 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
 
   const handleFormSubmit = (data1) => {
     // console.log("data: ", data1);
-    if (dataSigning.dtbsHash) {
-      const request = {
-        dtbsHash: dataSigning.dtbsHash,
-        pin: data1.pin,
-      };
-      getCertificate.mutateAsync(request);
-    } else {
-      usbHash.mutateAsync(dataSigning, {
-        onSuccess: (data) => {
-          // console.log("data: ", data);
-          setDataSigning({
-            ...dataSigning,
-            pin: data1.pin,
-            dtbsHash: data.hashPG,
-            hashList: data.hash,
-          });
-          const request = {
-            dtbsHash: data.hashPG,
-            pin: data1.pin,
-          };
-          getCertificate.mutateAsync(request);
-        },
-      });
-    }
+    usbHash.mutateAsync(dataSigning, {
+      onSuccess: (data) => {
+        // console.log("data: ", data);
+        setDataSigning({
+          ...dataSigning,
+          pin: data1.pin,
+          dtbsHash: data.hashPG,
+          hashList: data.hash,
+        });
+        const request = {
+          dtbsHash: data.hashPG,
+          pin: data1.pin,
+        };
+        getCertificate.mutateAsync(request);
+      },
+    });
   };
   // console.log("hash error: ", usbHash.error);
 

@@ -7,14 +7,15 @@ import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 export const Step15 = ({ taxInformation }) => {
   console.log("taxInformation: ", taxInformation);
   const [tax, setTax] = React.useState([]);
   const { t } = useTranslation();
-  React.useEffect(() => {
+  useEffect(() => {
     const taxDemo = [];
 
     taxDemo.push({
@@ -197,12 +198,11 @@ export const Step15 = ({ taxInformation }) => {
                   variant="h4"
                   sx={{
                     fontWeight: "500",
-                    cursor: "pointer",
-                    "&:hover": {
-                      color: "primary.main",
-                    },
+                    // "&:hover": {
+                    //   color: "primary.main",
+                    // },
                   }}
-                  onClick={() => setActiveStep(15)}
+                  // onClick={() => setActiveStep(15)}
                 >
                   {taxInfo.value}
                 </Typography>
@@ -213,4 +213,8 @@ export const Step15 = ({ taxInformation }) => {
       </Table>
     </TableContainer>
   );
+};
+
+Step15.propTypes = {
+  taxInformation: PropTypes.object,
 };

@@ -70,7 +70,8 @@
     "subjectDN": "SubjectDN",
     "valid_from": "Kehtib alates",
     "valid_to": "Kehtib kuni",
-    "preview": "Eelvaade"
+    "preview": "Eelvaade",
+    "preview&continue": "Eelvaade & Järjesta"
   },
   "batch": {
     "collapse": "Ahenda kõik",
