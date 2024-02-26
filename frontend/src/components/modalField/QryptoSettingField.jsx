@@ -11,10 +11,8 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { UseUpdateSig } from "@/hook/use-fpsService";
-import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { DetailsTextBoxForm } from ".";
 import QryptoField from "./QryptoField";
 
@@ -197,7 +195,7 @@ export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
               </Tabs>
 
               <TabPanel value={value} index={0}>
-                <QryptoField control={control} />
+                <QryptoField control={control} workFlow={workFlow} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <DetailsTextBoxForm control={control} />

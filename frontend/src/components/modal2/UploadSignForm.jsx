@@ -7,7 +7,7 @@ import { forwardRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UploadField } from "../form";
 
-const UploadSignForm = forwardRef(
+export const UploadSignForm = forwardRef(
   (
     {
       dataSigning,

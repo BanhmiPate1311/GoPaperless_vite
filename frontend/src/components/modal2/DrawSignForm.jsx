@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { forwardRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const DrawSignForm = forwardRef(
+export const DrawSignForm = forwardRef(
   (
     {
       dataSigning,

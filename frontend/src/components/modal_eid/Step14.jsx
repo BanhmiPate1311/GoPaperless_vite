@@ -230,6 +230,7 @@ Step14.propTypes = {
   handleSubmit: PropTypes.func,
   isSubmitDisabled: PropTypes.bool,
   taxInformation: PropTypes.object,
+  workFlow: PropTypes.object,
 };
 
 export default Step14;
