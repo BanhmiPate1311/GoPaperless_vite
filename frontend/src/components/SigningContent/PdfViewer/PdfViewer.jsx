@@ -79,8 +79,8 @@ export const PdfViewer = ({ workFlow }) => {
   // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
-    console.log("page: ", event);
-    if (openResize) return;
+    // console.log("page: ", event);
+    // if (openResize) return;
     if (
       checkSignerStatus(signer, signerToken) === 2 ||
       (event.target.className !== "rpv-core__text-layer" &&
@@ -293,6 +293,33 @@ export const PdfViewer = ({ workFlow }) => {
     );
   };
 
+  const QrQrypto = (value) => {
+    const newQrQrypto = {
+      field_name:
+        signerId + "_" + value + "_" + Number(field.qrypto.length + 1),
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 20,
+        height: 13,
+      },
+      suffix: Number(field.qrypto.length + 1),
+    };
+    addTextBox.mutate(
+      {
+        body: newQrQrypto,
+        field: "qrcode-qrypto",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
   const handleClickMenu = (value) => () => {
     // console.log("data: ", value);
     handleClose();
@@ -314,6 +341,9 @@ export const PdfViewer = ({ workFlow }) => {
         break;
       case "QR":
         qrCode(value);
+        break;
+      case "QRYPTO":
+        QrQrypto(value);
         break;
     }
   };
@@ -340,6 +370,7 @@ export const PdfViewer = ({ workFlow }) => {
           textbox={field?.textbox?.filter((item) => item.type !== "TEXTFIELD")}
           initial={field?.initial}
           qr={field?.qr}
+          qrypto={field?.qrypto}
           textField={field?.textField}
           addText={field?.textbox?.filter((item) => item.type === "TEXTFIELD")}
           openResize={openResize}

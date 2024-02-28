@@ -6,3 +6,5 @@ export * from "./ModalSigning";
 export * from "./TextSignForm";
 export * from "./DrawSignForm";
 export * from "./ReviewSign";
+export * from "./PreviewDocument";
+export * from "./UploadSignForm";

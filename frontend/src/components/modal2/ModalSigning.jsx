@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import useCountry from "@/hook/use-country";
 import { apiService } from "@/services/api_service";
-import { removeBase64Prefix } from "@/utils/commonFunction";
 import DrawIcon from "@mui/icons-material/Draw";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -17,15 +16,18 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
-import html2canvas from "html2canvas";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { AddSubtitle, ReviewSign, TextSignForm } from ".";
-import DrawSignForm from "./DrawSignForm";
-import UploadSignForm from "./UploadSignForm";
+import {
+  AddSubtitle,
+  DrawSignForm,
+  ReviewSign,
+  TextSignForm,
+  UploadSignForm,
+} from ".";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -168,61 +170,60 @@ export const ModalSigning = ({
   };
 
   const handleFormSubmit = (data) => {
-    switch (value) {
-      case 0:
-        html2canvas(textElement.current, { backgroundColor: null }).then(
-          (canvas) => {
-            const data64 = canvas.toDataURL();
+    setDataSigning({
+      ...dataSigning,
+      contactInfor: data.contactInfor,
+    });
+    handleOpenResize(true);
+    // switch (value) {
+    //   case 0:
+    //     html2canvas(textElement.current, { backgroundColor: null }).then(
+    //       (canvas) => {
+    //         const data64 = canvas.toDataURL();
 
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: imgBase64
-                ? removeBase64Prefix(imgBase64)
-                : removeBase64Prefix(data64),
-            });
-            onClose();
-            handleShowmodal();
-          }
-        );
-        break;
-      case 1:
-        html2canvas(drawElement.current, { backgroundColor: null }).then(
-          (canvas) => {
-            const data64 = canvas.toDataURL();
-            // console.log("data64: ", canvas);
+    //         setDataSigning({
+    //           ...dataSigning,
+    //           contactInfor: data.contactInfor,
+    //           imageBase64: removeBase64Prefix(data64),
+    //         });
+    //         onClose();
+    //         handleShowmodal();
+    //       }
+    //     );
+    //     break;
+    //   case 1:
+    //     html2canvas(drawElement.current, { backgroundColor: null }).then(
+    //       (canvas) => {
+    //         const data64 = canvas.toDataURL();
+    //         // console.log("data64: ", canvas);
 
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: imgBase64
-                ? removeBase64Prefix(imgBase64)
-                : removeBase64Prefix(data64),
-            });
-            onClose();
-            handleShowmodal();
-          }
-        );
-        break;
-      case 2:
-        html2canvas(fileElement.current, { backgroundColor: null }).then(
-          (canvas) => {
-            const data64 = canvas.toDataURL();
+    //         setDataSigning({
+    //           ...dataSigning,
+    //           contactInfor: data.contactInfor,
+    //           imageBase64: removeBase64Prefix(data64),
+    //         });
+    //         onClose();
+    //         handleShowmodal();
+    //       }
+    //     );
+    //     break;
+    //   case 2:
+    //     html2canvas(fileElement.current, { backgroundColor: null }).then(
+    //       (canvas) => {
+    //         const data64 = canvas.toDataURL();
 
-            // console.log(data64);
-            setDataSigning({
-              ...dataSigning,
-              contactInfor: data.contactInfor,
-              imageBase64: imgBase64
-                ? removeBase64Prefix(imgBase64)
-                : removeBase64Prefix(data64),
-            });
-            onClose();
-            handleShowmodal();
-          }
-        );
-        break;
-    }
+    //         // console.log(data64);
+    //         setDataSigning({
+    //           ...dataSigning,
+    //           contactInfor: data.contactInfor,
+    //           imageBase64: removeBase64Prefix(data64),
+    //         });
+    //         onClose();
+    //         handleShowmodal();
+    //       }
+    //     );
+    //     break;
+    // }
   };
 
   const handleSubmitClick = () => {
@@ -424,7 +425,7 @@ export const ModalSigning = ({
         >
           {t("0-common.cancel")}
         </Button>
-        <Button
+        {/* <Button
           variant="contained"
           disabled={isSubmitDisabled}
           // startIcon={
@@ -441,7 +442,7 @@ export const ModalSigning = ({
           }}
         >
           {t("0-common.preview")}
-        </Button>
+        </Button> */}
         <Button
           variant="contained"
           disabled={isSubmitDisabled}
@@ -453,7 +454,7 @@ export const ModalSigning = ({
           onClick={handleSubmitClick}
           type="button"
         >
-          {t("0-common.continue")}
+          {t("0-common.preview&continue")}
         </Button>
       </DialogActions>
       <ReviewSign
@@ -461,6 +462,7 @@ export const ModalSigning = ({
         handleOpenResize={handleOpenResize}
         ref={textElement}
         dataSigning={dataSigning}
+        setDataSigning={setDataSigning}
         headerFooter={headerFooter?.data}
         formattedDatetime={formattedDatetime}
         onDisableSubmit={handleDisableSubmit}
@@ -484,6 +486,9 @@ export const ModalSigning = ({
         handleDrag={handleDrag}
         newPos={newPos}
         handleSubmitClick={handleSubmitClick}
+        handleShowmodal={handleShowmodal}
+        onClose2={() => setOpenResize(false)}
+        onClose={onClose}
       />
     </Dialog>
   );

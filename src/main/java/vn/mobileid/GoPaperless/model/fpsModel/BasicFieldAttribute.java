@@ -29,6 +29,7 @@ public class BasicFieldAttribute {
     private Boolean read_only;
     private Boolean multiline;
     private Boolean apply_to_all;
+    private Boolean replicateAllPages;
     private String renamedAs;
     private String value;
     private String image;
@@ -36,6 +37,7 @@ public class BasicFieldAttribute {
     private String signingToken;
     private String formatType;
     private List<Integer> initial_pages;
+    private List<Integer> replicate;
     private AddTextValue font;
 }
 

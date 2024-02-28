@@ -70,7 +70,8 @@
     "subjectDN": "Chủ thể DN",
     "valid_from": "Có hiệu lực từ",
     "valid_to": "Có hiệu lực đến",
-    "preview": "Xem trước"
+    "preview": "Xem trước",
+    "preview&continue": "Xem trước & Tiếp tục"
   },
   "batch": {
     "collapse": "Thu gọn tất cả",

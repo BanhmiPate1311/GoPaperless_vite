@@ -70,7 +70,8 @@
     "subjectDN": "主题DN",
     "valid_from": "有效期自",
     "valid_to": "有效",
-    "preview": "预览"
+    "preview": "预览",
+    "preview&continue": "预览 & 继续"
   },
   "batch": {
     "collapse": "全 部 收 縮",

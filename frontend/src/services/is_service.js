@@ -3,7 +3,7 @@ import { api } from "@/utils/api";
 export const isService = {
   getHash: (data) => {
     const request = {
-      contactInfor: data.email,
+      contactInfor: data.contactInfor,
       fieldName: data.fieldName,
       signerToken: data.signerToken,
       signingToken: data.signingToken,

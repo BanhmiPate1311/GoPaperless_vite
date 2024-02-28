@@ -70,7 +70,8 @@
     "subjectDN": "BetreffDN",
     "valid_from": "Gültig ab",
     "valid_to": "Gültig bis",
-    "preview": "Vorschau"
+    "preview": "Vorschau",
+    "preview&continue": "Vorschau & Fortfahren"
   },
   "batch": {
     "collapse": "Alles kollabieren",

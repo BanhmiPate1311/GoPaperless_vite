@@ -36,6 +36,7 @@
     "participants": "Participants",
     "Position": "Position",
     "qrcode": "QR Code",
+    "qrqrypto": "QRcrypto",
     "Reason": "Reason",
     "Resolution": "Resolution",
     "retry": "Retry",
@@ -70,7 +71,8 @@
     "subjectDN": "Subject DN",
     "valid_from": "Valid from",
     "valid_to": "Valid to",
-    "preview": "Preview"
+    "preview": "Preview",
+    "preview&continue": "Preview & Continue"
   },
   "batch": {
     "collapse": "Collapse all",

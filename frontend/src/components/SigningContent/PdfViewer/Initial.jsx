@@ -2,8 +2,7 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
-import { InitialsField } from "@/components/modalField";
-import InitialsFieldSetting from "@/components/modalField/InitialsFieldSetting";
+import { InitialsField, InitialsFieldSetting } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";

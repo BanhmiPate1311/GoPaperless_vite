@@ -200,7 +200,7 @@ export const QrCodeSettingField = ({ open, onClose, qrData, workFlow }) => {
                   // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
                   label={t("0-common.details")}
-                  {...a11yProps(1)}
+                  {...a11yProps(0)}
                   sx={{
                     height: "45px",
                     minHeight: "45px", //set height for tabs and tab
