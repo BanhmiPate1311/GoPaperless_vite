@@ -105,7 +105,7 @@ export const QrCodeSettingField = ({ open, onClose, qrData, workFlow }) => {
 
           visible_enabled: true,
         },
-        field: "text",
+        field: "qrcode",
         documentId: workFlow.documentId,
       },
       {

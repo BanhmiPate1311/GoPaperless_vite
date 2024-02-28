@@ -92,7 +92,7 @@ export const InitialsFieldSetting = ({
   };
 
   const handleFormSubmit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     const newDimension = {
       x: data.left !== initData.dimension.x ? parseFloat(data.left) : -1,
       y: data.top !== initData.dimension.y ? parseFloat(data.top) : -1,
@@ -121,7 +121,7 @@ export const InitialsFieldSetting = ({
               ? null
               : data.replicate,
         },
-        field: "text",
+        field: "initial",
         documentId: workFlow.documentId,
       },
       {
