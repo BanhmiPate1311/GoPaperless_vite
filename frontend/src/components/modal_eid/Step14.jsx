@@ -176,6 +176,9 @@ export const Step14 = ({
                         {...controlProps(
                           taxInfo.company_information.business_license
                         )}
+                        onClick={() => {
+                          setTaxIndex(index);
+                        }}
                         size="small"
                       />
                     </TableCell>
@@ -201,13 +204,8 @@ export const Step14 = ({
                         variant="h4"
                         sx={{
                           fontWeight: "600",
-                          cursor: "pointer",
-                          "&:hover": {
-                            color: "primary.main",
-                          },
                         }}
                         onClick={() => {
-                          setActiveStep(15);
                           setTaxIndex(index);
                         }}
                       >

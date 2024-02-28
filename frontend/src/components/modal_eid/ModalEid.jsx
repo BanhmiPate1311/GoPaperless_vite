@@ -69,7 +69,7 @@ export const ModalEid = ({
   console.log("taxInformation: ", taxInformation);
   const [assurance, setAssurance] = useState("");
   const [certSelected, setCertSelected] = useState(null);
-  const [taxIndex, setTaxIndex] = useState(null);
+  const [taxIndex, setTaxIndex] = useState(0);
 
   const sdk = useRef(null);
   const emailRef = useRef(null);
@@ -588,6 +588,9 @@ export const ModalEid = ({
           ...workFlow,
           connectorName: "MOBILE_ID_IDENTITY",
         });
+        setActiveStep(15);
+        break;
+      case 15:
         createCertificate();
         break;
       default:
@@ -685,7 +688,7 @@ export const ModalEid = ({
       taxInformation={taxInformation?.document_data?.tax_informations[taxIndex]}
     />,
   ];
-
+  console.log(taxInformation?.document_data?.tax_informations[taxIndex]);
   return (
     <Dialog
       // keepMounted={false}
@@ -791,11 +794,7 @@ export const ModalEid = ({
         <Button
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
-          onClick={
-            activeStep === 2 || activeStep === 3 || activeStep === 15
-              ? handleBack
-              : onClose
-          }
+          onClick={activeStep === 2 || activeStep === 3 ? handleBack : onClose}
         >
           {activeStep === 2 || activeStep === 3
             ? t("0-common.back")
@@ -812,7 +811,8 @@ export const ModalEid = ({
               activeStep === 10 ||
               activeStep === 11 ||
               activeStep === 13 ||
-              activeStep === 14) &&
+              activeStep === 14 ||
+              activeStep === 15) &&
               isSubmitDisabled)
           }
           startIcon={
@@ -822,14 +822,13 @@ export const ModalEid = ({
             borderRadius: "10px",
             borderColor: "borderColor.main",
             marginLeft: "20px !important",
-            display: activeStep === 15 ? "none" : "flex",
           }}
           onClick={handleSubmitClick}
           type="button"
         >
           {errorPG
             ? t("0-common.retry")
-            : activeStep === steps.length - 1
+            : activeStep === steps.length
             ? t("0-common.submit")
             : t("0-common.continue")}
         </Button>

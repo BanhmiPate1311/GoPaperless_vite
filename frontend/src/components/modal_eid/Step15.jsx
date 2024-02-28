@@ -197,12 +197,7 @@ export const Step15 = ({ taxInformation }) => {
                   variant="h4"
                   sx={{
                     fontWeight: "500",
-                    cursor: "pointer",
-                    "&:hover": {
-                      color: "primary.main",
-                    },
                   }}
-                  onClick={() => setActiveStep(15)}
                 >
                   {taxInfo.value}
                 </Typography>
