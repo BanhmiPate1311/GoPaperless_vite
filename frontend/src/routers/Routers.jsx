@@ -1,5 +1,6 @@
 import { MainLayout } from "@/layouts";
 import { NotFound, Signing, Validation, PageDocument } from "@/pages";
+import { Arrangement } from "@/pages/arangement/Arrangement";
 import { useRoutes } from "react-router-dom";
 
 const Routers = () => {
@@ -11,6 +12,10 @@ const Routers = () => {
         {
           path: "/view/signing/:signing_token",
           element: <Signing />,
+        },
+        {
+          path: "/view/arrangement/:signing_token",
+          element: <Arrangement />,
         },
         {
           path: "/view/validation/:upload_token/show",
