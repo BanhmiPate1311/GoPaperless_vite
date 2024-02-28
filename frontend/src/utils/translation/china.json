@@ -93,7 +93,9 @@
     "cam right": "稍微向右转",
     "camera not found": "访问相机时出错",
     "camSuccess": "上传加密的 3D 面部扫描",
-    "createCertSuccess": "創造證書成功",
+    "createCertSuccess": "证书创建成功!",
+    "createCertFaild": "证书创建失败!",
+    "no_tax_found": "未找到与此公民识别码相关的税务识别号",
     "can wrong": "公民身份证号码错误",
     "eid not found": "未找到 EID 读卡器",
     "email error": "电子邮件已存在",
@@ -271,9 +273,11 @@
     "taxpayer_name": "纳税人姓名",
     "common_name": "通用名",
     "cert_tooltip": "证书详情",
+    "tax_tooltip": "税码详细信息",
     "init_warning": "在签署文件之前，您必须填写姓名首字母缩写",
     "qr_warning": "您无法添加多个二维码",
-    "text_warning": "填写指定的表单字段"
+    "text_warning": "填写指定的表单字段",
+    "sig_warning": "您不能添加多个签名"
   },
   "signingForm": {
     "step1": "选择远程签名服务提供商",

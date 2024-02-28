@@ -25,7 +25,6 @@ import {
   Step12,
   Step13,
   Step14,
-  Step15,
   Step2,
   Step3,
   Step4,
@@ -64,12 +63,9 @@ export const ModalEid = ({
   const [otp, setOtp] = useState(null);
   const [certificateList, setCertificateList] = useState([]);
   const [newListCert, setNewListCert] = useState([]);
-  const [certificate, setCertificate] = useState(null);
   const [taxInformation, setTaxInformation] = useState(null);
-  console.log("taxInformation: ", taxInformation);
   const [assurance, setAssurance] = useState("");
   const [certSelected, setCertSelected] = useState(null);
-  const [taxIndex, setTaxIndex] = useState(null);
 
   const sdk = useRef(null);
   const emailRef = useRef(null);
@@ -146,7 +142,6 @@ export const ModalEid = ({
     try {
       const response = await electronicService.checkIdentity(data);
       if (response.data) {
-        console.log("checkIdentity: ", response.data);
         setSubject(response.data);
       }
       if (response.data.status === 0) {
@@ -210,16 +205,12 @@ export const ModalEid = ({
       workFlow.code.slice(-6),
       60,
       function (response) {
-        console.log("subject Get: ", response);
         setIsFetching(false);
         setPersonalInformation(response.optionalDetails);
         setImage(response.image);
         handleNext();
       },
       function (error, mess) {
-        console.log("error: ", error);
-        console.log("mess: ", mess);
-
         switch (error) {
           case 1001:
             setErrorPG(t("electronic.eid not found"));
@@ -254,27 +245,20 @@ export const ModalEid = ({
 
     try {
       const response = await electronicService.faceAndCreate(data);
-      // console.log("faceAndCreate: ", response);
       if (response.data.status === 0) {
         setJwt(response.data.jwt);
         try {
           var decoded = jwtDecode(response.data.jwt);
 
-          // console.log("decoded", decoded);
-
           if (decoded.mobile === "" || decoded.phone_number === "") {
-            console.log("kiểm tra: ");
-
             checkIdentity();
           }
 
           let stepToNavigate = -1;
 
           if (decoded.phone_number === "") {
-            console.log("Đăng ký số điện thoại: ");
             stepToNavigate = 7;
           } else if (decoded.email === "") {
-            console.log("Đăng ký email: ");
             setPhoneNumber(decoded.phone_number);
             stepToNavigate = 9;
           } else {
@@ -363,10 +347,8 @@ export const ModalEid = ({
 
           if (activeStep === 8) {
             if (decoded.email === "") {
-              console.log("Đăng ký email: ");
               setActiveStep(9);
             } else {
-              console.log("Email đã có, cập nhật: ");
               emailRef.current = decoded.email;
               setActiveStep(11);
             }
@@ -470,6 +452,7 @@ export const ModalEid = ({
       }, 3000);
     } catch (error) {
       setIsFetching(false);
+      setErrorPG(t("electronic.createCertFaild"));
       console.log("error", error);
       setErrorPG(error.response.data.message);
     }
@@ -566,7 +549,6 @@ export const ModalEid = ({
         }
         break;
       case 13:
-        console.log("certSelected: ", certSelected);
         if (certSelected !== null) {
           setDataSigning({
             ...workFlow,
@@ -674,15 +656,11 @@ export const ModalEid = ({
       onDisableSubmit={handleDisableSubmit}
       handleSubmit={handleSubmitClick}
       isSubmitDisabled={isSubmitDisabled}
-      taxInformation={taxInformation}
+      taxInformation={taxInformation?.document_data?.tax_informations}
       workFlow={workFlow}
       setActiveStep={setActiveStep}
-      setTaxIndex={setTaxIndex}
+      taxCode={taxCode}
       setTaxCode={setTaxCode}
-    />,
-    <Step15
-      key="step15"
-      taxInformation={taxInformation?.document_data?.tax_informations[taxIndex]}
     />,
   ];
 
@@ -792,12 +770,12 @@ export const ModalEid = ({
           variant="outlined"
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={
-            activeStep === 2 || activeStep === 3 || activeStep === 15
+            activeStep === 2 || activeStep === 3 || activeStep === 14
               ? handleBack
               : onClose
           }
         >
-          {activeStep === 2 || activeStep === 3
+          {activeStep === 2 || activeStep === 3 || activeStep === 14
             ? t("0-common.back")
             : t("0-common.cancel")}
         </Button>

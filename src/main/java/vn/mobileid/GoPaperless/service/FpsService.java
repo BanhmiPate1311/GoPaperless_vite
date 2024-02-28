@@ -330,6 +330,9 @@ public class FpsService {
         if(data.getPlaceHolder() != null) {
             requestData.put("place_holder", data.getPlaceHolder());
         }
+        if(data.getRequired() != null) {
+            requestData.put("required", data.getRequired());
+        }
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
 //        requestData.put("visible_enabled", data.getVisibleEnabled());
@@ -515,10 +518,13 @@ public class FpsService {
         requestData.put("signed_hash", "SHA256");
         requestData.put("certificate_chain", data.getCertificateChain());
         requestData.put("signer_contact", data.getSignerContact());
-//        System.out.println("hashSignatureField Data: " + requestData);
 
-//        Gson gson = new Gson();
-//        System.out.println("Request Data: " + gson.toJson(requestData));
+        // Convert requestData to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestDataJson = objectMapper.writeValueAsString(requestData);
+
+        // Log the JSON string
+        System.out.println("Request Data hashSignatureField as JSON: " + requestDataJson);
 
         HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
 
@@ -532,7 +538,7 @@ public class FpsService {
 
 //            JsonObject jsonObject1 = gson.fromJson(responseBody, JsonObject.class);
 //            return jsonObject1.get("hash_value").getAsString();
-            ObjectMapper objectMapper = new ObjectMapper();
+//            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(responseBody);
 
             return jsonNode.get("hash_value").asText();

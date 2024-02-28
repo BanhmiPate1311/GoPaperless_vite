@@ -134,7 +134,7 @@ export const TextSignForm = forwardRef(
                     marginLeft: "auto",
                     marginRight: "auto",
                     width: direction ? "50%" : "100%",
-                    fontSize: "36px",
+                    fontSize: "20px",
                     textAlign: "center",
                     textTransform: "capitalize",
                     fontWeight: "bold",

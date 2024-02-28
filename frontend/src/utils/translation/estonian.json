@@ -93,7 +93,9 @@
     "cam right": "Pöörake KERGELT ENDA PAREMALE",
     "camera not found": "Viga kaamerale juurdepääsul",
     "camSuccess": "Krüpteeritud 3D FACESCANI ÜLESLAADIMINE",
-    "createCertSuccess": "SERTIFIKAADI EDU LOOMINE",
+    "createCertSuccess": "Sertifikaadi loomine õnnestus!",
+    "createCertFaild": "Sertifikaadi loomine ebaõnnestus!",
+    "no_tax_found": "Selle kodaniku identifitseerimiskoodiga seotud maksukohustuslasena identifitseerimisnumbrit ei leitud",
     "can wrong": "Kodaniku isikukood on vale",
     "eid not found": "EID-lugejat ei leitud",
     "email error": "E-post on juba olemas",
@@ -271,9 +273,11 @@
     "taxpayer_name": "Maksukohustuslase nimi",
     "common_name": "Üldnimetus",
     "cert_tooltip": "Sertifikaadi üksikasjad",
+    "tax_tooltip": "Maksukoodi üksikasjad",
     "init_warning": "Enne dokumendi allkirjastamist peate täitma oma initsiaalid",
     "qr_warning": "Te ei saa lisada mitut QR-koodi",
-    "text_warning": "Täitke määratud vormiväljad"
+    "text_warning": "Täitke määratud vormiväljad",
+    "sig_warning": "Te ei saa lisada mitut allkirja"
   },
   "signingForm": {
     "step1": "Valige Remote Signing Service Provider",

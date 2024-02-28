@@ -7,12 +7,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import { DrawSignForm, TextSignForm, UploadSignForm } from ".";
+import { useQueryClient } from "@tanstack/react-query";
+import { UseUpdateSig } from "@/hook/use-fpsService";
 
 export const PreviewDocument = ({
   props,
   signatureData,
   index,
-  setPosition,
+  dimension,
   setDimension,
   workFlow,
   value,
@@ -36,7 +38,9 @@ export const PreviewDocument = ({
     }),
     [props.pageIndex, props.height, props.width, props.scale, props.rotation]
   );
-  console.log("signatureData");
+  // console.log("signatureData");
+  const queryClient = useQueryClient();
+  const putSignature = UseUpdateSig();
   const [dragPosition, setDragPosition] = useState({
     x: (signatureData.dimension?.x * pdfPage.width) / 100,
     y: (signatureData.dimension?.y * pdfPage.height) / 100,
@@ -169,32 +173,32 @@ export const PreviewDocument = ({
                 const y =
                   (Math.abs(rectItem.top - rectComp.top) * 100) /
                   rectComp.height;
-                setPosition({ x: x, y: y });
-                // setDimension({ ...dimension, x: x, y: y });
-                // putSignature.mutate(
-                //   {
-                //     body: {
-                //       field_name: signatureData.field_name,
-                //       page: pdfPage.currentPage,
-                //       dimension: {
-                //         x: x,
-                //         y: y,
-                //         width: -1,
-                //         height: -1,
-                //       },
-                //       visible_enabled: true,
-                //     },
-                //     field: signatureData.type.toLowerCase(),
-                //     documentId: workFlow.documentId,
-                //   }
-                // {
-                //   onSuccess: () => {
-                //     queryClient.invalidateQueries({
-                //       queryKey: ["getField"],
-                //     });
-                //   },
-                // }
-                // );
+                // setPosition({ x: x, y: y });
+                setDimension({ ...dimension, x: x, y: y });
+                putSignature.mutate(
+                  {
+                    body: {
+                      field_name: signatureData.field_name,
+                      page: pdfPage.currentPage,
+                      dimension: {
+                        x: x,
+                        y: y,
+                        width: -1,
+                        height: -1,
+                      },
+                      visible_enabled: true,
+                    },
+                    field: signatureData.type.toLowerCase(),
+                    documentId: workFlow.documentId,
+                  },
+                  {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries({
+                        queryKey: ["getField"],
+                      });
+                    },
+                  }
+                );
               }
             }}
             disabled={
@@ -261,13 +265,13 @@ export const PreviewDocument = ({
                   : pdfPage
                   ? maxPosibleResizeWidth
                   : 200,
-                isSetPos ||
+
                 signerId +
                   "_" +
                   signatureData.type +
                   "_" +
                   signatureData.suffix !==
-                  signatureData.field_name
+                signatureData.field_name
                   ? signatureData.dimension?.height * (pdfPage.height / 100)
                   : pdfPage
                   ? maxPosibleResizeHeight
@@ -277,47 +281,63 @@ export const PreviewDocument = ({
               onResizeStop={(e, { size }) => {
                 // console.log("e: ", e);
                 if (
-                  isSetPos ||
                   signerId +
                     "_" +
                     signatureData.type +
                     "_" +
                     signatureData.suffix !==
-                    signatureData.field_name
+                  signatureData.field_name
                 )
                   return;
                 setDimension({
+                  ...dimension,
                   width: (size.width / pdfPage.width) * 100,
                   height: (size.height / pdfPage.height) * 100,
                 });
 
-                // putSignature.mutate(
-                //   {
-                //     body: {
-                //       field_name: signatureData.field_name,
-                //       page: pdfPage.currentPage,
-                //       dimension: {
-                //         x: signatureData.dimension.x,
-                //         y: signatureData.dimension.y,
-                //         width: (size.width / pdfPage.width) * 100,
-                //         height: (size.height / pdfPage.height) * 100,
-                //       },
-                //       visible_enabled: true,
-                //     },
-                //     field: signatureData.type.toLowerCase(),
-                //     documentId: workFlow.documentId,
-                //   }
-                //   // {
-                //   //   onSuccess: () => {
-                //   //     queryClient.invalidateQueries({
-                //   //       queryKey: ["getField"],
-                //   //     });
-                //   //   },
-                //   // }
-                // );
+                putSignature.mutate(
+                  {
+                    body: {
+                      field_name: signatureData.field_name,
+                      page: pdfPage.currentPage,
+                      dimension: {
+                        x: signatureData.dimension.x,
+                        y: signatureData.dimension.y,
+                        width: (size.width / pdfPage.width) * 100,
+                        height: (size.height / pdfPage.height) * 100,
+                      },
+                      visible_enabled: true,
+                    },
+                    field: signatureData.type.toLowerCase(),
+                    documentId: workFlow.documentId,
+                  },
+                  {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries({
+                        queryKey: ["getField"],
+                      });
+                    },
+                  }
+                );
               }}
               className={`sig1 choioi-${index}`}
             >
+              <span
+                className={`rauria-${index} topline`}
+                style={{ display: "none" }}
+              ></span>
+              <span
+                className={`rauria-${index} rightline`}
+                style={{ display: "none" }}
+              ></span>
+              <span
+                className={`rauria-${index} botline`}
+                style={{ display: "none" }}
+              ></span>
+              <span
+                className={`rauria-${index} leftline`}
+                style={{ display: "none" }}
+              ></span>
               <Box
                 id={`sigDrag1-${index}`}
                 sx={{ width: "100%", height: "100%" }}

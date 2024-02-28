@@ -465,6 +465,7 @@ export const ModalSigning = ({
         setDataSigning={setDataSigning}
         headerFooter={headerFooter?.data}
         formattedDatetime={formattedDatetime}
+        isSubmitDisabled={isSubmitDisabled}
         onDisableSubmit={handleDisableSubmit}
         watch={watch}
         control={control}

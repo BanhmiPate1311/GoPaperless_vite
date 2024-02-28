@@ -25,6 +25,7 @@ export const ReviewSign = forwardRef(
       setDataSigning,
       headerFooter,
       formattedDatetime,
+      isSubmitDisabled,
       onDisableSubmit,
       watch,
       control,
@@ -40,7 +41,8 @@ export const ReviewSign = forwardRef(
     },
     ref
   ) => {
-    console.log("signatureData: ", signatureData);
+    // console.log("signatureData: ", signatureData);
+    // console.log("isSubmitDisabled: ", isSubmitDisabled);
     const { t } = useTranslation();
     const putSignature = UseUpdateSig();
     const queryClient = useQueryClient();
@@ -51,10 +53,16 @@ export const ReviewSign = forwardRef(
       width: signatureData.dimension?.width,
       height: signatureData.dimension?.height,
     });
-    const [position, setPosition] = useState({
+
+    const firstPos = useRef({
       x: signatureData.dimension?.x,
       y: signatureData.dimension?.y,
+      width: signatureData.dimension?.width,
+      height: signatureData.dimension?.height,
     });
+
+    const [disabled, setDisabled] = useState(false);
+
     // useEffect(() => {
     //   setDimension({
     //     x: signatureData.dimension.x,
@@ -78,14 +86,15 @@ export const ReviewSign = forwardRef(
     // }
 
     const handleSubmit = () => {
+      setDisabled(true);
       putSignature.mutate(
         {
           body: {
             field_name: signatureData.field_name,
             page: pdfPage.currentPage,
             dimension: {
-              x: position.x !== signatureData.dimension.x ? position.x : -1,
-              y: position.y !== signatureData.dimension.y ? position.y : -1,
+              x: dimension.x !== signatureData.dimension.x ? dimension.x : -1,
+              y: dimension.y !== signatureData.dimension.y ? dimension.y : -1,
               width:
                 dimension.width !== signatureData.dimension.width
                   ? dimension.width
@@ -112,6 +121,8 @@ export const ReviewSign = forwardRef(
                 });
                 onClose();
                 onClose2();
+                queryClient.invalidateQueries({ queryKey: ["getField"] });
+                setDisabled(false);
                 handleShowmodal();
               }
             );
@@ -126,8 +137,8 @@ export const ReviewSign = forwardRef(
           props={props}
           signatureData={signatureData}
           index={index}
+          dimension={dimension}
           setDimension={setDimension}
-          setPosition={setPosition}
           workFlow={workFlow}
           value={value}
           control={control}
@@ -220,15 +231,39 @@ export const ReviewSign = forwardRef(
             sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
             onClick={() => {
               // setLocation(dragPosition);
-
-              handleOpenResize(false);
-              setImgBase64(null);
+              putSignature.mutate(
+                {
+                  body: {
+                    field_name: signatureData.field_name,
+                    page: pdfPage.currentPage,
+                    dimension: {
+                      x: firstPos.current.x,
+                      y: firstPos.current.y,
+                      width: firstPos.current.width,
+                      height: firstPos.current.height,
+                    },
+                    visible_enabled: true,
+                  },
+                  field: signatureData.type.toLowerCase(),
+                  documentId: workFlow.documentId,
+                },
+                {
+                  onSuccess: () => {
+                    queryClient.invalidateQueries({
+                      queryKey: ["getField"],
+                    });
+                    handleOpenResize(false);
+                    setImgBase64(null);
+                  },
+                }
+              );
             }}
           >
             {t("0-common.cancel")}
           </Button>
           <Button
             variant="contained"
+            disabled={disabled}
             sx={{
               borderRadius: "10px",
               borderColor: "borderColor.main",

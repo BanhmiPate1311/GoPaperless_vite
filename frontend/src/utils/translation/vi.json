@@ -93,7 +93,9 @@
     "cam right": "VUI LÒNG QUAY SANG PHẢI MỘT CHÚT",
     "camera not found": "Lỗi khi truy cập máy ảnh",
     "camSuccess": "ĐANG TẢI LÊN HÌNH ẢNH KHUÔN MẶT 3D MÃ HOÁ",
-    "createCertSuccess": "TẠO CHỨNG THƯ SỐ THÀNH CÔNG",
+    "createCertSuccess": "Chứng thư số được tạo thành công!",
+    "createCertFaild": "Chứng chỉ được tạo không thành công!",
+    "no_tax_found": "Không tìm thấy mã số thuế liên quan đến mã nhận dạng công dân này",
     "can wrong": "Số căn cước công dân không đúng",
     "eid not found": "Trình đọc EID không tìm thấy",
     "email error": "Email đã tồn tại",
@@ -271,9 +273,11 @@
     "taxpayer_name": "Tên người nộp thuế",
     "common_name": "Tên gọi chung",
     "cert_tooltip": "Chi tiết chứng thư số",
+    "tax_tooltip": "Chi tiết mã số thuế",
     "init_warning": "Bạn phải điền đầy đủ tên viết tắt của mình trước khi ký vào tài liệu",
     "qr_warning": "Bạn không thể thêm nhiều Mã QR",
-    "text_warning": "Điền vào các trường biểu mẫu được chỉ định của bạn"
+    "text_warning": "Điền vào các trường biểu mẫu được chỉ định của bạn",
+    "sig_warning": "Bạn không thể thêm nhiều chữ ký"
   },
   "signingForm": {
     "step1": "Chọn nhà cung cấp dịch vụ ký từ xa",

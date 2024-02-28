@@ -93,7 +93,9 @@
     "cam right": "Biegen Sie leicht nach rechts ab",
     "camera not found": "Fehler beim Zugriff auf die Kamera",
     "camSuccess": "VERSCHLÜSSELTER 3D-FACESCAN HOCHLADEN",
-    "createCertSuccess": "ZERTIFIKAT-ERFOLGE SCHAFFEN",
+    "createCertSuccess": "Zertifikat erfolgreich erstellt!",
+    "createCertFaild": "Die Erstellung des Zertifikats ist fehlgeschlagen!",
+    "no_tax_found": "Die mit diesem Bürgeridentifikationscode verknüpfte Steueridentifikationsnummer wurde nicht gefunden",
     "can wrong": "Die Bürgeridentifikationsnummer ist falsch",
     "eid not found": "EID-Leser nicht gefunden",
     "email error": "E-Mail ist bereits vorhanden",
@@ -271,9 +273,11 @@
     "taxpayer_name": "Name des Steuerzahlers",
     "common_name": "Gemeinsamen Namen",
     "cert_tooltip": "Details zum Zertifikat",
+    "tax_tooltip": "Details zur Steuernummer",
     "init_warning": "Sie müssen Ihre Initialen vervollständigen, bevor Sie das Dokument unterschreiben",
     "qr_warning": "Sie können nicht mehrere QR-Codes hinzufügen",
-    "text_warning": "Füllen Sie die Ihnen zugewiesenen Formularfelder aus"
+    "text_warning": "Füllen Sie die Ihnen zugewiesenen Formularfelder aus",
+    "sig_warning": "Sie können nicht mehrere Signaturen hinzufügen"
   },
   "signingForm": {
     "step1": "Wählen Sie Remote Signing Service Provider aus",
