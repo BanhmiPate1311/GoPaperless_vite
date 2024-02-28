@@ -13,4 +13,4 @@ export * from "./Step11";
 export * from "./Step12";
 export * from "./Step13";
 export * from "./Step14";
-export * from "./Step15";
+export * from "./ModalTaxInfor";

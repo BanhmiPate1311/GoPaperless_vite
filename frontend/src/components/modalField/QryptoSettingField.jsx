@@ -14,7 +14,6 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DetailsTextBoxForm } from ".";
-import QryptoField from "./QryptoField";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,7 +55,6 @@ function a11yProps(index) {
 }
 
 export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
-  console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
 
   const { control, handleSubmit } = useForm({
@@ -195,7 +193,7 @@ export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
               </Tabs>
 
               <TabPanel value={value} index={0}>
-                <QryptoField control={control} workFlow={workFlow} />
+                general
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <DetailsTextBoxForm control={control} />

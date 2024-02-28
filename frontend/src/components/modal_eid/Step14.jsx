@@ -1,60 +1,137 @@
+import { ReactComponent as TaxIcon } from "@/assets/images/svg/tax_icon.svg";
+import styled from "@emotion/styled";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import Stack from "@mui/material/Stack";
+import SvgIcon from "@mui/material/SvgIcon";
 import TextField from "@mui/material/TextField";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ModalTaxInfor } from ".";
+
+const ToggleButtonStyle = styled(ToggleButton)({
+  "&.Mui-selected, &.Mui-selected:hover": {
+    border: "1px solid #0f6dca !important",
+    color: "#3B82F6",
+  },
+  "&:not(.Mui-selected)": {
+    color: "#111", // tắt chức năng làm mờ của Mui
+  },
+  marginBottom: "4px",
+  border: "1px solid gray !important",
+  borderRadius: "10px",
+  padding: "7px",
+});
 
 export const Step14 = ({
   onDisableSubmit,
-  handleSubmit,
-  isSubmitDisabled,
   taxInformation,
   workFlow,
-  setActiveStep,
-  setTaxIndex,
   setTaxCode,
 }) => {
   const { t } = useTranslation();
+  const [isShowTaxInfor, setShowTaxInfor] = useState([false]);
+  const [taxIndex, setTaxIndex] = useState(null);
 
-  const handleTax = (e) => {
-    tax.current = e.target.value;
-    if (e.target.value.length < 10 || e.target.value.length > 14) {
+  useEffect(() => {
+    if (taxIndex === null || taxInformation?.length === 0) {
       onDisableSubmit(true);
     } else {
       onDisableSubmit(false);
     }
-  };
-  // Radio button
-  const [taxCodes, setTaxCodes] = React.useState(
-    taxInformation.document_data.tax_informations[0].company_information
-      .business_license
-  );
-  useEffect(() => {
-    setTaxCode(taxCodes);
-  }, [taxCodes]);
-  const handleChange = (event) => {
-    setTaxCodes(event.target.value);
+  }, [taxIndex, onDisableSubmit, taxInformation]);
+
+  // const handleTax = (e) => {
+  // tax.current = e.target.value;
+  // if (e.target.value.length < 10 || e.target.value.length > 14) {
+  //   onDisableSubmit(true);
+  // } else {
+  //   onDisableSubmit(false);
+  // }
+  // };
+
+  const content = taxInformation?.map((value, index) => (
+    <ToggleButtonStyle
+      sx={{
+        textTransform: "capitalize",
+        backgroundColor: "signingWFBackground.main",
+      }}
+      value={index}
+      aria-label="list"
+      key={index}
+      // onDoubleClick={(e) => {
+      //   e.preventDefault();
+      //   if (!isShowCertInfor[index]) {
+      //     onDoubleClick(index);
+      //   }
+      // }}
+    >
+      <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
+        <Tooltip title={t("signing.tax_tooltip")} followCursor>
+          <Box height="60px" minWidth="60px" mx={2}>
+            <SvgIcon
+              component={TaxIcon}
+              inheritViewBox
+              sx={{
+                width: "100%",
+                height: "100%",
+                color: "signingtextBlue.main",
+                cursor: "pointer",
+                // mx: 2,
+              }}
+              onClick={() => handleShowTaxInfor(index)}
+            />
+          </Box>
+        </Tooltip>
+
+        <Box flexGrow={1} textAlign="left">
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            sx={{ textTransform: "uppercase", color: "inherit" }}
+          >
+            {value.company_information.official_name}
+          </Typography>
+          <Typography variant="h5" sx={{ color: "inherit" }}>
+            {t("signing.tax_code")}: {value.company_information.tax_code}
+          </Typography>
+        </Box>
+      </Stack>
+      {isShowTaxInfor[index] && (
+        <ModalTaxInfor
+          open={isShowTaxInfor[index]}
+          onClose={() => handleCloseTaxInfor(index)}
+          data={value}
+        />
+      )}
+    </ToggleButtonStyle>
+  ));
+
+  const handleShowTaxInfor = (index) => {
+    const newValue = [...isShowTaxInfor];
+    newValue[index] = true;
+    setShowTaxInfor(newValue);
   };
 
-  const controlProps = (item) => ({
-    checked: taxCodes === item,
-    onChange: handleChange,
-    value: item,
-    name: "size-radio-button-demo",
-    inputProps: { "aria-label": item },
-  });
+  const handleCloseTaxInfor = (index) => {
+    const newValue = [...isShowTaxInfor];
+    newValue[index] = false;
+    setShowTaxInfor(newValue);
+  };
+
+  const handleChange = (event, nextView) => {
+    console.log("nextView: ", nextView);
+    setTaxIndex(nextView);
+    setTaxCode(taxInformation[nextView].company_information.tax_code);
+  };
+
   return (
-    <Box>
+    <Stack height="100%">
       <Typography
         variant="h6"
         // sx={{ height: "17px" }}
@@ -78,150 +155,49 @@ export const Step14 = ({
         sx={{
           width: "100%",
           height: "45px",
+          mb: "10px",
         }}
         autoComplete="off"
       >
         <TextField
           fullWidth
           size="small"
-          id="outlined-read-only-input"
-          label=""
-          type="number"
-          autoComplete="new-password"
+          margin="normal"
+          // name={name}
           value={workFlow.code}
           disabled
-          inputProps={{
+          InputLabelProps={{
             sx: {
               backgroundColor: "signingWFBackground.main",
             },
-            maxLength: 10,
           }}
-          onChange={handleTax}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !isSubmitDisabled) {
-              handleSubmit();
-            }
+          inputProps={{
+            sx: {
+              py: "10.5px",
+              backgroundColor: "signingWFBackground.main",
+            },
           }}
+          sx={{ my: 0, height: "45px" }}
         />
       </Box>
-      <TableContainer
-        component={Paper}
-        sx={{
-          marginTop: "10px",
-          boxShadow: "none",
-          border: "1px solid rgba(224, 224, 224, 1)",
-        }}
-      >
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
-          name="radio-buttons-group"
-        >
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow
-                sx={{
-                  height: "30px",
-                  "& th,td": {
-                    paddingTop: "0px",
-                    paddingBottom: "0px",
-                  },
-                }}
-              >
-                <TableCell></TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    borderLeft: " 1px solid rgba(224, 224, 224, 1)",
-                    borderRight: " 1px solid rgba(224, 224, 224, 1)",
-                    color: "#6B7280",
-                  }}
-                >
-                  <Typography variant="h4" sx={{ fontWeight: "500" }}>
-                    {t("signing.tax_code")}
-                  </Typography>
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    color: "#6B7280",
-                  }}
-                >
-                  <Typography variant="h4" sx={{ fontWeight: "500" }}>
-                    {t("signing.taxpayer_name")}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody
-              sx={{
-                "& td": {
-                  padding: "5px 20px",
-                },
-              }}
-            >
-              {taxInformation.document_data.tax_informations.map(
-                (taxInfo, index) => (
-                  <TableRow key={taxInfo.company_information.business_license}>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      sx={{
-                        width: "50px",
-                        padding: "5px",
-                      }}
-                    >
-                      {" "}
-                      <Radio
-                        {...controlProps(
-                          taxInfo.company_information.business_license
-                        )}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        textWrap: "nowrap",
-                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                        backgroundColor: "dialogBackground.main",
-                      }}
-                    >
-                      <Typography variant="h4" sx={{ fontWeight: "500" }}>
-                        {taxInfo.company_information.tax_code}
-                      </Typography>
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        backgroundColor: "dialogBackground.main",
-                      }}
-                    >
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          fontWeight: "600",
-                          cursor: "pointer",
-                          "&:hover": {
-                            color: "primary.main",
-                          },
-                        }}
-                        onClick={() => {
-                          setActiveStep(15);
-                          setTaxIndex(index);
-                        }}
-                      >
-                        {taxInfo.company_information.official_name}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-        </RadioGroup>
-      </TableContainer>
-    </Box>
+      <Box width={"100%"} flexGrow={1}>
+        {taxInformation === undefined ? (
+          <Stack direction="column" justifyContent="flex-end" height="100%">
+            <Alert severity="error">{t("electronic.no_tax_found")}</Alert>
+          </Stack>
+        ) : (
+          <ToggleButtonGroup
+            orientation="vertical"
+            value={taxIndex}
+            exclusive
+            onChange={handleChange}
+            sx={{ width: "100%" }}
+          >
+            {content}
+          </ToggleButtonGroup>
+        )}
+      </Box>
+    </Stack>
   );
 };
 
@@ -229,8 +205,10 @@ Step14.propTypes = {
   onDisableSubmit: PropTypes.func,
   handleSubmit: PropTypes.func,
   isSubmitDisabled: PropTypes.bool,
-  taxInformation: PropTypes.object,
+  taxInformation: PropTypes.array,
   workFlow: PropTypes.object,
+  taxCode: PropTypes.string,
+  setTaxCode: PropTypes.func,
 };
 
 export default Step14;

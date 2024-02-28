@@ -8,6 +8,7 @@ import {
   checkSignerStatus,
   getSigner,
 } from "@/utils/commonFunction";
+import { generateFieldName } from "@/utils/getField";
 import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -121,10 +122,21 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const signatureField = (value) => {
+    for (const item of field.signature) {
+      if (
+        item.field_name.substring(0, item.field_name.length - 7) ===
+        signerId + "_" + value
+      ) {
+        alert(t("signing.sig_warning"));
+        return;
+      }
+    }
+    const signatureField = generateFieldName(signerId, value);
     const newSignature = {
       type: value,
-      field_name:
-        signerId + "_" + value + "_" + Number(field.signature.length + 1),
+      // field_name:
+      //   signerId + "_" + value + "_" + Number(field.signature.length + 1),
+      field_name: signatureField.value,
       page: signInfo.page,
       dimension: {
         x: signInfo.x,
@@ -132,7 +144,7 @@ export const PdfViewer = ({ workFlow }) => {
         width: 22,
         height: 5,
       },
-      suffix: Number(field.signature.length + 1),
+      suffix: signatureField.suffix,
       visible_enabled: true,
       workFlowId: workFlow.workFlowId,
     };
@@ -167,10 +179,10 @@ export const PdfViewer = ({ workFlow }) => {
 
   const textField = (value) => {
     // console.log("value: ", value);
+    const fieldName = generateFieldName(signerId, value);
     const newTextField = {
       type: value,
-      field_name:
-        signerId + "_" + value + "_" + Number(field.textbox.length + 1),
+      field_name: fieldName.value,
       page: signInfo.page,
       value: handleValue(value),
       read_only: false,
@@ -182,7 +194,7 @@ export const PdfViewer = ({ workFlow }) => {
         height: 2,
       },
       place_holder: value,
-      suffix: Number(field.textbox.length + 1),
+      suffix: fieldName.suffix,
     };
     addTextBox.mutate(
       {
@@ -200,10 +212,10 @@ export const PdfViewer = ({ workFlow }) => {
 
   const addTextField = (value) => {
     console.log("value: ", value);
+    const fieldName = generateFieldName(signerId, "TEXTFIELD");
     const newTextField = {
       type: "TEXTFIELD",
-      field_name:
-        signerId + "_" + "TEXTFIELD" + "_" + Number(field.textbox.length + 1),
+      field_name: fieldName.value,
       page: signInfo.page,
       value: handleValue(value),
       read_only: false,
@@ -215,7 +227,7 @@ export const PdfViewer = ({ workFlow }) => {
         width: 22,
         height: 5,
       },
-      suffix: Number(field.textbox.length + 1),
+      suffix: fieldName.suffix,
     };
     addTextBox.mutate(
       {
@@ -232,9 +244,10 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const initial = (value) => {
+    console.log("value: ", value);
+    const fieldName = generateFieldName(signerId, value);
     const newInitField = {
-      field_name:
-        signerId + "_" + value + "_" + Number(field.initial.length + 1),
+      field_name: fieldName.value,
       page: signInfo.page,
       dimension: {
         x: signInfo.x,
@@ -242,7 +255,8 @@ export const PdfViewer = ({ workFlow }) => {
         width: 6,
         height: 4,
       },
-      suffix: Number(field.initial.length + 1),
+      suffix: fieldName.suffix,
+      required: true,
     };
     addTextBox.mutate(
       {
@@ -259,14 +273,15 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const qrCode = (value) => {
-    // console.log("qr: ", field?.qr);
+    console.log("value: ", value);
     if (field?.qr?.length > 0) {
       alert(t("signing.qr_warning"));
       return;
     }
     const qrToken = uuidv4();
+    const fieldName = generateFieldName(signerId, value);
     const newInitField = {
-      field_name: signerId + "_" + value + "_" + Number(field.qr.length + 1),
+      field_name: fieldName.value,
       page: signInfo.page,
       dimension: {
         x: signInfo.x,
@@ -274,7 +289,7 @@ export const PdfViewer = ({ workFlow }) => {
         width: 20,
         height: 13,
       },
-      suffix: Number(field.qr.length + 1),
+      suffix: fieldName.suffix,
       qr_token: qrToken,
       value: `${window.location.origin}/view/documents/${qrToken}`,
       signing_token: signingToken,
@@ -294,9 +309,9 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const QrQrypto = (value) => {
+    const fieldName = generateFieldName(signerId, value);
     const newQrQrypto = {
-      field_name:
-        signerId + "_" + value + "_" + Number(field.qrypto.length + 1),
+      field_name: fieldName.value,
       page: signInfo.page,
       dimension: {
         x: signInfo.x,
@@ -304,7 +319,7 @@ export const PdfViewer = ({ workFlow }) => {
         width: 20,
         height: 13,
       },
-      suffix: Number(field.qrypto.length + 1),
+      suffix: fieldName.suffix,
     };
     addTextBox.mutate(
       {

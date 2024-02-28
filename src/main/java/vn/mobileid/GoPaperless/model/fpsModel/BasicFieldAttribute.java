@@ -15,7 +15,7 @@ import java.util.List;
 public class BasicFieldAttribute {
     private String fieldName;
     private Integer page;
-    private int suffix;
+    private String suffix;
     private Integer maxLength;
     private String type;
     private String embedded;
