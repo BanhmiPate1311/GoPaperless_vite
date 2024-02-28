@@ -1,28 +1,24 @@
-import { convertTime, createValidName } from "@/utils/commonFunction";
+import { convertTime } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import ShowSignature from "./ShowSignature";
-import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
-import IconButton from "@mui/material/IconButton";
 
 export const SignDetail = ({ sign, signType }) => {
   // console.log("sign: ", sign);
-  let name = sign.name + " " + signType;
-  const [expanded, setExpanded] = useState("panel");
+  // let name = sign.name + " " + signType;
+  // const [expanded, setExpanded] = useState("panel");
 
-  const handleChangeShow = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : true);
-  };
+  // const handleChangeShow = (panel) => (event, isExpanded) => {
+  //   setExpanded(isExpanded ? panel : true);
+  // };
 
   // console.log("sign: ", sign);
   const [isOpen, setIsOpen] = useState([false]);
@@ -85,7 +81,12 @@ export const SignDetail = ({ sign, signType }) => {
               width="100%"
               // height="50px"
             >
-              {sign.icon}
+              <Box
+                onClick={() => toggleDrawer(index)}
+                sx={{ cursor: "pointer" }}
+              >
+                {sign.icon}
+              </Box>
               <Box flexGrow={1}>
                 <Typography
                   variant="h6"
@@ -100,9 +101,9 @@ export const SignDetail = ({ sign, signType }) => {
                   </Typography>
                 )}
               </Box>
-              <IconButton onClick={() => toggleDrawer(index)}>
+              {/* <IconButton onClick={() => toggleDrawer(index)}>
                 <ShowDetailIcon />
-              </IconButton>
+              </IconButton> */}
               {isOpen[index] && (
                 <ShowSignature
                   open={isOpen[index]}

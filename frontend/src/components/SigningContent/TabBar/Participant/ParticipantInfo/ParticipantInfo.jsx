@@ -1,4 +1,3 @@
-import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
 import { ReactComponent as Signed_Icon } from "@/assets/images/svg/signed_icon2.svg";
 import { ReactComponent as SignerSelected } from "@/assets/images/svg/signer_select.svg";
 import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
@@ -9,7 +8,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
@@ -104,13 +102,18 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                 ) : (
                   <WaitingSig width={24} height={24} />
                 )} */}
-              {status === 2 ? (
-                <Signed_Icon />
-              ) : check ? (
-                <SignerSelected />
-              ) : (
-                <WaitingSig width={24} height={24} />
-              )}
+              <Box
+                onClick={() => toggleDrawer(index)}
+                sx={{ cursor: "pointer" }}
+              >
+                {status === 2 ? (
+                  <Signed_Icon />
+                ) : check ? (
+                  <SignerSelected />
+                ) : (
+                  <WaitingSig width={24} height={24} />
+                )}
+              </Box>
               <Box flexGrow={1}>
                 <Typography
                   variant="h6"
@@ -133,9 +136,9 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                     : t("signing.wait_signature")}
                 </Typography>
               </Box>
-              <IconButton onClick={() => toggleDrawer(index)}>
+              {/* <IconButton onClick={() => toggleDrawer(index)}>
                 <ShowDetailIcon />
-              </IconButton>
+              </IconButton> */}
               <SigningDetail
                 open={isOpen[index]}
                 participant={participant}
