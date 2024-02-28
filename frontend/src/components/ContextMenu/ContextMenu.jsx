@@ -51,6 +51,7 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
       value: "AddText",
     },
   ];
+  console.log(123123);
   return (
     <Menu
       open={contextMenu !== null}
