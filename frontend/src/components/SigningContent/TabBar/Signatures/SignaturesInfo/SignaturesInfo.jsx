@@ -1,4 +1,3 @@
-import { ReactComponent as ShowDetailIcon } from "@/assets/images/svg/showdetail_icon.svg";
 import { convertTime } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -6,7 +5,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
@@ -78,7 +76,12 @@ export const SignaturesInfo = ({ sign, signType }) => {
               width="100%"
               // height="50px"
             >
-              {signvalue.isSigned ? sign.icon.signed : sign.icon.notSigned}
+              <Box
+                onClick={() => toggleDrawer(index)}
+                sx={{ cursor: "pointer" }}
+              >
+                {signvalue.isSigned ? sign.icon.signed : sign.icon.notSigned}
+              </Box>
               <Box flexGrow={1}>
                 <Typography
                   variant="h6"
@@ -93,9 +96,9 @@ export const SignaturesInfo = ({ sign, signType }) => {
                   </Typography>
                 )}
               </Box>
-              <IconButton onClick={() => toggleDrawer(index)}>
+              {/* <IconButton onClick={() => toggleDrawer(index)}>
                 <ShowDetailIcon />
-              </IconButton>
+              </IconButton> */}
               {isOpen[index] && (
                 <SignatureDetail
                   open={isOpen[index]}
