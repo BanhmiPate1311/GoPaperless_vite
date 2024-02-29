@@ -9,6 +9,7 @@ import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Participants } from "./tabbar/Participants";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -175,8 +176,8 @@ export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
           {...a11yProps(3)}
         />
       </Tabs>
-      {/* <TabPanel value={value} index={0}>
-        <Overview workFlow={workFlow} qrSigning={qrSigning} />
+      <TabPanel value={value} index={0}>
+        {/* <Overview workFlow={workFlow} qrSigning={qrSigning} /> */}
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Participants
@@ -185,11 +186,11 @@ export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Signatures sigList1={sigList1} sigList2={sigList2} />
+        {/* <Signatures sigList1={sigList1} sigList2={sigList2} /> */}
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Documents eSealList1={eSealList1} eSealList2={eSealList2} />
-      </TabPanel> */}
+        {/* <Documents eSealList1={eSealList1} eSealList2={eSealList2} /> */}
+      </TabPanel>
     </Box>
   );
 };
