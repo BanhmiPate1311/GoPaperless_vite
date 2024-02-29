@@ -87,46 +87,61 @@ export const ReviewSign = forwardRef(
 
     const handleSubmit = () => {
       setDisabled(true);
-      putSignature.mutate(
-        {
-          body: {
-            field_name: signatureData.field_name,
-            page: pdfPage.currentPage,
-            dimension: {
-              x: dimension.x !== signatureData.dimension.x ? dimension.x : -1,
-              y: dimension.y !== signatureData.dimension.y ? dimension.y : -1,
-              width:
-                dimension.width !== signatureData.dimension.width
-                  ? dimension.width
-                  : -1,
-              height:
-                dimension.height !== signatureData.dimension.height
-                  ? dimension.height
-                  : -1,
-            },
-            visible_enabled: true,
-          },
-          field: signatureData.type.toLowerCase(),
-          documentId: workFlow.documentId,
-        },
-        {
-          onSuccess: () => {
-            html2canvas(textElement.current, { backgroundColor: null }).then(
-              (canvas) => {
-                const data64 = canvas.toDataURL();
+      // putSignature.mutate(
+      //   {
+      //     body: {
+      //       field_name: signatureData.field_name,
+      //       page: pdfPage.currentPage,
+      //       dimension: {
+      //         x: dimension.x !== signatureData.dimension.x ? dimension.x : -1,
+      //         y: dimension.y !== signatureData.dimension.y ? dimension.y : -1,
+      //         width:
+      //           dimension.width !== signatureData.dimension.width
+      //             ? dimension.width
+      //             : -1,
+      //         height:
+      //           dimension.height !== signatureData.dimension.height
+      //             ? dimension.height
+      //             : -1,
+      //       },
+      //       visible_enabled: true,
+      //     },
+      //     field: signatureData.type.toLowerCase(),
+      //     documentId: workFlow.documentId,
+      //   },
+      //   {
+      //     onSuccess: () => {
+      //       html2canvas(textElement.current, { backgroundColor: null }).then(
+      //         (canvas) => {
+      //           const data64 = canvas.toDataURL();
 
-                setDataSigning({
-                  ...dataSigning,
-                  imageBase64: removeBase64Prefix(data64),
-                });
-                onClose();
-                onClose2();
-                queryClient.invalidateQueries({ queryKey: ["getField"] });
-                setDisabled(false);
-                handleShowmodal();
-              }
-            );
-          },
+      //           setDataSigning({
+      //             ...dataSigning,
+      //             imageBase64: removeBase64Prefix(data64),
+      //           });
+      //           onClose();
+      //           onClose2();
+      //           queryClient.invalidateQueries({ queryKey: ["getField"] });
+      //           setDisabled(false);
+      //           handleShowmodal();
+      //         }
+      //       );
+      //     },
+      //   }
+      // );
+      html2canvas(textElement.current, { backgroundColor: null }).then(
+        (canvas) => {
+          const data64 = canvas.toDataURL();
+
+          setDataSigning({
+            ...dataSigning,
+            imageBase64: removeBase64Prefix(data64),
+          });
+          onClose();
+          onClose2();
+          // queryClient.invalidateQueries({ queryKey: ["getField"] });
+          setDisabled(false);
+          handleShowmodal();
         }
       );
     };
