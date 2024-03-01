@@ -6,7 +6,7 @@ import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { PdfViewer } from "../SigningContent/PdfViewer";
-import TabBar from "./Tabbar";
+import TabBar from "./tabbar";
 
 export const ArragementDocument = ({ workFlow, page, qrSigning }) => {
   const { data: signedInfo } = useQuery({

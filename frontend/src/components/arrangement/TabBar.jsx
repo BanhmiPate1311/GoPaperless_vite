@@ -9,7 +9,7 @@ import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Participants } from "./tabbar/Participants";
+import { Participants } from "./tabbar/Participants/Participants";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

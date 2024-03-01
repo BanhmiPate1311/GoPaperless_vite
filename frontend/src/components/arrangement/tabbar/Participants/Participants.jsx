@@ -1,8 +1,6 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import { ParticipantInfo } from "@/components/SigningContent/TabBar/Participant/ParticipantInfo";
-import { ParticipantModal } from "@/components/SigningContent/TabBar/Participant/ParticipantModal";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -11,6 +9,8 @@ import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ParticipantsInfo } from "./ParticipantsInfo";
+import { ParticipantsModal } from "./ParticipantsModal";
 
 // eslint-disable-next-line react/prop-types
 export const Participants = ({ participantsList, signType }) => {
@@ -92,13 +92,13 @@ export const Participants = ({ participantsList, signType }) => {
           </Typography>
         </Box>
       ) : (
-        <ParticipantInfo
+        <ParticipantsInfo
           participantsList={participantsList}
           signType={signType}
         />
       )}
 
-      <ParticipantModal
+      <ParticipantsModal
         open={open}
         handleClose={handleClose}
         title={t("0-common.workflow")}
