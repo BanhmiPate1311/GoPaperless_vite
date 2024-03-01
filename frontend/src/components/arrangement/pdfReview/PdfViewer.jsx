@@ -18,32 +18,30 @@ import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
-import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
+import { Document } from ".";
 
-export const PdfViewer = ({ workFlow }) => {
-  // console.log("workFlow: ", workFlow);
+export const PdfViewer = ({ workFlow, tabBar }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
   const [openResize, setOpenResize] = useState(false);
-
-  const signerId = getSigner(workFlow).signerId;
+  const signerId = getSigner(workFlow)?.signerId;
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
-  const { signingToken, signerToken } = useCommonHook();
+  // const { signingToken, signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
 
-  const isSetPosRef = useRef(checkIsPosition(workFlow));
+  // const isSetPosRef = useRef(checkIsPosition(workFlow));
   // const isSetPos = isSetPosRef.current;
 
-  useEffect(() => {
-    isSetPosRef.current = checkIsPosition(workFlow);
-  }, [workFlow]);
+  // useEffect(() => {
+  //   isSetPosRef.current = checkIsPosition(workFlow);
+  // }, [workFlow]);
 
   // eslint-disable-next-line no-unused-vars
   const { data: field } = useQuery({
@@ -73,19 +71,18 @@ export const PdfViewer = ({ workFlow }) => {
     },
   });
 
-  // console.log("getField: ", field);
-
   const addSignature = UseAddSig();
   const addTextBox = UseAddTextField();
   // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
+    event.preventDefault();
     // console.log("page: ", event);
-    // if (openResize) return;
+    if (openResize) return;
     if (
-      checkSignerStatus(signer, signerToken) === 2 ||
-      (event.target.className !== "rpv-core__text-layer" &&
-        event.target.className !== "rpv-core__text-layer-text")
+      // checkSignerStatus(signer, signerToken) === 2 ||
+      event.target.className !== "rpv-core__text-layer" &&
+      event.target.className !== "rpv-core__text-layer-text"
     )
       return;
     const rect = event.currentTarget.getBoundingClientRect();
@@ -99,20 +96,14 @@ export const PdfViewer = ({ workFlow }) => {
       width: 22,
       height: 5,
       page: page.pageIndex + 1,
-      // totalPage: page.doc._pdfInfo.numPages,
     };
-
-    event.preventDefault();
     setContextMenu(
       contextMenu === null
         ? {
             mouseX: event.clientX + 2,
             mouseY: event.clientY - 6,
           }
-        : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
-          // Other native context menus might behave different.
-          // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
-          null
+        : null
     );
     setSignInFo(data);
   };
@@ -336,7 +327,7 @@ export const PdfViewer = ({ workFlow }) => {
   };
 
   const handleClickMenu = (value) => () => {
-    // console.log("data: ", value);
+    console.log("data: ", value);
     handleClose();
     switch (value) {
       case "SIGNATURE":
@@ -377,6 +368,7 @@ export const PdfViewer = ({ workFlow }) => {
           contextMenu={contextMenu}
           handleClose={handleClose}
           handleClickMenu={handleClickMenu}
+          tabBar={tabBar}
         />
         <Document
           props={props}

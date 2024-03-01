@@ -13,9 +13,14 @@ import { ReactComponent as Signature } from "@/assets/images/contextmenu/signatu
 import { ReactComponent as AddText } from "@/assets/images/contextmenu/addtext.svg";
 import { ReactComponent as QrQrypto } from "@/assets/images/contextmenu/qrypto.svg";
 
-export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
+export const ContextMenu = ({
+  contextMenu,
+  handleClose,
+  handleClickMenu,
+  tabBar,
+}) => {
   const { t } = useTranslation();
-  const data = [
+  let data = [
     {
       icon: <Signature />,
       label: t("0-common.signature"),
@@ -51,6 +56,26 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
       value: "AddText",
     },
   ];
+  // Arrangement Overview
+
+  switch (tabBar) {
+    case 0:
+      data = data.filter(
+        (item) => (item.value === "QRYPTO") | (item.value == "QR")
+      );
+      break;
+
+    case 1:
+      data = data.filter(
+        (item) => item.value !== "QRYPTO" && item.value !== "QR"
+      );
+      break;
+    case 2:
+      return;
+    case 3:
+      return;
+  }
+
   return (
     <Menu
       open={contextMenu !== null}
@@ -90,5 +115,6 @@ ContextMenu.propTypes = {
   }),
   handleClose: PropTypes.func,
   handleClickMenu: PropTypes.func,
+  tabBar: PropTypes.number,
 };
 export default ContextMenu;
