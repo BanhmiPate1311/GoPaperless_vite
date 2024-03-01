@@ -4,7 +4,7 @@ import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { checkIsPosition } from "@/utils/commonFunction";
 import { useQueryClient } from "@tanstack/react-query";
 import Signature from "./Signature";
-import { Initial, TextBox } from ".";
+import { AddText, Initial, QrCode, Qrypto, TextBox } from ".";
 export const Document = ({
   props,
   workFlow,
@@ -149,7 +149,7 @@ export const Document = ({
           />
         );
       })}
-      {/* {addText?.map((addTextData, index) => {
+      {addText?.map((addTextData, index) => {
         if (addTextData.page !== props.pageIndex + 1) return null;
         return (
           <AddText
@@ -160,7 +160,7 @@ export const Document = ({
             workFlow={workFlow}
           />
         );
-      })} */}
+      })}
       {initial?.map((initData, index) => {
         if (initData.page !== props.pageIndex + 1) return null;
         return (
@@ -177,7 +177,7 @@ export const Document = ({
           />
         );
       })}
-      {/* {qr?.map((qrData, index) => {
+      {qr?.map((qrData, index) => {
         if (qrData.page !== props.pageIndex + 1) return null;
         return (
           <QrCode
@@ -188,8 +188,8 @@ export const Document = ({
             workFlow={workFlow}
           />
         );
-      })} */}
-      {/* {qrypto?.map((qryptoData, index) => {
+      })}
+      {qrypto?.map((qryptoData, index) => {
         if (qryptoData.page !== props.pageIndex + 1) return null;
         return (
           <Qrypto
@@ -200,7 +200,7 @@ export const Document = ({
             workFlow={workFlow}
           />
         );
-      })} */}
+      })}
       {props.annotationLayer.children}
       <div style={{ userSelect: "none" }}>{props.textLayer.children}</div>
     </div>

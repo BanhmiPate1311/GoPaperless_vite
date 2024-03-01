@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ParticipantInfo } from ".";
+import { useSearchParams } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 export const Participants = ({ participantsList }) => {
@@ -26,7 +27,6 @@ export const Participants = ({ participantsList }) => {
     setOpen(false);
   };
   //End: Open modal
-
   return (
     <Box sx={{ height: "100%" }}>
       <Stack

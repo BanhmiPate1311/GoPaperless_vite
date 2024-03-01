@@ -28,10 +28,11 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   const [contextMenu, setContextMenu] = useState(null);
   const [openResize, setOpenResize] = useState(false);
   const signerId = getSigner(workFlow)?.signerId;
+  const [field, setField] = useState(null);
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
-  // const { signingToken, signerToken } = useCommonHook();
+  const { signingToken, signerToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
@@ -44,33 +45,36 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   // }, [workFlow]);
 
   // eslint-disable-next-line no-unused-vars
-  const { data: field } = useQuery({
-    queryKey: ["getField"],
-    queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
-    select: (data) => {
-      // console.log("data: ", data);
-      const newData = { ...data };
-      const textField = data.textbox
-        .filter(
-          (item) =>
-            item.type !== "TEXTFIELD" &&
-            item.process_status !== "PROCESSED" &&
-            item.value !== ""
-        )
-        .map((item) => {
-          return {
-            field_name: item.field_name,
-            value: item.value,
-          };
-        });
-      return {
-        ...newData,
-        textField,
-        workFlowId: workFlow.workFlowId,
-      };
-    },
-  });
+  const getFields = async () => {
+    const response = await fpsService.getFields({
+      documentId: workFlow.documentId,
+    });
+    if (!response) return;
+    const newData = { ...response };
+    const textField = response.textbox
+      .filter(
+        (item) =>
+          item.type !== "TEXTFIELD" &&
+          item.process_status !== "PROCESSED" &&
+          item.value !== ""
+      )
+      .map((item) => {
+        return {
+          field_name: item.field_name,
+          value: item.value,
+        };
+      });
+    setField({
+      ...newData,
+      textField,
+      workFlowId: workFlow.workFlowId,
+    });
+  };
+  useEffect(async () => {
+    await getFields();
+  }, []);
 
+  console.log("field: ", field);
   const addSignature = UseAddSig();
   const addTextBox = UseAddTextField();
   // const updateQr = UseUpdateQr();
@@ -80,7 +84,6 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
     // console.log("page: ", event);
     if (openResize) return;
     if (
-      // checkSignerStatus(signer, signerToken) === 2 ||
       event.target.className !== "rpv-core__text-layer" &&
       event.target.className !== "rpv-core__text-layer-text"
     )
@@ -125,8 +128,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
     const signatureField = generateFieldName(signerId, value);
     const newSignature = {
       type: value,
-      // field_name:
-      //   signerId + "_" + value + "_" + Number(field.signature.length + 1),
+
       field_name: signatureField.value,
       page: signInfo.page,
       dimension: {
@@ -270,7 +272,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       return;
     }
     const qrToken = uuidv4();
-    const fieldName = generateFieldName(signerId, value);
+    const fieldName = generateFieldName("ADMIN_PROVIDER", value);
     const newInitField = {
       field_name: fieldName.value,
       page: signInfo.page,
@@ -300,7 +302,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   };
 
   const QrQrypto = (value) => {
-    const fieldName = generateFieldName(signerId, value);
+    const fieldName = generateFieldName("ADMIN_PROVIDER", value);
     const newQrQrypto = {
       field_name: fieldName.value,
       page: signInfo.page,

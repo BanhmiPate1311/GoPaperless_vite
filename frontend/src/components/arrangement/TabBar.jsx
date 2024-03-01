@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { Participants } from "./tabbar/participants/Participants";
 import OverView from "./tabbar/Overview";
 import { useSearchParams } from "react-router-dom";
+import { Signatures } from "../SigningContent/TabBar/Signatures";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,11 +56,41 @@ export const TabBar = ({
   let [searchParams, setSearchParams] = useSearchParams();
   // End: Change params for participants
   const { t } = useTranslation();
+  //1: signature, 3: seal
+  const sigList1 = signedInfo
+    ?.map((sig) => {
+      if (sig.ppl_file_attr_type_id === 1) {
+        return { isSigned: true, ...sig.value };
+      }
+    })
+    .filter((value) => value !== undefined);
+  // console.log("sigList1: ", sigList1);
 
+  const sigList2 = workFlow.participants
+    .filter((sig) => sig.signedType === "NORMAL")
+    .map((sig) => {
+      return { isSigned: false, ...sig.certificate };
+    });
+
+  const eSealList1 = signedInfo
+    ?.map((sig) => {
+      if (sig.ppl_file_attr_type_id === 3) {
+        return { isSigned: true, ...sig.value };
+      }
+    })
+    .filter((value) => value !== undefined);
+
+  const eSealList2 = workFlow.participants
+    .filter((sig) => sig.signedType === "ESEAL")
+    .map((sig) => {
+      return { isSigned: false, ...sig.certificate };
+    });
   const handleChange = (event, newValue) => {
     setTabBar(newValue);
     if (newValue !== 1) {
       setSearchParams({});
+    } else {
+      setSearchParams({ access_token: workFlow.participants[0]?.signerToken });
     }
   };
   return (
@@ -158,7 +189,7 @@ export const TabBar = ({
         <Participants participantsList={workFlow.participants} />
       </TabPanel>
       <TabPanel value={tabBar} index={2}>
-        {/* <Signatures sigList1={sigList1} sigList2={sigList2} /> */}
+        <Signatures sigList1={sigList1} sigList2={sigList2} />
       </TabPanel>
       <TabPanel value={tabBar} index={3}>
         {/* <Documents eSealList1={eSealList1} eSealList2={eSealList2} /> */}
