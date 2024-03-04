@@ -9,7 +9,14 @@ import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+<<<<<<< HEAD
 import { Participants } from "./tabbar/Participants/Participants";
+=======
+import { Participants } from "./tabbar/participants/Participants";
+import OverView from "./tabbar/Overview";
+import { useSearchParams } from "react-router-dom";
+import { Signatures } from "../SigningContent/TabBar/Signatures";
+>>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -42,16 +49,17 @@ function a11yProps(index) {
 }
 
 // eslint-disable-next-line react/prop-types
-export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
-  // console.log("workFlow: ", workFlow);
-  // console.log("signedInfo: ", signedInfo);
+export const TabBar = ({
+  workFlow,
+  signedInfo,
+  qrSigning,
+  tabBar,
+  setTabBar,
+}) => {
+  // Begin: Change params for participants
+  let [searchParams, setSearchParams] = useSearchParams();
+  // End: Change params for participants
   const { t } = useTranslation();
-  const [value, setValue] = useState(0);
-
-  // const participantsList = workFlow.participants.filter(
-  //   (item) => item.signerId !== ""
-  // );
-
   //1: signature, 3: seal
   const sigList1 = signedInfo
     ?.map((sig) => {
@@ -81,11 +89,13 @@ export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
     .map((sig) => {
       return { isSigned: false, ...sig.certificate };
     });
-
-  // console.log("eSealList2: ", eSealList2);
-
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setTabBar(newValue);
+    if (newValue !== 1) {
+      setSearchParams({});
+    } else {
+      setSearchParams({ access_token: workFlow.participants[0]?.signerToken });
+    }
   };
   return (
     <Box
@@ -102,7 +112,7 @@ export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
       <Tabs
         orientation="vertical"
         // variant="scrollable"
-        value={value}
+        value={tabBar}
         onChange={handleChange}
         aria-label="Vertical tabs example"
         // textColor="primary"
@@ -176,19 +186,16 @@ export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
           {...a11yProps(3)}
         />
       </Tabs>
-      <TabPanel value={value} index={0}>
-        {/* <Overview workFlow={workFlow} qrSigning={qrSigning} /> */}
+      <TabPanel value={tabBar} index={0}>
+        <OverView workFlow={workFlow} qrSigning={qrSigning} />
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Participants
-          participantsList={workFlow.participants}
-          signType="Signature"
-        />
+      <TabPanel value={tabBar} index={1}>
+        <Participants participantsList={workFlow.participants} />
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        {/* <Signatures sigList1={sigList1} sigList2={sigList2} /> */}
+      <TabPanel value={tabBar} index={2}>
+        <Signatures sigList1={sigList1} sigList2={sigList2} />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={tabBar} index={3}>
         {/* <Documents eSealList1={eSealList1} eSealList2={eSealList2} /> */}
       </TabPanel>
     </Box>

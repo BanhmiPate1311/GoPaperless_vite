@@ -5,10 +5,12 @@ import Container from "@mui/material/Container";
 import { Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { PdfViewer } from "../SigningContent/PdfViewer";
 import TabBar from "./tabbar";
+import { PdfViewer } from "./pdfReview";
+import { useState } from "react";
 
 export const ArragementDocument = ({ workFlow, page, qrSigning }) => {
+  const [tabBar, setTabBar] = useState(0);
   const { data: signedInfo } = useQuery({
     queryKey: ["getSignedInfo"],
     queryFn: () => apiService.getSignedInfo(workFlow),
@@ -43,7 +45,7 @@ export const ArragementDocument = ({ workFlow, page, qrSigning }) => {
         <Box overflow="auto" height={{ xs: "500px", lg: "calc(100% - 25px)" }}>
           {/* <PdfViewer workFlow={workFlow} /> code a Cường */}
           {/* code thêm */}
-          <PdfViewer workFlow={workFlow} />
+          <PdfViewer workFlow={workFlow} tabBar={tabBar} />
           {/* code thêm */}
         </Box>
       </Box>
@@ -55,6 +57,8 @@ export const ArragementDocument = ({ workFlow, page, qrSigning }) => {
           workFlow={workFlow}
           signedInfo={signedInfo}
           qrSigning={qrSigning}
+          tabBar={tabBar}
+          setTabBar={setTabBar}
         />
       </Box>
     </Container>

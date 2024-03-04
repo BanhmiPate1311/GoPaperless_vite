@@ -1,6 +1,7 @@
 import { ReactComponent as Signed_Icon } from "@/assets/images/svg/signed_icon2.svg";
 import { ReactComponent as SignerSelected } from "@/assets/images/svg/signer_select.svg";
 import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
+import { SigningDetail } from "@/components/SigningContent/TabBar/Participant/SigningDetail";
 import { useCommonHook } from "@/hook";
 import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -13,9 +14,9 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SigningDetail } from "../SigningDetail";
+import { useSearchParams } from "react-router-dom";
 
-export const ParticipantInfo = ({ participantsList, signType }) => {
+export const ParticipantInfo = ({ participantsList }) => {
   const { t } = useTranslation();
   const { signerToken } = useCommonHook();
   const [isOpen, setIsOpen] = useState([false]);
@@ -29,6 +30,9 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
     setIsOpen(newIsOpen);
   };
 
+  // Begin: Change params for participants
+  let [searchParams, setSearchParams] = useSearchParams();
+  // End: Change params for participants
   return (
     <Accordion
       disableGutters
@@ -58,20 +62,8 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
         }}
       >
         <Typography variant="h2" color="textBlack.main">
-          {signType === "Signature"
-            ? t("0-common.participants")
-            : t("0-common.seals")}
+          {t("0-common.participants")}
         </Typography>
-        {/* <Avatar
-          sx={{
-            bgcolor: "signingtextBlue.main",
-            width: 16,
-            height: 16,
-            fontSize: "10px",
-          }}
-        >
-          {participantsList.length}
-        </Avatar> */}
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0 }}>
         {participantsList.map((participant, index) => {
@@ -87,6 +79,10 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
               color={check ? "signingtextBlue.main" : ""}
               sx={{
                 p: "10px 20px",
+                "&:hover": {
+                  cursor: "pointer",
+                  backgroundColor: "rgba(0,0,0,0.1)",
+                },
               }}
               alignItems={"center"}
               borderTop="1px solid"
@@ -94,7 +90,6 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                 index === participantsList.length - 1 ? "1px solid" : ""
               }
               borderColor="borderColor.main"
-              // height="50px"
             >
               <Box
                 onClick={() => toggleDrawer(index)}
@@ -108,7 +103,16 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                   <WaitingSig width={24} height={24} />
                 )}
               </Box>
-              <Box flexGrow={1}>
+              <Box
+                flexGrow={1}
+                onClick={() => {
+                  searchParams.get("access_token") === participant.signerToken
+                    ? setSearchParams({})
+                    : setSearchParams({
+                        access_token: participant.signerToken,
+                      });
+                }}
+              >
                 <Typography
                   variant="h6"
                   color={check ? "signingtextBlue.main" : "textBlack.main"}

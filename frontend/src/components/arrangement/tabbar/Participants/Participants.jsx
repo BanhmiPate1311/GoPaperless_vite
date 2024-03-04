@@ -1,6 +1,10 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
+<<<<<<<< HEAD:frontend/src/components/arrangement/tabbar/Participants/Participants.jsx
+========
+import { ParticipantModal } from "@/components/SigningContent/TabBar/Participant/ParticipantModal";
+>>>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89:frontend/src/components/arrangement/tabbar/participants/Participants.jsx
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -9,13 +13,19 @@ import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+<<<<<<<< HEAD:frontend/src/components/arrangement/tabbar/Participants/Participants.jsx
 import { ParticipantsInfo } from "./ParticipantsInfo";
 import { ParticipantsModal } from "./ParticipantsModal";
+========
+import { ParticipantInfo } from ".";
+import { useSearchParams } from "react-router-dom";
+>>>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89:frontend/src/components/arrangement/tabbar/participants/Participants.jsx
 
 // eslint-disable-next-line react/prop-types
-export const Participants = ({ participantsList, signType }) => {
-  // console.log("participantsList: ", participantsList);
+export const Participants = ({ participantsList }) => {
   const { t } = useTranslation();
+
+  //Begin: Open modal
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -24,7 +34,7 @@ export const Participants = ({ participantsList, signType }) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  //End: Open modal
   return (
     <Box sx={{ height: "100%" }}>
       <Stack
@@ -33,12 +43,9 @@ export const Participants = ({ participantsList, signType }) => {
         justifyContent="space-between"
       >
         <Stack direction="row" spacing={1} alignItems="center">
-          {/* {signType === "Signature" ? <ParticipantIcon /> : <SealIcon />} */}
           <ParticipantIcon />
           <Typography sx={{ fontWeight: "550" }} variant="h3">
-            {signType === "Signature"
-              ? t("0-common.participants")
-              : t("0-common.seals")}
+            {t("0-common.participants")}
           </Typography>
 
           <Avatar
@@ -76,26 +83,20 @@ export const Participants = ({ participantsList, signType }) => {
               alt="loading"
             />
           </Box>
-          {/* <Box
-            component="img"
-            sx={{
-              width: "200px",
-            }}
-            alt="The house from the offer."
-            src={imageNotFound}
-          /> */}
+
           <Typography textAlign="center" variant="h5" fontWeight="bold">
-            {signType === "Signature"
-              ? t("validation.signatureNotFound")
-              : t("validation.sealNotFound")}
-            {/* {t("validation.signatureNotFound")} */}
+            {t("validation.signatureNotFound")}
           </Typography>
         </Box>
       ) : (
+<<<<<<<< HEAD:frontend/src/components/arrangement/tabbar/Participants/Participants.jsx
         <ParticipantsInfo
           participantsList={participantsList}
           signType={signType}
         />
+========
+        <ParticipantInfo participantsList={participantsList} />
+>>>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89:frontend/src/components/arrangement/tabbar/participants/Participants.jsx
       )}
 
       <ParticipantsModal
