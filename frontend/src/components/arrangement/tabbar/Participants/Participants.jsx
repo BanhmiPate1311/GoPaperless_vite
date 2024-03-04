@@ -1,10 +1,7 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-<<<<<<<< HEAD:frontend/src/components/arrangement/tabbar/Participants/Participants.jsx
-========
-import { ParticipantModal } from "@/components/SigningContent/TabBar/Participant/ParticipantModal";
->>>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89:frontend/src/components/arrangement/tabbar/participants/Participants.jsx
+// import { ParticipantModal } from "@/components/SigningContent/TabBar/Participant/ParticipantModal";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -13,13 +10,8 @@ import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-<<<<<<<< HEAD:frontend/src/components/arrangement/tabbar/Participants/Participants.jsx
 import { ParticipantsInfo } from "./ParticipantsInfo";
 import { ParticipantsModal } from "./ParticipantsModal";
-========
-import { ParticipantInfo } from ".";
-import { useSearchParams } from "react-router-dom";
->>>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89:frontend/src/components/arrangement/tabbar/participants/Participants.jsx
 
 // eslint-disable-next-line react/prop-types
 export const Participants = ({ participantsList }) => {
@@ -89,14 +81,7 @@ export const Participants = ({ participantsList }) => {
           </Typography>
         </Box>
       ) : (
-<<<<<<<< HEAD:frontend/src/components/arrangement/tabbar/Participants/Participants.jsx
-        <ParticipantsInfo
-          participantsList={participantsList}
-          signType={signType}
-        />
-========
-        <ParticipantInfo participantsList={participantsList} />
->>>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89:frontend/src/components/arrangement/tabbar/participants/Participants.jsx
+        <ParticipantsInfo participantsList={participantsList} />
       )}
 
       <ParticipantsModal

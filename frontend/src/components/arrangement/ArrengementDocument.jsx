@@ -9,7 +9,7 @@ import TabBar from "./tabbar";
 import { PdfViewer } from "./pdfReview";
 import { useState } from "react";
 
-export const ArragementDocument = ({ workFlow, page, qrSigning }) => {
+export const ArragementDocument = ({ workFlow, qrSigning }) => {
   const [tabBar, setTabBar] = useState(0);
   const { data: signedInfo } = useQuery({
     queryKey: ["getSignedInfo"],

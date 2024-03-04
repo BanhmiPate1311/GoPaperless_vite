@@ -7,16 +7,11 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-<<<<<<< HEAD
-import { Participants } from "./tabbar/Participants/Participants";
-=======
 import { Participants } from "./tabbar/participants/Participants";
 import OverView from "./tabbar/Overview";
 import { useSearchParams } from "react-router-dom";
 import { Signatures } from "../SigningContent/TabBar/Signatures";
->>>>>>> b046f64c218f04c75d32170218151bd64a3f5a89
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
