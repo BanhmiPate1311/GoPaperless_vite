@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { ReactComponent as VectorIcon } from "@/assets/images/svg/Vector.svg";
 import { ReactComponent as PencilSquareIcon } from "@/assets/images/svg/pen-to-square-regular.svg";
@@ -5,6 +6,8 @@ import { ReactComponent as PerSonIcon } from "@/assets/images/svg/person_icon.sv
 import { ReactComponent as SignedIcon } from "@/assets/images/svg/signed_icon.svg";
 import { ReactComponent as WaitingMySig } from "@/assets/images/svg/waiting_mysig.svg";
 import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
+import { ReactComponent as BarsIcon } from "@/assets/images/svg/bars.svg";
+import { ReactComponent as CheckIcon } from "@/assets/images/svg/check.svg";
 import { useCommonHook } from "@/hook";
 import { checkSignerStatus } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
@@ -30,8 +33,18 @@ import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Store } from "@mui/icons-material";
+
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
 
 const CustomTab = styled(Tab)(({ theme }) => ({
   textTransform: "none", // Remove uppercase transformation
@@ -68,8 +81,10 @@ function TabPanel(props) {
 
 function Row(props) {
   const { row } = props;
+  const { index } = props;
   const { signerToken } = useCommonHook();
   console.log("row:", row);
+  console.log("index:", index);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const status = checkSignerStatus(row, signerToken);
@@ -81,214 +96,265 @@ function Row(props) {
 
   return (
     <>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell component="th" scope="row">
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <PerSonIcon />
-            {/* {tableCheckStatus(item, signerToken)} */}
-            {status === 2 ? (
-              <SignedIcon />
-            ) : status === 1 ? (
-              <WaitingMySig />
-            ) : (
-              <WaitingSig />
-            )}
-            <Typography>
-              {row.lastName} {row.firstName}
-            </Typography>
-          </Stack>
-        </TableCell>
-        <TableCell align="left">{row.firstName}</TableCell>
-        <TableCell align="left">{row.email}</TableCell>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {/* {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} */}
-            {open ? (
-              <VectorIcon
-                sx={{ borderRadius: 999, backgroundColor: "#FEF2F2" }}
-              />
-            ) : (
-              <PencilSquareIcon />
-            )}
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Stack
-              direction="row"
-              sx={{ margin: 1 }}
-              useFlexGap
-              flexWrap="wrap"
-            >
-              <Box width="calc(100% / 3)">
-                <Typography
-                  variant="h6"
-                  color="#1F2937"
-                  fontWeight={600}
-                  mb="10px"
-                  height={17}
-                >
-                  {t("0-common.name")}
-                </Typography>
-                <TextField
-                  sx={{
-                    my: 0,
-                    "& .MuiInputBase-root": {
-                      minHeight: "42px",
-                      height: "42px",
-                      width: "250px",
-                      fontSize: "14px",
-                    },
-                  }}
-                  value={row.lastName + " " + row.firstName}
-                  id="outlined-size-small"
-                  defaultValue="Small"
-                  size="small"
-                />
-              </Box>
-              <Box width="calc(100% / 3)">
-                <Typography
-                  variant="h6"
-                  color="#1F2937"
-                  fontWeight={600}
-                  mb="10px"
-                  height={17}
-                >
-                  {t("0-common.first name")}
-                </Typography>
-                <TextField
-                  sx={{
-                    my: 0,
-                    "& .MuiInputBase-root": {
-                      minHeight: "42px",
-                      height: "42px",
-                      width: "250px",
-                    },
-                  }}
-                  value={row.firstName}
-                  id="outlined-size-small"
-                  defaultValue="Small"
-                  size="small"
-                />
-              </Box>
-              <Box width="calc(100% / 3)">
-                <Typography
-                  variant="h6"
-                  color="#1F2937"
-                  fontWeight={600}
-                  mb="10px"
-                  height={17}
-                >
-                  {t("0-common.last name")}
-                </Typography>
+      <Draggable key={row.id} draggableId={row.id.toString()} index={index}>
+        {(provided) => (
+          <Fragment
 
-                <TextField
-                  sx={{
-                    my: 0,
-                    "& .MuiInputBase-root": {
-                      minHeight: "42px",
-                      height: "42px",
-                      width: "250px",
-                    },
-                  }}
-                  value={row.lastName}
-                  id="outlined-size-small"
-                  defaultValue="Small"
+          // style={getItemStyle(
+          //   snapshot.isDragging,
+          //   provided.draggableProps.style
+          // )}
+          >
+            <TableRow
+              className="row-container"
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              sx={{
+                "& > *": { borderBottom: "unset" },
+                backgroundColor: open ? "#d9d9d9" : "inherit",
+              }}
+              ref={provided.innerRef}
+            >
+              <TableCell component="th" scope="row" sx={{ width: "310px" }}>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <BarsIcon />
+                  <Typography>{index + 1}</Typography>
+                  <PerSonIcon />
+                  {/* {tableCheckStatus(item, signerToken)} */}
+                  {status === 2 ? (
+                    <SignedIcon />
+                  ) : status === 1 ? (
+                    <WaitingMySig />
+                  ) : (
+                    <WaitingSig />
+                  )}
+                  <Typography>
+                    {row.lastName} {row.firstName}
+                  </Typography>
+                </Stack>
+              </TableCell>
+              <TableCell align="left">{row.firstName}</TableCell>
+              <TableCell align="left">{row.email}</TableCell>
+              <TableCell>
+                <IconButton
+                  aria-label="expand row"
                   size="small"
-                />
-              </Box>
-              <Box pt="5px" width="calc(100% / 3)">
-                <Typography
-                  variant="h6"
-                  color="#1F2937"
-                  fontWeight={600}
-                  mb="10px"
-                  height={17}
+                  onClick={() => setOpen(!open)}
                 >
-                  {t("0-common.Reason")}
-                </Typography>
-                <TextField
-                  sx={{
-                    my: 0,
-                    "& .MuiInputBase-root": {
-                      minHeight: "42px",
-                      height: "42px",
-                      width: "250px",
-                    },
-                  }}
-                  value={row.customReason}
-                  id="outlined-size-small"
-                  defaultValue="Small"
-                  size="small"
-                />
-              </Box>
-              <Box pt="5px" width="calc(100% / 3)">
-                <Typography
-                  variant="h6"
-                  color="#1F2937"
-                  fontWeight={600}
-                  mb="10px"
-                  height={17}
-                >
-                  {t("0-common.Position")}
-                </Typography>
-                <TextField
-                  sx={{
-                    my: 0,
-                    "& .MuiInputBase-root": {
-                      minHeight: "42px",
-                      height: "42px",
-                      width: "250px",
-                    },
-                  }}
-                  value={row.metaInformation.position}
-                  id="outlined-size-small"
-                  defaultValue="Small"
-                  size="small"
-                />
-              </Box>
-              <Box pt="5px" width="calc(100% / 3)">
-                <Typography
-                  variant="h6"
-                  color="#1F2937"
-                  fontWeight={600}
-                  mb="10px"
-                  height={17}
-                >
-                  {t("0-common.purpose")}
-                </Typography>
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel
-                      id="demo-simple-select-label"
-                      value={row.metaInformation.signing_purpose}
-                    ></InputLabel>
-                    <Select
-                      sx={{
-                        minHeight: "42px",
-                        height: "42px",
-                        width: "250px",
-                      }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={purpose}
-                      onChange={handleChange}
-                    >
-                      <MenuItem value={10}>Signer</MenuItem>
-                      <MenuItem value={20}>Revlewer</MenuItem>
-                      <MenuItem value={30}>Editor</MenuItem>
-                      <MenuItem value={40}>Meeting Host</MenuItem>
-                      <MenuItem value={50}>Send a Copy</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                {/* <TextField
+                  {/* {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} */}
+                  {open ? (
+                    <>
+                      <span
+                        style={{
+                          marginRight: 16.71,
+                          backgroundColor: "#FEF2F2",
+                          borderRadius: 999,
+                          width: 30,
+                          height: 30,
+                        }}
+                      >
+                        <VectorIcon
+                          style={{
+                            width: 14,
+                            height: 14,
+                            marginTop: 7,
+                          }}
+                        />
+                      </span>
+                      <span
+                        style={{
+                          backgroundColor: "#F0FDFA",
+                          borderRadius: 999,
+                          width: 29,
+                          height: 30,
+                        }}
+                      >
+                        <CheckIcon
+                          style={{
+                            width: 17,
+                            height: 14,
+                            marginTop: 7,
+                          }}
+                        />
+                      </span>
+                    </>
+                  ) : (
+                    <PencilSquareIcon />
+                  )}
+                </IconButton>
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                style={{ paddingBottom: 0, paddingTop: 0 }}
+                colSpan={6}
+              >
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Stack
+                    direction="row"
+                    sx={{ margin: 1 }}
+                    useFlexGap
+                    flexWrap="wrap"
+                  >
+                    <Box width="calc(100% / 3)">
+                      <Typography
+                        variant="h6"
+                        color="#1F2937"
+                        fontWeight={600}
+                        mb="10px"
+                        height={17}
+                      >
+                        {t("0-common.name")}
+                      </Typography>
+                      <TextField
+                        sx={{
+                          my: 0,
+                          "& .MuiInputBase-root": {
+                            minHeight: "42px",
+                            height: "42px",
+                            width: "250px",
+                            fontSize: "14px",
+                          },
+                        }}
+                        value={row.lastName + " " + row.firstName}
+                        id="outlined-size-small"
+                        size="small"
+                      />
+                    </Box>
+                    <Box width="calc(100% / 3)">
+                      <Typography
+                        variant="h6"
+                        color="#1F2937"
+                        fontWeight={600}
+                        mb="10px"
+                        height={17}
+                      >
+                        {t("0-common.first name")}
+                      </Typography>
+                      <TextField
+                        sx={{
+                          my: 0,
+                          "& .MuiInputBase-root": {
+                            minHeight: "42px",
+                            height: "42px",
+                            width: "250px",
+                          },
+                        }}
+                        value={row.firstName}
+                        id="outlined-size-small"
+                        size="small"
+                      />
+                    </Box>
+                    <Box width="calc(100% / 3)">
+                      <Typography
+                        variant="h6"
+                        color="#1F2937"
+                        fontWeight={600}
+                        mb="10px"
+                        height={17}
+                      >
+                        {t("0-common.last name")}
+                      </Typography>
+
+                      <TextField
+                        sx={{
+                          my: 0,
+                          "& .MuiInputBase-root": {
+                            minHeight: "42px",
+                            height: "42px",
+                            width: "250px",
+                          },
+                        }}
+                        value={row.lastName}
+                        id="outlined-size-small"
+                        size="small"
+                      />
+                    </Box>
+                    <Box pt="5px" width="calc(100% / 3)">
+                      <Typography
+                        variant="h6"
+                        color="#1F2937"
+                        fontWeight={600}
+                        mb="10px"
+                        height={17}
+                      >
+                        {t("0-common.Reason")}
+                      </Typography>
+                      <TextField
+                        sx={{
+                          my: 0,
+                          "& .MuiInputBase-root": {
+                            minHeight: "42px",
+                            height: "42px",
+                            width: "250px",
+                          },
+                        }}
+                        value={row.customReason}
+                        id="outlined-size-small"
+                        size="small"
+                      />
+                    </Box>
+                    <Box pt="5px" width="calc(100% / 3)">
+                      <Typography
+                        variant="h6"
+                        color="#1F2937"
+                        fontWeight={600}
+                        mb="10px"
+                        height={17}
+                      >
+                        {t("0-common.Position")}
+                      </Typography>
+                      <TextField
+                        sx={{
+                          my: 0,
+                          "& .MuiInputBase-root": {
+                            minHeight: "42px",
+                            height: "42px",
+                            width: "250px",
+                          },
+                        }}
+                        value={row.metaInformation.position}
+                        id="outlined-size-small"
+                        size="small"
+                      />
+                    </Box>
+                    <Box pt="5px" width="calc(100% / 3)">
+                      <Typography
+                        variant="h6"
+                        color="#1F2937"
+                        fontWeight={600}
+                        mb="10px"
+                        height={17}
+                      >
+                        {t("0-common.purpose")}
+                      </Typography>
+                      <Box sx={{ minWidth: 120 }}>
+                        <FormControl fullWidth>
+                          <InputLabel
+                            id="demo-simple-select-label"
+                            value={row.metaInformation.signing_purpose}
+                          ></InputLabel>
+                          <Select
+                            sx={{
+                              minHeight: "42px",
+                              height: "42px",
+                              width: "250px",
+                            }}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={purpose}
+                            onChange={handleChange}
+                          >
+                            <MenuItem value={10}>Signer</MenuItem>
+                            <MenuItem value={20}>Revlewer</MenuItem>
+                            <MenuItem value={30}>Editor</MenuItem>
+                            <MenuItem value={40}>Meeting Host</MenuItem>
+                            <MenuItem value={50}>Send a Copy</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      {/* <TextField
                   sx={{
                     my: 0,
                     "& .MuiInputBase-root": {
@@ -299,60 +365,45 @@ function Row(props) {
                   }}
                   value={row.metaInformation.signing_purpose}
                   id="outlined-size-small"
-                  defaultValue="Small"
                   size="small"
                 /> */}
-              </Box>
-              <Box pt="5px" width="calc(100% / 3)">
-                <Typography
-                  variant="h6"
-                  color="#1F2937"
-                  fontWeight={600}
-                  mb="10px"
-                  height={17}
-                >
-                  {t("0-common.Structural subdivision")}
-                </Typography>
-                <TextField
-                  sx={{
-                    my: 0,
-                    "& .MuiInputBase-root": {
-                      minHeight: "42px",
-                      height: "42px",
-                      width: "250px",
-                    },
-                  }}
-                  value={row.metaInformation.structural_subdivision}
-                  id="outlined-size-small"
-                  defaultValue="Small"
-                  size="small"
-                />
-              </Box>
-            </Stack>
-          </Collapse>
-        </TableCell>
-      </TableRow>
+                    </Box>
+                    <Box pt="5px" width="calc(100% / 3)">
+                      <Typography
+                        variant="h6"
+                        color="#1F2937"
+                        fontWeight={600}
+                        mb="10px"
+                        height={17}
+                      >
+                        {t("0-common.Structural subdivision")}
+                      </Typography>
+                      <TextField
+                        sx={{
+                          my: 0,
+                          "& .MuiInputBase-root": {
+                            minHeight: "42px",
+                            height: "42px",
+                            width: "250px",
+                          },
+                        }}
+                        value={row.metaInformation.structural_subdivision}
+                        id="outlined-size-small"
+                        size="small"
+                      />
+                    </Box>
+                  </Stack>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+          </Fragment>
+        )}
+      </Draggable>
     </>
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
-};
+Row.propTypes = {};
 
 const ParticipantsTable = ({ data }) => {
   console.log("data123: ", data);
@@ -412,6 +463,22 @@ const ParticipantsTable = ({ data }) => {
   // };
 
   const [tabValue, setTabValue] = useState(0);
+  const [tableData, setTableData] = useState(data);
+
+  const onDragEnd = (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const items = reorder(
+      tableData,
+      result.source.index,
+      result.destination.index
+    );
+
+    setTableData(items);
+  };
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -453,11 +520,22 @@ const ParticipantsTable = ({ data }) => {
                 <TableCell />
               </TableRow>
             </TableHead>
-            <TableBody>
-              {data.map((user) => (
-                <Row key={user.id} row={user} />
-              ))}
-            </TableBody>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided) => (
+                  <TableBody
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    // component={"div"}
+                  >
+                    {tableData.map((user, index) => (
+                      <Row key={user.id} row={user} index={index} />
+                    ))}
+                    {provided.placeholder}
+                  </TableBody>
+                )}
+              </Droppable>
+            </DragDropContext>
           </Table>
         </TableContainer>
       </TabPanel>

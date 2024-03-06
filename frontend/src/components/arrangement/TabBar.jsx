@@ -8,10 +8,10 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Participants } from "./tabbar/participants/Participants";
-import OverView from "./tabbar/Overview";
 import { useSearchParams } from "react-router-dom";
 import { Signatures } from "../SigningContent/TabBar/Signatures";
+import OverView from "./tabbar/Overview";
+import { Participants } from "./tabbar/participants/Participants";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
