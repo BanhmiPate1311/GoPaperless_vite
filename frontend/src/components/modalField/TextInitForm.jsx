@@ -34,35 +34,47 @@ export const TextInitForm = forwardRef(
           }}
           sx={{ m: "0 0 10px" }}
         />
-        <Stack
-          ref={ref}
-          direction={"row"}
-          alignItems={"center"}
+        <Box
           sx={{
-            height: "170px",
-            width: "100%",
-            overflow: "hidden",
             borderRadius: "6px",
             border: "2px solid #357EEB",
-            position: "relative",
-            // background: "transparent",
+            height: "100%",
+            width: "100%",
+            p: "3px",
+            // maxHeight: "100%",
+            overflow: "hidden",
           }}
         >
-          <Box
+          <Stack
+            ref={ref}
+            direction={"row"}
+            alignItems={"center"}
             sx={{
-              marginLeft: "auto",
-              marginRight: "auto",
+              height: "160px",
               width: "100%",
-              fontSize: "36px",
-              textAlign: "center",
-              textTransform: "capitalize",
-              fontWeight: "bold",
+              overflow: "hidden",
+              borderRadius: "6px",
+              // border: "2px solid #357EEB",
+              position: "relative",
+              // background: "transparent",
             }}
-            className="font-moon-dance"
           >
-            {watch("text") || ""}
-          </Box>
-        </Stack>
+            <Box
+              sx={{
+                marginLeft: "auto",
+                marginRight: "auto",
+                width: "100%",
+                fontSize: "36px",
+                textAlign: "center",
+                textTransform: "capitalize",
+                fontWeight: "bold",
+              }}
+              className="font-moon-dance"
+            >
+              {watch("text") || ""}
+            </Box>
+          </Stack>
+        </Box>
       </Box>
     );
   }

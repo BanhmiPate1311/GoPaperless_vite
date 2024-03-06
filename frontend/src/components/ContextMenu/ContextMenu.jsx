@@ -13,7 +13,12 @@ import { ReactComponent as Signature } from "@/assets/images/contextmenu/signatu
 import { ReactComponent as AddText } from "@/assets/images/contextmenu/addtext.svg";
 import { ReactComponent as QrQrypto } from "@/assets/images/contextmenu/qrypto.svg";
 
-export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
+export const ContextMenu = ({
+  contextMenu,
+  handleClose,
+  handleClickMenu,
+  signerType,
+}) => {
   const { t } = useTranslation();
   const data = [
     {
@@ -51,6 +56,16 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
       value: "AddText",
     },
   ];
+  let menu = [];
+  switch (signerType) {
+    case 1:
+      menu = data;
+      break;
+    case 2:
+    case 3:
+      menu = data.filter((item) => item.value !== "SIGNATURE");
+      break;
+  }
   return (
     <Menu
       open={contextMenu !== null}
@@ -67,7 +82,7 @@ export const ContextMenu = ({ contextMenu, handleClose, handleClickMenu }) => {
         },
       }}
     >
-      {data.map((item, index) => (
+      {menu.map((item, index) => (
         <MenuItem key={index} onClick={handleClickMenu(item.value)}>
           <ListItemIcon sx={{ color: "inherit" }}>{item.icon}</ListItemIcon>
           <ListItemText
@@ -90,5 +105,6 @@ ContextMenu.propTypes = {
   }),
   handleClose: PropTypes.func,
   handleClickMenu: PropTypes.func,
+  signerType: PropTypes.number,
 };
 export default ContextMenu;

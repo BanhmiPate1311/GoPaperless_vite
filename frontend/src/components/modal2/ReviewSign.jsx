@@ -240,7 +240,7 @@ export const ReviewSign = forwardRef(
             />
           </Box>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
           <Button
             variant="outlined"
             sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}

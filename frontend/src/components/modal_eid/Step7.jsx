@@ -12,6 +12,7 @@ export const Step7 = ({
   dialCode,
   handleSubmit,
   isSubmitDisabled,
+  setErrorPG,
 }) => {
   const { t } = useTranslation();
 
@@ -38,6 +39,7 @@ export const Step7 = ({
   const handlePhoneNumber = (phone, country) => {
     dialCode.current = country.dialCode;
     setPhoneNumber(phone);
+    setErrorPG(null);
     // phoneNumberRef.current = phone;
   };
 
@@ -56,9 +58,9 @@ export const Step7 = ({
       </Typography>
       <Typography
         variant="h6"
-        // textAlign={"center"}
+        textAlign={"center"}
         mb={"10px"}
-        sx={{ fontWeight: 600, color: "textBold.main", height: "17px" }}
+        sx={{ fontWeight: 600, color: "signingtextBlue.main", height: "17px" }}
       >
         {/* Phone Verification */}
         {t("electronic.step73")}
@@ -95,6 +97,7 @@ Step7.propTypes = {
   dialCode: PropTypes.object,
   handleSubmit: PropTypes.func,
   isSubmitDisabled: PropTypes.bool,
+  setErrorPG: PropTypes.func,
 };
 
 export default Step7;

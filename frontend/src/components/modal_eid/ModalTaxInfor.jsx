@@ -200,7 +200,7 @@ export const ModalTaxInfor = ({ open, onClose, data }) => {
           }}
         >
           {/* {title} */}
-          title
+          {t("0-common.details")}
         </Typography>
       </DialogTitle>
 

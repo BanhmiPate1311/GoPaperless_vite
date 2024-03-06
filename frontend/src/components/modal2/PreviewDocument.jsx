@@ -224,11 +224,8 @@ export const PreviewDocument = ({
               }
               style={{
                 position: "absolute",
-                // borderRadius: "6px",
-                top: 0,
-                left: 0,
                 zIndex: 100,
-                opacity: signatureData.verification === undefined ? 1 : 0,
+                opacity: signatureData.process_status === "PROCESSED" ? 0 : 1,
                 transition: isControlled ? `transform 0.3s` : `none`,
               }}
               minConstraints={[

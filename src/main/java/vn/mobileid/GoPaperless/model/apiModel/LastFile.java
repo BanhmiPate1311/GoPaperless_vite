@@ -10,6 +10,7 @@ public class LastFile {
     private String fileType;
     private String uploadToken;
     private int documentId;
+    private String workflowProcessType;;
     private String workflowDocumentName;
     private String workflowDocumentFormat;
     private int enterpriseId;
@@ -117,5 +118,13 @@ public class LastFile {
 
     public void setDeadlineAt(String deadlineAt) {
         this.deadlineAt = deadlineAt;
+    }
+
+    public String getWorkflowProcessType() {
+        return workflowProcessType;
+    }
+
+    public void setWorkflowProcessType(String workflowProcessType) {
+        this.workflowProcessType = workflowProcessType;
     }
 }

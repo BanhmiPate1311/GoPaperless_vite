@@ -273,7 +273,7 @@
     "taxpayer_name": "Maksukohustuslase nimi",
     "common_name": "Üldnimetus",
     "cert_tooltip": "Sertifikaadi üksikasjad",
-    "tax_tooltip": "Maksukoodi üksikasjad",
+    "tax_tooltip": "Maksukoodi teave",
     "init_warning": "Enne dokumendi allkirjastamist peate täitma oma initsiaalid",
     "qr_warning": "Te ei saa lisada mitut QR-koodi",
     "text_warning": "Täitke määratud vormiväljad",

@@ -84,9 +84,7 @@ export const UploadSignForm = forwardRef(
             name="fileUrl"
             label={t("0-common.upload")}
             control={control}
-            sx={{
-              height: "45px",
-            }}
+            sx={{ border: "2px solid #357EEB", height: "45px" }}
             onChange={handleUploadFile}
           />
         </Box>
@@ -102,7 +100,7 @@ export const UploadSignForm = forwardRef(
           <Stack
             ref={ref}
             sx={{
-              height: showInput ? "100%" : "154px",
+              height: showInput ? "100%" : "150px",
               overflow: "hidden",
               // borderRadius: "6px",
               // border: !imgBase64 ? "2px solid #357EEB" : "none",
