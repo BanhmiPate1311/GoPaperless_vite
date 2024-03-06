@@ -70,7 +70,7 @@ export const Step5_smart = ({
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
         <Tooltip title={t("signing.cert_tooltip")} followCursor>
-          <Box height="60px" width="60px" mx={2}>
+          <Box height="60px" minWidth="60px" mx={2}>
             <SvgIcon
               component={assurance === "aes" ? CardIcon : SealIcon}
               inheritViewBox

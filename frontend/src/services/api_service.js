@@ -14,6 +14,9 @@ export const apiService = {
   checkWorkFlow: (data) => {
     return api.post("/uiApi/checkWorkFlow", data);
   },
+  checkPerMission: (data) => {
+    return api.post("/uiApi/checkPerMission", data);
+  },
   getSigningWorkFlow: (signingToken) => {
     return api.post("/uiApi/getSigningWorkFlow", {
       signingToken,

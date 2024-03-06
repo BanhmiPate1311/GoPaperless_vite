@@ -66,7 +66,7 @@ export const Step11 = ({
           {t("electronic.step111")}
         </Typography>
 
-        <Typography fontSize="12px" mb="10px">
+        <Typography variant="h6" mb="10px">
           {/* Please accept our certification terms to sign the document. */}
           {t("electronic.step112")}
         </Typography>

@@ -181,6 +181,8 @@ public class ProcessDb {
                 response.setCustomReason(rs.getString("CUSTOM_REASON"));
                 response.setSigningPurpose(rs.getString("SIGNING_PURPOSE"));
                 response.setCertificate(rs.getString("CERTIFICATE"));
+                response.setSequenceNumber(rs.getInt("SEQUENCE_NUMBER"));
+                response.setSignerType(rs.getInt("SIGNER_TYPE"));
 
                 responseList.add(response);
             }
@@ -233,6 +235,7 @@ public class ProcessDb {
                 response.setWorkflowDocumentFormat(rs.getString("WORKFLOW_DOCUMENT_FORMAT"));
                 response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
                 response.setDeadlineAt(rs.getString("DEADLINE_AT"));
+                response.setWorkflowProcessType(rs.getString("WORKFLOW_PROCESS_TYPE"));
             }
 
         } catch (Exception e) {
@@ -1067,6 +1070,42 @@ public class ProcessDb {
                 val = null;
             }
             System.out.println("val: " + val);
+            return val;
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public int USP_GW_PPL_WORKFLOW_PARTICIPANTS_CHECK_PERMISSION(String signerToken) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        ResultSet rs = null;
+        int val = 0;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_CHECK_PERMISSION(?,?) }");
+            proc_stmt.setString("pSIGNER_TOKEN", signerToken);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.VARCHAR);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            rs = proc_stmt.executeQuery();
+            if ("1".equals(convrtr)) {
+                while (rs.next()) {
+                    val = rs.getInt("SIGNER_TYPE");
+                }
+            } else {
+                val = 0;
+            }
             return val;
 
         } catch (Exception e) {

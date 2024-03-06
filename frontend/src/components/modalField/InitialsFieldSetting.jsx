@@ -297,7 +297,7 @@ export const InitialsFieldSetting = ({
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={onClose}
         >
-          {t("0-common.cancel")}
+          {t("0-common.close")}
         </Button>
         <Button
           variant="contained"

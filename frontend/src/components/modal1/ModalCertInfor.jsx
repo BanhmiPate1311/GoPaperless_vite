@@ -3,7 +3,6 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -74,8 +73,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
-  // console.log("certData: ", certData);
-  console.log("data: ", data);
+  // console.log("data: ", data);
   const { t } = useTranslation();
 
   const [value, setValue] = useState(0);
@@ -690,7 +688,21 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                   alignItems={"center"}
                   mt={"9px"}
                 >
-                  <Chip
+                  <Box
+                    onClick={() => downloadCertFromPEM(pemValue(), subject())}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      cursor: "pointer",
+                      color: "#357EEB",
+                      fontSize: "12px",
+                    }}
+                  >
+                    <SaveAltIcon fontSize="small" color="borderColor.light" />
+                    {t("modal.download")}
+                  </Box>
+                  {/* <Chip
                     label={t("modal.download")}
                     component="div"
                     sx={{
@@ -714,7 +726,7 @@ export const ModalCertInfor = ({ open, onClose, data, provider, certData }) => {
                       <SaveAltIcon fontSize="small" color="borderColor.light" />
                     }
                     clickable
-                  />
+                  /> */}
                 </Stack>
               </Stack>
             </TabPanel>

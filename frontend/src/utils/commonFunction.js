@@ -288,3 +288,11 @@ export const downloadCertFromPEM = (data, name) => {
   link.click();
   // console.log("data: ", data);
 };
+
+export function isValidEmail(email) {
+  return /\S+@\S+\.\S+/.test(email);
+}
+
+export function capitalLize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}

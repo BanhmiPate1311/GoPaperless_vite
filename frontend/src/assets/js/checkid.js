@@ -558,6 +558,42 @@ export default class ISPluginClient {
       }, timeOutInterval * 1000);
     }
 
+    function dGParseUtility(
+      dgNum,
+      dgValue,
+      timeOutInterval,
+      lang,
+      cbSuccess,
+      cbError,
+      cbTimeout
+    ) {
+      var requestID = create_uuidv4();
+      mapRequestID.set(requestID, {
+        cmdType: "DGParseUtility",
+        cb_success: cbSuccess,
+        cb_error: cbError,
+      });
+
+      socket.send(
+        JSON.stringify({
+          cmdType: "DGParseUtility",
+          requestID: requestID,
+          timeOutInterval: timeOutInterval,
+          lang,
+          data: {
+            dgNum,
+            dgValue,
+          },
+        })
+      );
+      let dGParseUtilityTimeout = setTimeout(function () {
+        if (mapRequestID.has(requestID)) {
+          mapRequestID.delete(requestID);
+          cbTimeout();
+        }
+      }, timeOutInterval * 1000);
+    }
+
     return {
       getDeviceDetails: getDeviceDetails,
       getInformationDetails: getInformationDetails,
@@ -570,6 +606,7 @@ export default class ISPluginClient {
       shutdown: shutdown,
       getTokenCertificate: getTokenCertificate,
       signTokenCertificate,
+      dGParseUtility,
     };
   }
 }

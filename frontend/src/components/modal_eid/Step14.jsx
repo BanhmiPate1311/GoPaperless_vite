@@ -23,7 +23,7 @@ const ToggleButtonStyle = styled(ToggleButton)({
     color: "#111", // tắt chức năng làm mờ của Mui
   },
   marginBottom: "4px",
-  border: "1px solid gray !important",
+  border: "1px solid #357EEB !important",
   borderRadius: "10px",
   padding: "7px",
 });

@@ -138,6 +138,7 @@ public class ApiController {
             signingWorkflowDto.setSigningToken(signingToken);
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
             signingWorkflowDto.setLastFileUuid(lastFile.getLastPplFileUuid());
+            signingWorkflowDto.setWorkflowProcessType(lastFile.getWorkflowProcessType());
             if (lastFile.getDeadlineAt() != null) {
                 signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
             }
@@ -363,6 +364,13 @@ public class ApiController {
         System.out.println("qr: " + request.get("qr"));
         System.out.println("res: " + connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr")));
         return connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr"));
+    }
+
+    @PostMapping("/checkPerMission")
+    public ResponseEntity<?> checkPerMission(@RequestBody Map<String, String> request) throws Exception {
+        System.out.println("signerToken: " + request.get("signerToken"));
+        int response = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_CHECK_PERMISSION(request.get("signerToken"));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/getCertDetail")

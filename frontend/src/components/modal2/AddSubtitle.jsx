@@ -29,7 +29,7 @@ export const AddSubtitle = ({ control }) => {
       <Box>
         <Typography
           variant="h6"
-          color="#1F2937"
+          color="signingtext1.main"
           fontWeight={600}
           mb="10px"
           height={17}
@@ -42,6 +42,8 @@ export const AddSubtitle = ({ control }) => {
           control={control}
           inputProps={{
             sx: {
+              py: "10.5px",
+              color: "signingtext1.main",
               backgroundColor: "signingWFBackground.main",
             },
           }}
@@ -55,6 +57,7 @@ export const AddSubtitle = ({ control }) => {
           height: 17,
           mb: "10px",
           color: "signingtext1.main",
+          fontWeight: 600,
         }}
       >
         {t("signing.include_text")}
@@ -68,6 +71,7 @@ export const AddSubtitle = ({ control }) => {
               label={t("0-common.name")}
               sx={{
                 color: "signingtext1.main",
+                fontWeight: 500,
                 width: "100%",
                 height: "21px",
                 "& .MuiCheckbox-root": {
@@ -80,6 +84,8 @@ export const AddSubtitle = ({ control }) => {
               control={control}
               label={t("0-common.date")}
               sx={{
+                color: "signingtext1.main",
+                fontWeight: 500,
                 width: "100%",
                 height: "21px",
                 "& .MuiCheckbox-root": {
@@ -92,6 +98,8 @@ export const AddSubtitle = ({ control }) => {
               control={control}
               label={t("0-common.logo")}
               sx={{
+                color: "signingtext1.main",
+                fontWeight: 500,
                 width: "100%",
                 height: "21px",
                 "& .MuiCheckbox-root": {
@@ -104,6 +112,8 @@ export const AddSubtitle = ({ control }) => {
               control={control}
               label={t("0-common.Reason")}
               sx={{
+                color: "signingtext1.main",
+                fontWeight: 500,
                 width: "100%",
                 height: "21px",
                 "& .MuiCheckbox-root": {
@@ -118,6 +128,8 @@ export const AddSubtitle = ({ control }) => {
               control={control}
               label={t("0-common.distinguished name")}
               sx={{
+                color: "signingtext1.main",
+                fontWeight: 500,
                 width: "100%",
                 height: "21px",
                 "& .MuiCheckbox-root": {
@@ -141,6 +153,8 @@ export const AddSubtitle = ({ control }) => {
               control={control}
               label={t("0-common.Location")}
               sx={{
+                color: "signingtext1.main",
+                fontWeight: 500,
                 width: "100%",
                 height: "21px",
                 "& .MuiCheckbox-root": {
@@ -153,6 +167,8 @@ export const AddSubtitle = ({ control }) => {
               control={control}
               label={t("0-common.labels")}
               sx={{
+                color: "signingtext1.main",
+                fontWeight: 500,
                 width: "100%",
                 height: "21px",
                 "& .MuiCheckbox-root": {
@@ -167,10 +183,11 @@ export const AddSubtitle = ({ control }) => {
             <FormLabel
               component="legend"
               sx={{
+                color: "signingtext1.main",
+                fontWeight: 600,
                 fontSize: "14px",
                 height: 17,
                 mb: "10px",
-                color: "signingtext1.main",
               }}
             >
               {t("0-common.text direction")}
@@ -192,6 +209,7 @@ export const AddSubtitle = ({ control }) => {
                 height: 17,
                 mb: "10px",
                 color: "signingtext1.main",
+                fontWeight: 600,
               }}
             >
               {t("0-common.digits format")}

@@ -201,7 +201,7 @@ export const Step2_smartid = ({
 
       {errorApi && (
         <Box width={"100%"}>
-          <Alert severity="error">{errorApi}</Alert>
+          <Alert severity="error">{errorApi.toLowerCase()}</Alert>
         </Box>
       )}
     </Stack>
