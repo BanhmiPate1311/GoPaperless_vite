@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
-export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
+export const TextBox = ({ index, pdfPage, textData, workFlow, getFields }) => {
   // console.log("workFlow: ", workFlow);
   // console.log("index: ", index);
   // console.log("textData: ", textData);
@@ -46,23 +46,20 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
       y: (textData.dimension?.y * pdfPage.height) / 100,
     });
   }, [textData]);
-
-  const removeSignature = useMutation({
-    mutationFn: () => {
-      return fpsService.removeSignature(
-        { documentId: workFlow.documentId },
-        textData.field_name
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-    },
-  });
+  const removeSignature = async () => {
+    const res = await fpsService.removeSignature(
+      { documentId: workFlow.documentId },
+      textData.field_name
+    );
+    if (res.status === 200) {
+      await getFields();
+    }
+  };
 
   const handleRemoveSignature = async () => {
     // setIsControlled(false);
     // if (isSetPos || signerId !== signatureData.field_name) return;
-    removeSignature.mutate();
+    removeSignature();
   };
 
   const TopBar = () => {
@@ -154,30 +151,26 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
       return;
     setTextValue(e.target.value);
     if (valueRef.current) clearTimeout(valueRef.current);
-    valueRef.current = setTimeout(() => {
-      putSignature.mutate(
+    valueRef.current = setTimeout(async () => {
+      const putpos = await fpsService.putSignature(
         {
-          body: {
-            field_name: textData.field_name,
-            page: pdfPage.currentPage,
-            dimension: {
-              x: -1,
-              y: -1,
-              width: -1,
-              height: -1,
-            },
-            visible_enabled: true,
-            value: e.target.value,
+          field_name: textData.field_name,
+          page: pdfPage.currentPage,
+          dimension: {
+            x: -1,
+            y: -1,
+            width: -1,
+            height: -1,
           },
-          field: "text",
-          documentId: workFlow.documentId,
+          visible_enabled: true,
+          value: e.target.value,
         },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["getField"] });
-          },
-        }
+        "text",
+        workFlow.documentId
       );
+      console.log("putpos: ", putpos);
+      if (putpos.status !== 200) return;
+      await getFields();
     }, 1000);
   };
 
@@ -196,7 +189,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
           setDragPosition({ x: data.x, y: data.y });
           setIsControlled(false);
         }}
-        onStop={(e, data) => {
+        onStop={async (e, data) => {
           // console.log("data: ", data);
           // console.log("e: ", e);
           setIsControlled(true);
@@ -259,29 +252,25 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
 
           const y =
             (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
-
-          putSignature.mutate(
+          const putpos = await fpsService.putSignature(
             {
-              body: {
-                field_name: textData.field_name,
-                page: pdfPage.currentPage,
-                dimension: {
-                  x: x,
-                  y: y,
-                  width: -1,
-                  height: -1,
-                },
-                visible_enabled: true,
+              field_name: textData.field_name,
+              page: pdfPage.currentPage,
+              dimension: {
+                x: x,
+                y: y,
+                width: -1,
+                height: -1,
               },
-              field: "text",
-              documentId: workFlow.documentId,
+              visible_enabled: true,
             },
-            {
-              onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ["getField"] });
-              },
-            }
+            "text",
+            workFlow.documentId
           );
+
+          if (putpos.status !== 200) return;
+          console.log("putpos1: ", putpos);
+          await getFields();
         }}
         disabled={
           signerId + "_" + textData.type + "_" + textData.suffix !==
@@ -330,7 +319,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               : 200,
           ]}
           onResize={(e, { size }) => {}}
-          onResizeStop={(e, { size }) => {
+          onResizeStop={async (e, { size }) => {
             // console.log("e: ", e);
             if (
               signerId + "_" + textData.type + "_" + textData.suffix !==
@@ -338,28 +327,24 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               textData.process_status === "PROCESSED"
             )
               return;
-            putSignature.mutate(
+
+            const putpos = await fpsService.putSignature(
               {
-                body: {
-                  field_name: textData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: -1,
-                    y: -1,
-                    width: (size.width / pdfPage.width) * 100,
-                    height: (size.height / pdfPage.height) * 100,
-                  },
-                  visible_enabled: true,
+                field_name: textData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: -1,
+                  y: -1,
+                  width: (size.width / pdfPage.width) * 100,
+                  height: (size.height / pdfPage.height) * 100,
                 },
-                field: "text",
-                documentId: workFlow.documentId,
+                visible_enabled: true,
               },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["getField"] });
-                },
-              }
+              "text",
+              workFlow.documentId
             );
+            if (putpos.status !== 200) return;
+            await getFields();
           }}
           className={`sig textbox-${index}`}
         >

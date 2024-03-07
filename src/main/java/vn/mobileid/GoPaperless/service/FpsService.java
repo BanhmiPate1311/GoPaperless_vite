@@ -333,6 +333,9 @@ public class FpsService {
         if(data.getRequired() != null) {
             requestData.put("required", data.getRequired());
         }
+        if(data.getItems() != null){
+            requestData.put("items",data.getItems());
+        }
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
 //        requestData.put("visible_enabled", data.getVisibleEnabled());

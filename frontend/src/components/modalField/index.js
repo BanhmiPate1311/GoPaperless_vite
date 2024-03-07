@@ -9,3 +9,4 @@ export * from "./QrCodeSettingField";
 export * from "./TextBoxSettingField";
 export * from "./UploadInitForm";
 export * from "./QryptoSettingField";
+export * from "./QryptoGeneralForm";

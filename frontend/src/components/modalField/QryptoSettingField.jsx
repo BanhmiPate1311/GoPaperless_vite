@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DetailsTextBoxForm } from ".";
+import { DetailsTextBoxForm, QryptoGeneralForm } from ".";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,8 +56,8 @@ function a11yProps(index) {
 
 export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
   const { t } = useTranslation();
-
-  const { control, handleSubmit } = useForm({
+  const [fields, setFeilds] = useState([]);
+  const { control, handleSubmit, watch, register } = useForm({
     defaultValues: {
       workFlowName: workFlow.documentName,
       fileName:
@@ -68,13 +68,47 @@ export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
       top: qryptoData.dimension.y,
       width: qryptoData.dimension.width,
       height: qryptoData.dimension.height,
+      items: [
+        ...qryptoData?.items,
+        {
+          field: "SIGNER_ID_1",
+          type: 8,
+          value: [
+            {
+              column_1:
+                workFlow.participants[0].lastName +
+                " " +
+                workFlow.participants[0].firstName,
+              column_2: workFlow.participants[0].email,
+              column_3: new Date(),
+            },
+            {
+              column_1: "",
+            },
+          ],
+        },
+        {
+          field: "SIGNER_ID_2",
+          type: 8,
+          value: [
+            {
+              column_1:
+                workFlow.participants[1].lastName +
+                " " +
+                workFlow.participants[1].firstName,
+              column_2: workFlow.participants[1].email,
+              column_3: new Date(),
+            },
+            {
+              column_1: "",
+            },
+          ],
+        },
+      ],
     },
   });
 
   const formRef = useRef();
-
-  // const queryClient = useQueryClient();
-  // const putSignature = UseUpdateSig();
 
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -193,7 +227,11 @@ export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
               </Tabs>
 
               <TabPanel value={value} index={0}>
-                general
+                <QryptoGeneralForm
+                  control={control}
+                  watch={watch}
+                  register={register}
+                />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <DetailsTextBoxForm control={control} />

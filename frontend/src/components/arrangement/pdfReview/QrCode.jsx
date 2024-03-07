@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
-export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
+export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
 
@@ -52,20 +52,18 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
     newValue[index] = false;
     setIsOpenModalSetting(newValue);
   };
-  const removeSignature = useMutation({
-    mutationFn: () => {
-      return fpsService.removeSignature(
-        { documentId: workFlow.documentId },
-        qrData.field_name
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-    },
-  });
+  const removeSignature = async () => {
+    const res = await fpsService.removeSignature(
+      { documentId: workFlow.documentId },
+      qrData.field_name
+    );
+    if (res.status === 200) {
+      await getFields();
+    }
+  };
 
   const handleRemoveSignature = async () => {
-    removeSignature.mutate();
+    await removeSignature();
   };
 
   const TopBar = () => {
@@ -135,7 +133,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           setDragPosition({ x: data.x, y: data.y });
           setIsControlled(false);
         }}
-        onStop={(e, data) => {
+        onStop={async (e, data) => {
           e.preventDefault();
           setIsControlled(true);
           handleDrag("none");
@@ -195,29 +193,23 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
 
           const y =
             (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
-
-          putSignature.mutate(
+          const putpos = await fpsService.putSignature(
             {
-              body: {
-                field_name: qrData.field_name,
-                page: pdfPage.currentPage,
-                dimension: {
-                  x: x,
-                  y: y,
-                  width: -1,
-                  height: -1,
-                },
-                visible_enabled: true,
+              field_name: qrData.field_name,
+              page: pdfPage.currentPage,
+              dimension: {
+                x: x,
+                y: y,
+                width: -1,
+                height: -1,
               },
-              field: "qrcode",
-              documentId: workFlow.documentId,
+              visible_enabled: true,
             },
-            {
-              onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ["getField"] });
-              },
-            }
+            "qrcode",
+            workFlow.documentId
           );
+          if (!putpos) return;
+          await getFields();
         }}
         disabled={
           signerId + "_" + qrData.type + "_" + qrData.suffix !==
@@ -272,35 +264,30 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow }) => {
           ]}
           lockAspectRatio={true}
           onResize={(e, { size }) => {}}
-          onResizeStop={(e, { size }) => {
+          onResizeStop={async (e, { size }) => {
             // console.log("e: ", e);
             if (
               signerId + "_" + qrData.type + "_" + qrData.suffix !==
               qrData.field_name
             )
               return;
-            putSignature.mutate(
+            const putpos = await fpsService.putSignature(
               {
-                body: {
-                  field_name: qrData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: -1,
-                    y: -1,
-                    width: (size.width / pdfPage.width) * 100,
-                    height: (size.height / pdfPage.height) * 100,
-                  },
-                  visible_enabled: true,
+                field_name: qrData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: -1,
+                  y: -1,
+                  width: (size.width / pdfPage.width) * 100,
+                  height: (size.height / pdfPage.height) * 100,
                 },
-                field: "qrcode",
-                documentId: workFlow.documentId,
+                visible_enabled: true,
               },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["getField"] });
-                },
-              }
+              "qrcode",
+              workFlow.documentId
             );
+            if (!putpos) return;
+            await getFields();
           }}
           className={`sig qrbox-${index}`}
         >

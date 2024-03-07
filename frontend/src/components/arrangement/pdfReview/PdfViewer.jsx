@@ -23,16 +23,16 @@ import { Document } from ".";
 
 export const PdfViewer = ({ workFlow, tabBar }) => {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const [contextMenu, setContextMenu] = useState(null);
   const [openResize, setOpenResize] = useState(false);
   const signerId = getSigner(workFlow)?.signerId;
-  // const [field, setField] = useState(null);
+  const [field, setField] = useState(null);
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
-  const { signingToken, signerToken } = useCommonHook();
+  const { signingToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
@@ -45,63 +45,37 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   // }, [workFlow]);
 
   // eslint-disable-next-line no-unused-vars
-  // const getFields = async () => {
-  //   const response = await fpsService.getFields({
-  //     documentId: workFlow.documentId,
-  //   });
-  //   if (!response) return;
-  //   const newData = { ...response };
-  //   const textField = response.textbox
-  //     .filter(
-  //       (item) =>
-  //         item.type !== "TEXTFIELD" &&
-  //         item.process_status !== "PROCESSED" &&
-  //         item.value !== ""
-  //     )
-  //     .map((item) => {
-  //       return {
-  //         field_name: item.field_name,
-  //         value: item.value,
-  //       };
-  //     });
-  //   setField({
-  //     ...newData,
-  //     textField,
-  //     workFlowId: workFlow.workFlowId,
-  //   });
-  // };
-  useEffect(async () => {
-    await getFields();
+  const getFields = async () => {
+    const response = await fpsService.getFields({
+      documentId: workFlow.documentId,
+    });
+    if (!response) return;
+    const newData = { ...response };
+    const textField = response.textbox
+      .filter(
+        (item) =>
+          item.type !== "TEXTFIELD" &&
+          item.process_status !== "PROCESSED" &&
+          item.value !== ""
+      )
+      .map((item) => {
+        return {
+          field_name: item.field_name,
+          value: item.value,
+        };
+      });
+    setField({
+      ...newData,
+      textField,
+      workFlowId: workFlow.workFlowId,
+    });
+  };
+  useEffect(() => {
+    getFields();
   }, []);
-  const { data: field } = useQuery({
-    queryKey: ["getField"],
-    queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
-    select: (data) => {
-      console.log("data: ", data);
-      const newData = { ...data };
-      const textField = data.textbox
-        .filter(
-          (item) =>
-            item.type !== "TEXTFIELD" &&
-            item.process_status !== "PROCESSED" &&
-            item.value !== ""
-        )
-        .map((item) => {
-          return {
-            field_name: item.field_name,
-            value: item.value,
-          };
-        });
-      return {
-        ...newData,
-        textField,
-        workFlowId: workFlow.workFlowId,
-      };
-    },
-  });
-  console.log("field: ", field);
-  const addSignature = UseAddSig();
-  const addTextBox = UseAddTextField();
+
+  // const addSignature = UseAddSig();
+  // const addTextBox = UseAddTextField();
   // const updateQr = UseUpdateQr();
 
   const handleContextMenu = (page) => (event) => {
@@ -141,7 +115,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
     setContextMenu(null);
   };
 
-  const signatureField = (value) => {
+  const signatureField = async (value) => {
     for (const item of field.signature) {
       if (
         item.field_name.substring(0, item.field_name.length - 7) ===
@@ -167,18 +141,15 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       visible_enabled: true,
       workFlowId: workFlow.workFlowId,
     };
-    addSignature.mutate(
-      {
-        body: newSignature,
-        field: newSignature.type.toLowerCase(),
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
-        },
-      }
+    const response = await fpsService.addSignature(
+      newSignature,
+      newSignature.type.toLowerCase(),
+      workFlow.documentId
     );
+    console.log("response:", response);
+    if (!response) return;
+
+    await getFields();
   };
 
   const handleValue = (value) => {
@@ -196,7 +167,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
     }
   };
 
-  const textField = (value) => {
+  const textField = async (value) => {
     // console.log("value: ", value);
     const fieldName = generateFieldName(signerId, value);
     const newTextField = {
@@ -215,21 +186,19 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       place_holder: value,
       suffix: fieldName.suffix,
     };
-    addTextBox.mutate(
-      {
-        body: newTextField,
-        field: "text",
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
-        },
-      }
+
+    const response = await fpsService.addTextBox(
+      newTextField,
+      "text",
+      workFlow.documentId
     );
+
+    if (!response) return;
+
+    await getFields();
   };
 
-  const addTextField = (value) => {
+  const addTextField = async (value) => {
     console.log("value: ", value);
     const fieldName = generateFieldName(signerId, "TEXTFIELD");
     const newTextField = {
@@ -248,21 +217,18 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       },
       suffix: fieldName.suffix,
     };
-    addTextBox.mutate(
-      {
-        body: newTextField,
-        field: "text",
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
-        },
-      }
+    const response = await fpsService.addTextBox(
+      newTextField,
+      "text",
+      workFlow.documentId
     );
+
+    if (!response) return;
+
+    await getFields();
   };
 
-  const initial = (value) => {
+  const initial = async (value) => {
     console.log("value: ", value);
     const fieldName = generateFieldName(signerId, value);
     const newInitField = {
@@ -277,21 +243,16 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       suffix: fieldName.suffix,
       required: true,
     };
-    addTextBox.mutate(
-      {
-        body: newInitField,
-        field: "initial",
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
-        },
-      }
+    const response = await fpsService.addTextBox(
+      newInitField,
+      "initial",
+      workFlow.documentId
     );
+    if (!response) return;
+    await getFields();
   };
 
-  const qrCode = (value) => {
+  const qrCode = async (value) => {
     console.log("value: ", value);
     if (field?.qr?.length > 0) {
       alert(t("signing.qr_warning"));
@@ -313,21 +274,20 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       value: `${window.location.origin}/view/documents/${qrToken}`,
       signing_token: signingToken,
     };
-    addTextBox.mutate(
-      {
-        body: newInitField,
-        field: "qrcode",
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
-        },
-      }
+    const response = await fpsService.addTextBox(
+      newInitField,
+      "qrcode",
+      workFlow.documentId
     );
+    if (!response) return;
+    await getFields();
   };
 
-  const QrQrypto = (value) => {
+  const QrQrypto = async (value) => {
+    if (field?.qrypto?.length > 0) {
+      alert(t("signing.qr_warning"));
+      return;
+    }
     const fieldName = generateFieldName("ADMIN_PROVIDER", value);
     const newQrQrypto = {
       field_name: fieldName.value,
@@ -339,19 +299,26 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
         height: 13,
       },
       suffix: fieldName.suffix,
-    };
-    addTextBox.mutate(
-      {
-        body: newQrQrypto,
-        field: "qrcode-qrypto",
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
+      items: [
+        {
+          field: "Workflow Name",
+          type: 1,
+          value: workFlow.documentName,
         },
-      }
+        {
+          field: "File Name",
+          type: 1,
+          value: workFlow.fileName,
+        },
+      ],
+    };
+    const response = await fpsService.addTextBox(
+      newQrQrypto,
+      "qrcode-qrypto",
+      workFlow.documentId
     );
+    if (!response) return;
+    await getFields();
   };
 
   const handleClickMenu = (value) => () => {
@@ -410,6 +377,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           addText={field?.textbox?.filter((item) => item.type === "TEXTFIELD")}
           openResize={openResize}
           setOpenResize={setOpenResize}
+          getFields={getFields}
         />
       </div>
     );

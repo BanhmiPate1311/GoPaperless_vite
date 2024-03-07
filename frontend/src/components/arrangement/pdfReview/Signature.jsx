@@ -3,24 +3,26 @@ import { ReactComponent as GiunIcon } from "@/assets/images/svg/congiun.svg";
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import "@/assets/style/react-resizable.css";
-import { SigDetail } from "@/components/SigningContent/PdfViewer";
-import { ModalSigning } from "@/components/modal2";
-import { ModalEidSign, ModalSmartid, ModalUsb } from "@/components/modal3";
-import { ModalEid } from "@/components/modal_eid";
 import { SignatureSetting } from "@/components/modal_setting";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { useTranslation } from "react-i18next";
 import { ResizableBox } from "react-resizable";
 
 /* eslint-disable react/prop-types */
-export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
+export const Signature = ({
+  index,
+  pdfPage,
+  signatureData,
+  workFlow,
+  getFields,
+}) => {
   const { t } = useTranslation();
 
   const [isOpenModalSetting, setOpenModalSetting] = useState([false]);
@@ -77,18 +79,15 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
   useEffect(() => {
     setIsSetPos(checkIsPosition(workFlow));
   }, [workFlow]);
-
-  const removeSignature = useMutation({
-    mutationFn: () => {
-      return fpsService.removeSignature(
-        { documentId: workFlow.documentId },
-        signatureData.field_name
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-    },
-  });
+  const removeSignature = async () => {
+    const res = await fpsService.removeSignature(
+      { documentId: workFlow.documentId },
+      signatureData.field_name
+    );
+    if (res.status === 200) {
+      getFields();
+    }
+  };
 
   const handleOpenModalSetting = (index) => {
     const newValue = [...isOpenModalSetting];
@@ -104,7 +103,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
 
   const handleRemoveSignature = async () => {
     console.log("remove");
-    removeSignature.mutate();
+    removeSignature();
   };
 
   const TopBar = ({ signatureData }) => {
@@ -177,7 +176,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
           newPos.current.y = data.y;
           setIsControlled(false);
         }}
-        onStop={(e, data) => {
+        onStop={async (e, data) => {
           // console.log("data: ", data);
           // console.log("e: ", e);
 
@@ -240,29 +239,23 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
 
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
-
-            putSignature.mutate(
+            const putpos = await fpsService.putSignature(
               {
-                body: {
-                  field_name: signatureData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: x,
-                    y: y,
-                    width: -1,
-                    height: -1,
-                  },
-                  visible_enabled: true,
+                field_name: signatureData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: x,
+                  y: y,
+                  width: -1,
+                  height: -1,
                 },
-                field: signatureData.type.toLowerCase(),
-                documentId: workFlow.documentId,
+                visible_enabled: true,
               },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["getField"] });
-                },
-              }
+              signatureData.type.toLowerCase(),
+              workFlow.documentId
             );
+            if (!putpos) return;
+            getFields();
           }
         }}
         disabled={
@@ -321,7 +314,7 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
               : 200,
           ]}
           onResize={(e, { size }) => {}}
-          onResizeStop={(e, { size }) => {
+          onResizeStop={async (e, { size }) => {
             if (
               isSetPos ||
               signerId +
@@ -333,28 +326,23 @@ export const Signature = ({ index, pdfPage, signatureData, workFlow }) => {
             )
               return;
             console.log(size, pdfPage, size.width / pdfPage.width);
-            putSignature.mutate(
+            const putpos = await fpsService.putSignature(
               {
-                body: {
-                  field_name: signatureData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: -1,
-                    y: -1,
-                    width: (size.width / pdfPage.width) * 100,
-                    height: (size.height / pdfPage.height) * 100,
-                  },
-                  visible_enabled: true,
+                field_name: signatureData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: -1,
+                  y: -1,
+                  width: (size.width / pdfPage.width) * 100,
+                  height: (size.height / pdfPage.height) * 100,
                 },
-                field: signatureData.type.toLowerCase(),
-                documentId: workFlow.documentId,
+                visible_enabled: true,
               },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["getField"] });
-                },
-              }
+              signatureData.type.toLowerCase(),
+              workFlow.documentId
             );
+            if (!putpos) return;
+            getFields();
           }}
           className={`sig signature-${index}`}
         >

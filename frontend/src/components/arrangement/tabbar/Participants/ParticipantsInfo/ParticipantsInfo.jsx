@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SigningDetail } from "../SigningDetail";
+import { useSearchParams } from "react-router-dom";
 
 export const ParticipantsInfo = ({ participantsList, signType }) => {
   const { t } = useTranslation();
@@ -28,7 +29,9 @@ export const ParticipantsInfo = ({ participantsList, signType }) => {
     newIsOpen[index] = !newIsOpen[index];
     setIsOpen(newIsOpen);
   };
-
+  // Begin: Change params for participants
+  let [searchParams, setSearchParams] = useSearchParams();
+  // End: Change params for participants
   return (
     <Accordion
       disableGutters
@@ -114,7 +117,17 @@ export const ParticipantsInfo = ({ participantsList, signType }) => {
                   <WaitingSig width={24} height={24} />
                 )}
               </Box>
-              <Box flexGrow={1}>
+              <Box
+                flexGrow={1}
+                sx={{ cursor: "pointer" }}
+                onClick={() => {
+                  searchParams.get("access_token") === participants.signerToken
+                    ? setSearchParams({})
+                    : setSearchParams({
+                        access_token: participants.signerToken,
+                      });
+                }}
+              >
                 <Typography
                   variant="h6"
                   color={check ? "signingtextBlue.main" : "textBlack.main"}
