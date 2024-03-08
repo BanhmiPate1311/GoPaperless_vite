@@ -8,10 +8,10 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Participants } from "./tabbar/participants/Participants";
-import OverView from "./tabbar/Overview";
 import { useSearchParams } from "react-router-dom";
 import { Signatures } from "../SigningContent/TabBar/Signatures";
+import OverView from "./tabbar/Overview";
+import { Participants } from "./tabbar/participants/Participants";
 import { useEffect } from "react";
 
 function TabPanel(props) {
@@ -59,6 +59,8 @@ export const TabBar = ({
   }, []);
   // End: Change params for participants
   const { t } = useTranslation();
+
+  // console.log("workFlow: ", workFlow);
   //1: signature, 3: seal
   const sigList1 = signedInfo
     ?.map((sig) => {
@@ -189,7 +191,10 @@ export const TabBar = ({
         <OverView workFlow={workFlow} qrSigning={qrSigning} />
       </TabPanel>
       <TabPanel value={tabBar} index={1}>
-        <Participants participantsList={workFlow.participants} />
+        <Participants
+          workFlow={workFlow}
+          participantsList={workFlow.participants}
+        />
       </TabPanel>
       <TabPanel value={tabBar} index={2}>
         <Signatures sigList1={sigList1} sigList2={sigList2} />
