@@ -2,10 +2,6 @@ package vn.mobileid.GoPaperless.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -16,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.mobileid.GoPaperless.dto.apiDto.ApiDtoRequest;
 import vn.mobileid.GoPaperless.dto.apiDto.SigningWorkflowDto;
-import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.model.apiModel.*;
 import vn.mobileid.GoPaperless.process.ProcessDb;
+import vn.mobileid.GoPaperless.service.CheckAndSendMailService;
 import vn.mobileid.GoPaperless.service.FpsService;
 import vn.mobileid.GoPaperless.utils.*;
 
@@ -43,10 +39,12 @@ public class ApiController {
 
     private final ProcessDb connect;
     private final FpsService fpsService;
+    private final CheckAndSendMailService checkAndSendMailService;
 
-    public ApiController(ProcessDb connect, FpsService fpsService) {
+    public ApiController(ProcessDb connect, FpsService fpsService, CheckAndSendMailService checkAndSendMailService) {
         this.connect = connect;
         this.fpsService = fpsService;
+        this.checkAndSendMailService = checkAndSendMailService;
     }
 
     @PostMapping("/checkHeader")
@@ -364,6 +362,20 @@ public class ApiController {
         System.out.println("qr: " + request.get("qr"));
         System.out.println("res: " + connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr")));
         return connect.USP_GW_PPL_WORKFLOW_GET_FROM_QR_TOKEN(request.get("qr"));
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity<?> getView(@RequestBody ApproveRequest request) throws Exception {
+
+        int workFlowCommentId = connect.USP_GW_PPL_WORKFLOW_COMMENT_ADD(request.getWorkFlowId(), request.getParticipantID(), request.getComment(), request.getRecipientID(), request.getHmac(), request.getSignerName());
+        int updateStatus = request.getSignerType() == 2 ? Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_REVIEWER_STATUS_ID_VIEWED : Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_EDITORER_STATUS_ID_EDITED;
+        connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(request.getSignerToken(),
+                updateStatus, "", 0);
+
+        byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
+        checkAndSendMailService.checkAndSendMail(request.getWorkFlowProcessType(), request.getSignerToken(), request.getSigningToken(), request.getSignerName(), request.getSignerEmail(), request.getFileName(), data);
+
+        return new ResponseEntity<>(workFlowCommentId, HttpStatus.OK);
     }
 
     @PostMapping("/checkPerMission")

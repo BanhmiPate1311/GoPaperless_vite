@@ -2,6 +2,8 @@ package vn.mobileid.GoPaperless.service;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
+import vn.mobileid.GoPaperless.model.apiModel.MailInfo;
+import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.utils.CommonFunction;
@@ -11,19 +13,23 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class PostBack {
     private final ProcessDb connect;
+    private final CheckAndSendMailService checkAndSendMailService;
 
-    public PostBack(ProcessDb connect) {
+    public PostBack(ProcessDb connect, CheckAndSendMailService checkAndSendMailService) {
         this.connect = connect;
+        this.checkAndSendMailService = checkAndSendMailService;
     }
 
     public void postBack2(
+            Participants signer,
+            String workFlowType,
+            String content,
             String dataResponse,
             String signedType,
             int isSetPosition,
@@ -147,12 +153,59 @@ public class PostBack {
                             sSigner, sStatus, sFileSigner, digest, sSignature_id, sCountryCode);
 
                 }
-//                String signedType = "NORMAL";
+//
+                byte[] data = CommonFunction.base64Decode(content);
                 connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(signerToken,
                         signedType, sDateSign, sSignature_id, signedHash, dataResponse, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, pFILE_ID[0], pLAST_MODIFIED_BY);
+                String signerName = signer.getLastName() + " " + signer.getFirstName();
+                checkAndSendMailService.checkAndSendMail(workFlowType, signerToken, signingToken, signerName, signer.getEmail(), fileName, data);
+//                if(!workFlowType.equals("parallel")){
+//                    boolean restart = false; // Biến này để kiểm tra xem có cần thực hiện lại từ đầu không
+//                    do {
+//                        List<Participants> responseList = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET_NEXT_PARTICIPANT(signerToken);
+//                        restart = false; // Gán lại giá trị mặc định trước khi lặp lại
+//                        if(responseList.size() > 0){
+//                            // Duyệt qua list participant và tiến hành gửi mail
+//                            for (Participants participant : responseList) {
+//                                System.out.println("participant kiem tra: " + participant.getFirstName());
+//                                String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signer.getLastName() + " " + signer.getFirstName()).replaceAll("@FirstLastName",participant.getLastName() + " " + participant.getFirstName()).replaceAll("@EmailSigner",signer.getEmail()).replaceAll("@LinkSign","https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken());
+//                                String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signer.getLastName() + " " + signer.getFirstName()).replaceAll("@FirstLastName",participant.getLastName() + " " + participant.getFirstName()).replaceAll("@EmailSigner",signer.getEmail());
+//                                if (participant.getSignerType() != 5){
+//                                    // Gửi mail
+//                                    try {
+//                                        // Gửi mail
+//                                        MailService.sendMail(null, null, participant.getEmail(), textMailInfo.getSubject(), newTextContent);
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace(); // In ra stack trace của lỗi
+//                                        // Ném lại ngoại lệ để dừng chương trình
+//                                        throw new RuntimeException("Error occurred while sending text mail to " + participant.getEmail(), e);
+//                                    }
+//                                } else {
+//                                    try {
+//                                        // Convert content from base64 to byte[]
+//
+//
+//                                        // Gửi attachment
+//                                        MailService.sendMail(fileName, data, participant.getEmail(), attachMailInfo.getSubject(), newAttachContent);
+//                                    } catch (Exception e) {
+//                                        e.printStackTrace(); // In ra stack trace của lỗi
+//                                        // Ném lại ngoại lệ để dừng chương trình
+//                                        throw new RuntimeException("Error occurred while sending attachment to " + participant.getEmail(), e);
+//                                    }
+//                                    // Tiến hành cập nhật trạng thái và thực hiện lại từ đầu
+//                                    connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(participant.getSignerToken(),
+//                                            Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_COPY_STATUS_ID_SENT_A_COPY, "", 0);
+//                                    restart = true; // Đánh dấu để thực hiện lại từ đầu
+//                                }
+//                            }
+//                        }
+//                    } while (restart); // Lặp lại nếu cần thực hiện lại từ đầu
+//                }
+
+
                 if (rsWFList != null) {
                     if (rsWFList.getWorkFlowStatus() != Difinitions.CONFIG_PPL_WORKFLOW_STATUS_PENDING) {
-                        connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(signingToken, Difinitions.CONFIG_PPL_WORKFLOW_STATUS_COMPLETED, "");
+//                        connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(signingToken, Difinitions.CONFIG_PPL_WORKFLOW_STATUS_COMPLETED, "");
                         if (!"".equals(rsWFList.getPostBackUrl())) {
                             sAction = "signing_completed";
 //                                log.info(

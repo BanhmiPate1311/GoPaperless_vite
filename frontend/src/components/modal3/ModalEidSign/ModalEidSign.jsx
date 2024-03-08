@@ -100,6 +100,7 @@ export const ModalEidSign = ({ open, onClose, dataSigning, signatureData }) => {
       assurance: dataSigning.assurance,
       contactInfor: dataSigning.contactInfor,
       textField: dataSigning.textField,
+      workFlowProcessType: dataSigning.workFlowProcessType,
     };
     try {
       const response = await electronicService.authorizeOTP(data);

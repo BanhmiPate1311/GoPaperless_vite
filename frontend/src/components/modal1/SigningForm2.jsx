@@ -450,6 +450,8 @@ export const SigningForm2 = ({
           ...dataApi.current,
           codeNumber: codeNumber,
           code: code,
+          workFlowProcessType: workFlow.workflowProcessType,
+          signerType: signer.signerType,
           criteriaAlias: convertTypeEid(criteriaEid),
         };
         setDataSigning(dataApi.current);
@@ -515,6 +517,8 @@ export const SigningForm2 = ({
           relyingParty: smartIdCertificate?.data?.relyingParty,
           codeEnable: smartIdCertificate?.data?.codeEnable,
           certChain: newListCert[certSelected],
+          workFlowProcessType: workFlow.workflowProcessType,
+          signerType: signer.signerType,
         };
         setDataSigning(dataApi.current);
         // handleNext(1);
@@ -526,6 +530,8 @@ export const SigningForm2 = ({
         dataApi.current = {
           ...dataApi.current,
           certChain: newListCert[certSelected],
+          workFlowProcessType: workFlow.workflowProcessType,
+          signerType: signer.signerType,
         };
         setDataSigning(dataApi.current);
         onClose();
