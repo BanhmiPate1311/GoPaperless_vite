@@ -71,13 +71,13 @@ export const ContextMenu = ({
 
   switch (tabBar) {
     case 0:
-      data = data.filter(
+      menu = menu.filter(
         (item) => (item.value === "QRYPTO") | (item.value == "QR")
       );
       break;
 
     case 1:
-      data = data.filter(
+      menu = menu.filter(
         (item) => item.value !== "QRYPTO" && item.value !== "QR"
       );
       break;

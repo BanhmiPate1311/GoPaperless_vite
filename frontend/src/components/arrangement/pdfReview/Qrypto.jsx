@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
+import qrypto from "../../../assets/images/qrcode-qrypto.png";
 
 export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
   const queryClient = useQueryClient();
@@ -351,7 +352,9 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
               sx={{
                 height: "100%",
                 width: "100%",
-                backgroundImage: `url(data:image/png;base64,${qryptoData.image_qr})`,
+                backgroundImage: qryptoData.image_qr
+                  ? `url(data:image/png;base64,${qryptoData.image_qr})`
+                  : `url(${qrypto})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -367,6 +370,7 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
           onClose={() => handleCloseModalSetting(index)}
           qryptoData={qryptoData}
           workFlow={workFlow}
+          getFields={getFields}
         />
       )}
     </>

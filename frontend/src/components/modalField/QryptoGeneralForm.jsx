@@ -11,22 +11,52 @@ import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { useController } from "react-hook-form";
 import { use } from "i18next";
+import { AddFieldQrypto } from "./AddFieldQrypto";
 
-export const QryptoGeneralForm = ({ control, watch, register }) => {
+export const QryptoGeneralForm = ({
+  control,
+  watch,
+  register,
+  setValue,
+  unregister,
+}) => {
   const { items } = watch();
 
   const [open, setOpen] = useState(false);
-  const [fields, setFields] = useState(items);
 
-  const handleOpen = () => {
-    console.log(register);
-    items.push();
-    setFields([...fields, { type: 1, field: "name value", value: "" }]);
+  const handleAddField = (type, label) => {
+    const index = items.length;
+    console.log("type: ", type);
+    console.log("label: ", label);
+    switch (type) {
+      case 1:
+        setValue(`items[${index}].field`, label);
+        setValue(`items[${index}].type`, 1);
+        setValue(`items[${index}].value`, "");
+        break;
+      case 8:
+        setValue(`items[${index}].field`, label);
+        setValue(`items[${index}].type`, 8);
+        setValue(`items[${index}].value`, [
+          {
+            column_1: "",
+            column_2: "",
+            column_3: "",
+          },
+          {
+            column_1: "",
+          },
+        ]);
+        break;
+    }
+  };
+  const removeField = (index) => {
+    unregister(`items.${index}`);
   };
   return (
     <>
       <Box>
-        {fields?.map((field, index) => {
+        {items?.map((field, index) => {
           switch (field.type) {
             case 1:
               return (
@@ -40,8 +70,6 @@ export const QryptoGeneralForm = ({ control, watch, register }) => {
                     }}
                   >
                     <TextField
-                      fullWidth
-                      // value={}
                       sx={{
                         "& .MuiInputBase-root": {
                           height: "auto",
@@ -50,6 +78,7 @@ export const QryptoGeneralForm = ({ control, watch, register }) => {
                           },
                         },
                         "& .MuiInputBase-input": {
+                          fontWeight: 500,
                           padding: "0",
                         },
                       }}
@@ -59,7 +88,7 @@ export const QryptoGeneralForm = ({ control, watch, register }) => {
                       style={{ display: "none" }}
                       {...register(`items[${index}].type`)}
                     />
-                    <Button>
+                    <Button onClick={() => removeField(index)}>
                       <TrashIcon sx={{ color: "#F24E1E" }} />
                     </Button>
                   </Box>
@@ -101,8 +130,22 @@ export const QryptoGeneralForm = ({ control, watch, register }) => {
                       marginBottom: "10px",
                     }}
                   >
-                    <Typography variant="h6">{field.field}</Typography>
-                    <Button>
+                    <TextField
+                      sx={{
+                        "& .MuiInputBase-root": {
+                          height: "auto",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderWidth: "0",
+                          },
+                        },
+                        "& .MuiInputBase-input": {
+                          fontWeight: 500,
+                          padding: "0",
+                        },
+                      }}
+                      {...register(`items[${index}].field`)}
+                    />
+                    <Button onClick={() => removeField(index)}>
                       <TrashIcon sx={{ color: "#F24E1E" }} />
                     </Button>
                   </Box>
@@ -226,7 +269,7 @@ export const QryptoGeneralForm = ({ control, watch, register }) => {
           }
         })}
         <Button
-          onClick={handleOpen}
+          onClick={() => setOpen(true)}
           variant="contained"
           sx={{ width: "100%", borderRadius: "10px", marginBottom: "10px" }}
         >
@@ -234,7 +277,13 @@ export const QryptoGeneralForm = ({ control, watch, register }) => {
           Add Element
         </Button>
       </Box>
-      {open && <Box>Modal</Box>}
+      {open && (
+        <AddFieldQrypto
+          open={open}
+          setOpen={setOpen}
+          handleAddField={handleAddField}
+        />
+      )}
     </>
   );
 };

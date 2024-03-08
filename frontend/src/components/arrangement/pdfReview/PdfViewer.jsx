@@ -288,6 +288,22 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       alert(t("signing.qr_warning"));
       return;
     }
+    const signerInfo = workFlow.participants.map((item) => {
+      return {
+        field: item.signerId,
+        type: 8,
+        value: [
+          {
+            column_1: item.lastName + " " + item.firstName,
+            column_2: item.email,
+            column_3: new Date(),
+          },
+          {
+            column_1: "",
+          },
+        ],
+      };
+    });
     const fieldName = generateFieldName("ADMIN_PROVIDER", value);
     const newQrQrypto = {
       field_name: fieldName.value,
@@ -310,6 +326,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           type: 1,
           value: workFlow.fileName,
         },
+        ...signerInfo,
       ],
     };
     const response = await fpsService.addTextBox(
@@ -322,7 +339,6 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   };
 
   const handleClickMenu = (value) => () => {
-    console.log("data: ", value);
     handleClose();
     switch (value) {
       case "SIGNATURE":
@@ -364,6 +380,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           handleClose={handleClose}
           handleClickMenu={handleClickMenu}
           tabBar={tabBar}
+          signerType={1}
         />
         <Document
           props={props}

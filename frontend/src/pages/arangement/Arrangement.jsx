@@ -108,16 +108,16 @@ export const Arrangement = () => {
             </Typography>
             {/* <VisibilityIcon sx={{ color: "signingtext1.main" }} /> */}
             <Chip
-              label={t("signing.download_completed")}
+              // label={t("signing.download_completed")}
               component="a"
-              color={checkWorkFlowStatus ? "primary" : undefined}
-              disabled={!checkWorkFlowStatus}
+              // color={checkWorkFlowStatus ? "primary" : undefined}
+              // disabled={!checkWorkFlowStatus}
               sx={{
                 padding: "8px 16px",
                 height: "36px",
                 fontWeight: "500",
                 borderRadius: "25px",
-                // backgroundColor: "borderColor.light",
+                backgroundColor: "transparent",
                 color: "signingWFBackground.main",
                 gap: "10px",
                 "& span": {
@@ -129,7 +129,7 @@ export const Arrangement = () => {
               }}
               // href="#basic-chip"
               href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}
-              icon={<SaveAltIcon fontSize="small" color="borderColor.light" />}
+              icon={<SaveAltIcon fontSize="small" color="#000" />}
               clickable
             />
           </Toolbar>

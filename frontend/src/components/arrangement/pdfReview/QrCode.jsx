@@ -205,8 +205,8 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
               },
               visible_enabled: true,
             },
-            "qrcode",
-            workFlow.documentId
+            
+            
           );
           if (!putpos) return;
           await getFields();
