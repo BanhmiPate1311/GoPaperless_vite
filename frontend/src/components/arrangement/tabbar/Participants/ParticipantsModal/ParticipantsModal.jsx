@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,11 +8,27 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 import { t } from "i18next";
 import PropTypes from "prop-types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ParticipantsTable from "./ParticipantsTable";
+import { participantsService } from "@/services/participants_service";
+import { useQueryClient } from "@tanstack/react-query";
 
-export const ParticipantsModal = ({ open, data, title, handleClose }) => {
+export const ParticipantsModal = ({
+  open,
+  data,
+  title,
+  handleClose,
+  workFlow,
+}) => {
   const descriptionElementRef = useRef(null);
+  const queryClient = useQueryClient();
+  const handleSubmitClick = () => {
+    participant.map((value) => {
+      updateParticipant(value);
+    });
+    handleClose();
+  };
+
   useEffect(() => {
     if (open) {
       const { current: descriptionElement } = descriptionElementRef;
@@ -20,6 +37,33 @@ export const ParticipantsModal = ({ open, data, title, handleClose }) => {
       }
     }
   }, [open]);
+  const [participant, setParticipant] = useState([]);
+
+  const updateParticipant = async (data) => {
+    // const data = {
+    //   fullName,
+    //   firstName,
+    //   lastName,
+    //   customReason,
+    //   position,
+    //   signingPurpose,
+    //   structuralSubdivision,
+    //   metaInformation,
+    //   signerToken: row.signerToken,
+    // };
+    console.log("data: ", data);
+
+    try {
+      const response = await participantsService.updateParticipant(data);
+      console.log("response: ", response);
+      // setProcess(response.data);
+      queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+    } catch (error) {
+      console.error("Lỗi khi gọi API updateParticipant:", error);
+      alert("UPDATE PARTICIPANTS ERROR");
+      // Xử lý lỗi tại đây nếu cần
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -76,7 +120,14 @@ export const ParticipantsModal = ({ open, data, title, handleClose }) => {
           ref={descriptionElementRef}
           tabIndex={-1}
         >
-          <ParticipantsTable data={data} />
+          <ParticipantsTable
+            workFlow={workFlow}
+            data={data}
+            handleClose={handleClose}
+            setParticipant={setParticipant}
+            updateParticipant={updateParticipant}
+            participant={participant}
+          />
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: "24px" }}>
@@ -85,7 +136,19 @@ export const ParticipantsModal = ({ open, data, title, handleClose }) => {
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={handleClose}
         >
-          {t("0-common.close")}
+          {t("0-common.cancel")}
+        </Button>
+        <Button
+          variant="contained"
+          sx={{
+            borderRadius: "10px",
+            borderColor: "borderColor.main",
+            marginLeft: "20px !important",
+          }}
+          onClick={handleSubmitClick}
+          type="button"
+        >
+          {t("0-common.save")}
         </Button>
       </DialogActions>
     </Dialog>

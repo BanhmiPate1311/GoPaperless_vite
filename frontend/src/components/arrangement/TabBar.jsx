@@ -55,6 +55,8 @@ export const TabBar = ({
   let [searchParams, setSearchParams] = useSearchParams();
   // End: Change params for participants
   const { t } = useTranslation();
+
+  // console.log("workFlow: ", workFlow);
   //1: signature, 3: seal
   const sigList1 = signedInfo
     ?.map((sig) => {
@@ -185,7 +187,10 @@ export const TabBar = ({
         <OverView workFlow={workFlow} qrSigning={qrSigning} />
       </TabPanel>
       <TabPanel value={tabBar} index={1}>
-        <Participants participantsList={workFlow.participants} />
+        <Participants
+          workFlow={workFlow}
+          participantsList={workFlow.participants}
+        />
       </TabPanel>
       <TabPanel value={tabBar} index={2}>
         <Signatures sigList1={sigList1} sigList2={sigList2} />

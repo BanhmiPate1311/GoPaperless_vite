@@ -77,7 +77,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
     queryKey: ["getField"],
     queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
     select: (data) => {
-      console.log("data: ", data);
+      // console.log("data: ", data);
       const newData = { ...data };
       const textField = data.textbox
         .filter(
@@ -99,7 +99,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       };
     },
   });
-  console.log("field: ", field);
+  // console.log("field: ", field);
   const addSignature = UseAddSig();
   const addTextBox = UseAddTextField();
   // const updateQr = UseUpdateQr();

@@ -14,9 +14,8 @@ import { ParticipantsInfo } from "./ParticipantsInfo";
 import { ParticipantsModal } from "./ParticipantsModal";
 
 // eslint-disable-next-line react/prop-types
-export const Participants = ({ participantsList }) => {
+export const Participants = ({ participantsList, workFlow }) => {
   const { t } = useTranslation();
-
   //Begin: Open modal
   const [open, setOpen] = useState(false);
 
@@ -85,6 +84,7 @@ export const Participants = ({ participantsList }) => {
       )}
 
       <ParticipantsModal
+        workFlow={workFlow}
         open={open}
         handleClose={handleClose}
         title={t("0-common.workflow")}
