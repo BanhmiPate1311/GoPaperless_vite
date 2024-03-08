@@ -273,7 +273,7 @@
     "taxpayer_name": "Name des Steuerzahlers",
     "common_name": "Gemeinsamen Namen",
     "cert_tooltip": "Details zum Zertifikat",
-    "tax_tooltip": "Details zur Steuernummer",
+    "tax_tooltip": "Informationen zur Steuernummer",
     "init_warning": "Sie müssen Ihre Initialen vervollständigen, bevor Sie das Dokument unterschreiben",
     "qr_warning": "Sie können nicht mehrere QR-Codes hinzufügen",
     "text_warning": "Füllen Sie die Ihnen zugewiesenen Formularfelder aus",

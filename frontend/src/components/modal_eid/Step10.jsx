@@ -134,6 +134,7 @@ export const Step10 = ({
   };
 
   const handleOnChange = (res) => {
+    setErrorPG(null);
     setOtp1(res);
     console.log("res: ", res.length);
     if (res.length === 6) {
@@ -228,7 +229,7 @@ export const Step10 = ({
         textAlign="center"
         marginTop="15px"
         // onClick={processOTPResend}
-        onClick={handleResend}
+
         // className="buttontet"
         disabled={!enResend}
       >
@@ -240,6 +241,7 @@ export const Step10 = ({
             color: enResend ? "#1976D2" : "#26293f",
             // textDecoration: "underline",
           }}
+          onClick={handleResend}
         >
           {t("electronic.step105")}
         </Typography>

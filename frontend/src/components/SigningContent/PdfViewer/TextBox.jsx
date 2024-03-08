@@ -4,7 +4,7 @@ import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.
 import { TextBoxSettingField } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
-import { getSigner } from "@/utils/commonFunction";
+import { capitalLize, getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
 import TextField from "@mui/material/TextField";
@@ -45,6 +45,10 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
       x: (textData.dimension?.x * pdfPage.width) / 100,
       y: (textData.dimension?.y * pdfPage.height) / 100,
     });
+  }, [textData]);
+
+  useEffect(() => {
+    setTextValue(textData.value);
   }, [textData]);
 
   const removeSignature = useMutation({
@@ -421,7 +425,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               // value={code}
               value={textValue}
               autoComplete="off"
-              placeholder={textData.place_holder}
+              placeholder={capitalLize(textData.place_holder)}
               sx={{
                 my: 0,
                 "& .MuiInputBase-root": {
@@ -435,6 +439,9 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               onChange={handleChange}
               inputProps={{
                 sx: { fontWeight: 600, padding: 0 }, // Sử dụng style để đặt fontWeight và padding
+              }}
+              InputProps={{
+                readOnly: textData.process_status === "PROCESSED",
               }}
             />
             {textData.required && (

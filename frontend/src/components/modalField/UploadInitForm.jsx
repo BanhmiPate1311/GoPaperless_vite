@@ -52,73 +52,85 @@ export const UploadInitForm = forwardRef(
             onChange={handleUploadFile}
           />
         </Box>
-        <Stack
-          ref={ref}
+        <Box
           sx={{
-            height: "170px",
-            overflow: "hidden",
             borderRadius: "6px",
             border: "2px solid #357EEB",
-            position: "relative",
-            // backgroundColor: "white",
-            // set background image
+            height: "100%",
+            width: "100%",
+            p: "3px",
+            // maxHeight: "100%",
+            overflow: "hidden",
           }}
         >
           <Stack
-            // direction="row-reverse"
-            direction={
-              watch("alignment") === "auto" || watch("alignment") === "left"
-                ? "row"
-                : "row-reverse"
-            }
+            ref={ref}
             sx={{
-              // flexDirection: "row-reversed",
-              display: "flex",
-              width: "100%",
-              // height: "150px",
-              height: "100%",
-              alignItems: "center",
-              minHeight: "100px",
-              // padding: "2rem 0",
+              height: "160px",
+              overflow: "hidden",
+              borderRadius: "6px",
+              // border: "2px solid #357EEB",
+              position: "relative",
+              // backgroundColor: "white",
+              // set background image
             }}
-            // ref={sigFileRef}
           >
             <Stack
-              justifyContent={"center"}
-              alignItems={"center"}
+              // direction="row-reverse"
+              direction={
+                watch("alignment") === "auto" || watch("alignment") === "left"
+                  ? "row"
+                  : "row-reverse"
+              }
               sx={{
-                marginLeft: "auto",
-                marginRight: "auto",
+                // flexDirection: "row-reversed",
+                display: "flex",
                 width: "100%",
+                // height: "150px",
                 height: "100%",
-                fontSize: "2rem",
-                textAlign: "center",
-                textTransform: "capitalize",
+                alignItems: "center",
+                minHeight: "100px",
+                // padding: "2rem 0",
               }}
-              className="font-moon-dance"
+              // ref={sigFileRef}
             >
-              {/* {watch("text") || ""} */}
-              {watch("imageScrop") ? (
-                <Box
-                  component="img"
-                  sx={{
-                    // height: "100%",
-                    maxWidth: "70%",
-                    maxHeight: "100%",
-                  }}
-                  alt="The house from the offer."
-                  src={watch("imageScrop")}
-                />
-              ) : null}
+              <Stack
+                justifyContent={"center"}
+                alignItems={"center"}
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "100%",
+                  height: "100%",
+                  fontSize: "2rem",
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                }}
+                className="font-moon-dance"
+              >
+                {/* {watch("text") || ""} */}
+                {watch("imageScrop") ? (
+                  <Box
+                    component="img"
+                    sx={{
+                      // height: "100%",
+                      maxWidth: "70%",
+                      maxHeight: "100%",
+                    }}
+                    alt="The house from the offer."
+                    src={watch("imageScrop")}
+                  />
+                ) : null}
+              </Stack>
             </Stack>
-          </Stack>
-          {/* <Box
+            {/* <Box
             style={{
               borderTop: "2px dashed #357EEB",
               height: "20px",
             }}
           ></Box> */}
-        </Stack>
+          </Stack>
+        </Box>
 
         <DialogFile
           name="imageScrop"

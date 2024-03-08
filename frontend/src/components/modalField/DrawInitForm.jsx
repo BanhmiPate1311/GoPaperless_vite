@@ -41,66 +41,78 @@ export const DrawInitForm = forwardRef(
             {t("0-common.draw")}
           </Button>
         </Box>
-        <Stack
-          ref={ref}
+        <Box
           sx={{
-            height: "170px",
-            overflow: "hidden",
             borderRadius: "6px",
             border: "2px solid #357EEB",
-            position: "relative",
-            // backgroundColor: "white",
+            height: "100%",
+            width: "100%",
+            p: "3px",
+            // maxHeight: "100%",
+            overflow: "hidden",
           }}
         >
           <Stack
-            direction={
-              watch("alignment") === "auto" || watch("alignment") === "left"
-                ? "row"
-                : "row-reverse"
-            }
+            ref={ref}
             sx={{
-              display: "flex",
-              width: "100%",
-              alignItems: "center",
-              // height: "150px",
-              height: "100%",
+              height: "160px",
+              overflow: "hidden",
+              borderRadius: "6px",
+              // border: "2px solid #357EEB",
+              position: "relative",
+              // backgroundColor: "white",
             }}
-            // ref={sigCanvasRef}
           >
             <Stack
-              direction="row"
-              justifyContent={"center"}
-              alignItems="center"
+              direction={
+                watch("alignment") === "auto" || watch("alignment") === "left"
+                  ? "row"
+                  : "row-reverse"
+              }
               sx={{
-                marginLeft: "auto",
-                marginRight: "auto",
+                display: "flex",
                 width: "100%",
-                fontSize: "2rem",
-                textAlign: "center",
-                textTransform: "capitalize",
+                alignItems: "center",
+                // height: "150px",
+                height: "100%",
               }}
+              // ref={sigCanvasRef}
             >
-              {/* {watch("drawUrl") || ""} */}
-              {watch("drawUrl") ? (
-                <Box
-                  component="img"
-                  sx={{
-                    // height: "100%",
-                    maxWidth: "70%",
-                  }}
-                  alt="The house from the offer."
-                  src={watch("drawUrl")}
-                />
-              ) : null}
+              <Stack
+                direction="row"
+                justifyContent={"center"}
+                alignItems="center"
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "100%",
+                  fontSize: "2rem",
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                }}
+              >
+                {/* {watch("drawUrl") || ""} */}
+                {watch("drawUrl") ? (
+                  <Box
+                    component="img"
+                    sx={{
+                      // height: "100%",
+                      maxWidth: "70%",
+                    }}
+                    alt="The house from the offer."
+                    src={watch("drawUrl")}
+                  />
+                ) : null}
+              </Stack>
             </Stack>
-          </Stack>
-          {/* <Box
+            {/* <Box
       style={{
         borderTop: "2px dashed #357EEB",
         height: "20px",
       }}
     ></Box> */}
-        </Stack>
+          </Stack>
+        </Box>
 
         <DialogDraw
           name="drawUrl"

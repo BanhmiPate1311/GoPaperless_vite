@@ -14,11 +14,19 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { NotFound } from "../NotFound";
+import { useEffect, useState } from "react";
 
 export const Signing = () => {
   const { t } = useTranslation();
   const { signingToken, signerToken } = useCommonHook();
+  const [permit, setPermit] = useState(false);
   // const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (signerToken) {
+      checkPerMission();
+    }
+  }, [signerToken]);
 
   const { data: workFlowValid } = useQuery({
     queryKey: ["checkWorkFlowValid"],
@@ -30,6 +38,13 @@ export const Signing = () => {
       return apiService.checkWorkFlow(data);
     },
   });
+
+  const checkPerMission = async () => {
+    const response = await apiService.checkPerMission({ signerToken });
+    console.log("response: ", response);
+    setPermit(response.data);
+    // return response.data;
+  };
   const workFlow = useQuery({
     queryKey: ["getWorkFlow"],
     queryFn: () => apiService.getSigningWorkFlow(signingToken),
@@ -67,7 +82,7 @@ export const Signing = () => {
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
-  if (workFlowValid && workFlowValid.data === 0) {
+  if ((workFlowValid && workFlowValid.data === 0) || !permit) {
     return <NotFound />;
   } else {
     return (

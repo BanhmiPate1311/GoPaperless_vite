@@ -21,6 +21,7 @@ export const Step1 = ({
   onDisableSubmit,
   errorPG,
   errorApi,
+  setErrorApi,
 }) => {
   const { t } = useTranslation();
   const [data2, setData2] = useState(null);
@@ -76,6 +77,7 @@ export const Step1 = ({
   };
 
   const handleChange2 = (e) => {
+    setErrorApi(null);
     setConnectorName(e.target.value);
     // setCert({});
   };

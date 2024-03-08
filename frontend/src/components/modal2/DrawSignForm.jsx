@@ -75,9 +75,7 @@ export const DrawSignForm = forwardRef(
         <Box mb="10px" sx={showInput ? { display: "none" } : {}}>
           <Button
             variant="outlined"
-            style={{
-              height: "45px",
-            }}
+            sx={{ border: "2px solid #357EEB", height: "45px" }}
             onClick={handleOpenDraw}
           >
             {t("0-common.draw")}
@@ -95,7 +93,7 @@ export const DrawSignForm = forwardRef(
           <Stack
             ref={ref}
             sx={{
-              height: showInput ? "100%" : "154px",
+              height: showInput ? "100%" : "150px",
               overflow: "hidden",
               // borderRadius: "6px",
               // border: !imgBase64 ? "2px solid #357EEB" : "none",

@@ -18,6 +18,8 @@ public class SigningWorkflowDto {
     private List<Participants> participants;
     private String pdfBase64;
     private String deadlineAt;
+    private String fileType;
+    private String workflowProcessType;
 
     public int getDocumentId() {
         return documentId;
@@ -121,5 +123,21 @@ public class SigningWorkflowDto {
 
     public void setDeadlineAt(String deadlineAt) {
         this.deadlineAt = deadlineAt;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getWorkflowProcessType() {
+        return workflowProcessType;
+    }
+
+    public void setWorkflowProcessType(String workflowProcessType) {
+        this.workflowProcessType = workflowProcessType;
     }
 }

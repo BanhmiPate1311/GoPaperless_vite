@@ -18,6 +18,7 @@ export const ContextMenu = ({
   handleClose,
   handleClickMenu,
   tabBar,
+  signerType,
 }) => {
   const { t } = useTranslation();
   let data = [
@@ -56,6 +57,16 @@ export const ContextMenu = ({
       value: "AddText",
     },
   ];
+  let menu = [];
+  switch (signerType) {
+    case 1:
+      menu = data;
+      break;
+    case 2:
+    case 3:
+      menu = data.filter((item) => item.value !== "SIGNATURE");
+      break;
+  }
   // Arrangement Overview
 
   switch (tabBar) {
@@ -92,7 +103,7 @@ export const ContextMenu = ({
         },
       }}
     >
-      {data.map((item, index) => (
+      {menu.map((item, index) => (
         <MenuItem key={index} onClick={handleClickMenu(item.value)}>
           <ListItemIcon sx={{ color: "inherit" }}>{item.icon}</ListItemIcon>
           <ListItemText
@@ -115,6 +126,7 @@ ContextMenu.propTypes = {
   }),
   handleClose: PropTypes.func,
   handleClickMenu: PropTypes.func,
+  signerType: PropTypes.number,
   tabBar: PropTypes.number,
 };
 export default ContextMenu;
