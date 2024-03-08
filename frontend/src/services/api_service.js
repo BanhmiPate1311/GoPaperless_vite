@@ -53,4 +53,9 @@ export const apiService = {
     const response = await api.post("/uiApi/getCertDetail", { cert });
     return response.data;
   },
+
+  approve: async (data) => {
+    const response = await api.post("/uiApi/approve", data);
+    return response.data;
+  },
 };

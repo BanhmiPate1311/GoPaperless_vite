@@ -1,9 +1,11 @@
 import { SigningContent } from "@/components/SigningContent";
+import { ApproveModal } from "@/components/approve_modal";
 import { Cookie } from "@/components/cookie";
 import { useCommonHook } from "@/hook";
 import { apiService } from "@/services/api_service";
 import { checkWorkflowStatus } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { Button } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
@@ -12,14 +14,24 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotFound } from "../NotFound";
-import { useEffect, useState } from "react";
 
 export const Signing = () => {
   const { t } = useTranslation();
   const { signingToken, signerToken } = useCommonHook();
   const [permit, setPermit] = useState(false);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpenApprove = () => {
+    setOpen(true);
+  };
+
+  const handleCloseApprove = () => {
+    setOpen(false);
+  };
   // const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -41,7 +53,7 @@ export const Signing = () => {
 
   const checkPerMission = async () => {
     const response = await apiService.checkPerMission({ signerToken });
-    console.log("response: ", response);
+    // console.log("response: ", response);
     setPermit(response.data);
     // return response.data;
   };
@@ -149,6 +161,9 @@ export const Signing = () => {
                 }
                 clickable
               />
+              <Button variant="contained" onClick={handleClickOpenApprove}>
+                {t("0-common.approve")}
+              </Button>
             </Toolbar>
           </AppBar>
         </Box>
@@ -162,6 +177,11 @@ export const Signing = () => {
         >
           {workFlow.data && <SigningContent workFlow={workFlow.data} />}
         </Container>
+        <ApproveModal
+          open={open}
+          onClose={handleCloseApprove}
+          workFlow={workFlow.data}
+        />
         <Cookie />
       </Stack>
     );
