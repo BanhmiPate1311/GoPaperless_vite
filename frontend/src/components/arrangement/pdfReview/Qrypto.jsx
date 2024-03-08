@@ -1,23 +1,22 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
-import PropTypes from "prop-types";
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
+import { QryptoSettingField } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
-import { QryptoSettingField } from "@/components/modalField";
+import qrypto from "../../../assets/images/qrcode-qrypto.png";
 
-export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
+export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
-
   const signer = getSigner(workFlow);
   const signerId = signer?.signerId || "ADMIN_PROVIDER";
 
@@ -54,53 +53,29 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
     setIsOpenModalSetting(newValue);
   };
   const removeSignature = async () => {
-    try {
-      const response = await fpsService.removeSignature1(
-        { documentId: workFlow.documentId },
-        qryptoData.field_name
-      );
-      if (response.status === 200) {
-        const getFields = fpsService.getFields({
-          documentId: workFlow.documentId,
-        });
-        const newData = { ...getFields };
-        const textField = data.textbox
-          .filter(
-            (item) =>
-              item.type !== "TEXTFIELD" &&
-              item.process_status !== "PROCESSED" &&
-              item.value !== ""
-          )
-          .map((item) => {
-            return {
-              field_name: item.field_name,
-              value: item.value,
-            };
-          });
-        return {
-          ...newData,
-          textField,
-          workFlowId: workFlow.workFlowId,
-        };
-      }
-    } catch {
-      console.log("error");
+    const response = await fpsService.removeSignature1(
+      { documentId: workFlow.documentId },
+      qryptoData.field_name
+    );
+    console.log("response: ", response);
+    if (response === 200) {
+      await getFields();
     }
   };
-  const removeSignature1 = useMutation({
-    mutationFn: () => {
-      return fpsService.removeSignature(
-        { documentId: workFlow.documentId },
-        qryptoData.field_name
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-    },
-  });
+  // const removeSignature1 = useMutation({
+  //   mutationFn: () => {
+  //     return fpsService.removeSignature(
+  //       { documentId: workFlow.documentId },
+  //       qryptoData.field_name
+  //     );
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["getField"] });
+  //   },
+  // });
 
   const handleRemoveSignature = async () => {
-    removeSignature();
+    await removeSignature();
   };
 
   const TopBar = () => {
@@ -170,7 +145,7 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
           setDragPosition({ x: data.x, y: data.y });
           setIsControlled(false);
         }}
-        onStop={(e, data) => {
+        onStop={async (e, data) => {
           e.preventDefault();
           setIsControlled(true);
           handleDrag("none");
@@ -232,29 +207,23 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
 
           const y =
             (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
-
-          putSignature.mutate(
+          const putpos = await fpsService.putSignature(
             {
-              body: {
-                field_name: qryptoData.field_name,
-                page: pdfPage.currentPage,
-                dimension: {
-                  x: x,
-                  y: y,
-                  width: -1,
-                  height: -1,
-                },
-                visible_enabled: true,
+              field_name: qryptoData.field_name,
+              page: pdfPage.currentPage,
+              dimension: {
+                x: x,
+                y: y,
+                width: -1,
+                height: -1,
               },
-              field: "qrcode-qrypto",
-              documentId: workFlow.documentId,
+              visible_enabled: true,
             },
-            {
-              onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ["getField"] });
-              },
-            }
+            "qrcode-qrypto",
+            workFlow.documentId
           );
+          if (!putpos) return;
+          await getFields();
         }}
         disabled={
           signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
@@ -309,35 +278,30 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
           ]}
           lockAspectRatio={true}
           onResize={(e, { size }) => {}}
-          onResizeStop={(e, { size }) => {
+          onResizeStop={async (e, { size }) => {
             // console.log("e: ", e);
             if (
               signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
               qryptoData.field_name
             )
               return;
-            putSignature.mutate(
+            const putpos = await fpsService.putSignature(
               {
-                body: {
-                  field_name: qryptoData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: -1,
-                    y: -1,
-                    width: (size.width / pdfPage.width) * 100,
-                    height: (size.height / pdfPage.height) * 100,
-                  },
-                  visible_enabled: true,
+                field_name: qryptoData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: -1,
+                  y: -1,
+                  width: (size.width / pdfPage.width) * 100,
+                  height: (size.height / pdfPage.height) * 100,
                 },
-                field: "qrcode-qrypto",
-                documentId: workFlow.documentId,
+                visible_enabled: true,
               },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["getField"] });
-                },
-              }
+              "qrcode-qrypto",
+              workFlow.documentId
             );
+            if (!putpos) return;
+            await getFields();
           }}
           className={`sig qryptobox-${index}`}
         >
@@ -388,7 +352,9 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
               sx={{
                 height: "100%",
                 width: "100%",
-                backgroundImage: `url(data:image/png;base64,${qryptoData.image_qr})`,
+                backgroundImage: qryptoData.image_qr
+                  ? `url(data:image/png;base64,${qryptoData.image_qr})`
+                  : `url(${qrypto})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -404,6 +370,7 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow }) => {
           onClose={() => handleCloseModalSetting(index)}
           qryptoData={qryptoData}
           workFlow={workFlow}
+          getFields={getFields}
         />
       )}
     </>

@@ -17,6 +17,7 @@ export const ContextMenu = ({
   contextMenu,
   handleClose,
   handleClickMenu,
+  tabBar,
   signerType,
 }) => {
   const { t } = useTranslation();
@@ -66,6 +67,26 @@ export const ContextMenu = ({
       menu = data.filter((item) => item.value !== "SIGNATURE");
       break;
   }
+  // Arrangement Overview
+
+  switch (tabBar) {
+    case 0:
+      menu = menu.filter(
+        (item) => (item.value === "QRYPTO") | (item.value == "QR")
+      );
+      break;
+
+    case 1:
+      menu = menu.filter(
+        (item) => item.value !== "QRYPTO" && item.value !== "QR"
+      );
+      break;
+    case 2:
+      return;
+    case 3:
+      return;
+  }
+
   return (
     <Menu
       open={contextMenu !== null}
@@ -105,5 +126,7 @@ ContextMenu.propTypes = {
   }),
   handleClose: PropTypes.func,
   handleClickMenu: PropTypes.func,
+  signerType: PropTypes.number,
+  tabBar: PropTypes.number,
 };
 export default ContextMenu;

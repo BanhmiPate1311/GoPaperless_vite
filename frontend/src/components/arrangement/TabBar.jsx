@@ -12,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import { Signatures } from "../SigningContent/TabBar/Signatures";
 import OverView from "./tabbar/Overview";
 import { Participants } from "./tabbar/participants/Participants";
+import { useEffect } from "react";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,6 +54,9 @@ export const TabBar = ({
 }) => {
   // Begin: Change params for participants
   let [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    searchParams.get("access_token") ? setTabBar(1) : setTabBar(0);
+  }, []);
   // End: Change params for participants
   const { t } = useTranslation();
 

@@ -13,7 +13,8 @@ import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DetailsTextBoxForm } from ".";
+import { DetailsTextBoxForm, QryptoGeneralForm } from ".";
+import { fpsService } from "@/services/fps_service";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,39 +55,65 @@ function a11yProps(index) {
   };
 }
 
-export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
+export const QryptoSettingField = ({
+  open,
+  onClose,
+  qryptoData,
+  workFlow,
+  getFields,
+}) => {
+  console.log(qryptoData, "qryptoData");
+  console.log(workFlow, "workFlow");
   const { t } = useTranslation();
-
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
-      workFlowName: workFlow.documentName,
-      fileName:
-        workFlow.fileName.substring(0, workFlow.fileName.lastIndexOf(".")) ||
-        workFlow.fileName,
-      fieldName: qryptoData.field_name,
-      left: qryptoData.dimension.x,
-      top: qryptoData.dimension.y,
-      width: qryptoData.dimension.width,
-      height: qryptoData.dimension.height,
-    },
-  });
+  const { control, handleSubmit, watch, register, unregister, setValue } =
+    useForm({
+      defaultValues: {
+        workFlowName: workFlow.documentName,
+        fileName:
+          workFlow.fileName.substring(0, workFlow.fileName.lastIndexOf(".")) ||
+          workFlow.fileName,
+        fieldName: qryptoData.field_name,
+        left: qryptoData.dimension.x,
+        top: qryptoData.dimension.y,
+        width: qryptoData.dimension.width,
+        height: qryptoData.dimension.height,
+        items: [...qryptoData?.items],
+      },
+    });
 
   const formRef = useRef();
 
-  // const queryClient = useQueryClient();
-  // const putSignature = UseUpdateSig();
-
-  const [value, setValue] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setTabIndex(newValue);
   };
 
   const handleSubmitClick = () => {
     formRef.current.requestSubmit();
   };
 
-  const handleFormSubmit = (data) => {
-    console.log("data: ", data);
+  const handleFormSubmit = async (data) => {
+    console.log(data, "data");
+    const request = {
+      field_name: data.fieldName,
+      dimension: {
+        x: data.left,
+        y: data.top,
+        width: data.width,
+        height: data.height,
+      },
+      visible_enabled: true,
+      page: qryptoData.page,
+      items: data.items.filter((item) => item !== null),
+    };
+    const response = await fpsService.putSignature(
+      request,
+      "qrcode-qrypto",
+      workFlow.documentId
+    );
+    if (!response) return;
+    await getFields();
+    onClose();
   };
 
   return (
@@ -129,7 +156,7 @@ export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
             paddingBottom: "5px",
           }}
         >
-          {t("modal.edit_qr")}
+          EDIT QRYPTO
         </Typography>
       </DialogTitle>
 
@@ -156,7 +183,7 @@ export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
           <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
             <AppBar position="static" elevation={0}>
               <Tabs
-                value={value}
+                value={tabIndex}
                 onChange={handleChange}
                 indicatorColor="primary"
                 // textColor="inherit"
@@ -192,10 +219,16 @@ export const QryptoSettingField = ({ open, onClose, qryptoData, workFlow }) => {
                 />
               </Tabs>
 
-              <TabPanel value={value} index={0}>
-                general
+              <TabPanel value={tabIndex} index={0}>
+                <QryptoGeneralForm
+                  control={control}
+                  watch={watch}
+                  register={register}
+                  setValue={setValue}
+                  unregister={unregister}
+                />
               </TabPanel>
-              <TabPanel value={value} index={1}>
+              <TabPanel value={tabIndex} index={1}>
                 <DetailsTextBoxForm control={control} />
               </TabPanel>
             </AppBar>

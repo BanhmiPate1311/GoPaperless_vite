@@ -20,6 +20,7 @@ export const Initial = ({
   workFlow,
   totalPages,
   initList,
+  getFields,
 }) => {
   const queryClient = useQueryClient();
 
@@ -43,18 +44,15 @@ export const Initial = ({
     (pdfPage.height * (100 - initData.dimension?.y)) / 100;
 
   const putSignature = UseUpdateSig();
-
-  const removeSignature = useMutation({
-    mutationFn: () => {
-      return fpsService.removeSignature(
-        { documentId: workFlow.documentId },
-        initData.field_name
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-    },
-  });
+  const removeSignature = async () => {
+    const res = await fpsService.removeSignature(
+      { documentId: workFlow.documentId },
+      initData.field_name
+    );
+    if (res.status === 200) {
+      await getFields();
+    }
+  };
 
   useEffect(() => {
     setDragPosition({
@@ -76,7 +74,7 @@ export const Initial = ({
   };
 
   const handleRemoveSignature = async () => {
-    removeSignature.mutate();
+    await removeSignature();
   };
 
   const TopBar = ({ initData }) => {
@@ -152,7 +150,7 @@ export const Initial = ({
           newPos.current.y = data.y;
           setIsControlled(false);
         }}
-        onStop={(e, data) => {
+        onStop={async (e, data) => {
           // console.log("data: ", data);
           // console.log("e: ", e);
 
@@ -213,28 +211,24 @@ export const Initial = ({
             const y =
               (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
 
-            putSignature.mutate(
+            const putpos = await fpsService.putSignature(
               {
-                body: {
-                  field_name: initData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: x,
-                    y: y,
-                    width: -1,
-                    height: -1,
-                  },
-                  visible_enabled: true,
+                field_name: initData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: x,
+                  y: y,
+                  width: -1,
+                  height: -1,
                 },
-                field: "initial",
-                documentId: workFlow.documentId,
+                visible_enabled: true,
               },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["getField"] });
-                },
-              }
+              "initial",
+              workFlow.documentId
             );
+
+            if (putpos.status !== 200) return;
+            await getFields();
           }
         }}
         disabled={
@@ -276,35 +270,30 @@ export const Initial = ({
               : 200,
           ]}
           onResize={(e, { size }) => {}}
-          onResizeStop={(e, { size }) => {
+          onResizeStop={async (e, { size }) => {
             // console.log("e: ", e);
             if (
               signerId + "_" + initData.type + "_" + initData.suffix !==
               initData.field_name
             )
               return;
-            putSignature.mutate(
+            const putpos = await fpsService.putSignature(
               {
-                body: {
-                  field_name: initData.field_name,
-                  page: pdfPage.currentPage,
-                  dimension: {
-                    x: -1,
-                    y: -1,
-                    width: (size.width / pdfPage.width) * 100,
-                    height: (size.height / pdfPage.height) * 100,
-                  },
-                  visible_enabled: true,
+                field_name: initData.field_name,
+                page: pdfPage.currentPage,
+                dimension: {
+                  x: -1,
+                  y: -1,
+                  width: (size.width / pdfPage.width) * 100,
+                  height: (size.height / pdfPage.height) * 100,
                 },
-                field: "initial",
-                documentId: workFlow.documentId,
+                visible_enabled: true,
               },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["getField"] });
-                },
-              }
+              "initial",
+              workFlow.documentId
             );
+            if (putpos.status !== 200) return;
+            await getFields();
           }}
           className={`sig init-${index}`}
         >

@@ -97,7 +97,13 @@ CustomToolbar.propTypes = {
   index: PropTypes.number,
 };
 
-export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
+export const AddText = ({
+  index,
+  pdfPage,
+  addTextData,
+  workFlow,
+  getFields,
+}) => {
   // console.log("index: ", index);
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
@@ -121,18 +127,15 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
       y: (addTextData.dimension?.y * pdfPage.height) / 100,
     });
   }, [addTextData]);
-
-  const removeSignature = useMutation({
-    mutationFn: () => {
-      return fpsService.removeSignature(
-        { documentId: workFlow.documentId },
-        addTextData.field_name
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getField"] });
-    },
-  });
+  const removeSignature = async () => {
+    const res = await fpsService.removeSignature(
+      { documentId: workFlow.documentId },
+      addTextData.field_name
+    );
+    if (res.status === 200) {
+      await getFields();
+    }
+  };
 
   const handleSave = () => {
     console.log("save");
@@ -147,8 +150,8 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
         documentId: workFlow.documentId,
       },
       {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        onSuccess: async () => {
+          await getFields();
           queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
         },
       }
@@ -158,7 +161,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
   const handleRemoveSignature = () => {
     console.log("remove");
     // if (isSetPos || signerId !== signatureData.field_name) return;
-    removeSignature.mutate();
+    removeSignature();
   };
 
   const handleDrag = (type) => {
@@ -212,7 +215,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
     });
 
     if (valueRef.current) clearTimeout(valueRef.current);
-    valueRef.current = setTimeout(() => {
+    valueRef.current = setTimeout(async () => {
       console.log("content.ops[0].insert: ", content.ops[0].insert);
       const font = content.ops[0].attributes?.font || "vernada";
       // console.log("font: ", font);
@@ -222,33 +225,30 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
       // console.log("italic: ", italic);
       const size = content.ops[0].attributes?.size;
       // console.log("size: ", size);
-      putSignature.mutate(
+      const putpos = await fpsService.putSignature(
         {
-          body: {
-            field_name: addTextData.field_name,
-            page: pdfPage.currentPage,
-            dimension: {
-              x: -1,
-              y: -1,
-              width: -1,
-              height: -1,
-            },
-            font: {
-              name: font + bold + italic,
-              size: size || 13,
-            },
-            visible_enabled: true,
-            value: "",
+          field_name: addTextData.field_name,
+          page: pdfPage.currentPage,
+          dimension: {
+            x: -1,
+            y: -1,
+            width: -1,
+            height: -1,
           },
-          field: "text",
-          documentId: workFlow.documentId,
+          font: {
+            name: font + bold + italic,
+            size: size || 13,
+          },
+          visible_enabled: true,
+          value: "",
         },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["getField"] });
-          },
-        }
+        "text",
+        workFlow.documentId
       );
+
+      if (putpos.status !== 200) return;
+      console.log("putpos1: ", putpos);
+      await getFields();
     }, 1000);
   };
 
@@ -269,7 +269,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
         setDragPosition({ x: data.x, y: data.y });
         setIsControlled(false);
       }}
-      onStop={(e, data) => {
+      onStop={async (e, data) => {
         // console.log("data: ", data);
         // console.log("e: ", e);
         setIsControlled(true);
@@ -330,29 +330,23 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
 
         const y =
           (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
-
-        putSignature.mutate(
+        const putpos = await fpsService.putSignature(
           {
-            body: {
-              field_name: addTextData.field_name,
-              page: pdfPage.currentPage,
-              dimension: {
-                x: x,
-                y: y,
-                width: -1,
-                height: -1,
-              },
-              visible_enabled: true,
+            field_name: addTextData.field_name,
+            page: pdfPage.currentPage,
+            dimension: {
+              x: x,
+              y: y,
+              width: -1,
+              height: -1,
             },
-            field: "text",
-            documentId: workFlow.documentId,
+            visible_enabled: true,
           },
-          {
-            onSuccess: () => {
-              queryClient.invalidateQueries({ queryKey: ["getField"] });
-            },
-          }
+          "text",
+          workFlow.documentId
         );
+        if (putpos.status !== 200) return;
+        await getFields();
       }}
       disabled={
         signerId + "_" + addTextData.type + "_" + addTextData.suffix !==

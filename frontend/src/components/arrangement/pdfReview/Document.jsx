@@ -17,6 +17,7 @@ export const Document = ({
   addText,
   openResize,
   setOpenResize,
+  getFields,
 }) => {
   const queryClient = useQueryClient();
   let isSetPos;
@@ -134,6 +135,7 @@ export const Document = ({
             props={props}
             openResize={openResize}
             setOpenResize={setOpenResize}
+            getFields={getFields}
           />
         );
       })}
@@ -146,6 +148,7 @@ export const Document = ({
             pdfPage={pdfPage}
             textData={textData}
             workFlow={workFlow}
+            getFields={getFields}
           />
         );
       })}
@@ -158,6 +161,7 @@ export const Document = ({
             pdfPage={pdfPage}
             addTextData={addTextData}
             workFlow={workFlow}
+            getFields={getFields}
           />
         );
       })}
@@ -174,6 +178,7 @@ export const Document = ({
             initList={initial.map((item) => {
               return { ...item, documentName: workFlow.documentName };
             })}
+            getFields={getFields}
           />
         );
       })}
@@ -186,6 +191,7 @@ export const Document = ({
             pdfPage={pdfPage}
             qrData={qrData}
             workFlow={workFlow}
+            getFields={getFields}
           />
         );
       })}
@@ -198,6 +204,7 @@ export const Document = ({
             pdfPage={pdfPage}
             qryptoData={qryptoData}
             workFlow={workFlow}
+            getFields={getFields}
           />
         );
       })}

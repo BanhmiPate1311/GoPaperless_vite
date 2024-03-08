@@ -218,6 +218,7 @@ public class FpsService {
         System.out.println("y: " + data.getDimension().getY());
         System.out.println("width: " + data.getDimension().getWidth());
         System.out.println("height: " + data.getDimension().getHeight());
+        System.out.println("height: " + data.getItems());
 
         Map<String, Object> dimension = new HashMap<>();
 
@@ -262,6 +263,9 @@ public class FpsService {
         }
         if(data.getReplicate() != null) {
             requestData.put("replicate", data.getReplicate());
+        }
+        if(data.getItems() != null){
+            requestData.put("items",data.getItems());
         }
 //        requestData.put("max_length", data.getMaxLength());
         requestData.put("visible_enabled", data.getVisibleEnabled());
@@ -332,6 +336,9 @@ public class FpsService {
         }
         if(data.getRequired() != null) {
             requestData.put("required", data.getRequired());
+        }
+        if(data.getItems() != null){
+            requestData.put("items",data.getItems());
         }
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
