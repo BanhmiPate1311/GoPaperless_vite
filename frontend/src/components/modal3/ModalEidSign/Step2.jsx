@@ -258,7 +258,7 @@ export const Step2 = ({
       </Box>
       {errorPG && (
         <Box width={"100%"}>
-          <Alert severity="error">{errorPG}</Alert>
+          <Alert severity="error">{errorPG.toLowerCase()}</Alert>
         </Box>
       )}
     </Stack>

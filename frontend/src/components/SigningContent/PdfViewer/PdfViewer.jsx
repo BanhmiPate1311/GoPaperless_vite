@@ -377,6 +377,7 @@ export const PdfViewer = ({ workFlow }) => {
           contextMenu={contextMenu}
           handleClose={handleClose}
           handleClickMenu={handleClickMenu}
+          signerType={signer.signerType}
         />
         <Document
           props={props}

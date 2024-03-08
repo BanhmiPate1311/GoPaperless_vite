@@ -69,6 +69,7 @@ export const SigningForm2 = ({
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [assurance, setAssurance] = useState("");
   const [provider, setProvider] = useState("");
+  // console.log("provider: ", provider);
   const [connectorName, setConnectorName] = useState("");
   const sdk = useRef(null);
   const urlWithoutProtocol = getUrlWithoutProtocol();
@@ -82,6 +83,7 @@ export const SigningForm2 = ({
   const [certSelected, setCertSelected] = useState(0);
 
   const [activeStep, setActiveStep] = useState(1);
+  // console.log("activeStep: ", activeStep);
 
   const signer = getSigner(workFlow);
 
@@ -150,7 +152,7 @@ export const SigningForm2 = ({
         return response;
       } catch (error) {
         console.log("error: ", error);
-
+        setErrorApi(error);
         throw new Error(error);
       }
     },
@@ -265,10 +267,14 @@ export const SigningForm2 = ({
         setProvider("");
         setConnectorName("");
         setCriteria("PHONE");
-        setCode("84");
+        setCode("");
         setActiveStep(1);
         break;
       case 3:
+        setProvider("");
+        setConnectorName("");
+        setCriteria("PHONE");
+        setCode("");
         setActiveStep(1);
         break;
       case 4:
@@ -544,7 +550,8 @@ export const SigningForm2 = ({
       filterConnector={filterConnector}
       onDisableSubmit={handleDisableSubmit}
       errorPG={errorPG}
-      errorApi={certificateInfor?.error?.message}
+      errorApi={errorApi}
+      setErrorApi={setErrorApi}
     />,
     <Step2_smartid
       key="step2"

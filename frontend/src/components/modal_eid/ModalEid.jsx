@@ -2,7 +2,7 @@
 import ISPluginClient from "@/assets/js/checkid";
 import { useConnectorList } from "@/hook";
 import { electronicService } from "@/services/electronic_service";
-import { getLang } from "@/utils/commonFunction";
+import { getLang, isValidEmail } from "@/utils/commonFunction";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -125,7 +125,14 @@ export const ModalEid = ({
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    switch (activeStep) {
+      case 14:
+        setActiveStep(12);
+        break;
+      default:
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        break;
+    }
   };
 
   const handleDisableSubmit = (disabled) => {
@@ -463,8 +470,8 @@ export const ModalEid = ({
 
     const data = {
       lang: lang,
-      // code: workFlow.code,
-      code: "048080000061",
+      code: workFlow.code,
+      // code: "048080000061",
     };
 
     try {
@@ -509,7 +516,11 @@ export const ModalEid = ({
         perFormProcess(otp);
         break;
       case 9:
-        updateSubject();
+        if (isValidEmail(emailRef.current)) {
+          updateSubject();
+        } else {
+          setErrorPG(t("electronic.email invalid"));
+        }
         break;
       case 10:
         perFormProcess(otp);
@@ -604,6 +615,7 @@ export const ModalEid = ({
       dialCode={dialCode}
       handleSubmit={handleSubmitClick}
       isSubmitDisabled={isSubmitDisabled}
+      setErrorPG={setErrorPG}
     />,
     <Step8
       key={"step8"}
@@ -754,11 +766,13 @@ export const ModalEid = ({
                   {/* Hết nội dung */}
                   {!faceSuccess && errorPG && (
                     <Alert severity="error" sx={{ mt: "10px" }}>
-                      {errorPG}
+                      {errorPG.toLowerCase()}
                     </Alert>
                   )}
                   {faceSuccess && (
-                    <Alert severity="success">{faceSuccess}</Alert>
+                    <Alert severity="success">
+                      {faceSuccess.toLowerCase()}
+                    </Alert>
                   )}
                 </Stack>
               )

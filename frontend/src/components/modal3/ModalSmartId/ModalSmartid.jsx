@@ -260,7 +260,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
             <Stack width={"100%"}>
               {smartSign?.error && (
                 <Alert severity="error">
-                  {smartSign?.error?.response?.data.message}
+                  {smartSign?.error?.response?.data.message.toLowerCase()}
                 </Alert>
               )}
             </Stack>

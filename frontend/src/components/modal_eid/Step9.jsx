@@ -5,31 +5,33 @@ import { useTranslation } from "react-i18next";
 
 export const Step9 = ({
   onDisableSubmit,
-  setErrorPG,
   emailRef,
   handleSubmit,
   isSubmitDisabled,
+  setErrorPG,
 }) => {
   const { t } = useTranslation();
-
-  function isValidEmail(email) {
-    return /\S+@\S+\.\S+/.test(email);
-  }
 
   useEffect(() => {
     onDisableSubmit(true);
   }, []);
 
   const handleEmail = (event) => {
-    if (!isValidEmail(event.target.value) || event.target.value.length === 0) {
-      setErrorPG(t("electronic.email invalid"));
-      onDisableSubmit(true);
-    } else {
-      setErrorPG(null);
-      onDisableSubmit(false);
-    }
+    // if (!isValidEmail(event.target.value) || event.target.value.length === 0) {
+    //   setErrorPG(t("electronic.email invalid"));
+    //   onDisableSubmit(true);
+    // } else {
+    //   setErrorPG(null);
+    //   onDisableSubmit(false);
+    // }
 
     // setEmail(event.target.value);
+    setErrorPG(null);
+    if (event.target.value.length === 0) {
+      onDisableSubmit(true);
+    } else {
+      onDisableSubmit(false);
+    }
     emailRef.current = event.target.value;
   };
   return (
@@ -70,6 +72,7 @@ export const Step9 = ({
           inputProps={{
             sx: {
               fontSize: "14px",
+              py: "10.5px",
               backgroundColor: "signingWFBackground.main",
             },
           }}

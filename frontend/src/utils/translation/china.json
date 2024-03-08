@@ -273,7 +273,7 @@
     "taxpayer_name": "纳税人姓名",
     "common_name": "通用名",
     "cert_tooltip": "证书详情",
-    "tax_tooltip": "税码详细信息",
+    "tax_tooltip": "税码信息",
     "init_warning": "在签署文件之前，您必须填写姓名首字母缩写",
     "qr_warning": "您无法添加多个二维码",
     "text_warning": "填写指定的表单字段",

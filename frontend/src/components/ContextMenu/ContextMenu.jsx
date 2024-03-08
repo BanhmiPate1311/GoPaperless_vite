@@ -17,7 +17,7 @@ export const ContextMenu = ({
   contextMenu,
   handleClose,
   handleClickMenu,
-  tabBar,
+  signerType,
 }) => {
   const { t } = useTranslation();
   let data = [
@@ -56,26 +56,16 @@ export const ContextMenu = ({
       value: "AddText",
     },
   ];
-  // Arrangement Overview
-
-  switch (tabBar) {
-    case 0:
-      data = data.filter(
-        (item) => (item.value === "QRYPTO") | (item.value == "QR")
-      );
-      break;
-
+  let menu = [];
+  switch (signerType) {
     case 1:
-      data = data.filter(
-        (item) => item.value !== "QRYPTO" && item.value !== "QR"
-      );
+      menu = data;
       break;
     case 2:
-      return;
     case 3:
-      return;
+      menu = data.filter((item) => item.value !== "SIGNATURE");
+      break;
   }
-
   return (
     <Menu
       open={contextMenu !== null}
@@ -92,7 +82,7 @@ export const ContextMenu = ({
         },
       }}
     >
-      {data.map((item, index) => (
+      {menu.map((item, index) => (
         <MenuItem key={index} onClick={handleClickMenu(item.value)}>
           <ListItemIcon sx={{ color: "inherit" }}>{item.icon}</ListItemIcon>
           <ListItemText
@@ -115,6 +105,5 @@ ContextMenu.propTypes = {
   }),
   handleClose: PropTypes.func,
   handleClickMenu: PropTypes.func,
-  tabBar: PropTypes.number,
 };
 export default ContextMenu;

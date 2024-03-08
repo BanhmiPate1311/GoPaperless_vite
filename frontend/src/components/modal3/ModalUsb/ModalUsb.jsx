@@ -377,7 +377,9 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
               />
             </Box>
             <Stack width={"100%"}>
-              {errorApi && <Alert severity="error">{errorApi}</Alert>}
+              {errorApi && (
+                <Alert severity="error">{errorApi.toLowerCase()}</Alert>
+              )}
             </Stack>
           </Stack>
         </DialogContentText>

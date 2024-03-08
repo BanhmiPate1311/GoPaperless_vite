@@ -68,6 +68,7 @@ export const TextSignForm = forwardRef(
             control={control}
             inputProps={{
               sx: {
+                py: "10.5px",
                 backgroundColor: "signingWFBackground.main",
               },
             }}
@@ -88,7 +89,7 @@ export const TextSignForm = forwardRef(
           <Stack
             ref={ref}
             sx={{
-              height: showInput ? "100%" : "154px",
+              height: showInput ? "100%" : "160px",
               overflow: "hidden",
               // borderRadius: "6px",
               // border: !imgBase64 ? "2px solid #357EEB" : "none",
@@ -134,7 +135,7 @@ export const TextSignForm = forwardRef(
                     marginLeft: "auto",
                     marginRight: "auto",
                     width: direction ? "50%" : "100%",
-                    fontSize: "30px",
+                    fontSize: "25px",
                     textAlign: "center",
                     textTransform: "capitalize",
                     fontWeight: "bold",

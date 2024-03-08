@@ -4,10 +4,12 @@ public class Participants {
     private int id;
     private int pplWorkflowId;
     private String signerId;
+    private int sequenceNumber;
     private String firstName;
     private String lastName;
     private String email;
     private String metaInformation;
+    private int signerType;
     private int signerStatus;
     private String signerToken;
     private String signingOptions;
@@ -180,5 +182,21 @@ public class Participants {
 
     public void setValidTo(String validTo) {
         this.validTo = validTo;
+    }
+
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public int getSignerType() {
+        return signerType;
+    }
+
+    public void setSignerType(int signerType) {
+        this.signerType = signerType;
     }
 }

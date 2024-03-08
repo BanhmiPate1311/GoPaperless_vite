@@ -349,6 +349,7 @@ export const ModalSigning = ({
                     height: "45px",
                     minHeight: "45px", //set height for tabs and tab
                     textTransform: "none",
+                    color: "signingtext1.main",
                   }} //set height for tabs and tab
                 />
                 <Tab
@@ -360,6 +361,7 @@ export const ModalSigning = ({
                     height: "45px",
                     minHeight: "45px", //set height for tabs and tab
                     textTransform: "none",
+                    color: "signingtext1.main",
                   }} //set height for tabs and tab
                 />
                 <Tab
@@ -371,6 +373,7 @@ export const ModalSigning = ({
                     height: "45px",
                     minHeight: "45px", //set height for tabs and tab
                     textTransform: "none",
+                    color: "signingtext1.main",
                   }} //set height for tabs and tab
                 />
               </Tabs>

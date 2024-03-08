@@ -277,7 +277,7 @@
     "taxpayer_name": "Taxpayer name",
     "common_name": "Common name",
     "cert_tooltip": "Certificate details",
-    "tax_tooltip": "TaxCode details",
+    "tax_tooltip": "Tax code information",
     "init_warning": "You must complete your initials before you sign the document",
     "qr_warning": "You can not add multiple QR Codes",
     "text_warning": "Fill your assigned form fields",
