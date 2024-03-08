@@ -15,6 +15,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { NotFound } from "../NotFound";
 import ArragementDocument from "@/components/arrangement/ArrengementDocument";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
+import Button from "@mui/material/Button";
 
 export const Arrangement = () => {
   const { t } = useTranslation();
@@ -107,31 +111,110 @@ export const Arrangement = () => {
               {workFlow?.data?.documentName}
             </Typography>
             {/* <VisibilityIcon sx={{ color: "signingtext1.main" }} /> */}
-            <Chip
-              // label={t("signing.download_completed")}
-              component="a"
-              // color={checkWorkFlowStatus ? "primary" : undefined}
-              // disabled={!checkWorkFlowStatus}
-              sx={{
-                padding: "8px 16px",
-                height: "36px",
-                fontWeight: "500",
-                borderRadius: "25px",
-                backgroundColor: "transparent",
-                color: "signingWFBackground.main",
-                gap: "10px",
-                "& span": {
-                  padding: "0",
-                },
-                "& svg.MuiChip-icon": {
-                  margin: "0",
-                },
-              }}
-              // href="#basic-chip"
-              href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}
-              icon={<SaveAltIcon fontSize="small" color="#000" />}
-              clickable
-            />
+            <Box sx={{ display: "flex", gap: "5px", alignItems: "center" }}>
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                // href="#basic-chip"
+                icon={<KeyboardDoubleArrowLeftIcon fontSize="small" />}
+                clickable
+              />
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                // href="#basic-chip"
+                icon={<KeyboardDoubleArrowRightIcon fontSize="small" />}
+                clickable
+              />
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                // href="#basic-chip"
+                icon={<PrintOutlinedIcon fontSize="small" />}
+                clickable
+              />
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}
+                // href="#basic-chip"
+                icon={<SaveAltIcon fontSize="small" />}
+                clickable
+              />
+              <Button variant="contained">Share Now</Button>
+            </Box>
           </Toolbar>
         </AppBar>
       </Box>
