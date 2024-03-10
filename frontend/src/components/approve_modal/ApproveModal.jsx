@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Step1, Step2 } from ".";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -26,6 +27,7 @@ export const ApproveModal = ({ open, onClose, workFlow }) => {
   const queryClient = useQueryClient();
 
   const [activeStep, setActiveStep] = useState(1);
+  const [isPending, setIsPending] = useState(false);
   const [comment, setComment] = useState("");
   // console.log("comment: ", comment);
 
@@ -45,12 +47,13 @@ export const ApproveModal = ({ open, onClose, workFlow }) => {
 
   useEffect(() => {
     return () => {
-      console.log("thót");
+      // console.log("thót");
       setComment("");
     };
   }, [activeStep]);
 
   const approve = async () => {
+    setIsPending(true);
     const data = {
       workFlowId: workFlow.workFlowId,
       participantID: signer.id,
@@ -69,8 +72,10 @@ export const ApproveModal = ({ open, onClose, workFlow }) => {
       await apiService.approve(data);
       queryClient.invalidateQueries({ queryKey: ["getField"] });
       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+      setIsPending(false);
       onClose();
     } catch (error) {
+      setIsPending(false);
       console.log("error: ", error);
     }
   };
@@ -177,10 +182,10 @@ export const ApproveModal = ({ open, onClose, workFlow }) => {
         </Button>
         <Button
           variant="contained"
-          //   disabled={isPending || isSubmitDisabled}
-          //   startIcon={
-          //     isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          //   }
+          disabled={isPending}
+          startIcon={
+            isPending ? <CircularProgress color="inherit" size="1em" /> : null
+          }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",

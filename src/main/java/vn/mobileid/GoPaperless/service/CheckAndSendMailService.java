@@ -39,6 +39,7 @@ public class CheckAndSendMailService {
                     // Duyệt qua list participant và tiến hành gửi mail
                     for (Participants participant : responseList) {
                         String participantName = participant.getLastName() + " " + participant.getFirstName();
+                        String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
                         String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken());
                         String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
                         if (participant.getSignerType() != 5) {
@@ -56,7 +57,7 @@ public class CheckAndSendMailService {
                                 // Convert content from base64 to byte[]
 
                                 // Gửi attachment
-                                MailService.sendMail(fileName, data, participant.getEmail(), attachMailInfo.getSubject(), newAttachContent);
+                                MailService.sendMail(fileName, data, participant.getEmail(), newAttachSubject, newAttachContent);
                             } catch (Exception e) {
                                 e.printStackTrace(); // In ra stack trace của lỗi
                                 // Ném lại ngoại lệ để dừng chương trình

@@ -17,10 +17,11 @@ export const apiService = {
   checkPerMission: (data) => {
     return api.post("/uiApi/checkPerMission", data);
   },
-  getSigningWorkFlow: (signingToken) => {
-    return api.post("/uiApi/getSigningWorkFlow", {
+  getSigningWorkFlow: async (signingToken) => {
+    const response = await api.post("/uiApi/getSigningWorkFlow", {
       signingToken,
     });
+    return response;
   },
   getSignedInfo: async ({ firstFileId }) => {
     const response = await api.post("/uiApi/getSignedInfo", {

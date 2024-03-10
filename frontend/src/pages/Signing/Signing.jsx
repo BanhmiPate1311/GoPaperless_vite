@@ -3,6 +3,7 @@ import { ApproveModal } from "@/components/approve_modal";
 import { Cookie } from "@/components/cookie";
 import { useCommonHook } from "@/hook";
 import { apiService } from "@/services/api_service";
+import { fpsService } from "@/services/fps_service";
 import { checkWorkflowStatus } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { Button } from "@mui/material";
@@ -20,6 +21,7 @@ import { NotFound } from "../NotFound";
 
 export const Signing = () => {
   const { t } = useTranslation();
+
   const { signingToken, signerToken } = useCommonHook();
   const [permit, setPermit] = useState(false);
 
@@ -90,6 +92,47 @@ export const Signing = () => {
       };
     },
   });
+
+  const { data: field } = useQuery({
+    queryKey: ["getField"],
+    queryFn: () =>
+      fpsService.getFields({ documentId: workFlow?.data?.documentId }),
+    enabled: !!workFlow?.data?.documentId,
+    select: (data) => {
+      // console.log("data: ", data);
+      const newData = { ...data };
+      const textField = data.textbox
+        .filter(
+          (item) =>
+            item.type !== "TEXTFIELD" &&
+            item.process_status !== "PROCESSED" &&
+            item.value !== ""
+        )
+        .map((item) => {
+          return {
+            field_name: item.field_name,
+            value: item.value,
+          };
+        });
+      return {
+        ...newData,
+        textField,
+        workFlowId: workFlow.data.workFlowId,
+      };
+    },
+  });
+
+  // const field = useMutation({
+  //   mutationFn: async ({ documentId }) => {
+  //     const response = await fpsService.getFields({ documentId });
+  //     // console.log("response: ", response);
+  //     return response;
+  //   },
+  // });
+
+  // console.log("workFlow: ", workFlow?.data);
+  // console.log("workFlowtet: ", workFlow?.data?.documentId);
+  // console.log("field: ", field);
 
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);

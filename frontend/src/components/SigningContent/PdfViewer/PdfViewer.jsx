@@ -2,7 +2,6 @@
 import "@/assets/style/cursor.css";
 import { useCommonHook } from "@/hook";
 import { UseAddSig, UseAddTextField } from "@/hook/use-fpsService";
-import { fpsService } from "@/services/fps_service";
 import {
   checkIsPosition,
   checkSignerStatus,
@@ -13,7 +12,7 @@ import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,6 +24,8 @@ export const PdfViewer = ({ workFlow }) => {
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+
+  const field = queryClient.getQueryData(["getField"]);
 
   const [contextMenu, setContextMenu] = useState(null);
   const [openResize, setOpenResize] = useState(false);
@@ -46,32 +47,32 @@ export const PdfViewer = ({ workFlow }) => {
   }, [workFlow]);
 
   // eslint-disable-next-line no-unused-vars
-  const { data: field } = useQuery({
-    queryKey: ["getField"],
-    queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
-    select: (data) => {
-      // console.log("data: ", data);
-      const newData = { ...data };
-      const textField = data.textbox
-        .filter(
-          (item) =>
-            item.type !== "TEXTFIELD" &&
-            item.process_status !== "PROCESSED" &&
-            item.value !== ""
-        )
-        .map((item) => {
-          return {
-            field_name: item.field_name,
-            value: item.value,
-          };
-        });
-      return {
-        ...newData,
-        textField,
-        workFlowId: workFlow.workFlowId,
-      };
-    },
-  });
+  // const { data: field } = useQuery({
+  //   queryKey: ["getField"],
+  //   queryFn: () => fpsService.getFields({ documentId: workFlow.documentId }),
+  //   select: (data) => {
+  //     // console.log("data: ", data);
+  //     const newData = { ...data };
+  //     const textField = data.textbox
+  //       .filter(
+  //         (item) =>
+  //           item.type !== "TEXTFIELD" &&
+  //           item.process_status !== "PROCESSED" &&
+  //           item.value !== ""
+  //       )
+  //       .map((item) => {
+  //         return {
+  //           field_name: item.field_name,
+  //           value: item.value,
+  //         };
+  //       });
+  //     return {
+  //       ...newData,
+  //       textField,
+  //       workFlowId: workFlow.workFlowId,
+  //     };
+  //   },
+  // });
 
   // console.log("getField: ", field);
 
