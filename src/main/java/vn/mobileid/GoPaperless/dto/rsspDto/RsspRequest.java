@@ -23,6 +23,7 @@ public class RsspRequest {
     private String requestID;
     private String signerId;
     private String signerToken;
+    private int signerType;
     private String signingOption;
     private String signingPurpose;
     private String signingToken;
@@ -33,6 +34,7 @@ public class RsspRequest {
     private List<String> signatures;
     private int workFlowId;
     private String assurance;
+    private String workFlowProcessType;
     private List<TextField> textField;
 
     public CertChain getCertChain() {
@@ -283,5 +285,19 @@ public class RsspRequest {
         this.textField = textField;
     }
 
+    public int getSignerType() {
+        return signerType;
+    }
 
+    public void setSignerType(int signerType) {
+        this.signerType = signerType;
+    }
+
+    public String getWorkFlowProcessType() {
+        return workFlowProcessType;
+    }
+
+    public void setWorkFlowProcessType(String workFlowProcessType) {
+        this.workFlowProcessType = workFlowProcessType;
+    }
 }

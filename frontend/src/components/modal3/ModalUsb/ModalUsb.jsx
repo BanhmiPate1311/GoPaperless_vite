@@ -78,7 +78,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
             "*"
           );
           queryClient.invalidateQueries({ queryKey: ["getField"] });
-          queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
+          // queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
           queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
           onClose();
           return data;
@@ -360,6 +360,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                 //   sx={{ height: "28px" }}
                 inputProps={{
                   sx: {
+                    py: "10.5px",
                     backgroundColor: "signingWFBackground.main",
                   },
                   maxLength: dataSigning?.tokenDetails?.maxPinLength,

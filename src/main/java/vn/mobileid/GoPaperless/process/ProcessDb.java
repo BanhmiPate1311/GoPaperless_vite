@@ -571,6 +571,7 @@ public class ProcessDb {
                 response.setPplWorkflowId(rs.getInt("PPL_WORKFLOW_ID"));
                 response.setFirstName(rs.getString("FIRST_NAME"));
                 response.setLastName(rs.getString("LAST_NAME"));
+                response.setEmail(rs.getString("EMAIL"));
                 response.setSignerStatus(rs.getInt("SIGNER_STATUS"));
                 response.setCertificate(rs.getString("CERTIFICATE"));
                 response.setSigningOptions(rs.getString("SIGNING_OPTIONS"));
@@ -838,11 +839,11 @@ public class ProcessDb {
         Connection conns = null;
         CallableStatement proc_stmt = null;
         try {
-            System.out.println("dzo day");
-            System.out.println("pSIGNED_TIME" + pSIGNED_TIME);
-            System.out.println("pGRACE_PERIOD_END_TIME" + pGRACE_PERIOD_END_TIME);
-            System.out.println("pPPL_FILE_SIGNED_ID" + pPPL_FILE_SIGNED_ID);
-            System.out.println("pLAST_MODIFIED_BY" + pLAST_MODIFIED_BY);
+            System.out.println("PATICIPANTS UPDATE");
+            // System.out.println("pSIGNED_TIME" + pSIGNED_TIME);
+            // System.out.println("pGRACE_PERIOD_END_TIME" + pGRACE_PERIOD_END_TIME);
+            // System.out.println("pPPL_FILE_SIGNED_ID" + pPPL_FILE_SIGNED_ID);
+            // System.out.println("pLAST_MODIFIED_BY" + pLAST_MODIFIED_BY);
             conns = OpenDatabase();
             proc_stmt = conns
                     .prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(?,?,?,?,?,?,?,?,?,?,?,?,?) }");
@@ -1119,7 +1120,7 @@ public class ProcessDb {
             CloseDatabase(temp_connection);
         }
     }
-    
+
     public String USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(ParticipantsObject data) throws Exception {
         String convrtr = "1";
         Connection conns = null;
@@ -1146,6 +1147,137 @@ public class ProcessDb {
             rs = proc_stmt.executeQuery();
 
             return convrtr;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public List<Participants> USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET_NEXT_PARTICIPANT(String signerToken)
+            throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        List<Participants> responseList = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET_NEXT_PARTICIPANT(?,?) }");
+            proc_stmt.setString("pSIGNER_TOKEN", signerToken);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.VARCHAR);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            rs = proc_stmt.executeQuery();
+            if ("1".equals(convrtr)) {
+                while (rs.next()) {
+                    Participants response = new Participants();
+                    response.setId(rs.getInt("ID"));
+                    response.setPplWorkflowId(rs.getInt("PPL_WORKFLOW_ID"));
+                    response.setSignerId(rs.getString("SIGNER_ID"));
+                    response.setFirstName(rs.getString("FIRST_NAME"));
+                    response.setLastName(rs.getString("LAST_NAME"));
+                    response.setEmail(rs.getString("EMAIL"));
+                    response.setMetaInformation(rs.getString("META_INFORMATION"));
+                    response.setSignerStatus(rs.getInt("SIGNER_STATUS"));
+                    response.setSignerToken(rs.getString("SIGNER_TOKEN"));
+                    response.setSigningOptions(rs.getString("SIGNING_OPTIONS"));
+                    response.setAnnotation(rs.getString("ANNOTATION"));
+                    response.setSignedType(rs.getString("SIGNED_TYPE"));
+                    response.setSignedTime(rs.getString("SIGNED_TIME"));
+                    response.setCustomReason(rs.getString("CUSTOM_REASON"));
+                    response.setSigningPurpose(rs.getString("SIGNING_PURPOSE"));
+                    response.setCertificate(rs.getString("CERTIFICATE"));
+                    response.setSequenceNumber(rs.getInt("SEQUENCE_NUMBER"));
+                    response.setSignerType(rs.getInt("SIGNER_TYPE"));
+
+                    responseList.add(response);
+                }
+            }
+            return responseList;
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public MailInfo USP_GW_EMAIL_TEMPLATE_GET(int langId, String emailKey) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        MailInfo mailInfo = new MailInfo();
+        ResultSet rs = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_EMAIL_TEMPLATE_GET(?,?,?) }");
+            proc_stmt.setInt("pLANGUAGE_ID", langId);
+            proc_stmt.setString("pEMAIL_KEY", emailKey);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.VARCHAR);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            rs = proc_stmt.executeQuery();
+            if ("1".equals(convrtr)) {
+                while (rs.next()) {
+                    mailInfo.setSubject(rs.getString("SUBJECT"));
+                    mailInfo.setBody(rs.getString("BODY"));
+
+                }
+            }
+            return mailInfo;
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public int USP_GW_PPL_WORKFLOW_COMMENT_ADD(int pPPL_WORKFLOW_ID, int pPPL_WORKFLOW_PARTICIPANTS_ID,
+            String pCOMMENTS, int pRECIPIENT, String pHMAC, String pCREATED_BY) throws Exception {
+        String convrtr = "1";
+        Integer convrrs = null;
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        MailInfo mailInfo = new MailInfo();
+        ResultSet rs = null;
+        try {
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_COMMENT_ADD(?,?,?,?,?,?,?,?) }");
+            proc_stmt.setInt("pPPL_WORKFLOW_ID", pPPL_WORKFLOW_ID);
+            proc_stmt.setInt("pPPL_WORKFLOW_PARTICIPANTS_ID", pPPL_WORKFLOW_PARTICIPANTS_ID);
+            proc_stmt.setString("pCOMMENTS", pCOMMENTS);
+            proc_stmt.setInt("pRECIPIENT", pRECIPIENT);
+            proc_stmt.setString("pHMAC", pHMAC);
+            proc_stmt.setString("pCREATED_BY", pCREATED_BY);
+
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.VARCHAR);
+            proc_stmt.registerOutParameter("pPPL_WORKFLOW_COMMENT_ID", java.sql.Types.INTEGER);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+            convrrs = proc_stmt.getInt("pPPL_WORKFLOW_COMMENT_ID");
+            rs = proc_stmt.executeQuery();
+
+            return convrrs;
+
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         } finally {

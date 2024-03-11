@@ -92,7 +92,7 @@ function CircularProgressWithLabel(props) {
 }
 
 export const ModalSmartid = ({ open, onClose, dataSigning }) => {
-  console.log("dataSigning: ", dataSigning);
+  // console.log("dataSigning: ", dataSigning);
   const { t } = useTranslation();
 
   const queryClient = useQueryClient();

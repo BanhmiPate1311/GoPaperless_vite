@@ -108,6 +108,7 @@ public class IsService {
             String assurance = data.getAssurance();
             String sResult = "";
             List<TextField> textFields = data.getTextField();
+            String workFlowType = data.getWorkFlowProcessType();
 //            System.out.println("textFields: " + textFields);
 //            System.out.println("dataText: " + data.getTextField());
 
@@ -163,7 +164,7 @@ public class IsService {
 //            String sSignature_id = requestID; // temporary
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {
