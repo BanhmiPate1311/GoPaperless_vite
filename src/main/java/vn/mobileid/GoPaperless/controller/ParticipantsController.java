@@ -35,6 +35,10 @@ public class ParticipantsController {
 public ResponseEntity<?> updateParticipant(@RequestBody ParticipantsObject data) throws Exception {
     System.out.println("data: " + data.getFirstName());
     System.out.println("data: " + data.getSequenceNumber());
+    System.out.println("data: " + data.getMetaInformation());
+    System.out.println("data: " + data.getSigningPurpose());
+    System.out.println("data: " + data.getSignerToken());
+    System.out.println("data: " + data.getLastName());
     String result = "";
     if (data.getFirstName() != null) {
         result = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(data);

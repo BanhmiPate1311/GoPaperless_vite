@@ -17,21 +17,11 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
 import Button from "@mui/material/Button";
+import { fpsService } from "@/services/fps_service";
 
 export const Arrangement = () => {
   const { t } = useTranslation();
   const { signingToken, signerToken } = useCommonHook();
-
-  // const { data: workFlowValid } = useQuery({
-  //   queryKey: ["checkWorkFlowValid"],
-  //   queryFn: () => {
-  //     const data = {
-  //       signerToken,
-  //       signingToken,
-  //     };
-  //     return apiService.checkWorkFlow(data);
-  //   },
-  // });
 
   const workFlow = useQuery({
     queryKey: ["getWorkFlow"],
@@ -66,7 +56,69 @@ export const Arrangement = () => {
       };
     },
   });
+  const getFields = async () => {
+    const response = await fpsService.getFields({
+      documentId: workFlow.data.documentId,
+    });
+    if (!response) return;
+    const newData = { ...response };
+    const textField = response.textbox
+      .filter(
+        (item) =>
+          item.type !== "TEXTFIELD" &&
+          item.process_status !== "PROCESSED" &&
+          item.value !== ""
+      )
+      .map((item) => {
+        return {
+          field_name: item.field_name,
+          value: item.value,
+        };
+      });
+    return {
+      ...newData,
+      textField,
+      workFlowId: workFlow.workFlowId,
+    };
+  };
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
+
+  const handleShareToSign = async () => {
+    const fields = await getFields();
+    const checkFields = workFlow.data.participants
+      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+      .map((participant) => {
+        let data = false;
+
+        // check signerType
+        switch (participant.signerType) {
+          case 1:
+            if (fields.signature.length > 0) {
+              data = false;
+              // Check have Signature field for this signer
+              fields.signature.map((item) => {
+                if (item.field_name.slice(0, -17) === participant.signerId) {
+                  data = true;
+                  return;
+                }
+              });
+              // If have Signature field for this signer
+              data
+                ? null
+                : alert(
+                    "Don't have enough signature field for this signer",
+                    participant.signerId
+                  );
+            }
+            break;
+          case 2:
+            console.log("participant.signerId", participant.signerId);
+            break;
+        }
+        return data;
+      });
+    console.log("checkFields", checkFields);
+  };
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
   // if (workFlowValid && workFlowValid.data === 0) {
@@ -133,7 +185,6 @@ export const Arrangement = () => {
                 }}
                 // href="#basic-chip"
                 icon={<KeyboardDoubleArrowLeftIcon fontSize="small" />}
-                clickable
               />
               <Chip
                 // label={t("signing.download_completed")}
@@ -158,7 +209,6 @@ export const Arrangement = () => {
                 }}
                 // href="#basic-chip"
                 icon={<KeyboardDoubleArrowRightIcon fontSize="small" />}
-                clickable
               />
               <Chip
                 // label={t("signing.download_completed")}
@@ -183,7 +233,6 @@ export const Arrangement = () => {
                 }}
                 // href="#basic-chip"
                 icon={<PrintOutlinedIcon fontSize="small" />}
-                clickable
               />
               <Chip
                 // label={t("signing.download_completed")}
@@ -211,7 +260,9 @@ export const Arrangement = () => {
                 icon={<SaveAltIcon fontSize="small" />}
                 clickable
               />
-              <Button variant="contained">Share Now</Button>
+              <Button variant="contained" onClick={handleShareToSign}>
+                Share Now
+              </Button>
             </Box>
           </Toolbar>
         </AppBar>
