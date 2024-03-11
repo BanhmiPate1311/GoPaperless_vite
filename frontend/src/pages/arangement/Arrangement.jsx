@@ -91,11 +91,13 @@ export const Arrangement = () => {
         let data = false;
 
         // check signerType
+
         switch (participant.signerType) {
           case 1:
             if (fields.signature.length > 0) {
               data = false;
               // Check have Signature field for this signer
+
               fields.signature.map((item) => {
                 if (item.field_name.slice(0, -17) === participant.signerId) {
                   data = true;
@@ -103,21 +105,60 @@ export const Arrangement = () => {
                 }
               });
               // If have Signature field for this signer
-              data
-                ? null
-                : alert(
-                    "Don't have enough signature field for this signer",
-                    participant.signerId
-                  );
+              if (!data) {
+                alert("Don't have enough signature field for this signer");
+              }
+            } else {
+              alert("Don't have enough signature field for this signer");
             }
             break;
           case 2:
-            console.log("participant.signerId", participant.signerId);
+            if (fields.initial.length > 0) {
+              data = false;
+              // Check have Signature field for this signer
+
+              fields.initial.map((item) => {
+                if (item.field_name.slice(0, -15) === participant.signerId) {
+                  data = true;
+                  return;
+                }
+              });
+              // If have Signature field for this signer
+              if (!data) {
+                alert("Don't have enough Initial field for this Reviewer");
+              }
+            } else {
+              alert("Don't have enough Initial field for this Reviewer");
+            }
+            break;
+          default:
+            data = true;
             break;
         }
         return data;
       });
-    console.log("checkFields", checkFields);
+    if (!checkFields.includes(false)) {
+      // TODO: Share to sign
+      const data = {
+        workFlowId: workFlow.data.workFlowId,
+        participant: {
+          ...workFlow.data.participants[0],
+          metaInformation: null,
+        },
+        signerName:
+          workFlow.data.participants[0].lastName +
+          " " +
+          workFlow.data.participants[0].firstName,
+        fileName: workFlow.data.fileName,
+        signingToken: workFlow.data.signingToken,
+        workFlowProcessType: workFlow.data.workflowProcessType,
+        documentId: workFlow.data.documentId,
+      };
+      console.log(data);
+      await apiService.shareToSign(data);
+    } else {
+      alert("Don't have enough field for Participants");
+    }
   };
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
