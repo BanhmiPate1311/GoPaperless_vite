@@ -31,19 +31,19 @@ public class ParticipantsController {
 //        String response = electronicIdService.updateParticipant(updateSubjectRequest);
 //        return new ResponseEntity<>(response, HttpStatus.OK);
 //    }
-    @PostMapping("/updateParticipant")
-    public ResponseEntity<?> updateParticipant(@RequestBody ParticipantsObject data) throws Exception {
-        System.out.println("data: " + data.getFirstName());
-        System.out.println("data: " + data.getSequenceNumber());
-        String result = "";
-        if (data.getFirstName() != null) {
-            result = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(data);
-            if (result.equals("1")) {
-                System.out.println("update participant success");
-            } else {
-                System.out.println("update participant fail");
-            }
+@PostMapping("/updateParticipant")
+public ResponseEntity<?> updateParticipant(@RequestBody ParticipantsObject data) throws Exception {
+    System.out.println("data: " + data.getFirstName());
+    System.out.println("data: " + data.getSequenceNumber());
+    String result = "";
+    if (data.getFirstName() != null) {
+        result = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(data);
+        if (result.equals("1")) {
+            System.out.println("update participant success");
+        } else {
+            System.out.println("update participant fail");
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
+    return new ResponseEntity<>(result, HttpStatus.OK);
+}
 }
