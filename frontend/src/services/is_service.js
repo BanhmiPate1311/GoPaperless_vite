@@ -37,6 +37,7 @@ export const isService = {
       enterpriseId: data.enterpriseId,
       assurance: data.assurance,
       textField: data.textField,
+      workFlowProcessType: data.workFlowProcessType,
     };
     return api.post("/is/packFile", request);
   },

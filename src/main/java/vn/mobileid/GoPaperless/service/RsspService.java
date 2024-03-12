@@ -787,6 +787,7 @@ public class RsspService {
         String contactInfor = signRequest.getContactInfor();
         String assurance = signRequest.getAssurance();
         List<TextField> textFields = signRequest.getTextField();
+        String workFlowType = signRequest.getWorkFlowProcessType();
 
         try {
             System.out.println("connectorName: " + connectorName);
@@ -918,7 +919,7 @@ public class RsspService {
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

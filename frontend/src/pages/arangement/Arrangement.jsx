@@ -13,21 +13,15 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ArragementDocument from "@/components/arrangement/ArrengementDocument";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
+import Button from "@mui/material/Button";
+import { fpsService } from "@/services/fps_service";
 
 export const Arrangement = () => {
   const { t } = useTranslation();
   const { signingToken, signerToken } = useCommonHook();
-
-  // const { data: workFlowValid } = useQuery({
-  //   queryKey: ["checkWorkFlowValid"],
-  //   queryFn: () => {
-  //     const data = {
-  //       signerToken,
-  //       signingToken,
-  //     };
-  //     return apiService.checkWorkFlow(data);
-  //   },
-  // });
 
   const workFlow = useQuery({
     queryKey: ["getWorkFlow"],
@@ -62,7 +56,110 @@ export const Arrangement = () => {
       };
     },
   });
+  const getFields = async () => {
+    const response = await fpsService.getFields({
+      documentId: workFlow.data.documentId,
+    });
+    if (!response) return;
+    const newData = { ...response };
+    const textField = response.textbox
+      .filter(
+        (item) =>
+          item.type !== "TEXTFIELD" &&
+          item.process_status !== "PROCESSED" &&
+          item.value !== ""
+      )
+      .map((item) => {
+        return {
+          field_name: item.field_name,
+          value: item.value,
+        };
+      });
+    return {
+      ...newData,
+      textField,
+      workFlowId: workFlow.workFlowId,
+    };
+  };
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
+
+  const handleShareToSign = async () => {
+    const fields = await getFields();
+    const checkFields = workFlow.data.participants
+      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+      .map((participant) => {
+        let data = false;
+
+        // check signerType
+
+        switch (participant.signerType) {
+          case 1:
+            if (fields.signature.length > 0) {
+              data = false;
+              // Check have Signature field for this signer
+
+              fields.signature.map((item) => {
+                if (item.field_name.slice(0, -17) === participant.signerId) {
+                  data = true;
+                  return;
+                }
+              });
+              // If have Signature field for this signer
+              if (!data) {
+                alert("Don't have enough signature field for this signer");
+              }
+            } else {
+              alert("Don't have enough signature field for this signer");
+            }
+            break;
+          case 2:
+            if (fields.initial.length > 0) {
+              data = false;
+              // Check have Signature field for this signer
+
+              fields.initial.map((item) => {
+                if (item.field_name.slice(0, -15) === participant.signerId) {
+                  data = true;
+                  return;
+                }
+              });
+              // If have Signature field for this signer
+              if (!data) {
+                alert("Don't have enough Initial field for this Reviewer");
+              }
+            } else {
+              alert("Don't have enough Initial field for this Reviewer");
+            }
+            break;
+          default:
+            data = true;
+            break;
+        }
+        return data;
+      });
+    if (!checkFields.includes(false)) {
+      // TODO: Share to sign
+      const data = {
+        workFlowId: workFlow.data.workFlowId,
+        participant: {
+          ...workFlow.data.participants[0],
+          metaInformation: null,
+        },
+        signerName:
+          workFlow.data.participants[0].lastName +
+          " " +
+          workFlow.data.participants[0].firstName,
+        fileName: workFlow.data.fileName,
+        signingToken: workFlow.data.signingToken,
+        workFlowProcessType: workFlow.data.workflowProcessType,
+        documentId: workFlow.data.documentId,
+      };
+      console.log(data);
+      await apiService.shareToSign(data);
+    } else {
+      alert("Don't have enough field for Participants");
+    }
+  };
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
   // if (workFlowValid && workFlowValid.data === 0) {
@@ -105,31 +202,109 @@ export const Arrangement = () => {
               {workFlow?.data?.documentName}
             </Typography>
             {/* <VisibilityIcon sx={{ color: "signingtext1.main" }} /> */}
-            <Chip
-              // label={t("signing.download_completed")}
-              component="a"
-              // color={checkWorkFlowStatus ? "primary" : undefined}
-              // disabled={!checkWorkFlowStatus}
-              sx={{
-                padding: "8px 16px",
-                height: "36px",
-                fontWeight: "500",
-                borderRadius: "25px",
-                backgroundColor: "transparent",
-                color: "signingWFBackground.main",
-                gap: "10px",
-                "& span": {
-                  padding: "0",
-                },
-                "& svg.MuiChip-icon": {
-                  margin: "0",
-                },
-              }}
-              // href="#basic-chip"
-              href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}
-              icon={<SaveAltIcon fontSize="small" color="#000" />}
-              clickable
-            />
+            <Box sx={{ display: "flex", gap: "5px", alignItems: "center" }}>
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                // href="#basic-chip"
+                icon={<KeyboardDoubleArrowLeftIcon fontSize="small" />}
+              />
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                // href="#basic-chip"
+                icon={<KeyboardDoubleArrowRightIcon fontSize="small" />}
+              />
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                // href="#basic-chip"
+                icon={<PrintOutlinedIcon fontSize="small" />}
+              />
+              <Chip
+                // label={t("signing.download_completed")}
+                component="a"
+                // color={checkWorkFlowStatus ? "primary" : undefined}
+                // disabled={!checkWorkFlowStatus}
+                sx={{
+                  padding: "8px 16px",
+
+                  fontWeight: "500",
+                  borderRadius: "25px",
+                  backgroundColor: "transparent",
+                  color: "signingWFBackground.main",
+
+                  "& span": {
+                    padding: "0",
+                  },
+                  "& svg.MuiChip-icon": {
+                    margin: "0",
+                    color: "#3B82F6",
+                  },
+                }}
+                href={`${window.location.origin}/view/uiApi/signing/${signingToken}/download`}
+                // href="#basic-chip"
+                icon={<SaveAltIcon fontSize="small" />}
+                clickable
+              />
+              <Button variant="contained" onClick={handleShareToSign}>
+                Share Now
+              </Button>
+            </Box>
           </Toolbar>
         </AppBar>
       </Box>

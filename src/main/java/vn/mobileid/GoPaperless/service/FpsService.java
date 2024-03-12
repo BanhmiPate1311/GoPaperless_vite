@@ -639,4 +639,31 @@ public class FpsService {
             }
         }
     }
+
+    public byte[] getByteImagePdf(int documentId) throws Exception {
+
+        String getImageBasse64Url = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<byte[]> response = restTemplate.exchange(getImageBasse64Url, HttpMethod.GET, httpEntity, byte[].class);
+
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return getByteImagePdf(documentId);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
 }

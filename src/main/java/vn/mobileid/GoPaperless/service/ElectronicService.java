@@ -649,7 +649,6 @@ public class ElectronicService {
     }
 
 
-
     public String credentialOTP(CheckCertificateRequest checkCertificateRequest) throws Throwable {
         return rsspService.sendOTP(checkCertificateRequest.getLang(), checkCertificateRequest.getCredentialID());
     }
@@ -679,6 +678,7 @@ public class ElectronicService {
         String contactInfor = authorizeOTPRequest.getContactInfor();
         String assurance = authorizeOTPRequest.getAssurance();
         List<TextField> textFields = authorizeOTPRequest.getTextField();
+        String workFlowType = authorizeOTPRequest.getWorkFlowProcessType();
 
         try {
             boolean error = false;
@@ -761,7 +761,7 @@ public class ElectronicService {
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

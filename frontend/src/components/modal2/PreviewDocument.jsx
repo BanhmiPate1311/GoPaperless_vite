@@ -319,64 +319,66 @@ export const PreviewDocument = ({
               }}
               className={`sig1 choioi-${index}`}
             >
-              <span
-                className={`rauria-${index} topline`}
-                style={{ display: "none" }}
-              ></span>
-              <span
-                className={`rauria-${index} rightline`}
-                style={{ display: "none" }}
-              ></span>
-              <span
-                className={`rauria-${index} botline`}
-                style={{ display: "none" }}
-              ></span>
-              <span
-                className={`rauria-${index} leftline`}
-                style={{ display: "none" }}
-              ></span>
-              <Box
-                id={`sigDrag1-${index}`}
-                sx={{ width: "100%", height: "100%" }}
-              >
-                {value == 0 && (
-                  <TextSignForm
-                    ref={textElement}
-                    dataSigning={dataSigning}
-                    headerFooter={headerFooter}
-                    formattedDatetime={formattedDatetime}
-                    onDisableSubmit={onDisableSubmit}
-                    watch={watch}
-                    control={control}
-                    showInput={true}
-                  />
-                )}
-                {value == 1 && (
-                  <DrawSignForm
-                    ref={textElement}
-                    dataSigning={dataSigning}
-                    headerFooter={headerFooter}
-                    formattedDatetime={formattedDatetime}
-                    onDisableSubmit={onDisableSubmit}
-                    watch={watch}
-                    control={control}
-                    showInput={true}
-                  />
-                )}
+              <>
+                <span
+                  className={`rauria-${index} topline`}
+                  style={{ display: "none" }}
+                ></span>
+                <span
+                  className={`rauria-${index} rightline`}
+                  style={{ display: "none" }}
+                ></span>
+                <span
+                  className={`rauria-${index} botline`}
+                  style={{ display: "none" }}
+                ></span>
+                <span
+                  className={`rauria-${index} leftline`}
+                  style={{ display: "none" }}
+                ></span>
+                <Box
+                  id={`sigDrag1-${index}`}
+                  sx={{ width: "100%", height: "100%" }}
+                >
+                  {value == 0 && (
+                    <TextSignForm
+                      ref={textElement}
+                      dataSigning={dataSigning}
+                      headerFooter={headerFooter}
+                      formattedDatetime={formattedDatetime}
+                      onDisableSubmit={onDisableSubmit}
+                      watch={watch}
+                      control={control}
+                      showInput={true}
+                    />
+                  )}
+                  {value == 1 && (
+                    <DrawSignForm
+                      ref={textElement}
+                      dataSigning={dataSigning}
+                      headerFooter={headerFooter}
+                      formattedDatetime={formattedDatetime}
+                      onDisableSubmit={onDisableSubmit}
+                      watch={watch}
+                      control={control}
+                      showInput={true}
+                    />
+                  )}
 
-                {value == 2 && (
-                  <UploadSignForm
-                    ref={textElement}
-                    dataSigning={dataSigning}
-                    headerFooter={headerFooter}
-                    formattedDatetime={formattedDatetime}
-                    onDisableSubmit={onDisableSubmit}
-                    watch={watch}
-                    control={control}
-                    showInput={true}
-                  />
-                )}
-              </Box>
+                  {value == 2 && (
+                    <UploadSignForm
+                      ref={textElement}
+                      dataSigning={dataSigning}
+                      headerFooter={headerFooter}
+                      formattedDatetime={formattedDatetime}
+                      onDisableSubmit={onDisableSubmit}
+                      watch={watch}
+                      control={control}
+                      showInput={true}
+                    />
+                  )}
+                </Box>
+              </>
             </ResizableBox>
           </Draggable>
         )}
