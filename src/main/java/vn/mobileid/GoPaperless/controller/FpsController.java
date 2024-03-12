@@ -59,11 +59,10 @@ public class FpsController {
 
     @PostMapping("/{documentId}/{field}/addTextBox")
     public ResponseEntity<?> addTextField(@PathVariable int documentId, @PathVariable String field, @RequestBody BasicFieldAttribute data) throws Exception {
+        System.out.println("addTextbox" );
 
         String response = fpsService.addTextBox(documentId, field, data, true);
-        System.out.println("field: " + field);
-        System.out.println("qrtoken: " + data.getQrToken());
-        System.out.println("signingtoken: " + data.getSigningToken());
+
         if (("qrcode").equals(field)) {
             String result = connect.USP_GW_PPL_WORKFLOW_UPDATE_QR_TOKEN(data.getSigningToken(), data.getQrToken(), "Gateway view");
             if (result.equals("1")) {

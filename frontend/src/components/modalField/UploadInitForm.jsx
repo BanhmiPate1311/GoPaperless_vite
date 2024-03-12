@@ -46,9 +46,7 @@ export const UploadInitForm = forwardRef(
             name="fileUrl"
             label={t("0-common.upload")}
             control={control}
-            sx={{
-              height: "45px",
-            }}
+            sx={{ border: "2px solid #357EEB", height: "45px" }}
             onChange={handleUploadFile}
           />
         </Box>

@@ -33,9 +33,7 @@ export const DrawInitForm = forwardRef(
         <Box mb="10px">
           <Button
             variant="outlined"
-            style={{
-              height: "45px",
-            }}
+            sx={{ border: "2px solid #357EEB", height: "45px" }}
             onClick={handleOpenDraw}
           >
             {t("0-common.draw")}
