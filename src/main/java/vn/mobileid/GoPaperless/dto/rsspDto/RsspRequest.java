@@ -35,6 +35,7 @@ public class RsspRequest {
     private int workFlowId;
     private String assurance;
     private String workFlowProcessType;
+    private String qrypto;
     private List<TextField> textField;
 
     public CertChain getCertChain() {
@@ -291,6 +292,14 @@ public class RsspRequest {
 
     public void setSignerType(int signerType) {
         this.signerType = signerType;
+    }
+
+    public String getQrypto() {
+        return qrypto;
+    }
+
+    public void setQrypto(String qrypto) {
+        this.qrypto = qrypto;
     }
 
     public String getWorkFlowProcessType() {

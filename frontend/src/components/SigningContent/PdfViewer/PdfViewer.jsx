@@ -16,12 +16,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
 
-export const PdfViewer = ({ workFlow }) => {
+export const PdfViewer = ({ workFlow, field }) => {
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-
-  const field = queryClient.getQueryData(["getField"]);
 
   const [contextMenu, setContextMenu] = useState(null);
   const [openResize, setOpenResize] = useState(false);
