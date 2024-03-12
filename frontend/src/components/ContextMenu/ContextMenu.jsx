@@ -60,11 +60,18 @@ export const ContextMenu = ({
   let menu = [];
   switch (signerType) {
     case 1:
-      menu = data;
+      menu = data.filter(
+        (item) => item.value !== "QR" && item.value !== "QRYPTO"
+      );
       break;
     case 2:
     case 3:
-      menu = data.filter((item) => item.value !== "SIGNATURE");
+      menu = data.filter(
+        (item) =>
+          item.value !== "SIGNATURE" &&
+          item.value !== "QR" &&
+          item.value !== "QRYPTO"
+      );
       break;
   }
   // Arrangement Overview

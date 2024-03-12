@@ -26,6 +26,7 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
     private int documentId;
     private String assurance;
     private List<TextField> textField;
+    private String qrypto;
     private String workFlowProcessType;
 
     public String getCredentialID() {
@@ -194,6 +195,14 @@ public class AuthorizeOTPRequest extends ElectronicBaseRequest{
 
     public void setTextField(List<TextField> textField) {
         this.textField = textField;
+    }
+
+    public String getQrypto() {
+        return qrypto;
+    }
+
+    public void setQrypto(String qrypto) {
+        this.qrypto = qrypto;
     }
 
     public String getWorkFlowProcessType() {

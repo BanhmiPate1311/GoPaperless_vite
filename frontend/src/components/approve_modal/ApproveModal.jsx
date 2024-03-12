@@ -30,7 +30,7 @@ export const ApproveModal = ({ open, onClose, workFlow, signer }) => {
   const [comment, setComment] = useState("");
   // console.log("comment: ", comment);
 
-  console.log("signer: ", signer);
+  // console.log("signer: ", signer);
 
   const handleSubmitClick = () => {
     switch (activeStep) {

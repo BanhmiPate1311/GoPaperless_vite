@@ -915,6 +915,7 @@ public class RsspService {
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
+
             fpsService.fillForm(documentId, textFields);
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";

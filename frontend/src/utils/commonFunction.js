@@ -111,7 +111,7 @@ export function removeBase64Prefix(base64String) {
 }
 
 export const checkWorkflowStatus = (workflow) => {
-  return workflow?.participants?.every((item) => item?.signerStatus === 2);
+  return workflow?.participants?.every((item) => item?.signerStatus !== 1);
 };
 
 export const convertTime = (time) => {

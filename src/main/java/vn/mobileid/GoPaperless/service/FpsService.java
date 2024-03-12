@@ -472,6 +472,51 @@ public class FpsService {
         }
     }
 
+    public String fillQrypto(int documentId, String qryptoFieldName) throws Exception {
+        System.out.println("fillQrypto");
+        String fillQryptoUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/qrcode-qrypto";
+
+        System.out.println("fillQryptoUrl: " + fillQryptoUrl);
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        Map<String, Object> requestData = new HashMap<>();
+        if(qryptoFieldName != null) {
+        requestData.put("field_name", qryptoFieldName);
+        }
+
+        // Convert requestData to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestDataJson = objectMapper.writeValueAsString(requestData);
+
+        // Log the JSON string
+        System.out.println("Request Data fillQrypto as JSON: " + requestDataJson);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(fillQryptoUrl, HttpMethod.POST, httpEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error : ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return fillQrypto(documentId, qryptoFieldName);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
     public String deleteSignatue(int documentId, String field_name) throws Exception {
         String deleteSignatureUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields";
 

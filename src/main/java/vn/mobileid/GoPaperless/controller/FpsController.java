@@ -95,6 +95,13 @@ public class FpsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/{documentId}/fillQrypto")
+    public ResponseEntity<?> fillQrypto(@PathVariable int documentId, @RequestBody RsspRequest data) throws Exception {
+        String qrypto = data.getQrypto();
+        String response = fpsService.fillQrypto(documentId, qrypto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/download/{documentId}")
     public ResponseEntity<?> download(@PathVariable int documentId) throws Exception {
 

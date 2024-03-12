@@ -20,7 +20,7 @@ export const Document = ({
   openResize,
   setOpenResize,
 }) => {
-  // console.log("textField: ", textField);
+  // console.log("qrypto: ", qrypto);
 
   const queryClient = useQueryClient();
   let isSetPos;

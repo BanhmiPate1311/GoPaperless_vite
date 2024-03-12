@@ -46,6 +46,14 @@ export const fpsService = {
     return response.data;
   },
 
+  fillQrypto: async (data, { documentId }) => {
+    console.log("documentId: ", documentId);
+    const response = await api.post(`/fps/${documentId}/fillQrypto`, {
+      qrypto: data,
+    });
+    return response.data;
+  },
+
   removeSignature: async ({ documentId }, field_name) => {
     const response = await api.delete(
       `/fps/${documentId}/${field_name}/deleteSignatue`
