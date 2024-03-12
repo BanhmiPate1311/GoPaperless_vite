@@ -380,6 +380,15 @@ public class ApiController {
 
         return new ResponseEntity<>("workFlowCommentId", HttpStatus.OK);
     }
+    @PostMapping("/shareToSign")
+    public ResponseEntity<?> shareToSign(@RequestBody ShareToSignRequest request) throws Exception{
+        System.out.println("request: "+request.getParticipant().getSignerToken());
+        System.out.println("request: "+request.getFileName());
+        byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
+        checkAndSendMailService.shareToSign(request.getWorkFlowProcessType(), request.getParticipant().getSignerToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(),request.getParticipant(), data);
+
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
 
     @PostMapping("/checkPerMission")
     public ResponseEntity<?> checkPerMission(@RequestBody Map<String, String> request) throws Exception {

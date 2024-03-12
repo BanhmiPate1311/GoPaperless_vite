@@ -76,7 +76,6 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
       <AccordionDetails sx={{ p: 0 }}>
         {participantsList.map((participant, index) => {
           const status = checkSignerStatus(participant, signerToken);
-          // console.log("status: ", status);
           const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
@@ -97,11 +96,6 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
               borderColor="borderColor.main"
               // height="50px"
             >
-              {/* {check ? (
-                  <SignerSelected />
-                ) : (
-                  <WaitingSig width={24} height={24} />
-                )} */}
               <Box
                 onClick={() => toggleDrawer(index)}
                 sx={{ cursor: "pointer" }}

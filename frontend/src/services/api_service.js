@@ -59,4 +59,8 @@ export const apiService = {
     const response = await api.post("/uiApi/approve", data);
     return response.data;
   },
+  shareToSign: async (data) => {
+    const response = await api.post("/uiApi/shareToSign", data);
+    return response.data;
+  },
 };

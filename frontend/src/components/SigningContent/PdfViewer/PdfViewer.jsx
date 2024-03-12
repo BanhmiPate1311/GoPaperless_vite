@@ -78,7 +78,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const handleContextMenu = (page) => (event) => {
     // console.log("page: ", event);
-    if (openResize) return;
+    // if (openResize) return;
     if (
       signer.signerStatus !== 1 ||
       (event.target.className !== "rpv-core__text-layer" &&
