@@ -227,6 +227,439 @@ function Row(props) {
   //   setPurpose(event.target.value);
   // };
 
+  if (typeWorkflow === "parallel" || typeWorkflow === "individual") {
+    return (
+      <Fragment
+
+      // style={getItemStyle(
+      //   snapshot.isDragging,
+      //   provided.draggableProps.style
+      // )}
+      >
+        <TableRow
+          className="row-container"
+          sx={{
+            "& > *": { borderBottom: "unset" },
+            backgroundColor: open ? "#d9d9d9" : "inherit",
+          }}
+        >
+          <TableCell component="th" scope="row" sx={{ width: "310px" }}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {typeWorkflow === "serial" && (
+                <>
+                  <BarsIcon />
+                  <Typography>{index + 1}</Typography>
+                </>
+              )}
+              {typeWorkflow === "custom" && (
+                <>
+                  <BarsIcon />
+                  <TextField
+                    style={{}}
+                    sx={{
+                      my: 0,
+                      "& .MuiInputBase-root": {
+                        minHeight: "36px",
+                        height: "36px",
+                        width: "38px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
+                      },
+                    }}
+                    value={data.sequenceNumber}
+                    onChange={(event) =>
+                      handleChangeParticipant(event, "sequenceNumber")
+                    }
+                    id="outlined-size-small"
+                    size="small"
+                    inputProps={{
+                      inputMode: "numeric", // chỉ cho phép nhập số
+                      pattern: "[0-9]*", // chỉ cho phép các ký tự số
+                    }}
+                  />
+                </>
+              )}
+
+              <PerSonIcon style={{ borderRadius: 999 }} />
+              {/* {tableCheckStatus(item, signerToken)} */}
+              {status === 2 ? (
+                <SignedIcon />
+              ) : status === 1 ? (
+                <WaitingMySig />
+              ) : (
+                <WaitingSig />
+              )}
+              <Typography style={{ width: "190.482px" }}>
+                {row.lastName} {row.firstName}
+              </Typography>
+            </Stack>
+          </TableCell>
+          <TableCell align="left">{row.firstName}</TableCell>
+          <TableCell style={{ width: "250px" }} align="left">
+            {row.email}
+          </TableCell>
+          <TableCell>
+            <IconButton
+              aria-label="expand row"
+              variant="plain"
+              color="neutral"
+              size="sm"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? (
+                <span
+                  // onClick={() => setOpen(!open)}
+                  style={{
+                    backgroundColor: "#FEF2F2",
+                    borderRadius: 999,
+                    width: 30,
+                    height: 30,
+                    display: open ? "block" : "none",
+                  }}
+                >
+                  <VectorIcon
+                    style={{
+                      width: 14,
+                      height: 14,
+                      marginTop: 7,
+                    }}
+                  />
+                </span>
+              ) : (
+                <PencilSquareIcon
+
+                // style={{
+                //   display: open ? "none" : "block",
+                // }}
+                />
+              )}
+            </IconButton>
+            <IconButton
+              aria-label="expand row"
+              variant="plain"
+              color="neutral"
+              size="sm"
+              onClick={() => updateParticipant(data)}
+            >
+              {open ? (
+                <span
+                  style={{
+                    backgroundColor: "#F0FDFA",
+                    borderRadius: 999,
+                    width: 29,
+                    height: 30,
+                    display: open ? "block" : "none",
+                  }}
+                >
+                  <CheckIcon
+                    style={{
+                      width: 17,
+                      height: 14,
+                      marginTop: 7,
+                    }}
+                  />
+                </span>
+              ) : (
+                ""
+              )}
+            </IconButton>
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Stack
+                direction="row"
+                sx={{ margin: 1 }}
+                useFlexGap
+                flexWrap="wrap"
+              >
+                <Box width="calc(100% / 3)">
+                  <Typography
+                    variant="h6"
+                    color="#1F2937"
+                    fontWeight={600}
+                    mb="10px"
+                    height={17}
+                  >
+                    {t("0-common.name")}
+                  </Typography>
+                  <TextField
+                    style={{}}
+                    sx={{
+                      my: 0,
+                      "& .MuiInputBase-root": {
+                        minHeight: "42px",
+                        height: "42px",
+                        width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#E7E7E7", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
+                      },
+                    }}
+                    disabled
+                    value={data.fullName}
+                    onChange={(event) =>
+                      handleChangeParticipant(event, "fullname")
+                    }
+                    id="outlined-size-small"
+                    size="small"
+                  />
+                </Box>
+                <Box width="calc(100% / 3)">
+                  <Typography
+                    variant="h6"
+                    color="#1F2937"
+                    fontWeight={600}
+                    mb="10px"
+                    height={17}
+                  >
+                    {t("0-common.first name")}
+                  </Typography>
+                  <TextField
+                    sx={{
+                      my: 0,
+                      "& .MuiInputBase-root": {
+                        minHeight: "42px",
+                        height: "42px",
+                        width: "250px",
+                      },
+                    }}
+                    value={data.firstName}
+                    onChange={(event) =>
+                      handleChangeParticipant(event, "firstName")
+                    }
+                    id="outlined-size-small"
+                    size="small"
+                  />
+                </Box>
+                <Box width="calc(100% / 3)">
+                  <Typography
+                    variant="h6"
+                    color="#1F2937"
+                    fontWeight={600}
+                    mb="10px"
+                    height={17}
+                  >
+                    {t("0-common.last name")}
+                  </Typography>
+
+                  <TextField
+                    sx={{
+                      my: 0,
+                      "& .MuiInputBase-root": {
+                        minHeight: "42px",
+                        height: "42px",
+                        width: "250px",
+                      },
+                    }}
+                    value={data.lastName}
+                    onChange={(event) =>
+                      handleChangeParticipant(event, "lastName")
+                    }
+                    id="outlined-size-small"
+                    size="small"
+                  />
+                </Box>
+                <Box pt="5px" width="calc(100% / 3)">
+                  <Typography
+                    variant="h6"
+                    color="#1F2937"
+                    fontWeight={600}
+                    mb="10px"
+                    height={17}
+                  >
+                    {t("0-common.Reason")}
+                  </Typography>
+                  <TextField
+                    sx={{
+                      my: 0,
+                      "& .MuiInputBase-root": {
+                        minHeight: "42px",
+                        height: "42px",
+                        width: "250px",
+                      },
+                    }}
+                    value={data.customReason}
+                    onChange={(event) =>
+                      handleChangeParticipant(event, "customReason")
+                    }
+                    id="outlined-size-small"
+                    size="small"
+                  />
+                </Box>
+                <Box pt="5px" width="calc(100% / 3)">
+                  <Typography
+                    variant="h6"
+                    color="#1F2937"
+                    fontWeight={600}
+                    mb="10px"
+                    height={17}
+                  >
+                    {t("0-common.Position")}
+                  </Typography>
+                  <TextField
+                    sx={{
+                      my: 0,
+                      "& .MuiInputBase-root": {
+                        minHeight: "42px",
+                        height: "42px",
+                        width: "250px",
+                      },
+                    }}
+                    value={data.position}
+                    onChange={(event) =>
+                      handleChangeParticipant(event, "position")
+                    }
+                    id="outlined-size-small"
+                    size="small"
+                  />
+                </Box>
+                <Box pt="5px" width="calc(100% / 3)">
+                  <Typography
+                    variant="h6"
+                    color="#1F2937"
+                    fontWeight={600}
+                    mb="10px"
+                    height={17}
+                  >
+                    {t("0-common.purpose")}
+                  </Typography>
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                      <InputLabel
+                        id="demo-simple-select-label"
+                        value={data.purpose}
+                        // onChange={(event) =>
+                        //   handleChangeParticipant(event, "purpose")
+                        // }
+                      ></InputLabel>
+                      <Select
+                        sx={{
+                          minHeight: "42px",
+                          height: "42px",
+                          width: "250px",
+                        }}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={data.purpose}
+                        onChange={(event) =>
+                          handleChangeParticipant(event, "purpose")
+                        }
+                      >
+                        <MenuItem value={1}>
+                          <Signer style={{ width: "16px", height: "16px" }} />
+                          <span
+                            style={{
+                              paddingLeft: "12px",
+                              fontSize: "14px",
+                            }}
+                          >
+                            Signer
+                          </span>
+                        </MenuItem>
+                        <MenuItem value={2}>
+                          <Reviewer style={{ width: "16px", height: "16px" }} />
+                          <span
+                            style={{
+                              paddingLeft: "12px",
+                              fontSize: "14px",
+                            }}
+                          >
+                            Reviewer
+                          </span>
+                        </MenuItem>
+                        <MenuItem value={3}>
+                          <Editor style={{ width: "16px", height: "16px" }} />
+                          <span
+                            style={{
+                              paddingLeft: "12px",
+                              fontSize: "14px",
+                            }}
+                          >
+                            Editor
+                          </span>
+                        </MenuItem>
+                        <MenuItem value={4}>
+                          <MeetingHost
+                            style={{ width: "16px", height: "16px" }}
+                          />
+                          <span
+                            style={{
+                              paddingLeft: "12px",
+                              fontSize: "14px",
+                            }}
+                          >
+                            Meeting Host
+                          </span>
+                        </MenuItem>
+                        <MenuItem value={5}>
+                          <SendACopy
+                            style={{ width: "16px", height: "16px" }}
+                          />
+                          <span
+                            style={{
+                              paddingLeft: "12px",
+                              fontSize: "14px",
+                            }}
+                          >
+                            Send a Copy
+                          </span>
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  {/* <TextField
+            sx={{
+              my: 0,
+              "& .MuiInputBase-root": {
+                minHeight: "42px",
+                height: "42px",
+                width: "250px",
+              },
+            }}
+            value={row.metaInformation.signing_purpose}
+            id="outlined-size-small"
+            size="small"
+          /> */}
+                </Box>
+                <Box pt="5px" width="calc(100% / 3)">
+                  <Typography
+                    variant="h6"
+                    color="#1F2937"
+                    fontWeight={600}
+                    mb="10px"
+                    height={17}
+                  >
+                    {t("0-common.Structural subdivision")}
+                  </Typography>
+                  <TextField
+                    sx={{
+                      my: 0,
+                      "& .MuiInputBase-root": {
+                        minHeight: "42px",
+                        height: "42px",
+                        width: "250px",
+                      },
+                    }}
+                    value={data.structuralSubdivision}
+                    onChange={(event) =>
+                      handleChangeParticipant(event, "structuralSubdivision")
+                    }
+                    id="outlined-size-small"
+                    size="small"
+                  />
+                </Box>
+              </Stack>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </Fragment>
+    );
+  }
+
   return (
     <>
       <Draggable key={row.id} draggableId={row.id.toString()} index={index}>
@@ -826,33 +1259,31 @@ const ParticipantsTable = ({
                 <TableCell />
               </TableRow>
             </TableHead>
-            <DragDropContext>
-              <Droppable droppableId="">
-                {(provided) => (
-                  <TableBody
-                  // ref={provided.innerRef}
-                  // {...provided.droppableProps}
-                  // component={"div"}
-                  >
-                    {tableData
-                      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                      .map((user, index) => (
-                        ////////========== PARALLEL ==========/////////
-                        <Row
-                          key={user.id}
-                          row={user}
-                          index={index}
-                          workFlow={workFlow}
-                          setParticipant={setParticipant}
-                          updateParticipant={updateParticipant}
-                          participant={participant}
-                        />
-                      ))}
-                    {provided.placeholder}
-                  </TableBody>
-                )}
-              </Droppable>
-            </DragDropContext>
+
+            {/* {(provided) => ( */}
+            <TableBody
+            // ref={provided.innerRef}
+            // {...provided.droppableProps}
+            // component={"div"}
+            >
+              {tableData
+                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                .map((user, index) => (
+                  ////////========== PARALLEL ==========/////////
+                  <Row
+                    key={user.id}
+                    row={user}
+                    index={index}
+                    workFlow={workFlow}
+                    setParticipant={setParticipant}
+                    updateParticipant={updateParticipant}
+                    participant={participant}
+                    typeWorkflow="parallel"
+                  />
+                ))}
+              {/* {provided.placeholder} */}
+            </TableBody>
+            {/* )} */}
           </Table>
         </TableContainer>
       </TabPanel>
@@ -867,33 +1298,27 @@ const ParticipantsTable = ({
                 <TableCell />
               </TableRow>
             </TableHead>
-            <DragDropContext>
-              <Droppable droppableId="">
-                {(provided) => (
-                  <TableBody
-                  // ref={provided.innerRef}
-                  // {...provided.droppableProps}
-                  // component={"div"}
-                  >
-                    {tableData
-                      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                      .map((user, index) => (
-                        ////////========== INDIVIDUAL ==========/////////
-                        <Row
-                          key={user.id}
-                          row={user}
-                          index={index}
-                          workFlow={workFlow}
-                          setParticipant={setParticipant}
-                          updateParticipant={updateParticipant}
-                          participant={participant}
-                        />
-                      ))}
-                    {provided.placeholder}
-                  </TableBody>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <TableBody
+            // ref={provided.innerRef}
+            // {...provided.droppableProps}
+            // component={"div"}
+            >
+              {tableData
+                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                .map((user, index) => (
+                  ////////========== INDIVIDUAL ==========/////////
+                  <Row
+                    key={user.id}
+                    row={user}
+                    index={index}
+                    workFlow={workFlow}
+                    setParticipant={setParticipant}
+                    updateParticipant={updateParticipant}
+                    participant={participant}
+                    typeWorkflow="individual"
+                  />
+                ))}
+            </TableBody>
           </Table>
         </TableContainer>
       </TabPanel>
