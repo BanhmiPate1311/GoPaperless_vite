@@ -155,7 +155,12 @@ export const Arrangement = () => {
         documentId: workFlow.data.documentId,
       };
       console.log(data);
-      await apiService.shareToSign(data);
+      try {
+        await apiService.shareToSign(data);
+        alert("Share to sign success!!");
+      } catch (error) {
+        alert("Share to sign fail!!");
+      }
     } else {
       alert("Don't have enough field for Participants");
     }

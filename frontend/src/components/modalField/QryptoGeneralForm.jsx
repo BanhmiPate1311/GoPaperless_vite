@@ -11,7 +11,14 @@ import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { useController } from "react-hook-form";
 import { use } from "i18next";
+import FormControl from "@mui/material/FormControl";
 import { AddFieldQrypto } from "./AddFieldQrypto";
+import { MenuItem } from "@mui/material";
+import Select from "@mui/material/Select";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import AddIcon from "@mui/icons-material/Add";
 
 export const QryptoGeneralForm = ({
   control,
@@ -33,6 +40,11 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 1);
         setValue(`items[${index}].value`, "");
+        break;
+      case 7:
+        setValue(`items[${index}].field`, label);
+        setValue(`items[${index}].type`, 7);
+        setValue(`items[${index}].value`, []);
         break;
       case 8:
         setValue(`items[${index}].field`, label);
@@ -84,10 +96,10 @@ export const QryptoGeneralForm = ({
                       }}
                       {...register(`items[${index}].field`)}
                     />
-                    <input
+                    {/* <input
                       style={{ display: "none" }}
                       {...register(`items[${index}].type`)}
-                    />
+                    /> */}
                     <Button onClick={() => removeField(index)}>
                       <TrashIcon sx={{ color: "#F24E1E" }} />
                     </Button>
@@ -109,6 +121,133 @@ export const QryptoGeneralForm = ({
                     }}
                     sx={{ my: 0, height: "45px" }}
                   />
+                </Box>
+              );
+            case 7:
+              return (
+                <Box key={index} sx={{ marginBottom: "10px" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <TextField
+                      sx={{
+                        "& .MuiInputBase-root": {
+                          height: "auto",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderWidth: "0",
+                          },
+                        },
+                        "& .MuiInputBase-input": {
+                          fontWeight: 500,
+                          padding: "0",
+                        },
+                      }}
+                      {...register(`items[${index}].field`)}
+                    />
+                    {/* <input
+                      style={{ display: "none" }}
+                      {...register(`items[${index}].type`)}
+                    /> */}
+                    <Button onClick={() => removeField(index)}>
+                      <TrashIcon sx={{ color: "#F24E1E" }} />
+                    </Button>
+                  </Box>
+                  <FormControl fullWidth size="small" sx={{ mb: "15px" }}>
+                    <Box sx={{ display: "flex ", gap: "10px" }}>
+                      <Select
+                        labelId="demo-simple-select1-label-step1"
+                        id="demo-simple-select-step1"
+                        // value={type}
+                        onChange={(e) => console.log(e.target.value)}
+                        sx={{
+                          "& .MuiListItemSecondaryAction-root": {
+                            right: "30px",
+                            display: "flex",
+                          },
+                          backgroundColor: "signingWFBackground.main",
+                          width: "100%",
+                        }}
+                      >
+                        {field.value?.map((item, i) => {
+                          console.log(item, item !== null, "item");
+                          return (
+                            item && (
+                              <MenuItem key={i} value={item.value}>
+                                {item.element}
+                              </MenuItem>
+                            )
+                          );
+                        })}
+                      </Select>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          setValue(`items[${index}].value`, [
+                            ...field.value,
+                            { element: "", choise: false },
+                          ]);
+                        }}
+                      >
+                        <AddIcon />
+                      </Button>
+                    </Box>
+                    <RadioGroup
+                      aria-labelledby="demo-radio-buttons-group-label"
+                      // defaultValue={true}
+                      name="radio-buttons-group"
+                      // {...register(`items[${index}].value[${i}].choise`)}
+                    >
+                      {field.value?.map((values, i) => {
+                        return (
+                          values && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginTop: "10px",
+                                gap: "10px",
+                              }}
+                            >
+                              <FormControlLabel
+                                value={values.element + i}
+                                control={<Radio />}
+                              />
+                              <InputField
+                                label=""
+                                name={`items[${index}].value[${i}].element`}
+                                control={control}
+                                InputLabelProps={{
+                                  sx: {
+                                    backgroundColor: "signingWFBackground.main",
+                                  },
+                                }}
+                                inputProps={{
+                                  sx: {
+                                    py: "10.5px",
+                                    backgroundColor: "signingWFBackground.main",
+                                  },
+                                }}
+                                sx={{ my: 0, height: "45px" }}
+                              />
+                              <Button
+                                variant="contained"
+                                onClick={() => {
+                                  unregister(`items.[${index}].value.[${i}]`);
+                                }}
+                              >
+                                <TrashIcon sx={{ color: "#fff" }} />
+                              </Button>
+                            </Box>
+                          )
+                        );
+                      })}
+                    </RadioGroup>
+                  </FormControl>
                 </Box>
               );
             case 8:

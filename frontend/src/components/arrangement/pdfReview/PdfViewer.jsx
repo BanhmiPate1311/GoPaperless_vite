@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import { ContextMenu } from "../../ContextMenu";
 import { Document } from ".";
+import { useSearchParams } from "react-router-dom";
 
 export const PdfViewer = ({ workFlow, tabBar }) => {
   const { t } = useTranslation();
@@ -35,14 +36,11 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   const { signingToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
-  // console.log("signInfo: ", signInfo);
 
-  // const isSetPosRef = useRef(checkIsPosition(workFlow));
-  // const isSetPos = isSetPosRef.current;
-
-  // useEffect(() => {
-  //   isSetPosRef.current = checkIsPosition(workFlow);
-  // }, [workFlow]);
+  const location = useSearchParams();
+  const participantsType = workFlow.participants.filter(
+    (item) => item.signerToken === location[0].get("access_token")
+  );
 
   // eslint-disable-next-line no-unused-vars
   const getFields = async () => {
@@ -380,7 +378,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           handleClose={handleClose}
           handleClickMenu={handleClickMenu}
           tabBar={tabBar}
-          signerType={1}
+          signerType={participantsType[0]?.signerType}
         />
         <Document
           props={props}
