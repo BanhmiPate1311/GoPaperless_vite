@@ -39,6 +39,7 @@ public class BasicFieldAttribute {
     private List<Integer> initial_pages;
     private List<Integer> replicate;
     private AddTextValue font;
+    private List<Object> items;
 }
 
 

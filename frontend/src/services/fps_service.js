@@ -23,7 +23,7 @@ export const fpsService = {
       `/fps/${documentId}/${field}/putSignature`,
       data
     );
-    return response.data;
+    return response;
   },
 
   addTextBox: async (data, field, documentId) => {
@@ -50,6 +50,14 @@ export const fpsService = {
     const response = await api.delete(
       `/fps/${documentId}/${field_name}/deleteSignatue`
     );
-    return response.data;
+
+    return response;
+  },
+  removeSignature1: async ({ documentId }, field_name) => {
+    const response = await api.delete(
+      `/fps/${documentId}/${field_name}/deleteSignatue`
+    );
+
+    return response.status;
   },
 };

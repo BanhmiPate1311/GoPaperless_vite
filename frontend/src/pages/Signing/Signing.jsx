@@ -4,7 +4,7 @@ import { Cookie } from "@/components/cookie";
 import { useCommonHook } from "@/hook";
 import { apiService } from "@/services/api_service";
 import { fpsService } from "@/services/fps_service";
-import { checkWorkflowStatus } from "@/utils/commonFunction";
+import { checkWorkflowStatus, getSigner } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { Button } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
@@ -15,7 +15,7 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotFound } from "../NotFound";
 
@@ -130,12 +130,60 @@ export const Signing = () => {
   //   },
   // });
 
-  // console.log("workFlow: ", workFlow?.data);
+  console.log("workFlow: ", workFlow?.data);
   // console.log("workFlowtet: ", workFlow?.data?.documentId);
   // console.log("field: ", field);
 
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
+
+  const signer = useRef({});
+
+  useEffect(() => {
+    if (workFlow?.data?.participants) {
+      signer.current = getSigner(workFlow?.data);
+    }
+  }, [workFlow?.data]);
+  console.log("signer: ", signer.current);
+
+  const checkInit = field?.initial.findIndex(
+    (item) =>
+      item.process_status === "UN_PROCESSED" &&
+      item.field_name.includes(signer.current.signerId)
+  );
+  console.log("checkInit: ", checkInit);
+
+  const checkTextBox = field?.textbox.findIndex(
+    (item) =>
+      item.field_name.includes(signer.current.signerId) &&
+      item.value === "" &&
+      item.required === true
+  );
+  console.log("checkTextBox: ", checkTextBox);
+
+  const checkApprove = (signerType, signerStatus) => {
+    if (signerStatus !== 1) return "none";
+    switch (signerType) {
+      case 2:
+        if (checkInit === -1 && checkTextBox === -1) {
+          return "block";
+        } else {
+          return "none";
+        }
+      case 3:
+        if (
+          field?.initial.length >= 1 &&
+          checkInit === -1 &&
+          checkTextBox === -1
+        ) {
+          return "block";
+        } else {
+          return "none";
+        }
+      default:
+        return "none";
+    }
+  };
 
   if ((workFlowValid && workFlowValid.data === 0) || !permit) {
     return <NotFound />;
@@ -204,8 +252,19 @@ export const Signing = () => {
                 }
                 clickable
               />
-              <Button variant="contained" onClick={handleClickOpenApprove}>
-                {t("0-common.approve")}
+              <Button
+                variant="contained"
+                onClick={handleClickOpenApprove}
+                sx={{
+                  display: checkApprove(
+                    signer.current.signerType,
+                    signer.current.signerStatus
+                  ),
+                }}
+              >
+                {signer.current.signerId === 2
+                  ? t("0-common.approve")
+                  : t("0-common.submit")}
               </Button>
             </Toolbar>
           </AppBar>
@@ -224,6 +283,7 @@ export const Signing = () => {
           open={open}
           onClose={handleCloseApprove}
           workFlow={workFlow.data}
+          signer={signer.current}
         />
         <Cookie />
       </Stack>

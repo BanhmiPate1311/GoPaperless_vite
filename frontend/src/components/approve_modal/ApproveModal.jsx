@@ -1,7 +1,7 @@
 import { apiService } from "@/services/api_service";
-import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -15,13 +15,12 @@ import PropTypes from "prop-types";
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Step1, Step2 } from ".";
-import CircularProgress from "@mui/material/CircularProgress";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export const ApproveModal = ({ open, onClose, workFlow }) => {
+export const ApproveModal = ({ open, onClose, workFlow, signer }) => {
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -31,13 +30,16 @@ export const ApproveModal = ({ open, onClose, workFlow }) => {
   const [comment, setComment] = useState("");
   // console.log("comment: ", comment);
 
-  const signer = getSigner(workFlow);
-  // console.log("signer: ", signer);
+  console.log("signer: ", signer);
 
   const handleSubmitClick = () => {
     switch (activeStep) {
       case 1:
-        setActiveStep(2);
+        if (signer.signerType === 2) {
+          setActiveStep(2);
+        } else {
+          approve();
+        }
         break;
       case 2:
         approve();
@@ -194,7 +196,7 @@ export const ApproveModal = ({ open, onClose, workFlow }) => {
           onClick={handleSubmitClick}
           type="button"
         >
-          {t("0-common.continue")}
+          {t("modal.agree")}
         </Button>
       </DialogActions>
     </Dialog>
@@ -205,6 +207,7 @@ ApproveModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   workFlow: PropTypes.object,
+  signer: PropTypes.object,
 };
 
 export default ApproveModal;

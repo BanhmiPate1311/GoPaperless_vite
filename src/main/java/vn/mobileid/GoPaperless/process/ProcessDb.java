@@ -17,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import vn.mobileid.GoPaperless.model.participantsModel.ParticipantsObject;
 
 @Component
 public class ProcessDb {
@@ -839,10 +840,10 @@ public class ProcessDb {
         CallableStatement proc_stmt = null;
         try {
             System.out.println("PATICIPANTS UPDATE");
-//            System.out.println("pSIGNED_TIME" + pSIGNED_TIME);
-//            System.out.println("pGRACE_PERIOD_END_TIME" + pGRACE_PERIOD_END_TIME);
-//            System.out.println("pPPL_FILE_SIGNED_ID" + pPPL_FILE_SIGNED_ID);
-//            System.out.println("pLAST_MODIFIED_BY" + pLAST_MODIFIED_BY);
+            // System.out.println("pSIGNED_TIME" + pSIGNED_TIME);
+            // System.out.println("pGRACE_PERIOD_END_TIME" + pGRACE_PERIOD_END_TIME);
+            // System.out.println("pPPL_FILE_SIGNED_ID" + pPPL_FILE_SIGNED_ID);
+            // System.out.println("pLAST_MODIFIED_BY" + pLAST_MODIFIED_BY);
             conns = OpenDatabase();
             proc_stmt = conns
                     .prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(?,?,?,?,?,?,?,?,?,?,?,?,?) }");
@@ -1120,7 +1121,46 @@ public class ProcessDb {
         }
     }
 
-    public List<Participants> USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET_NEXT_PARTICIPANT(String signerToken) throws Exception {
+    public String USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(ParticipantsObject data) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(?,?,?,?,?,?,?,?,?,?) }");
+            proc_stmt.setString("pSIGNER_TOKEN", data.getSignerToken());
+            proc_stmt.setString("pFIRST_NAME", data.getFirstName());
+            proc_stmt.setString("pLAST_NAME", data.getLastName());
+            proc_stmt.setInt("pSEQUENCE_NUMBER", data.getSequenceNumber());
+            proc_stmt.setInt("pSIGNER_TYPE", data.getPurpose());
+            proc_stmt.setString("pCUSTOM_REASON", data.getCustomReason());
+            proc_stmt.setString("pSIGNING_PURPOSE", data.getSigningPurpose());
+            proc_stmt.setString("pLAST_MODIFIED_BY", "");
+            proc_stmt.setString("pMETA_INFORMATION", data.getMetaInformation());
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+            rs = proc_stmt.executeQuery();
+
+            return convrtr;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+    }
+
+    public List<Participants> USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET_NEXT_PARTICIPANT(String signerToken)
+            throws Exception {
         String convrtr = "1";
         Connection conns = null;
         CallableStatement proc_stmt = null;
@@ -1211,7 +1251,8 @@ public class ProcessDb {
         }
     }
 
-    public int USP_GW_PPL_WORKFLOW_COMMENT_ADD(int pPPL_WORKFLOW_ID, int pPPL_WORKFLOW_PARTICIPANTS_ID, String pCOMMENTS, int pRECIPIENT, String pHMAC, String pCREATED_BY) throws Exception {
+    public int USP_GW_PPL_WORKFLOW_COMMENT_ADD(int pPPL_WORKFLOW_ID, int pPPL_WORKFLOW_PARTICIPANTS_ID,
+            String pCOMMENTS, int pRECIPIENT, String pHMAC, String pCREATED_BY) throws Exception {
         String convrtr = "1";
         Integer convrrs = null;
         Connection conns = null;
@@ -1238,6 +1279,38 @@ public class ProcessDb {
 
             return convrrs;
 
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+    }
+    
+    public String USP_GW_PPL_WORKFLOW_UPDATE_PROCESS_TYPE(ParticipantsObject data) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_UPDATE_PROCESS_TYPE(?,?,?,?) }");
+            proc_stmt.setString("pSIGNING_TOKEN", data.getSigningToken());
+            proc_stmt.setString("pWORKFLOW_PROCESS_TYPE", data.getWorkflowProcessType());
+            proc_stmt.setString("pLAST_MODIFIED_BY", "");
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+            rs = proc_stmt.executeQuery();
+
+            return convrtr;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         } finally {

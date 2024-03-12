@@ -2,11 +2,7 @@
 import "@/assets/style/cursor.css";
 import { useCommonHook } from "@/hook";
 import { UseAddSig, UseAddTextField } from "@/hook/use-fpsService";
-import {
-  checkIsPosition,
-  checkSignerStatus,
-  getSigner,
-} from "@/utils/commonFunction";
+import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import { generateFieldName } from "@/utils/getField";
 import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
@@ -34,7 +30,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
-  const { signingToken, signerToken } = useCommonHook();
+  const { signingToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
@@ -82,9 +78,9 @@ export const PdfViewer = ({ workFlow }) => {
 
   const handleContextMenu = (page) => (event) => {
     // console.log("page: ", event);
-    if (openResize) return;
+    // if (openResize) return;
     if (
-      checkSignerStatus(signer, signerToken) === 2 ||
+      signer.signerStatus !== 1 ||
       (event.target.className !== "rpv-core__text-layer" &&
         event.target.className !== "rpv-core__text-layer-text")
     )

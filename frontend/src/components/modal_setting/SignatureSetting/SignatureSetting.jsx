@@ -605,7 +605,6 @@ SignatureSetting.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   signer: PropTypes.object,
-  setDataSigning: PropTypes.func,
   signatureData: PropTypes.object,
 };
 

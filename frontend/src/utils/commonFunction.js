@@ -15,6 +15,9 @@ export const getSigner = (workFlow) => {
 
 export const checkIsPosition = (workFlow) => {
   if (!workFlow) return false;
+  //Begin: Check for Arrangement
+  if (!workFlow.signerToken) return false;
+  //End: Check for Arrangement
   const signer = workFlow.participants.find(
     (item) => item.signerToken === workFlow.signerToken
   );
