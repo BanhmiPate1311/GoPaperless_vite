@@ -94,26 +94,26 @@ export const QryptoSettingField = ({
 
   const handleFormSubmit = async (data) => {
     console.log(data, "data");
-    const request = {
-      field_name: data.fieldName,
-      dimension: {
-        x: data.left,
-        y: data.top,
-        width: data.width,
-        height: data.height,
-      },
-      visible_enabled: true,
-      page: qryptoData.page,
-      items: data.items.filter((item) => item !== null),
-    };
-    const response = await fpsService.putSignature(
-      request,
-      "qrcode-qrypto",
-      workFlow.documentId
-    );
-    if (!response) return;
-    await getFields();
-    onClose();
+    // const request = {
+    //   field_name: data.fieldName,
+    //   dimension: {
+    //     x: data.left,
+    //     y: data.top,
+    //     width: data.width,
+    //     height: data.height,
+    //   },
+    //   visible_enabled: true,
+    //   page: qryptoData.page,
+    //   items: data.items.filter((item) => item !== null),
+    // };
+    // const response = await fpsService.putSignature(
+    //   request,
+    //   "qrcode-qrypto",
+    //   workFlow.documentId
+    // );
+    // if (!response) return;
+    // await getFields();
+    // onClose();
   };
 
   return (
