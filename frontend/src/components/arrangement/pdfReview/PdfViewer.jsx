@@ -300,6 +300,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
             column_1: "",
           },
         ],
+        remark: "table",
       };
     });
     const fieldName = generateFieldName("ADMIN_PROVIDER", value);
@@ -318,11 +319,13 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           field: "Workflow Name",
           type: 1,
           value: workFlow.documentName,
+          remark: "text",
         },
         {
           field: "File Name",
           type: 1,
           value: workFlow.fileName,
+          remark: "text",
         },
         ...signerInfo,
       ],
