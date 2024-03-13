@@ -10,8 +10,8 @@ import { PdfViewer } from "./PdfViewer";
 import { PdfViewerDocument } from "./PdfViewer";
 import { TabBar } from "./TabBar";
 
-export const SigningContent = ({ workFlow, page, qrSigning }) => {
-  console.log("workFlow: ", workFlow);
+export const SigningContent = ({ workFlow, page, qrSigning, field }) => {
+  // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
   // console.log("workFlow: ", workFlow);
   // eslint-disable-next-line no-unused-vars
@@ -33,7 +33,7 @@ export const SigningContent = ({ workFlow, page, qrSigning }) => {
     if (page === "document") {
       return <PdfViewerDocument workFlow={workFlow} />;
     } else {
-      return <PdfViewer workFlow={workFlow} />;
+      return <PdfViewer workFlow={workFlow} field={field} />;
     }
   }
   // code thêm
@@ -95,6 +95,7 @@ SigningContent.propTypes = {
   }),
   page: PropTypes.string,
   qrSigning: PropTypes.string,
+  field: PropTypes.object,
 };
 
 export default SigningContent;

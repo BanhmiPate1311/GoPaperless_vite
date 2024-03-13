@@ -59,11 +59,10 @@ public class FpsController {
 
     @PostMapping("/{documentId}/{field}/addTextBox")
     public ResponseEntity<?> addTextField(@PathVariable int documentId, @PathVariable String field, @RequestBody BasicFieldAttribute data) throws Exception {
+        System.out.println("addTextbox" );
 
         String response = fpsService.addTextBox(documentId, field, data, true);
-        System.out.println("field: " + field);
-        System.out.println("qrtoken: " + data.getQrToken());
-        System.out.println("signingtoken: " + data.getSigningToken());
+
         if (("qrcode").equals(field)) {
             String result = connect.USP_GW_PPL_WORKFLOW_UPDATE_QR_TOKEN(data.getSigningToken(), data.getQrToken(), "Gateway view");
             if (result.equals("1")) {
@@ -93,6 +92,13 @@ public class FpsController {
     public ResponseEntity<?> fillForm(@PathVariable int documentId, @RequestBody RsspRequest data) throws Exception {
         List<TextField> textFields = data.getTextField();
         String response = fpsService.fillForm(documentId, textFields);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/{documentId}/fillQrypto")
+    public ResponseEntity<?> fillQrypto(@PathVariable int documentId, @RequestBody RsspRequest data) throws Exception {
+        String qrypto = data.getQrypto();
+        String response = fpsService.fillQrypto(documentId, qrypto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

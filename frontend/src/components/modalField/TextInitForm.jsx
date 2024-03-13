@@ -29,6 +29,7 @@ export const TextInitForm = forwardRef(
           control={control}
           inputProps={{
             sx: {
+              py: "10.5px",
               backgroundColor: "signingWFBackground.main",
             },
           }}

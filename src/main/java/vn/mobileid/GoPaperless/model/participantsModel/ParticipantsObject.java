@@ -19,8 +19,11 @@ public class ParticipantsObject {
     private int sequenceNumber;
     private String customReason;
     private String signingPurpose;
+    private int purpose;
     private String metaInformation;
     private String signerToken;
+    private String workflowProcessType;
+    private String signingToken;
 
     public String getFirstName() {
         return firstName;
@@ -76,6 +79,30 @@ public class ParticipantsObject {
 
     public void setSignerToken(String signerToken) {
         this.signerToken = signerToken;
+    }
+
+    public int getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(int purpose) {
+        this.purpose = purpose;
+    }
+
+    public String getWorkflowProcessType() {
+        return workflowProcessType;
+    }
+
+    public void setWorkflowProcessType(String workflowProcessType) {
+        this.workflowProcessType = workflowProcessType;
+    } 
+
+    public String getSigningToken() {
+        return signingToken;
+    }
+
+    public void setSigningToken(String signingToken) {
+        this.signingToken = signingToken;
     }
     
     

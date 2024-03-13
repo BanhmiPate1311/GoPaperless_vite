@@ -38,7 +38,7 @@ export const Signature = ({
   // console.log("initial: ", initial);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
-  // console.log("index: ", index);
+  // console.log("qrypto: ", qrypto);
   // console.log("signatureData: ", signatureData);
 
   const { t } = useTranslation();

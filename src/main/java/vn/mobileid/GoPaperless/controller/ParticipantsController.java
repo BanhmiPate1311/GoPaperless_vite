@@ -31,23 +31,30 @@ public class ParticipantsController {
 //        String response = electronicIdService.updateParticipant(updateSubjectRequest);
 //        return new ResponseEntity<>(response, HttpStatus.OK);
 //    }
-@PostMapping("/updateParticipant")
-public ResponseEntity<?> updateParticipant(@RequestBody ParticipantsObject data) throws Exception {
-    System.out.println("data: " + data.getFirstName());
-    System.out.println("data: " + data.getSequenceNumber());
-    System.out.println("data: " + data.getMetaInformation());
-    System.out.println("data: " + data.getSigningPurpose());
-    System.out.println("data: " + data.getSignerToken());
-    System.out.println("data: " + data.getLastName());
-    String result = "";
-    if (data.getFirstName() != null) {
-        result = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(data);
-        if (result.equals("1")) {
-            System.out.println("update participant success");
-        } else {
-            System.out.println("update participant fail");
+    @PostMapping("/updateParticipant")
+    public ResponseEntity<?> updateParticipant(@RequestBody ParticipantsObject data) throws Exception {
+        System.out.println("data getFirstName: " + data.getFirstName());
+        System.out.println("data getSequenceNumber: " + data.getSequenceNumber());
+        System.out.println("data getPurpose: " + data.getPurpose());
+        System.out.println("data getSigningToken: " + data.getSigningToken());
+        System.out.println("data getWorkflowProcessType: " + data.getWorkflowProcessType());
+        String result = "";
+        if (data.getFirstName() != null) {
+            result = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(data);
+            if (result.equals("1")) {
+                System.out.println("update participant success");
+            } else {
+                System.out.println("update participant fail");
+            }
         }
+        if (data.getWorkflowProcessType() != null) {
+            result = connect.USP_GW_PPL_WORKFLOW_UPDATE_PROCESS_TYPE(data);
+            if (result.equals("1")) {
+                System.out.println("update workflow success");
+            } else {
+                System.out.println("update workflow fail");
+            }
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    return new ResponseEntity<>(result, HttpStatus.OK);
-}
 }
