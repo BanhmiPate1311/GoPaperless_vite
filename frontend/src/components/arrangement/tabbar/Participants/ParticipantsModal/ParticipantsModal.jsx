@@ -63,6 +63,7 @@ export const ParticipantsModal = ({
       alert("UPDATE PARTICIPANTS ERROR");
       // Xử lý lỗi tại đây nếu cần
     }
+    handleClose();
   };
   return (
     <Dialog

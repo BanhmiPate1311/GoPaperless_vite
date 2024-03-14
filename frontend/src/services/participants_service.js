@@ -2,7 +2,8 @@ import { api } from "@/utils/api";
 
 export const participantsService = {
     updateParticipant: (data) => {
-        console.log("data: ", data);
+        console.log("data participantsService: ", data);
+        console.log("data metaInformation participantsService: ", data.metaInformation);
         // const value = { 
         //     firstName: data.firstName,
         //     lastName: data.lastName,
@@ -10,7 +11,7 @@ export const participantsService = {
         //     customReason: data.customReason,
         //     signingPurpose: data.signingPurpose,
         //     signerToken: data.signerToken,
-        //     metaInformation:JSON.stringify(data.metaInformation) ,
+            data.metaInformation=JSON.stringify(data.metaInformation) ;
 
         // }
     return api.post("/participants/updateParticipant", data);

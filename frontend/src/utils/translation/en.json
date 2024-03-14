@@ -376,5 +376,8 @@
     "cookieSetting14": "Reject all",
     "cookieSetting15": "Confirm my choices",
     "cookieSetting16": "Allow All"
+  },
+  "arrangement": {
+    "manage_participants": "Manage Participants"
   }
 }
