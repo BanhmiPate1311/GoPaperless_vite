@@ -61,6 +61,7 @@ export const Step6_usb = ({
       aria-label="list"
       key={index}
       onDoubleClick={(e) => {
+        if (certSelected === null) return;
         e.preventDefault();
         if (!isShowCertInfor[index]) {
           onDoubleClick(index);

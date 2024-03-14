@@ -9,6 +9,8 @@ import PropTypes from "prop-types";
 import { PdfViewer } from "./PdfViewer";
 import { PdfViewerDocument } from "./PdfViewer";
 import { TabBar } from "./TabBar";
+import { useEffect, useState } from "react";
+import { Next } from "../next";
 
 export const SigningContent = ({ workFlow, page, qrSigning, field }) => {
   // console.log("workFlow: ", workFlow);
@@ -28,12 +30,43 @@ export const SigningContent = ({ workFlow, page, qrSigning, field }) => {
   });
   // console.log("getSignedInfo: ", signedInfo);
 
+  const [newFields, setNewFields] = useState(
+    Object.entries(field)
+      .filter(([, value]) => Array.isArray(value)) // Loại bỏ các phần tử không phải là mảng
+      .flatMap(([, value]) => value)
+      .filter((item) => item.process_status === "UN_PROCESSED")
+  );
+
+  useEffect(() => {
+    setNewFields(
+      Object.entries(field)
+        .filter(([, value]) => Array.isArray(value)) // Loại bỏ các phần tử không phải là mảng
+        .flatMap(([, value]) => value)
+        .filter((item) => item.process_status === "UN_PROCESSED")
+    );
+  }, [field]);
+
+  const [value, setValue] = useState(0);
+
+  const handleChange = () => {
+    // console.log("object");
+    setValue(value === newFields.length - 1 ? 0 : value + 1);
+  };
+
+  // console.log("newFields: ", newFields);
+
   //code thêm
   function checkPDFView(page) {
     if (page === "document") {
       return <PdfViewerDocument workFlow={workFlow} />;
     } else {
-      return <PdfViewer workFlow={workFlow} field={field} />;
+      return (
+        <PdfViewer
+          workFlow={workFlow}
+          field={field}
+          fieldSelect={newFields[value]}
+        />
+      );
     }
   }
   // code thêm
@@ -80,6 +113,7 @@ export const SigningContent = ({ workFlow, page, qrSigning, field }) => {
           qrSigning={qrSigning}
         />
       </Box>
+      {/* <Next newFields={newFields} handleChange={handleChange} value={value} /> */}
     </Container>
   );
 };

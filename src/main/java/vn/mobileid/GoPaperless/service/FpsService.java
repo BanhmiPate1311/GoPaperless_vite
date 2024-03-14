@@ -474,7 +474,7 @@ public class FpsService {
 
     public String fillQrypto(int documentId, String qryptoFieldName) throws Exception {
         System.out.println("fillQrypto");
-        String fillQryptoUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/fields/qrcode-qrypto";
+        String fillQryptoUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/qrcode-qrypto";
 
         System.out.println("fillQryptoUrl: " + fillQryptoUrl);
 //        RestTemplate restTemplate = new RestTemplate();

@@ -81,6 +81,7 @@ export const SigningForm2 = ({
   const [code, setCode] = useState("");
   const [newListCert, setNewListCert] = useState([]);
   const [certSelected, setCertSelected] = useState(0);
+  // console.log("certSelected: ", certSelected);
 
   const [activeStep, setActiveStep] = useState(1);
   // console.log("activeStep: ", activeStep);

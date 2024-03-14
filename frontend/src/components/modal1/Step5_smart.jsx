@@ -62,6 +62,7 @@ export const Step5_smart = ({
       aria-label="list"
       key={index}
       onDoubleClick={(e) => {
+        if (certSelected === null) return;
         e.preventDefault();
         if (!isShowCertInfor[index]) {
           onDoubleClick(index);
