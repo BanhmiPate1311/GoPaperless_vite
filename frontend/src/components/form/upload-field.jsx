@@ -31,6 +31,13 @@ export const UploadField = ({
   } = useController({ name, control });
 
   const handleUploadImage = (e) => {
+    const file = e.target.files[0];
+
+    if (file && file.size > 4 * 1024) {
+      alert("File size exceeds the limit (4KB). Please choose a smaller file.");
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       onChange(reader.result);

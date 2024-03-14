@@ -4,6 +4,7 @@ import ISPluginClient from "@/assets/js/checkid";
 import { PasswordField } from "@/components/form";
 import { usePending, useUsbHash, useUsbPackFile } from "@/hook";
 import {
+  capitalLize,
   convertTime,
   getLang,
   getUrlWithoutProtocol,
@@ -379,7 +380,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
             </Box>
             <Stack width={"100%"}>
               {errorApi && (
-                <Alert severity="error">{errorApi.toLowerCase()}</Alert>
+                <Alert severity="error">{capitalLize(errorApi)}</Alert>
               )}
             </Stack>
           </Stack>

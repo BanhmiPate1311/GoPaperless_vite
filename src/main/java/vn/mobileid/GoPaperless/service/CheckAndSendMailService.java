@@ -173,7 +173,6 @@ public class CheckAndSendMailService {
             do {
                 List<Participants> responseList = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET_NEXT_PARTICIPANT(newSignerToken);
                 restart = false; // Gán lại giá trị mặc định trước khi lặp lại
-                System.out.println("responseList: " + responseList.size());
                 if (responseList.size() > 0) {
                     // Duyệt qua list participant và tiến hành gửi mail
                     for (Participants participant : responseList) {
@@ -185,7 +184,7 @@ public class CheckAndSendMailService {
                             // Gửi mail
                             try {
                                 // Gửi mail
-                                MailService.sendMail(null, null, participant.getEmail(), textMailInfo.getSubject(), newTextContent);
+                                MailService.sendMail(null, null, participant.getEmail(), newAttachSubject, newTextContent);
                             } catch (Exception e) {
                                 e.printStackTrace(); // In ra stack trace của lỗi
                                 // Ném lại ngoại lệ để dừng chương trình

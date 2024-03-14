@@ -26,7 +26,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const SigDetail = ({ open, signDetail, handleClose }) => {
-  // console.log("signDetail: ", signDetail);
+  console.log("signDetail: ", signDetail);
   const { t } = useTranslation();
 
   const signType = signDetail.is_seal === true ? "eseal" : "Signature";
@@ -44,6 +44,14 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
   const country = signDetail.certificate?.issuer?.C?.[0]
     ? ", " + signDetail.certificate?.issuer?.C[0]
     : "";
+
+  const validFrom =
+    signDetail.certificate?.valid_from || signDetail.certificate?.validFrom;
+  console.log("validFrom: ", validFrom);
+
+  const validTo =
+    signDetail.certificate?.valid_to || signDetail.certificate?.validTo;
+  console.log("validTo: ", validTo);
 
   const signArray = {
     certificated: [
@@ -77,10 +85,7 @@ export const SigDetail = ({ open, signDetail, handleClose }) => {
       },
       {
         title: t("0-common.Certificate validity period"),
-        subtitle:
-          convertTime(signDetail.certificate?.valid_from) +
-          " - " +
-          convertTime(signDetail.certificate?.valid_to),
+        subtitle: convertTime(validFrom) + " - " + convertTime(validTo),
       },
     ].filter((item) => item.subtitle !== null),
   };

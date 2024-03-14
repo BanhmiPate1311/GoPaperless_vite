@@ -1,3 +1,4 @@
+import { capitalLize } from "@/utils/commonFunction";
 import { Alert, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import CircularProgress, {
@@ -258,7 +259,7 @@ export const Step2 = ({
       </Box>
       {errorPG && (
         <Box width={"100%"}>
-          <Alert severity="error">{errorPG.toLowerCase()}</Alert>
+          <Alert severity="error">{capitalLize(errorPG)}</Alert>
         </Box>
       )}
     </Stack>

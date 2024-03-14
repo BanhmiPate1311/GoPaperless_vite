@@ -478,7 +478,7 @@ public class RsspService {
                         property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
 
                     } else {
-                        property.setRelyingPartyKeyStore("C:/Duy/Project/GoPaperless_Gateway/File_p12/PAPERLESS.p12");
+                        property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
                     }
                 } else if ("KEYSTORE_FILE_URL".equals(name)) {
                     property.setRelyingPartyKeyStore(value);
@@ -686,7 +686,7 @@ public class RsspService {
                         if ("SMART_ID_LCA".equals(request.getConnectorName())) {
                             property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
                         } else {
-                            property.setRelyingPartyKeyStore("C:/Duy/Project/GoPaperless_Gateway/File_p12/PAPERLESS.p12");
+                            property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
                         }
                     } else {
                         property.setRelyingPartyKeyStore(value);
