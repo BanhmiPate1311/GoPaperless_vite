@@ -1266,8 +1266,7 @@ const ParticipantsTable = ({
         aria-label="Vertical tabs example"
         sx={{
           float: "right",
-          border: "2px solid #3B82F6",
-          borderRadius: "6px",
+          // border: "2px solid #3B82F6",
           height: "23px",
           minHeight: "23px",
           // "& .MuiTabs-root": {
@@ -1279,18 +1278,40 @@ const ParticipantsTable = ({
         }}
       >
         <CustomTab
-          style={{ borderRight: "2px solid #3B82F6" }}
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+            borderLeft: "2px solid #3B82F6",
+            borderRadius: "6px 0px 0px 6px",
+          }}
           label="Serial"
         ></CustomTab>
         <CustomTab
-          style={{ borderRight: "2px solid #3B82F6" }}
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+          }}
           label="Parallel"
         ></CustomTab>
         <CustomTab
-          style={{ borderRight: "2px solid #3B82F6" }}
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+          }}
           label="Individual"
         ></CustomTab>
-        <CustomTab label="Custom"></CustomTab>
+        <CustomTab
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+            borderRadius: "0px 6px 6px 0px",
+          }}
+          label="Custom"
+        ></CustomTab>
       </Tabs>
       <TabPanel value={tabValue} index={0}>
         <TableContainer
@@ -1312,7 +1333,9 @@ const ParticipantsTable = ({
           >
             <TableHead>
               <TableRow>
-                <TableCell>Participants</TableCell>
+                <TableCell style={{ paddingLeft: "55px" }}>
+                  Participants
+                </TableCell>
                 <TableCell align="left">Name</TableCell>
                 <TableCell align="left">Email</TableCell>
                 <TableCell />
@@ -1473,7 +1496,9 @@ const ParticipantsTable = ({
           >
             <TableHead>
               <TableRow>
-                <TableCell>Participants</TableCell>
+                <TableCell style={{ paddingLeft: "85px" }}>
+                  Participants
+                </TableCell>
                 <TableCell align="left">Name</TableCell>
                 <TableCell align="left">Email</TableCell>
                 <TableCell />
