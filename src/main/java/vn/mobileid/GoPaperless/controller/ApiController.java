@@ -385,7 +385,7 @@ public class ApiController {
         System.out.println("request: "+request.getParticipant().getSignerToken());
         System.out.println("request: "+request.getFileName());
         byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
-        checkAndSendMailService.shareToSign(request.getWorkFlowProcessType(), request.getParticipant().getSignerToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(),request.getParticipant(), data);
+        checkAndSendMailService.shareToSign(request.getWorkFlowProcessType(), request.getSigningToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(),request.getParticipant(), data);
 
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
