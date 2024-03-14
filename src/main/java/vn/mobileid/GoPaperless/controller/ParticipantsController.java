@@ -38,6 +38,7 @@ public class ParticipantsController {
         System.out.println("data getPurpose: " + data.getPurpose());
         System.out.println("data getSigningToken: " + data.getSigningToken());
         System.out.println("data getWorkflowProcessType: " + data.getWorkflowProcessType());
+        System.out.println("data getMetaInformation: " + data.getMetaInformation());
         String result = "";
         if (data.getFirstName() != null) {
             result = connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(data);

@@ -1120,45 +1120,6 @@ public class ProcessDb {
             CloseDatabase(temp_connection);
         }
     }
-
-    public String USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(ParticipantsObject data) throws Exception {
-        String convrtr = "1";
-        Connection conns = null;
-        CallableStatement proc_stmt = null;
-        ResultSet rs = null;
-
-        try {
-
-            conns = OpenDatabase();
-            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(?,?,?,?,?,?,?,?,?,?) }");
-            proc_stmt.setString("pSIGNER_TOKEN", data.getSignerToken());
-            proc_stmt.setString("pFIRST_NAME", data.getFirstName());
-            proc_stmt.setString("pLAST_NAME", data.getLastName());
-            proc_stmt.setInt("pSEQUENCE_NUMBER", data.getSequenceNumber());
-            proc_stmt.setInt("pSIGNER_TYPE", data.getPurpose());
-            proc_stmt.setString("pCUSTOM_REASON", data.getCustomReason());
-            proc_stmt.setString("pSIGNING_PURPOSE", data.getSigningPurpose());
-            proc_stmt.setString("pLAST_MODIFIED_BY", "");
-            proc_stmt.setString("pMETA_INFORMATION", data.getMetaInformation());
-            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
-
-            proc_stmt.execute();
-            convrtr = proc_stmt.getString("pRESPONSE_CODE");
-
-            rs = proc_stmt.executeQuery();
-
-            return convrtr;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        } finally {
-            if (proc_stmt != null) {
-                proc_stmt.close();
-            }
-            Connection[] temp_connection = new Connection[] { conns };
-            CloseDatabase(temp_connection);
-        }
-    }
-
     public List<Participants> USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET_NEXT_PARTICIPANT(String signerToken)
             throws Exception {
         String convrtr = "1";
@@ -1279,6 +1240,44 @@ public class ProcessDb {
 
             return convrrs;
 
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            if (proc_stmt != null) {
+                proc_stmt.close();
+            }
+            Connection[] temp_connection = new Connection[] { conns };
+            CloseDatabase(temp_connection);
+        }
+    }
+    
+    public String USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(ParticipantsObject data) throws Exception {
+        String convrtr = "1";
+        Connection conns = null;
+        CallableStatement proc_stmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            conns = OpenDatabase();
+            proc_stmt = conns.prepareCall("{ call USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_INFO(?,?,?,?,?,?,?,?,?,?) }");
+            proc_stmt.setString("pSIGNER_TOKEN", data.getSignerToken());
+            proc_stmt.setString("pFIRST_NAME", data.getFirstName());
+            proc_stmt.setString("pLAST_NAME", data.getLastName());
+            proc_stmt.setInt("pSEQUENCE_NUMBER", data.getSequenceNumber());
+            proc_stmt.setInt("pSIGNER_TYPE", data.getPurpose());
+            proc_stmt.setString("pCUSTOM_REASON", data.getCustomReason());
+            proc_stmt.setString("pSIGNING_PURPOSE", data.getSigningPurpose());
+            proc_stmt.setString("pLAST_MODIFIED_BY", "");
+            proc_stmt.setString("pMETA_INFORMATION", data.getMetaInformation());
+            proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
+
+            proc_stmt.execute();
+            convrtr = proc_stmt.getString("pRESPONSE_CODE");
+
+            rs = proc_stmt.executeQuery();
+
+            return convrtr;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         } finally {
