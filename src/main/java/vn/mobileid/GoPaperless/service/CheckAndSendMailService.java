@@ -7,6 +7,7 @@ import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.utils.Difinitions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -80,7 +81,7 @@ public class CheckAndSendMailService {
 
                         String participantName = signerFirst.getLastName() + " " + signerFirst.getFirstName();
                         String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
-                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + signerFirst.getSignerToken());
+                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerFirst.getLastName()+" "+ signerFirst.getFirstName()).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + signerFirst.getSignerToken());
                         String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
                         if (signerFirst.getSignerType() != 5) {
                             // Gửi mail
@@ -112,6 +113,46 @@ public class CheckAndSendMailService {
                     }
                 }
             } while (restart); // Lặp lại nếu cần thực hiện lại từ đầu
+        }else{
+            List<Participants> responseList = new ArrayList<>();
+            connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_LIST(responseList,signingToken);
+            System.out.println("parallel participant:"+ responseList);
+            System.out.println("parallel singing:"+ signingToken);
+            for (Participants participant : responseList) {
+                System.out.print(participant.getEmail());
+                String participantName = participant.getLastName() + " " + participant.getFirstName();
+                String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
+                String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken());
+                String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
+                if (participant.getSignerType() != 5) {
+                    // Gửi mail
+                    try {
+                        // Gửi mail
+                        MailService.sendMail(null, null, participant.getEmail(), textMailInfo.getSubject(), newTextContent);
+
+                    } catch (Exception e) {
+                        e.printStackTrace(); // In ra stack trace của lỗi
+                        // Ném lại ngoại lệ để dừng chương trình
+                        throw new RuntimeException("Error occurred while sending text mail to " + participant.getEmail(), e);
+                    }
+                } else {
+                    try {
+                        // Convert content from base64 to byte[]
+
+                        // Gửi attachment
+                        MailService.sendMail(fileName, data, participant.getEmail(), newAttachSubject, newAttachContent);
+                    } catch (Exception e) {
+                        e.printStackTrace(); // In ra stack trace của lỗi
+                        // Ném lại ngoại lệ để dừng chương trình
+                        throw new RuntimeException("Error occurred while sending attachment to " + participant.getEmail(), e);
+                    }
+                    // Tiến hành cập nhật trạng thái và thực hiện lại từ đầu
+                    connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(participant.getSignerToken(),
+                            Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_COPY_STATUS_ID_SENT_A_COPY, "", 0);
+
+                }
+            }
+
         }
     }
     public void checkAndSendMail(

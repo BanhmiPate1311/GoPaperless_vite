@@ -204,7 +204,10 @@ export const SigningDetail = ({ open, participants, handleClose }) => {
                         : "signingtext1.main",
                     }}
                   >
-                    {t("signing.wait_signature")}
+                    {participants.signerType === 1 && "Waiting for signature"}
+                    {participants.signerType === 2 && "Waiting for approve"}
+                    {participants.signerType === 3 && "Signature is valid"}
+                    {participants.signerType === 5 && "Only view"}
                   </Typography>
                 </>
               )}

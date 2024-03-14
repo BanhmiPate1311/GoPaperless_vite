@@ -39,9 +39,9 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
 
   const location = useSearchParams();
   const participantsType = workFlow.participants.filter(
-    (item) => item.signerToken === location[0].get("access_token")
+    (item) => item.signerToken === workFlow.signerToken
   );
-
+  console.log("participantsType: ", participantsType);
   // eslint-disable-next-line no-unused-vars
   const getFields = async () => {
     const response = await fpsService.getFields({
@@ -294,12 +294,13 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           {
             column_1: item.lastName + " " + item.firstName,
             column_2: item.email,
-            column_3: new Date(),
+            column_3: "Signing Time: ",
           },
           {
             column_1: "",
           },
         ],
+        remark: "table",
       };
     });
     const fieldName = generateFieldName("ADMIN_PROVIDER", value);
@@ -318,11 +319,13 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           field: "Workflow Name",
           type: 1,
           value: workFlow.documentName,
+          remark: "text",
         },
         {
           field: "File Name",
           type: 1,
           value: workFlow.fileName,
+          remark: "text",
         },
         ...signerInfo,
       ],

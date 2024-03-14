@@ -2,23 +2,19 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { QrCodeSettingField } from "@/components/modalField";
-import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
 export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
-  const queryClient = useQueryClient();
-  const putSignature = UseUpdateSig();
-
   const signer = getSigner(workFlow);
   const signerId = signer?.signerId || "ADMIN_PROVIDER";
+  console.log("signerId: ", qrData);
 
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
@@ -205,8 +201,8 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
               },
               visible_enabled: true,
             },
-            
-            
+            "qrcode",
+            workFlow.documentId
           );
           if (!putpos) return;
           await getFields();
