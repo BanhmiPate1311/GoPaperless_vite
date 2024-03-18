@@ -21,6 +21,7 @@ export const Document = ({
   setOpenResize,
 }) => {
   // console.log("qrypto: ", qrypto);
+  // console.log("signatures: ", signatures);
 
   const queryClient = useQueryClient();
   let isSetPos;

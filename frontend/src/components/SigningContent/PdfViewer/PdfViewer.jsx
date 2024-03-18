@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
 
-export const PdfViewer = ({ workFlow, field }) => {
+export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -377,7 +377,10 @@ export const PdfViewer = ({ workFlow, field }) => {
         <Document
           props={props}
           workFlow={workFlow}
-          signatures={field?.signature}
+          signatures={field?.signature.map((item) => ({
+            ...item,
+            selected: item.field_name === fieldSelect.field_name ? true : false,
+          }))}
           textbox={field?.textbox?.filter((item) => item.type !== "TEXTFIELD")}
           initial={field?.initial}
           qr={field?.qr}

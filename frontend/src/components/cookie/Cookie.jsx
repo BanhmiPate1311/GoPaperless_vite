@@ -64,7 +64,7 @@ export const Cookie = () => {
 
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
-  const [expanded, setExpanded] = React.useState("panel1");
+  const [expanded, setExpanded] = useState("panel1");
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);

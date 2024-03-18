@@ -14,8 +14,8 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotFound } from "../NotFound";
 
@@ -26,6 +26,7 @@ export const Signing = () => {
   const [permit, setPermit] = useState(false);
 
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleClickOpenApprove = () => {
     setOpen(true);
@@ -130,14 +131,15 @@ export const Signing = () => {
   //   },
   // });
 
-  console.log("workFlow: ", workFlow?.data);
+  // console.log("workFlow: ", workFlow?.data);
   // console.log("workFlowtet: ", workFlow?.data?.documentId);
   // console.log("field: ", field);
 
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
-  const signer = useRef({});
+  const signer = getSigner(workFlow?.data);
+  // console.log("signer: ", signer);
 
   useEffect(() => {
     if (workFlow?.data?.participants) {
@@ -149,13 +151,13 @@ export const Signing = () => {
   const checkInit = field?.initial.findIndex(
     (item) =>
       item.process_status === "UN_PROCESSED" &&
-      item.field_name.includes(signer.current.signerId)
+      item.field_name.includes(signer.signerId)
   );
   // console.log("checkInit: ", checkInit);
 
   const checkTextBox = field?.textbox.findIndex(
     (item) =>
-      item.field_name.includes(signer.current.signerId) &&
+      item.field_name.includes(signer.signerId) &&
       item.value === "" &&
       item.required === true
   );
@@ -169,6 +171,8 @@ export const Signing = () => {
   useEffect(() => {
     if (checkWorkFlowStatus && qrypto) {
       fpsService.fillQrypto(qrypto, { documentId: workFlow?.data?.documentId });
+      queryClient.invalidateQueries({ queryKey: ["getField"] });
+      queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
     }
   }, [qrypto, checkWorkFlowStatus, workFlow?.data?.documentId]);
 
@@ -183,7 +187,9 @@ export const Signing = () => {
         }
       case 3:
         if (
-          field?.initial.length >= 1 &&
+          field?.initial.findIndex((item) =>
+            item.field_name.includes(signer.signerId)
+          ) !== -1 &&
           checkInit === -1 &&
           checkTextBox === -1
         ) {
@@ -268,12 +274,12 @@ export const Signing = () => {
                 onClick={handleClickOpenApprove}
                 sx={{
                   display: checkApprove(
-                    signer.current.signerType,
-                    signer.current.signerStatus
+                    signer?.signerType,
+                    signer?.signerStatus
                   ),
                 }}
               >
-                {signer.current.signerId === 2
+                {signer?.signerType === 2
                   ? t("0-common.approve")
                   : t("0-common.submit")}
               </Button>
@@ -288,7 +294,7 @@ export const Signing = () => {
             height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
           }}
         >
-          {workFlow.data && (
+          {workFlow.data && field && (
             <SigningContent workFlow={workFlow.data} field={field} />
           )}
         </Container>
@@ -296,7 +302,7 @@ export const Signing = () => {
           open={open}
           onClose={handleCloseApprove}
           workFlow={workFlow.data}
-          signer={signer.current}
+          signer={signer}
         />
         <Cookie />
       </Stack>

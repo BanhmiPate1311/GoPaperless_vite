@@ -2,7 +2,7 @@
 import ISPluginClient from "@/assets/js/checkid";
 import { useConnectorList } from "@/hook";
 import { electronicService } from "@/services/electronic_service";
-import { getLang, isValidEmail } from "@/utils/commonFunction";
+import { capitalLize, getLang, isValidEmail } from "@/utils/commonFunction";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -678,7 +678,6 @@ export const ModalEid = ({
       setTaxCode={setTaxCode}
     />,
   ];
-  console.log(taxInformation?.document_data?.tax_informations[taxIndex]);
   return (
     <Dialog
       // keepMounted={false}
@@ -766,13 +765,11 @@ export const ModalEid = ({
                   {/* Hết nội dung */}
                   {!faceSuccess && errorPG && (
                     <Alert severity="error" sx={{ mt: "10px" }}>
-                      {errorPG.toLowerCase()}
+                      {capitalLize(errorPG)}
                     </Alert>
                   )}
                   {faceSuccess && (
-                    <Alert severity="success">
-                      {faceSuccess.toLowerCase()}
-                    </Alert>
+                    <Alert severity="success">{capitalLize(faceSuccess)}</Alert>
                   )}
                 </Stack>
               )

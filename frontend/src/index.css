@@ -221,3 +221,24 @@ input[type="number"] {
 .rpv-toolbar__item button[data-testid="toolbar__more-actions-popover-target"] {
   display: none;
 }
+
+@keyframes banner {
+  0% {
+    background-color: #ff5733; /* Màu cam đậm */
+  }
+  18% {
+    background-color: #ffbd33; /* Màu vàng cam */
+  }
+  36% {
+    background-color: #33ff57; /* Màu xanh lá cây */
+  }
+  54% {
+    background-color: #3357ff; /* Màu xanh dương */
+  }
+  72% {
+    background-color: #ff33dc; /* Màu hồng */
+  }
+  100% {
+    background-color: #ffbd33; /* Màu vàng cam */
+  }
+}

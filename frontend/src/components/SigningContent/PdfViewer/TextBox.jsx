@@ -425,6 +425,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
               // value={code}
               value={textValue}
               autoComplete="off"
+              // autoFocus={true}
               placeholder={capitalLize(textData.place_holder)}
               sx={{
                 my: 0,
