@@ -56,23 +56,29 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].type`, 1);
         setValue(`items[${index}].value`, "");
         setValue(`items[${index}].remark`, "text");
+        setValue(`items[${index}].mandatory_enable`, false);
         break;
       case "boldLabel":
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 6);
         setValue(`items[${index}].remark`, "boldLabel");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "date":
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 1);
         setValue(`items[${index}].value`, "");
         setValue(`items[${index}].remark`, "date");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "choice":
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 7);
         setValue(`items[${index}].value`, []);
         setValue(`items[${index}].remark`, "choice");
+        setValue(`items[${index}].mandatory_enable`, false);
 
         break;
       case "picture":
@@ -82,6 +88,7 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].remark`, "picture");
         setValue(`items[${index}].file_format`, "");
         setValue(`items[${index}].file_name`, "");
+        setValue(`items[${index}].mandatory_enable`, false);
 
         break;
       case "file":
@@ -91,6 +98,7 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].remark`, "file");
         setValue(`items[${index}].file_format`, "");
         setValue(`items[${index}].file_name`, "");
+        setValue(`items[${index}].mandatory_enable`, false);
 
         break;
       case "table":
@@ -107,6 +115,8 @@ export const QryptoGeneralForm = ({
           },
         ]);
         setValue(`items[${index}].remark`, "table");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "pictureLabel":
         setValue(`items[${index}].field`, label);
@@ -121,6 +131,8 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].remark`, "pictureLabel");
         setValue(`items[${index}].file_format`, "");
         setValue(`items[${index}].file_name`, "");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "url":
         setValue(`items[${index}].field`, label);
@@ -128,6 +140,8 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].value.url`, "");
         setValue(`items[${index}].value.label`, "");
         setValue(`items[${index}].remark`, "url");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
     }
   };
@@ -277,6 +291,7 @@ const TextElement = ({ register, index, removeField, control }) => {
             },
           }}
           {...register(`items[${index}].field`)}
+          disabled={register(`items[${index}].mandatory_enable`)}
         />
         {/* <input
           style={{ display: "none" }}
@@ -302,6 +317,7 @@ const TextElement = ({ register, index, removeField, control }) => {
           },
         }}
         sx={{ my: 0, height: "45px" }}
+        disabled={register(`items[${index}].mandatory_enable`)}
       />
     </Box>
   );
@@ -331,11 +347,8 @@ const BoldLabelElement = ({ register, index, removeField }) => {
             },
           }}
           {...register(`items[${index}].field`)}
+          disabled={register(`items[${index}].mandatory_enable`)}
         />
-        {/* <input
-                      style={{ display: "none" }}
-                      {...register(`items[${index}].type`)}
-                    /> */}
         <Button sx={{ color: "#F24E1E" }} onClick={() => removeField(index)}>
           <TrashIcon />
         </Button>
@@ -368,6 +381,7 @@ const DateElement = ({ register, index, removeField, setValue, field }) => {
             },
           }}
           {...register(`items[${index}].field`)}
+          disabled={register(`items[${index}].mandatory_enable`)}
         />
         {/* <input
         style={{ display: "none" }}
@@ -387,6 +401,7 @@ const DateElement = ({ register, index, removeField, setValue, field }) => {
               newValue.month() + "/" + newValue.date() + "/" + newValue.year()
             );
           }}
+          disabled={register(`items[${index}].mandatory_enable`)}
         />
       </LocalizationProvider>
     </Box>
@@ -425,6 +440,7 @@ const ChoiceElement = ({
             },
           }}
           {...register(`items[${index}].field`)}
+          disabled={register(`items[${index}].mandatory_enable`)}
         />
         {/* <input
         style={{ display: "none" }}
@@ -560,7 +576,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
         borderRadius: "6px",
         marginBottom: "10px",
         padding: "5px",
-        margin: "-5px",
+        margin: "-6px",
       }}
     >
       <Box
@@ -585,6 +601,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
             },
           }}
           {...register(`items[${index}].field`)}
+          disabled={register(`items[${index}].mandatory_enable`)}
         />
         <Button sx={{ color: "#F24E1E" }} onClick={() => removeField(index)}>
           <TrashIcon />
@@ -616,6 +633,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                       },
                     }}
                     sx={{ my: 0, height: "45px" }}
+                    disabled={register(`items[${index}].mandatory_enable`)}
                   />
                 </Grid>
                 <Grid item xs={5.3}>
@@ -635,6 +653,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                       },
                     }}
                     sx={{ my: 0, height: "45px" }}
+                    disabled={register(`items[${index}].mandatory_enable`)}
                   />
                 </Grid>
                 <Grid
@@ -684,6 +703,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                     },
                   }}
                   sx={{ my: 0, height: "45px" }}
+                  disabled={register(`items[${index}].mandatory_enable`)}
                 />
               </Grid>
             </Grid>

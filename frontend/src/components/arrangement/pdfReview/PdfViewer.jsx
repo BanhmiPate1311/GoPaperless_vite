@@ -1,26 +1,20 @@
 /* eslint-disable react/prop-types */
 import "@/assets/style/cursor.css";
 import { useCommonHook } from "@/hook";
-import { UseAddSig, UseAddTextField } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
-import {
-  checkIsPosition,
-  checkSignerStatus,
-  getSigner,
-} from "@/utils/commonFunction";
+import { getSigner } from "@/utils/commonFunction";
 import { generateFieldName } from "@/utils/getField";
 import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { v4 as uuidv4 } from "uuid";
-import { ContextMenu } from "../../ContextMenu";
-import { Document } from ".";
 import { useSearchParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { Document } from ".";
+import { ContextMenu } from "../../ContextMenu";
 
 export const PdfViewer = ({ workFlow, tabBar }) => {
   const { t } = useTranslation();
@@ -290,6 +284,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       return {
         field: item.signerId,
         type: 8,
+        mandatory_enable: true,
         value: [
           {
             column_1: item.lastName + " " + item.firstName,
@@ -320,12 +315,14 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           type: 1,
           value: workFlow.documentName,
           remark: "text",
+          mandatory_enable: true,
         },
         {
           field: "File Name",
           type: 1,
           value: workFlow.fileName,
           remark: "text",
+          mandatory_enable: true,
         },
         ...signerInfo,
       ],
