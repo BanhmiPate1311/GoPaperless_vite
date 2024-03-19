@@ -15,6 +15,7 @@ import { ReactComponent as Reviewer } from "@/assets/images/svg/person-check.svg
 import { ReactComponent as Editor } from "@/assets/images/svg/note-edit-outline.svg";
 import { ReactComponent as MeetingHost } from "@/assets/images/svg/person-star.svg";
 import { ReactComponent as SendACopy } from "@/assets/images/svg/cc-outline.svg";
+import { ReactComponent as AngleDown } from "@/assets/images/svg/angle-down-solid.svg";
 import { useCommonHook } from "@/hook";
 import { checkSignerStatus } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
@@ -425,11 +426,11 @@ function Row(props) {
               >
                 <Box width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.name")}
                   </Typography>
@@ -446,22 +447,23 @@ function Row(props) {
                         color: "#1F2937",
                       },
                     }}
-                    disabled
-                    value={data.fullName}
+                    defaultValue={data.fullName}
                     onChange={(event) =>
                       handleChangeParticipant(event, "fullname")
                     }
-                    id="outlined-size-small"
+                    InputProps={{
+                      readOnly: true,
+                    }}
                     size="small"
                   />
                 </Box>
                 <Box width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.first name")}
                   </Typography>
@@ -472,6 +474,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.firstName}
@@ -484,11 +489,11 @@ function Row(props) {
                 </Box>
                 <Box width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.last name")}
                   </Typography>
@@ -500,6 +505,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.lastName}
@@ -512,11 +520,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.Reason")}
                   </Typography>
@@ -527,6 +535,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.customReason}
@@ -539,11 +550,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.Position")}
                   </Typography>
@@ -554,6 +565,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.metaInformation.position}
@@ -566,11 +580,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.purpose")}
                   </Typography>
@@ -588,6 +602,9 @@ function Row(props) {
                           minHeight: "42px",
                           height: "42px",
                           width: "250px",
+                          fontSize: "14px",
+                          backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                          color: "#1F2937",
                         }}
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -674,11 +691,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.Structural subdivision")}
                   </Typography>
@@ -689,6 +706,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.metaInformation.structuralSubdivision}
@@ -837,12 +857,22 @@ function Row(props) {
                       />
                     </span>
                   ) : (
-                    <PencilSquareIcon
-
-                    // style={{
-                    //   display: open ? "none" : "block",
-                    // }}
-                    />
+                    <span
+                      style={{
+                        backgroundColor: "#EFF6FF",
+                        borderRadius: 999,
+                        width: 30,
+                        height: 30,
+                      }}
+                    >
+                      <PencilSquareIcon
+                        style={{
+                          width: 14,
+                          height: 14,
+                          marginTop: 7,
+                        }}
+                      />
+                    </span>
                   )}
                 </IconButton>
                 <IconButton
@@ -893,9 +923,9 @@ function Row(props) {
                   >
                     <Box width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -914,20 +944,22 @@ function Row(props) {
                             color: "#1F2937",
                           },
                         }}
-                        disabled
-                        value={data.fullName}
+                        defaultValue={data.fullName}
                         onChange={(event) =>
                           handleChangeParticipant(event, "fullname")
                         }
-                        id="outlined-size-small"
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        id="outlined-read-only-input"
                         size="small"
                       />
                     </Box>
                     <Box width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -940,21 +972,23 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
+                        id="custom-css-outlined-input"
+                        size="small"
                         value={data.firstName}
                         onChange={(event) =>
                           handleChangeParticipant(event, "firstName")
                         }
-                        id="outlined-size-small"
-                        size="small"
                       />
                     </Box>
                     <Box width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -968,6 +1002,8 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
                         value={data.lastName}
@@ -980,9 +1016,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -995,6 +1031,8 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
                         value={data.customReason}
@@ -1007,9 +1045,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -1022,6 +1060,8 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
                         value={data.metaInformation.position}
@@ -1037,9 +1077,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -1059,6 +1099,8 @@ function Row(props) {
                               minHeight: "42px",
                               height: "42px",
                               width: "250px",
+                              backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                              color: "#1F2937",
                             }}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -1151,9 +1193,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -1166,6 +1208,8 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
                         value={data.metaInformation.structuralSubdivision}
@@ -1284,6 +1328,7 @@ const ParticipantsTable = ({
             borderRight: "2px solid #3B82F6",
             borderLeft: "2px solid #3B82F6",
             borderRadius: "6px 0px 0px 6px",
+            paddingTop: "1.5px",
           }}
           label="Serial"
         ></CustomTab>
@@ -1292,6 +1337,7 @@ const ParticipantsTable = ({
             borderBottom: "2px solid #3B82F6",
             borderTop: "2px solid #3B82F6",
             borderRight: "2px solid #3B82F6",
+            paddingTop: "1.5px",
           }}
           label="Parallel"
         ></CustomTab>
@@ -1300,6 +1346,7 @@ const ParticipantsTable = ({
             borderBottom: "2px solid #3B82F6",
             borderTop: "2px solid #3B82F6",
             borderRight: "2px solid #3B82F6",
+            paddingTop: "1.5px",
           }}
           label="Individual"
         ></CustomTab>
@@ -1309,6 +1356,7 @@ const ParticipantsTable = ({
             borderTop: "2px solid #3B82F6",
             borderRight: "2px solid #3B82F6",
             borderRadius: "0px 6px 6px 0px",
+            paddingTop: "1.5px",
           }}
           label="Custom"
         ></CustomTab>
@@ -1392,9 +1440,21 @@ const ParticipantsTable = ({
           >
             <TableHead>
               <TableRow>
-                <TableCell>Participants</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Email</TableCell>
+                <TableCell style={{ color: "#475569", fontSize: "16px" }}>
+                  Participants
+                </TableCell>
+                <TableCell
+                  style={{ color: "#475569", fontSize: "16px" }}
+                  align="left"
+                >
+                  Name
+                </TableCell>
+                <TableCell
+                  style={{ color: "#475569", fontSize: "16px" }}
+                  align="left"
+                >
+                  Email
+                </TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
