@@ -1,6 +1,7 @@
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
+
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";

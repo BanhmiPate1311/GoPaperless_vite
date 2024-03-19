@@ -44,7 +44,7 @@ public class CheckAndSendMailService {
                     for (Participants participant : responseList) {
                         String participantName = participant.getLastName() + " " + participant.getFirstName();
                         String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
-                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken());
+                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + signerFirst.getSignerToken());
                         String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
                         if (participant.getSignerType() != 5) {
                             // Gửi mail
@@ -81,7 +81,7 @@ public class CheckAndSendMailService {
 
                         String participantName = signerFirst.getLastName() + " " + signerFirst.getFirstName();
                         String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
-                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerFirst.getLastName()+" "+ signerFirst.getFirstName()).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + signerFirst.getSignerToken());
+                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + signerFirst.getSignerToken());
                         String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
                         if (signerFirst.getSignerType() != 5) {
                             // Gửi mail

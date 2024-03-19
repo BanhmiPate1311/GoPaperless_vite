@@ -35,8 +35,22 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   const participantsType = workFlow.participants.filter(
     (item) => item.signerToken === workFlow.signerToken
   );
-  console.log("participantsType: ", participantsType);
   // eslint-disable-next-line no-unused-vars
+  // remove fields
+  const removeSignature = async (documentId, fileName) => {
+    const res = await fpsService.removeSignature(
+      { documentId: documentId },
+      fileName
+    );
+
+    if (res.status === 200) {
+      return true;
+    } else {
+      alert("Error: ", res.message);
+    }
+  };
+  console.log(workFlow, "workFlow");
+  // Get fields
   const getFields = async () => {
     const response = await fpsService.getFields({
       documentId: workFlow.documentId,
@@ -56,6 +70,149 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           value: item.value,
         };
       });
+    workFlow.participants.map((participant) => {
+      let reload = false;
+      switch (participant.signerType) {
+        case 2:
+          const removeSign = newData.signature.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 17) ===
+              participant.signerId
+            );
+          });
+          if (removeSign.length > 0) {
+            removeSign.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          break;
+        case 3:
+          const removeSign3 = newData.signature.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 17) ===
+              participant.signerId
+            );
+          });
+          if (removeSign3.length > 0) {
+            removeSign3.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          break;
+        case 4:
+          const removeSign4 = newData.signature.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 17) ===
+              participant.signerId
+            );
+          });
+          if (removeSign4.length > 0) {
+            removeSign4.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          break;
+        case 5:
+          // remove signature
+          const removeSign5 = newData.signature.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 17) ===
+              participant.signerId
+            );
+          });
+          if (removeSign5.length > 0) {
+            removeSign5.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          // remove initial
+          const removeinitial5 = newData.initial.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 15) ===
+              participant.signerId
+            );
+          });
+          if (removeinitial5.length > 0) {
+            removeinitial5.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          // remove Email
+          const removeEmmail5 = newData.textbox.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 13) ===
+              participant.signerId
+            );
+          });
+          if (removeEmmail5.length > 0) {
+            removeEmmail5.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          // remove Email
+          const removeName5 = newData.textbox.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 12) ===
+              participant.signerId
+            );
+          });
+          if (removeName5.length > 0) {
+            removeName5.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          // remove Job
+          const removeJob5 = newData.textbox.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 16) ===
+              participant.signerId
+            );
+          });
+          if (removeJob5.length > 0) {
+            removeJob5.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          // remove Company
+          const removeCompany5 = newData.textbox.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 15) ===
+              participant.signerId
+            );
+          });
+          if (removeCompany5.length > 0) {
+            removeCompany5.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+          // remove Company
+          const removeTextFields5 = newData.textbox.filter((item) => {
+            return (
+              item.field_name.substring(0, item.field_name.length - 17) ===
+              participant.signerId
+            );
+          });
+          if (removeTextFields5.length > 0) {
+            removeTextFields5.map(async (item) => {
+              await removeSignature(workFlow.documentId, item.field_name);
+            });
+            reload = true;
+          }
+
+          break;
+      }
+      reload ? getFields() : null;
+    });
+
     setField({
       ...newData,
       textField,
@@ -64,7 +221,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   };
   useEffect(() => {
     getFields();
-  }, []);
+  }, [workFlow]);
 
   // const addSignature = UseAddSig();
   // const addTextBox = UseAddTextField();

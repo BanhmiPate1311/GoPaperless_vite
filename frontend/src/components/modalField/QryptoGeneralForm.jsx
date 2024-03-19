@@ -68,7 +68,15 @@ export const QryptoGeneralForm = ({
       case "date":
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 1);
-        setValue(`items[${index}].value`, "");
+        setValue(
+          `items[${index}].value`,
+
+          new Date().getMonth +
+            "/" +
+            new Date().getDay +
+            "/" +
+            new Date().getFullYear()
+        );
         setValue(`items[${index}].remark`, "date");
         setValue(`items[${index}].mandatory_enable`, false);
 
@@ -160,6 +168,7 @@ export const QryptoGeneralForm = ({
                   index={index}
                   removeField={removeField}
                   control={control}
+                  field={field}
                 />
               );
             case "boldLabel":
@@ -168,6 +177,7 @@ export const QryptoGeneralForm = ({
                   register={register}
                   index={index}
                   removeField={removeField}
+                  field={field}
                 />
               );
             case "date":
@@ -242,6 +252,7 @@ export const QryptoGeneralForm = ({
                   index={index}
                   removeField={removeField}
                   control={control}
+                  field={field}
                 />
               );
           }
@@ -266,7 +277,7 @@ export const QryptoGeneralForm = ({
   );
 };
 
-const TextElement = ({ register, index, removeField, control }) => {
+const TextElement = ({ register, index, removeField, control, field }) => {
   return (
     <Box key={index} sx={{ marginBottom: "10px" }}>
       <Box
@@ -291,7 +302,7 @@ const TextElement = ({ register, index, removeField, control }) => {
             },
           }}
           {...register(`items[${index}].field`)}
-          disabled={register(`items[${index}].mandatory_enable`)}
+          disabled={field.mandatory_enable}
         />
         {/* <input
           style={{ display: "none" }}
@@ -317,7 +328,7 @@ const TextElement = ({ register, index, removeField, control }) => {
           },
         }}
         sx={{ my: 0, height: "45px" }}
-        disabled={register(`items[${index}].mandatory_enable`)}
+        disabled={field.mandatory_enable}
       />
     </Box>
   );
@@ -347,7 +358,7 @@ const BoldLabelElement = ({ register, index, removeField }) => {
             },
           }}
           {...register(`items[${index}].field`)}
-          disabled={register(`items[${index}].mandatory_enable`)}
+          disabled={field.mandatory_enable}
         />
         <Button sx={{ color: "#F24E1E" }} onClick={() => removeField(index)}>
           <TrashIcon />
@@ -381,7 +392,6 @@ const DateElement = ({ register, index, removeField, setValue, field }) => {
             },
           }}
           {...register(`items[${index}].field`)}
-          disabled={register(`items[${index}].mandatory_enable`)}
         />
         {/* <input
         style={{ display: "none" }}
@@ -398,10 +408,15 @@ const DateElement = ({ register, index, removeField, setValue, field }) => {
           onChange={(newValue) => {
             setValue(
               `items[${index}].value`,
-              newValue.month() + "/" + newValue.date() + "/" + newValue.year()
+              newValue.month() +
+                1 +
+                "/" +
+                newValue.date() +
+                "/" +
+                newValue.year()
             );
           }}
-          disabled={register(`items[${index}].mandatory_enable`)}
+          disabled={field.mandatory_enable}
         />
       </LocalizationProvider>
     </Box>
@@ -440,7 +455,7 @@ const ChoiceElement = ({
             },
           }}
           {...register(`items[${index}].field`)}
-          disabled={register(`items[${index}].mandatory_enable`)}
+          disabled={field.mandatory_enable}
         />
         {/* <input
         style={{ display: "none" }}
@@ -456,9 +471,10 @@ const ChoiceElement = ({
             labelId="demo-simple-select1-label-step1"
             id="demo-simple-select-step1"
             defaultValue={
-              field.value.filter((item) => item.choise === true)[0]?.element
+              field?.value?.filter((item) => item.choise === true)[0]?.element
             }
             sx={{
+              maxWidth: "371px",
               "& .MuiListItemSecondaryAction-root": {
                 right: "30px",
                 display: "flex",
@@ -601,7 +617,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
             },
           }}
           {...register(`items[${index}].field`)}
-          disabled={register(`items[${index}].mandatory_enable`)}
+          disabled={field.mandatory_enable}
         />
         <Button sx={{ color: "#F24E1E" }} onClick={() => removeField(index)}>
           <TrashIcon />
@@ -633,7 +649,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                       },
                     }}
                     sx={{ my: 0, height: "45px" }}
-                    disabled={register(`items[${index}].mandatory_enable`)}
+                    disabled={field.mandatory_enable}
                   />
                 </Grid>
                 <Grid item xs={5.3}>
@@ -653,7 +669,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                       },
                     }}
                     sx={{ my: 0, height: "45px" }}
-                    disabled={register(`items[${index}].mandatory_enable`)}
+                    disabled={field.mandatory_enable}
                   />
                 </Grid>
                 <Grid
@@ -703,7 +719,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                     },
                   }}
                   sx={{ my: 0, height: "45px" }}
-                  disabled={register(`items[${index}].mandatory_enable`)}
+                  disabled={field.mandatory_enable}
                 />
               </Grid>
             </Grid>
@@ -789,10 +805,21 @@ const PictureElement = ({ register, index, removeField, setValue, field }) => {
             Upload
             <VisuallyHiddenInput
               type="file"
-              onChange={(e) => readFile(e.target.files[0])}
+              onChange={(e) => {
+                readFile(e.target.files[0]);
+                e.target.value = "";
+              }}
             />
           </Button>
-          <Typography variant="body">
+          <Typography
+            variant="body"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              maxWidth: "200px",
+            }}
+          >
             {field.file_name || "No File Chosen"}
           </Typography>
           {field.file_name && (
@@ -976,10 +1003,21 @@ const PictureLabelElement = ({
             Upload
             <VisuallyHiddenInput
               type="file"
-              onChange={(e) => readFile(e.target.files[0])}
+              onChange={(e) => {
+                readFile(e.target.files[0]);
+                e.target.value = "";
+              }}
             />
           </Button>
-          <Typography variant="body">
+          <Typography
+            variant="body"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              maxWidth: "200px",
+            }}
+          >
             {field.file_name || "No File Chosen"}
           </Typography>
           {field.file_name && (
@@ -1059,7 +1097,15 @@ const FileElement = ({ register, index, removeField, setValue, field }) => {
               onChange={(e) => readFile(e.target.files[0])}
             />
           </Button>
-          <Typography variant="body">
+          <Typography
+            variant="body"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              maxWidth: "200px",
+            }}
+          >
             {field.file_name || "No File Chosen"}
           </Typography>
           {field.file_name && (

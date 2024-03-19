@@ -63,6 +63,7 @@ export const QryptoSettingField = ({
   getFields,
 }) => {
   const { t } = useTranslation();
+  const [isPending, setIsPending] = useState(false);
   const { control, handleSubmit, watch, register, unregister, setValue } =
     useForm({
       defaultValues: {
@@ -91,6 +92,7 @@ export const QryptoSettingField = ({
   };
 
   const handleFormSubmit = async (data) => {
+    setIsPending(true);
     console.log(data, "data");
     const request = {
       field_name: data.fieldName,
@@ -104,14 +106,21 @@ export const QryptoSettingField = ({
       page: qryptoData.page,
       items: data.items.filter((item) => item !== null),
     };
-    const response = await fpsService.putSignature(
-      request,
-      "qrcode-qrypto",
-      workFlow.documentId
-    );
-    if (!response) return;
-    await getFields();
-    onClose();
+    try {
+      const response = await fpsService.putSignature(
+        request,
+        "qrcode-qrypto",
+        workFlow.documentId
+      );
+      if (response.status === 200) {
+        await getFields();
+        onClose();
+      }
+      setIsPending(false);
+    } catch (error) {
+      alert(error);
+      setIsPending(false);
+    }
   };
 
   return (
@@ -254,6 +263,7 @@ export const QryptoSettingField = ({
           }}
           onClick={handleSubmitClick}
           type="button"
+          disabled={isPending}
         >
           {t("0-common.save")}
         </Button>

@@ -140,7 +140,6 @@ function Row(props) {
     signingToken: workFlow.signingToken,
     workflowProcessType: workFlow.workflowProcessType,
   });
-  console.log("data:", data);
 
   useEffect(() => {
     if (typeWorkflow === "serial") {
