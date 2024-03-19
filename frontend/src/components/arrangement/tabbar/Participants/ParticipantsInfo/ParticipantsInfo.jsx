@@ -3,6 +3,7 @@ import { ReactComponent as SignerIcon } from "@/assets/images/svg/signer.svg";
 import { ReactComponent as EditorIcon } from "@/assets/images/svg/editor.svg";
 import { ReactComponent as ReviewerIcon } from "@/assets/images/svg/reviewer.svg";
 import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
+import { ReactComponent as MeetingHost } from "@/assets/images/svg/person-star.svg";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -99,6 +100,9 @@ export const ParticipantsInfo = ({
                 {participants.signerType === 3 && (
                   <EditorIcon width={24} height={24} />
                 )}
+                {participants.signerType === 4 && (
+                  <MeetingHost width={24} height={24} />
+                )}
                 {participants.signerType === 5 && (
                   <SendCopyIcon width={24} height={24} />
                 )}
@@ -130,10 +134,11 @@ null
                   variant="h2"
                   color={check ? "signingtextBlue.main" : "signingtext2.main"}
                 >
-                  {participants.signerType === 1 && "Waiting for signature"}
-                  {participants.signerType === 2 && "Waiting for approve"}
-                  {participants.signerType === 3 && "Signature is valid"}
-                  {participants.signerType === 5 && "Only view"}
+                  {participants.signerType === 1 && "Signer"}
+                  {participants.signerType === 2 && "Reviewer"}
+                  {participants.signerType === 3 && "Editor"}
+                  {participants.signerType === 4 && "Meeting Host"}
+                  {participants.signerType === 5 && "Send a Copy"}
                 </Typography>
               </Box>
               {/* <IconButton onClick={() => toggleDrawer(index)}>

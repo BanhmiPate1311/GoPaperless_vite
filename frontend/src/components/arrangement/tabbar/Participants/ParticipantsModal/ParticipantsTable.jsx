@@ -126,7 +126,6 @@ function Row(props) {
     signingToken: workFlow.signingToken,
     workflowProcessType: typeWorkflow,
   });
-  console.log("row:", row);
   console.log("data:", data);
 
   useEffect(() => {

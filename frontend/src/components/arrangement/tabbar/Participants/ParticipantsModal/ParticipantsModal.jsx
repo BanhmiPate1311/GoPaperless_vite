@@ -51,11 +51,9 @@ export const ParticipantsModal = ({
     //   metaInformation,
     //   signerToken: row.signerToken,
     // };
-    console.log("data: ", data);
 
     try {
       const response = await participantsService.updateParticipant(data);
-      console.log("response: ", response);
       // setProcess(response.data);
       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
     } catch (error) {
