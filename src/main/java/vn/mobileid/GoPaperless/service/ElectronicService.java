@@ -16,6 +16,7 @@ import vn.mobileid.GoPaperless.model.Electronic.response.PerformResponse;
 import vn.mobileid.GoPaperless.model.Electronic.response.SubjectResponse;
 import vn.mobileid.GoPaperless.model.Electronic.response.TokenResponse;
 import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
+import vn.mobileid.GoPaperless.model.apiModel.LastFile;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
 import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
@@ -656,21 +657,21 @@ public class ElectronicService {
     public String authorizeOTPFps(AuthorizeOTPRequest authorizeOTPRequest, HttpServletRequest request) throws Throwable {
         String field_name = authorizeOTPRequest.getFieldName();
         System.out.println("field_name: " + field_name);
-        String connectorName = authorizeOTPRequest.getConnectorName();
-        int enterpriseId = authorizeOTPRequest.getEnterpriseId();
-        int workFlowId = authorizeOTPRequest.getWorkFlowId();
+//        String connectorName = authorizeOTPRequest.getConnectorName();
+//        int enterpriseId = authorizeOTPRequest.getEnterpriseId();
+//        int workFlowId = authorizeOTPRequest.getWorkFlowId();
         String signingToken = authorizeOTPRequest.getSigningToken();
         String signerToken = authorizeOTPRequest.getSignerToken();
         String lang = authorizeOTPRequest.getLang();
         String codeNumber = authorizeOTPRequest.getCodeNumber();
         String credentialID = authorizeOTPRequest.getCredentialID();
         String signingOption = authorizeOTPRequest.getSigningOption();
-        String signerId = authorizeOTPRequest.getSignerId();
+//        String signerId = authorizeOTPRequest.getSignerId();
         String certChain = authorizeOTPRequest.getCertChain();
-        String fileName = authorizeOTPRequest.getFileName();
-        int lastFileId = authorizeOTPRequest.getLastFileId();
-        int documentId = authorizeOTPRequest.getDocumentId();
-        String signingPurpose = authorizeOTPRequest.getSigningPurpose();
+//        String fileName = authorizeOTPRequest.getFileName();
+//        int lastFileId = authorizeOTPRequest.getLastFileId();
+//        int documentId = authorizeOTPRequest.getDocumentId();
+//        String signingPurpose = authorizeOTPRequest.getSigningPurpose();
         String country = !Objects.equals(authorizeOTPRequest.getCountry(), "") ? authorizeOTPRequest.getCountry() : authorizeOTPRequest.getCountryRealtime();
         String imageBase64 = authorizeOTPRequest.getImageBase64();
         String otpRequestID = authorizeOTPRequest.getRequestID();
@@ -678,7 +679,7 @@ public class ElectronicService {
         String contactInfor = authorizeOTPRequest.getContactInfor();
         String assurance = authorizeOTPRequest.getAssurance();
         List<TextField> textFields = authorizeOTPRequest.getTextField();
-        String workFlowType = authorizeOTPRequest.getWorkFlowProcessType();
+//        String workFlowType = authorizeOTPRequest.getWorkFlowProcessType();
 
         try {
             boolean error = false;
@@ -699,6 +700,17 @@ public class ElectronicService {
             if (rsParticipant == null || rsParticipant.getSignerStatus() != Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_PENDING) {
                 return sResult = "The document has already been signed";
             }
+            String signerId = rsParticipant.getSignerId();
+
+            LastFile lastFile = new LastFile();
+            connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, signingToken);
+
+            String fileName = lastFile.getLastPplFileName();
+            int documentId = lastFile.getDocumentId();
+            String deadline = lastFile.getDeadlineAt();
+            int lastFileId = lastFile.getLastPplFileSignedId();
+            int enterpriseId = lastFile.getEnterpriseId();
+            String workFlowType = lastFile.getWorkflowProcessType();
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
@@ -708,7 +720,7 @@ public class ElectronicService {
             HashFileRequest hashFileRequest = new HashFileRequest();
 
             hashFileRequest.setCertificateChain(listCertChain);
-            hashFileRequest.setSigningReason(signingPurpose);
+            hashFileRequest.setSigningReason(rsParticipant.getSigningPurpose() != null ? rsParticipant.getSigningPurpose() : "Sign Document");
             hashFileRequest.setSignatureAlgorithm("RSA");
             hashFileRequest.setSignedHash("SHA256");
             hashFileRequest.setSigningLocation(country);
@@ -761,7 +773,7 @@ public class ElectronicService {
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(deadline, rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

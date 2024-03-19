@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import vn.mobileid.GoPaperless.controller.GatewayAPI;
 import vn.mobileid.GoPaperless.dto.rsspDto.RsspRequest;
 import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
+import vn.mobileid.GoPaperless.model.apiModel.LastFile;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
 import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
@@ -38,11 +39,11 @@ public class IsService {
 
         String fieldName = data.getFieldName();
         String signerToken = data.getSignerToken();
-        String connectorName = data.getConnectorName();
+//        String connectorName = data.getConnectorName();
         int documentId = data.getDocumentId();
         String certChain = data.getUsbCertChain();
-        String signingToken = data.getSigningToken();
-        String signerId = data.getSignerId();
+//        String signingToken = data.getSigningToken();
+//        String signerId = data.getSignerId();
         String signingPurpose = data.getSigningPurpose();
         String country = !Objects.equals(data.getCountry(), "") ? data.getCountry() : data.getCountryRealtime();
         String imageBase64 = data.getImageBase64();
@@ -97,20 +98,18 @@ public class IsService {
             String signerToken = data.getSignerToken();
             String hashList = data.getHashList();
             String certChain = data.getUsbCertChain();
-            String signerId = data.getSignerId();
+//            String signerId = data.getSignerId();
             List<String> signatures = data.getSignatures();
-            int documentId = data.getDocumentId();
-            String fileName = data.getFileName();
-            int lastFileId = data.getLastFileId();
+//            int documentId = data.getDocumentId();
+//            String fileName = data.getFileName();
+//            int lastFileId = data.getLastFileId();
             String codeNumber = data.getCodeNumber();
             String signingOption = data.getSigningOption();
-            int enterpriseId = data.getEnterpriseId();
+//            int enterpriseId = data.getEnterpriseId();
             String assurance = data.getAssurance();
             String sResult = "";
             List<TextField> textFields = data.getTextField();
-            String workFlowType = data.getWorkFlowProcessType();
-//            System.out.println("textFields: " + textFields);
-//            System.out.println("dataText: " + data.getTextField());
+//            String workFlowType = data.getWorkFlowProcessType();
 
             WorkFlowList rsWFList = new WorkFlowList();
             connect.USP_GW_PPL_WORKFLOW_GET(rsWFList, signingToken);
@@ -125,6 +124,17 @@ public class IsService {
             if (rsParticipant == null || rsParticipant.getSignerStatus() != Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_PENDING) {
                 return sResult = "The document has already been signed";
             }
+            String signerId = rsParticipant.getSignerId();
+
+            LastFile lastFile = new LastFile();
+            connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, signingToken);
+
+            String fileName = lastFile.getLastPplFileName();
+            int documentId = lastFile.getDocumentId();
+            String deadline = lastFile.getDeadlineAt();
+            int lastFileId = lastFile.getLastPplFileSignedId();
+            int enterpriseId = lastFile.getEnterpriseId();
+            String workFlowType = lastFile.getWorkflowProcessType();
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
@@ -135,7 +145,7 @@ public class IsService {
             List<String> listCertChain = new ArrayList<>();
             listCertChain.add(certChain);
             FpsSignRequest fpsSignRequest = new FpsSignRequest();
-            fpsSignRequest.setFieldName(!data.getFieldName().isEmpty() ? data.getFieldName() : signerId);
+            fpsSignRequest.setFieldName(data.getFieldName());
             fpsSignRequest.setHashValue(hashList);
             fpsSignRequest.setSignatureValue(signature);
 
@@ -164,7 +174,7 @@ public class IsService {
 //            String sSignature_id = requestID; // temporary
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(deadline, rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {

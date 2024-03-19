@@ -8,9 +8,6 @@ public class CertResponse {
     private String validTo;
     private String cert;
     private String credentialID;
-    private String relyingParty;
-    private String prefixCode;
-    private boolean codeEnable;
     private boolean isSeal;
 
     public String getSubject() {
@@ -67,30 +64,6 @@ public class CertResponse {
 
     public void setCredentialID(String credentialID) {
         this.credentialID = credentialID;
-    }
-
-    public String getRelyingParty() {
-        return relyingParty;
-    }
-
-    public void setRelyingParty(String relyingParty) {
-        this.relyingParty = relyingParty;
-    }
-
-    public String getPrefixCode() {
-        return prefixCode;
-    }
-
-    public void setPrefixCode(String prefixCode) {
-        this.prefixCode = prefixCode;
-    }
-
-    public boolean getCodeEnable() {
-        return codeEnable;
-    }
-
-    public void setCodeEnable(boolean codeEnable) {
-        this.codeEnable = codeEnable;
     }
 
     public boolean isSeal() {

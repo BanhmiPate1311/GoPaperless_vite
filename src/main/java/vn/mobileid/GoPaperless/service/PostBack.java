@@ -27,6 +27,7 @@ public class PostBack {
     }
 
     public void postBack2(
+            String deadline,
             Participants signer,
             String workFlowType,
             String content,
@@ -54,7 +55,7 @@ public class PostBack {
             HttpServletRequest request
     ) throws Exception {
         String pLAST_MODIFIED_BY = "CoreGateway";
-        String fileName1 = fileName.replace(".pdf", "");
+//        String fileName1 = fileName.replace(".pdf", "");
 
 //        String fileName_Signed = fileName1 + "_" + CommonFunction.generateNumberDays() + "_signed"
 //                + ".pdf";
@@ -158,7 +159,7 @@ public class PostBack {
                 connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE(signerToken,
                         signedType, sDateSign, sSignature_id, signedHash, dataResponse, SIGNATURE_TYPE, signingOption, sDateSign, pSIGNATURE_VALUE, pFILE_ID[0], pLAST_MODIFIED_BY);
                 String signerName = signer.getLastName() + " " + signer.getFirstName();
-                checkAndSendMailService.checkAndSendMail(workFlowType, signerToken, signingToken, signerName, signer.getEmail(), fileName, data);
+                checkAndSendMailService.checkAndSendMail(workFlowType, signerToken, signingToken, signerName, signer.getEmail(), fileName, deadline, data);
 //                if(!workFlowType.equals("parallel")){
 //                    boolean restart = false; // Biến này để kiểm tra xem có cần thực hiện lại từ đầu không
 //                    do {

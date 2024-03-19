@@ -113,12 +113,12 @@ export const Step3_eid = ({
           sx={{
             my: 0,
             backgroundColor: "signingWFBackground.main",
-            animationName: "banner",
-            animationDuration: "6s",
-            animationIterationCount: "infinite",
-            animationDirection: "normal",
-            perspective: "1000",
-            backgroundAttachment: "fixed",
+            // animationName: "banner",
+            // animationDuration: "6s",
+            // animationIterationCount: "infinite",
+            // animationDirection: "normal",
+            // perspective: "1000",
+            // backgroundAttachment: "fixed",
           }}
           inputProps={{
             maxLength:
