@@ -68,8 +68,8 @@ export const Signature = ({
   });
   // console.log("currentPos: ", newPos.current);
   const [dataSigning, setDataSigning] = useState({});
-  // const boxRef = useRef(null);
-  // const [scrolled, setScrolled] = useState(false);
+  const boxRef = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
@@ -133,6 +133,12 @@ export const Signature = ({
   //     setScrolled(false);
   //   }
   // }, [signatureData, scrolled]);
+  useEffect(() => {
+    if (signatureData.selected && boxRef.current) {
+      console.log("object");
+      boxRef.current.focus();
+    }
+  }, [signatureData.selected]);
 
   useEffect(() => {
     const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
@@ -565,7 +571,6 @@ export const Signature = ({
           className={`sig signature-${index}`}
         >
           <Box
-            // ref={boxRef}
             id={`sigDrag-${index}`}
             sx={{
               backgroundColor:
@@ -578,14 +583,14 @@ export const Signature = ({
                   signatureData.field_name
                   ? "rgba(217, 223, 228, 0.7)"
                   : "rgba(254, 240, 138, 0.7)",
-              ...(signatureData.selected && {
-                animationName: "banner",
-                animationDuration: "6s",
-                animationIterationCount: "infinite",
-                animationDirection: "normal",
-                perspective: "1000",
-                backgroundAttachment: "fixed",
-              }),
+              // ...(signatureData.selected && {
+              //   animationName: "banner",
+              //   animationDuration: "6s",
+              //   animationIterationCount: "infinite",
+              //   animationDirection: "normal",
+              //   perspective: "1000",
+              //   backgroundAttachment: "fixed",
+              // }),
               height: "100%",
               position: "relative",
               padding: "10px",
@@ -671,6 +676,7 @@ export const Signature = ({
                 style={{ display: "none" }}
               ></span>
               <Box
+                // ref={boxRef}
                 id="click-duoc"
                 variant="h5"
                 width={"100%"}
@@ -687,6 +693,9 @@ export const Signature = ({
                 }
                 textAlign={"center"}
                 height="45px"
+                // sx={{
+                //   overflow: "hidden",
+                // }}
               >
                 Signature
                 <br />

@@ -19,8 +19,8 @@ public class CheckAndSendMailService {
     }
 
     public void shareToSign(
+            String deadline,
             String workFlowType,
-
             String signingToken,
             String signerName,
             String signerEmail,
@@ -33,6 +33,7 @@ public class CheckAndSendMailService {
         MailInfo attachMailInfo = connect.USP_GW_EMAIL_TEMPLATE_GET(2, attachMailKey);
         String newSignerToken = null;
         Participants signerFirst = participants;
+        String url = "https://rssp.mobile-id.vn/downloads/paperless/images/logo_paperless-color.png";
         if (!workFlowType.equals("parallel")) {
             boolean restart = false; // Biến này để kiểm tra xem có cần thực hiện lại từ đầu không
             do {
@@ -44,8 +45,15 @@ public class CheckAndSendMailService {
                     for (Participants participant : responseList) {
                         String participantName = participant.getLastName() + " " + participant.getFirstName();
                         String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
-                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken());
-                        String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
+                        String newTextContent = textMailInfo.getBody()
+                                .replaceAll("@FirstLastNameSigner", signerName)
+                                .replaceAll("@FirstLastName", participantName)
+                                .replaceAll("@EmailSigner", signerEmail)
+                                .replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken())
+                                .replaceAll("@logoUrl", url)
+                                .replaceAll("@FileName", fileName)
+                                .replaceAll("@SigningDeadline", deadline);
+                        String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@logoUrl", "https://rssp.mobile-id.vn/downloads/paperless/images/logo_paperless-color.png");
                         if (participant.getSignerType() != 5) {
                             // Gửi mail
                             try {
@@ -74,14 +82,21 @@ public class CheckAndSendMailService {
                             restart = true; // Đánh dấu để thực hiện lại từ đầu
                         }
                     }
-                }else{
+                } else {
                     System.out.println("send Mail!");
-                    System.out.println("check:"+ ObjectUtils.isEmpty(signerFirst)+","+signerFirst != null);
-                    if(signerFirst != null){
+                    System.out.println("check:" + ObjectUtils.isEmpty(signerFirst) + "," + signerFirst != null);
+                    if (signerFirst != null) {
 
                         String participantName = signerFirst.getLastName() + " " + signerFirst.getFirstName();
                         String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
-                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerFirst.getLastName()+" "+ signerFirst.getFirstName()).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + signerFirst.getSignerToken());
+                        String newTextContent = textMailInfo.getBody()
+                                .replaceAll("@FirstLastNameSigner", signerFirst.getLastName() + " " + signerFirst.getFirstName())
+                                .replaceAll("@FirstLastName", participantName)
+                                .replaceAll("@EmailSigner", signerEmail)
+                                .replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + signerFirst.getSignerToken()
+                                .replaceAll("@logoUrl", url)
+                                .replaceAll("@FileName", fileName)
+                                .replaceAll("@SigningDeadline", deadline));
                         String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
                         if (signerFirst.getSignerType() != 5) {
                             // Gửi mail
@@ -93,7 +108,7 @@ public class CheckAndSendMailService {
                                 // Ném lại ngoại lệ để dừng chương trình
                                 throw new RuntimeException("Error occurred while sending text mail to " + signerFirst.getEmail(), e);
                             }
-                        }else {
+                        } else {
                             try {
                                 // Convert content from base64 to byte[]
 
@@ -113,16 +128,23 @@ public class CheckAndSendMailService {
                     }
                 }
             } while (restart); // Lặp lại nếu cần thực hiện lại từ đầu
-        }else{
+        } else {
             List<Participants> responseList = new ArrayList<>();
-            connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_LIST(responseList,signingToken);
-            System.out.println("parallel participant:"+ responseList);
-            System.out.println("parallel singing:"+ signingToken);
+            connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_LIST(responseList, signingToken);
+            System.out.println("parallel participant:" + responseList);
+            System.out.println("parallel singing:" + signingToken);
             for (Participants participant : responseList) {
                 System.out.print(participant.getEmail());
                 String participantName = participant.getLastName() + " " + participant.getFirstName();
                 String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
-                String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken());
+                String newTextContent = textMailInfo.getBody()
+                        .replaceAll("@FirstLastNameSigner", signerName)
+                        .replaceAll("@FirstLastName", participantName)
+                        .replaceAll("@EmailSigner", signerEmail)
+                        .replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken()
+                        .replaceAll("@logoUrl", url)
+                        .replaceAll("@FileName", fileName)
+                        .replaceAll("@SigningDeadline", deadline));
                 String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail);
                 if (participant.getSignerType() != 5) {
                     // Gửi mail
@@ -155,6 +177,7 @@ public class CheckAndSendMailService {
 
         }
     }
+
     public void checkAndSendMail(
             String workFlowType,
             String signerToken,
@@ -162,12 +185,14 @@ public class CheckAndSendMailService {
             String signerName,
             String signerEmail,
             String fileName,
+            String deadline,
             byte[] data) throws Exception {
         String textMailKey = "email_invite_signing";
         String attachMailKey = "email_send_a_copy";
         MailInfo textMailInfo = connect.USP_GW_EMAIL_TEMPLATE_GET(2, textMailKey);
         MailInfo attachMailInfo = connect.USP_GW_EMAIL_TEMPLATE_GET(2, attachMailKey);
         String newSignerToken = signerToken;
+        String url = "https://rssp.mobile-id.vn/downloads/paperless/images/logo_paperless-color.png";
         if (!workFlowType.equals("parallel")) {
             boolean restart = false; // Biến này để kiểm tra xem có cần thực hiện lại từ đầu không
             do {
@@ -178,7 +203,14 @@ public class CheckAndSendMailService {
                     for (Participants participant : responseList) {
                         String participantName = participant.getLastName() + " " + participant.getFirstName();
                         String newAttachSubject = attachMailInfo.getSubject().replaceAll("\\[filename\\]", fileName);
-                        String newTextContent = textMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("@EmailSigner", signerEmail).replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken());
+                        String newTextContent = textMailInfo.getBody()
+                                .replaceAll("@FirstLastNameSigner", signerName)
+                                .replaceAll("@FirstLastName", participantName)
+                                .replaceAll("@EmailSigner", signerEmail)
+                                .replaceAll("@LinkSign", "https://uat-paperless-gw.mobile-id.vn/view/signing/" + signingToken + "?access_token=" + participant.getSignerToken())
+                                .replaceAll("@logoUrl", url)
+                                .replaceAll("@FileName", fileName)
+                                .replaceAll("@SigningDeadline", deadline);
                         String newAttachContent = attachMailInfo.getBody().replaceAll("@FirstLastNameSigner", signerName).replaceAll("@FirstLastName", participantName).replaceAll("<@EmailSigner>", "&lt;" + signerEmail + "&gt;");
                         if (participant.getSignerType() != 5) {
                             // Gửi mail

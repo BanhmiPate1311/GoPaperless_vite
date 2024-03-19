@@ -20,7 +20,7 @@ export const Next = ({ newFields, value, handleChange }) => {
       }}
       onClick={handleChange}
     >
-      Next: {value + 1 + "/" + newFields.length}
+      Next: {newFields.length > 0 ? value + 1 : 0 + "/" + newFields.length}
     </Box>
   );
 };

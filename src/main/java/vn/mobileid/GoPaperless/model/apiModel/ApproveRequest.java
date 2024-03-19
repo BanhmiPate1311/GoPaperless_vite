@@ -2,18 +2,18 @@ package vn.mobileid.GoPaperless.model.apiModel;
 
 public class ApproveRequest {
     private int workFlowId;
-    private int participantID;
+//    private int participantID;
     private String comment;
     private int recipientID;
     private String hmac;
-    private String signerName;
+//    private String signerName;
     private String signerToken;
     private String signingToken;
     private int documentId;
     private String workFlowProcessType;
     private String fileName;
-    private String signerEmail;
-    private int signerType;
+//    private String signerEmail;
+//    private int signerType;
 
     public int getWorkFlowId() {
         return workFlowId;
@@ -23,13 +23,7 @@ public class ApproveRequest {
         this.workFlowId = workFlowId;
     }
 
-    public int getParticipantID() {
-        return participantID;
-    }
 
-    public void setParticipantID(int participantID) {
-        this.participantID = participantID;
-    }
 
     public String getComment() {
         return comment;
@@ -55,13 +49,6 @@ public class ApproveRequest {
         this.hmac = hmac;
     }
 
-    public String getSignerName() {
-        return signerName;
-    }
-
-    public void setSignerName(String signerName) {
-        this.signerName = signerName;
-    }
 
     public String getSignerToken() {
         return signerToken;
@@ -103,19 +90,4 @@ public class ApproveRequest {
         this.fileName = fileName;
     }
 
-    public String getSignerEmail() {
-        return signerEmail;
-    }
-
-    public void setSignerEmail(String signerEmail) {
-        this.signerEmail = signerEmail;
-    }
-
-    public int getSignerType() {
-        return signerType;
-    }
-
-    public void setSignerType(int signerType) {
-        this.signerType = signerType;
-    }
 }

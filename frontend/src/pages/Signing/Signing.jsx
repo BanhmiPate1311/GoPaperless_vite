@@ -295,7 +295,11 @@ export const Signing = () => {
           }}
         >
           {workFlow.data && field && (
-            <SigningContent workFlow={workFlow.data} field={field} />
+            <SigningContent
+              workFlow={workFlow.data}
+              field={field}
+              signer={signer}
+            />
           )}
         </Container>
         <ApproveModal

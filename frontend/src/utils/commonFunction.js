@@ -296,6 +296,27 @@ export function isValidEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
 }
 
-export function capitalLize(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+// export function capitalLize(string) {
+//   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+// }
+
+export function capitalLize(str) {
+  // Tách chuỗi thành các câu bằng dấu chấm, dấu chấm than hoặc dấu chấm hỏi
+  const sentences = str.split(/\.|\?|!/);
+
+  // Lặp qua mỗi câu và viết hoa chữ cái đầu của nó
+  const capitalizedSentences = sentences.map((sentence) => {
+    // Loại bỏ các khoảng trắng thừa ở đầu câu trước khi viết hoa
+    sentence = sentence.trim();
+
+    // Viết hoa chữ cái đầu của câu
+    if (sentence.length > 0) {
+      sentence =
+        sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase();
+    }
+    return sentence;
+  });
+
+  // Kết hợp lại các câu thành một chuỗi và trả về
+  return capitalizedSentences.join(". ") + ".";
 }
