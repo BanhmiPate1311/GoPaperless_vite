@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
@@ -12,6 +13,7 @@ import { useSearchParams } from "react-router-dom";
 import { Signatures } from "../SigningContent/TabBar/Signatures";
 import OverView from "./tabbar/Overview";
 import { Participants } from "./tabbar/participants/Participants";
+import { Documents } from "./tabbar/Documents/Documents";
 import { useEffect } from "react";
 
 function TabPanel(props) {
@@ -77,19 +79,19 @@ export const TabBar = ({
       return { isSigned: false, ...sig.certificate };
     });
 
-  const eSealList1 = signedInfo
-    ?.map((sig) => {
-      if (sig.ppl_file_attr_type_id === 3) {
-        return { isSigned: true, ...sig.value };
-      }
-    })
-    .filter((value) => value !== undefined);
+  // const eSealList1 = signedInfo
+  //   ?.map((sig) => {
+  //     if (sig.ppl_file_attr_type_id === 3) {
+  //       return { isSigned: true, ...sig.value };
+  //     }
+  //   })
+  //   .filter((value) => value !== undefined);
 
-  const eSealList2 = workFlow.participants
-    .filter((sig) => sig.signedType === "ESEAL")
-    .map((sig) => {
-      return { isSigned: false, ...sig.certificate };
-    });
+  // const eSealList2 = workFlow.participants
+  //   .filter((sig) => sig.signedType === "ESEAL")
+  //   .map((sig) => {
+  //     return { isSigned: false, ...sig.certificate };
+  //   });
   const handleChange = (event, newValue) => {
     setTabBar(newValue);
     if (newValue !== 1) {
@@ -200,7 +202,7 @@ export const TabBar = ({
         <Signatures sigList1={sigList1} sigList2={sigList2} />
       </TabPanel>
       <TabPanel value={tabBar} index={3}>
-        {/* <Documents eSealList1={eSealList1} eSealList2={eSealList2} /> */}
+        <Documents workFlow={workFlow} />
       </TabPanel>
     </Box>
   );

@@ -76,7 +76,8 @@
     "valid_from": "Valid from",
     "valid_to": "Valid to",
     "preview": "Preview",
-    "preview&continue": "Preview & Continue"
+    "preview&continue": "Preview & Continue",
+    "attachments": "Attachments"
   },
   "batch": {
     "collapse": "Collapse all",
@@ -377,6 +378,7 @@
     "cookieSetting16": "Allow All"
   },
   "arrangement": {
-    "manage_participants": "Manage Participants"
+    "manage_participants": "Manage Participants",
+    "setting_documents": "Setting Documents"
   }
 }

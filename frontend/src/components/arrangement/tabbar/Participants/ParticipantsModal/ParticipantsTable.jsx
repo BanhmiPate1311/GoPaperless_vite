@@ -272,6 +272,7 @@ function Row(props) {
               width: "310px",
               borderBottom: "none",
               borderRadius: "10px 0px 0px 10px",
+              padding: "0px 0px 0px 16px",
             }}
           >
             <Stack direction="row" alignItems="center" spacing={1}>
@@ -332,14 +333,20 @@ function Row(props) {
               </Typography>
             </Stack>
           </TableCell>
-          <TableCell align="left">{row.firstName}</TableCell>
-          <TableCell style={{ width: "250px" }} align="left">
+          <TableCell align="left" style={{ padding: "0px 0px 0px 0px" }}>
+            {row.firstName}
+          </TableCell>
+          <TableCell
+            style={{ width: "250px", padding: "0px 0px 0px 0px" }}
+            align="left"
+          >
             {row.email}
           </TableCell>
           <TableCell
             style={{
               borderBottom: "none",
               borderRadius: "0px 10px 10px 0px",
+              padding: "0px 0px 0px 0px",
             }}
           >
             <IconButton
@@ -369,12 +376,22 @@ function Row(props) {
                   />
                 </span>
               ) : (
-                <PencilSquareIcon
-
-                // style={{
-                //   display: open ? "none" : "block",
-                // }}
-                />
+                <span
+                  style={{
+                    backgroundColor: "#EFF6FF",
+                    borderRadius: 999,
+                    width: 30,
+                    height: 30,
+                  }}
+                >
+                  <PencilSquareIcon
+                    style={{
+                      width: 14,
+                      height: 14,
+                      marginTop: 7,
+                    }}
+                  />
+                </span>
               )}
             </IconButton>
             <IconButton
@@ -414,6 +431,7 @@ function Row(props) {
             style={{
               padding: 0,
               borderBottom: "none",
+              textAlign: "center",
             }}
             colSpan={6}
           >
@@ -430,7 +448,9 @@ function Row(props) {
                     color="#757575"
                     fontWeight={400}
                     mb="10px"
-                    // height={17}
+                    height={17}
+                    textAlign="left"
+                    paddingLeft={3}
                   >
                     {t("0-common.name")}
                   </Typography>
@@ -463,7 +483,9 @@ function Row(props) {
                     color="#757575"
                     fontWeight={400}
                     mb="10px"
-                    // height={17}
+                    height={17}
+                    textAlign="left"
+                    paddingLeft={3}
                   >
                     {t("0-common.first name")}
                   </Typography>
@@ -493,7 +515,9 @@ function Row(props) {
                     color="#757575"
                     fontWeight={400}
                     mb="10px"
-                    // height={17}
+                    height={17}
+                    textAlign="left"
+                    paddingLeft={3}
                   >
                     {t("0-common.last name")}
                   </Typography>
@@ -524,7 +548,9 @@ function Row(props) {
                     color="#757575"
                     fontWeight={400}
                     mb="10px"
-                    // height={17}
+                    height={17}
+                    textAlign="left"
+                    paddingLeft={3}
                   >
                     {t("0-common.Reason")}
                   </Typography>
@@ -554,7 +580,9 @@ function Row(props) {
                     color="#757575"
                     fontWeight={400}
                     mb="10px"
-                    // height={17}
+                    height={17}
+                    textAlign="left"
+                    paddingLeft={3}
                   >
                     {t("0-common.Position")}
                   </Typography>
@@ -584,11 +612,13 @@ function Row(props) {
                     color="#757575"
                     fontWeight={400}
                     mb="10px"
-                    // height={17}
+                    height={17}
+                    textAlign="left"
+                    paddingLeft={3}
                   >
                     {t("0-common.purpose")}
                   </Typography>
-                  <Box sx={{ minWidth: 120 }}>
+                  <Box sx={{ minWidth: 120, paddingLeft: "20px" }}>
                     <FormControl fullWidth>
                       <InputLabel
                         id="demo-simple-select-label"
@@ -605,6 +635,8 @@ function Row(props) {
                           fontSize: "14px",
                           backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                           color: "#1F2937",
+                          textAlign: "left",
+                          paddingLeft: "2px",
                         }}
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -695,7 +727,9 @@ function Row(props) {
                     color="#757575"
                     fontWeight={400}
                     mb="10px"
-                    // height={17}
+                    height={17}
+                    textAlign="left"
+                    paddingLeft={3}
                   >
                     {t("0-common.Structural subdivision")}
                   </Typography>
@@ -758,6 +792,7 @@ function Row(props) {
                   width: "310px",
                   borderBottom: "none",
                   borderRadius: "10px 0px 0px 10px",
+                  padding: "0px 0px 0px 16px",
                 }}
               >
                 <Stack direction="row" alignItems="center" spacing={1}>
@@ -815,11 +850,22 @@ function Row(props) {
                   </Typography>
                 </Stack>
               </TableCell>
-              <TableCell align="left" style={{ borderBottom: "none" }}>
+              <TableCell
+                align="left"
+                style={{
+                  borderBottom: "none",
+                  padding: "0px 0px 0px 0px",
+                  minWidth: "150px",
+                }}
+              >
                 {row.firstName}
               </TableCell>
               <TableCell
-                style={{ width: "250px", borderBottom: "none" }}
+                style={{
+                  width: "250px",
+                  borderBottom: "none",
+                  padding: "0px 0px 0px 0px",
+                }}
                 align="left"
               >
                 {row.email}
@@ -828,6 +874,7 @@ function Row(props) {
                 style={{
                   borderBottom: "none",
                   borderRadius: "0px 10px 10px 0px",
+                  padding: "0px 0px 0px 0px",
                 }}
               >
                 <IconButton
@@ -917,7 +964,7 @@ function Row(props) {
                 <Collapse in={open} timeout="auto" unmountOnExit>
                   <Stack
                     direction="row"
-                    sx={{ margin: 1 }}
+                    sx={{ margin: 1, textAlign: "center" }}
                     useFlexGap
                     flexWrap="wrap"
                   >
@@ -928,11 +975,12 @@ function Row(props) {
                         fontWeight={400}
                         mb="10px"
                         height={17}
+                        textAlign="left"
+                        paddingLeft={3}
                       >
                         {t("0-common.name")}
                       </Typography>
                       <TextField
-                        style={{}}
                         sx={{
                           my: 0,
                           "& .MuiInputBase-root": {
@@ -962,6 +1010,8 @@ function Row(props) {
                         fontWeight={400}
                         mb="10px"
                         height={17}
+                        textAlign="left"
+                        paddingLeft={3}
                       >
                         {t("0-common.first name")}
                       </Typography>
@@ -991,6 +1041,8 @@ function Row(props) {
                         fontWeight={400}
                         mb="10px"
                         height={17}
+                        textAlign="left"
+                        paddingLeft={3}
                       >
                         {t("0-common.last name")}
                       </Typography>
@@ -1021,6 +1073,8 @@ function Row(props) {
                         fontWeight={400}
                         mb="10px"
                         height={17}
+                        textAlign="left"
+                        paddingLeft={3}
                       >
                         {t("0-common.Reason")}
                       </Typography>
@@ -1050,6 +1104,8 @@ function Row(props) {
                         fontWeight={400}
                         mb="10px"
                         height={17}
+                        textAlign="left"
+                        paddingLeft={3}
                       >
                         {t("0-common.Position")}
                       </Typography>
@@ -1082,10 +1138,12 @@ function Row(props) {
                         fontWeight={400}
                         mb="10px"
                         height={17}
+                        textAlign="left"
+                        paddingLeft={3}
                       >
                         {t("0-common.purpose")}
                       </Typography>
-                      <Box sx={{ minWidth: 120 }}>
+                      <Box sx={{ minWidth: 120, paddingLeft: "20px" }}>
                         <FormControl fullWidth>
                           <InputLabel
                             id="demo-simple-select-label"
@@ -1101,6 +1159,8 @@ function Row(props) {
                               width: "250px",
                               backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                               color: "#1F2937",
+                              textAlign: "left",
+                              paddingLeft: "2px",
                             }}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -1198,6 +1258,8 @@ function Row(props) {
                         fontWeight={400}
                         mb="10px"
                         height={17}
+                        textAlign="left"
+                        paddingLeft={3}
                       >
                         {t("0-common.Structural subdivision")}
                       </Typography>

@@ -137,6 +137,13 @@ public class ApiController {
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
             signingWorkflowDto.setLastFileUuid(lastFile.getLastPplFileUuid());
             signingWorkflowDto.setWorkflowProcessType(lastFile.getWorkflowProcessType());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setCreatedBy(lastFile.getCreatedBy());
+            signingWorkflowDto.setCreatedAt(lastFile.getCreatedAt());
+            signingWorkflowDto.setLastModifiedAt(lastFile.getLastModifiedAt());
             if (lastFile.getDeadlineAt() != null) {
                 signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
             }

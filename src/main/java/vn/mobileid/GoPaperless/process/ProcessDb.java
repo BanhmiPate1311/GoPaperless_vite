@@ -237,6 +237,11 @@ public class ProcessDb {
                 response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
                 response.setDeadlineAt(rs.getString("DEADLINE_AT"));
                 response.setWorkflowProcessType(rs.getString("WORKFLOW_PROCESS_TYPE"));
+                response.setWorkflowStatus(rs.getString("WORKFLOW_STATUS"));
+                System.out.println("WORKFLOW_STATUS: " + (rs.getString("WORKFLOW_STATUS")));
+                response.setCreatedBy(rs.getString("CREATED_BY"));
+                response.setCreatedAt(rs.getDate("CREATED_AT"));
+                response.setLastModifiedAt(rs.getDate("LAST_MODIFIED_AT"));
             }
 
         } catch (Exception e) {
