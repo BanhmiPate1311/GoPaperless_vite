@@ -49,7 +49,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       alert("Error: ", res.message);
     }
   };
-  console.log(workFlow, "workFlow");
+
   // Get fields
   const getFields = async () => {
     const response = await fpsService.getFields({
@@ -423,6 +423,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       value: `${window.location.origin}/view/documents/${qrToken}`,
       signing_token: signingToken,
     };
+    console.log("newInitField: ", newInitField);
     const response = await fpsService.addTextBox(
       newInitField,
       "qrcode",
@@ -446,13 +447,13 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           {
             column_1: item.lastName + " " + item.firstName,
             column_2: item.email,
-            column_3: "Signing Time: ",
+            column_3: "Signing Time",
           },
           {
             column_1: "",
           },
         ],
-        remark: "table",
+        remark: "signer",
       };
     });
     const fieldName = generateFieldName("ADMIN_PROVIDER", value);

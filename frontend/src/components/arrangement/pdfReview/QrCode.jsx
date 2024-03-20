@@ -14,7 +14,6 @@ import { ResizableBox } from "react-resizable";
 export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
   const signer = getSigner(workFlow);
   const signerId = signer?.signerId || "ADMIN_PROVIDER";
-  console.log("signerId: ", qrData);
 
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
