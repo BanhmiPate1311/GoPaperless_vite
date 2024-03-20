@@ -15,6 +15,7 @@ import { ReactComponent as Reviewer } from "@/assets/images/svg/person-check.svg
 import { ReactComponent as Editor } from "@/assets/images/svg/note-edit-outline.svg";
 import { ReactComponent as MeetingHost } from "@/assets/images/svg/person-star.svg";
 import { ReactComponent as SendACopy } from "@/assets/images/svg/cc-outline.svg";
+import { ReactComponent as AngleDown } from "@/assets/images/svg/angle-down-solid.svg";
 import { useCommonHook } from "@/hook";
 import { checkSignerStatus } from "@/utils/commonFunction";
 import styled from "@emotion/styled";
@@ -59,7 +60,7 @@ const CustomTab = styled(Tab)(({ theme }) => ({
   fontWeight: theme.typography.fontWeightRegular, // Adjust font weight
   fontSize: theme.typography.pxToRem(14), // Adjust font size
   color: "#3B82F6", // Adjust tab text color
-  border: "1px solid #3B82F6",
+  // border: "1px solid #3B82F6",
   textAlign: "center",
   height: "23px",
   minHeight: "23px",
@@ -106,25 +107,7 @@ function Row(props) {
   const [open, setOpen] = useState(false);
   const [process, setProcess] = useState(false);
   const status = checkSignerStatus(row, signerToken);
-  // const [purpose, setPurpose] = useState("");
-  // Tạo state để lưu giá trị của TextField
-  const [fullName, setFullName] = useState(row.lastName + " " + row.firstName);
-  const [firstName, setFirstName] = useState(row.firstName);
-  const [lastName, setLastName] = useState(row.lastName);
-  const [customReason, setCustomReason] = useState(row.customReason);
-  const [position, setPosition] = useState(row.metaInformation.position);
-  const [signingPurpose, setSigningPurpose] = useState(
-    row.metaInformation.signing_purpose
-  );
-  const [purpose, setPurpose] = useState(row.signerType);
-  const [structuralSubdivision, setStructuralSubdivision] = useState(
-    row.metaInformation.structural_subdivision
-  );
-  const [signingToken, setSigningToken] = useState(workFlow.signingToken);
-  const [workflowProcessType, setWorkflowProcessType] = useState(
-    workFlow.workflowProcessType
-  );
-  // console.log("index: ", index);
+
   const [data, setData] = useState({
     fullName: row.lastName + " " + row.firstName,
     firstName: row.firstName,
@@ -134,25 +117,30 @@ function Row(props) {
     signingPurpose: row.metaInformation.signing_purpose,
     purpose: row.signerType,
     structuralSubdivision: row.metaInformation.structural_subdivision,
-    metaInformation: JSON.stringify(row.metaInformation),
+    // metaInformation: JSON.stringify(row.metaInformation),
+    metaInformation: {
+      position: row.metaInformation.position,
+      structuralSubdivision: row.metaInformation.structuralSubdivision,
+    },
     signerToken: row.signerToken,
-    sequenceNumber: row.sequenceNumber,
+    sequenceNumber: row.sequenceNumber === 0 ? 1 : row.sequenceNumber,
     signingToken: workFlow.signingToken,
-    workflowProcessType: workFlow.workflowProcessType,
+    workflowProcessType: typeWorkflow,
   });
+  console.log("row:", row);
+  console.log("data:", data);
 
   useEffect(() => {
     if (typeWorkflow === "serial") {
       setData({ ...data, sequenceNumber: index + 1 });
     }
     if (typeWorkflow === "custom") {
-      setData({ ...data, sequenceNumber: row.sequenceNumber });
+      setData({
+        ...data,
+        sequenceNumber: row.sequenceNumber === 0 ? 1 : row.sequenceNumber,
+      });
     }
   }, [index]);
-
-  const [metaInformation, setMetaInformation] = useState(
-    JSON.stringify(row.metaInformation)
-  );
 
   useEffect(() => {
     let reparticipant = participant;
@@ -207,15 +195,49 @@ function Row(props) {
       case "structuralSubdivision":
         setData({ ...data, structuralSubdivision: event.target.value });
         break;
+      case "metaInformationPosition":
+        console.log({
+          ...data,
+          metaInformation: {
+            ...data.metaInformation,
+            position: event.target.value,
+          },
+        });
+        setData({
+          ...data,
+          metaInformation: {
+            ...data.metaInformation,
+            position: event.target.value,
+          },
+        });
+        break;
+      case "metaInformationStructuralSubdivision":
+        setData({
+          ...data,
+          metaInformation: {
+            ...data.metaInformation,
+            structuralSubdivision: event.target.value,
+          },
+        });
+        break;
       case "sequenceNumber":
+        console.log("event.target.value: ", event.target.value);
         // Kiểm tra xem giá trị nhập vào có phải là số không
         if (!isNaN(event.target.value)) {
-          // Nếu là số, thực hiện cập nhật giá trị
-          setData({ ...data, sequenceNumber: event.target.value });
+          // Nếu là số, kiểm tra xem có đúng 3 chữ số không
+          if (event.target.value.length <= 3) {
+            // Nếu có tối đa 3 chữ số, thực hiện cập nhật giá trị
+            setData({ ...data, sequenceNumber: event.target.value });
+            console.log("data.sequenceNumber: ", data.sequenceNumber);
+          } else {
+            // Nếu có hơn 3 chữ số, hiển thị thông báo lỗi
+            console.log("Vui lòng nhập số có tối đa 3 chữ số!!!");
+            // alert("Vui lòng nhập số có tối đa 3 chữ số!!!");
+          }
         } else {
           // Nếu không phải là số, không thực hiện gì cả hoặc có thể hiển thị thông báo lỗi
           console.log("Vui lòng nhập số!!!");
-          alert("Vui lòng nhập số!!!");
+          // alert("Vui lòng nhập số!!!");
         }
         break;
     }
@@ -239,10 +261,19 @@ function Row(props) {
           className="row-container"
           sx={{
             "& > *": { borderBottom: "unset" },
-            backgroundColor: open ? "#d9d9d9" : "inherit",
+            backgroundColor: open ? "#DBEAFE" : "#FFFFFF",
+            borderRadius: "8px",
           }}
         >
-          <TableCell component="th" scope="row" sx={{ width: "310px" }}>
+          <TableCell
+            component="th"
+            scope="row"
+            sx={{
+              width: "310px",
+              borderBottom: "none",
+              borderRadius: "10px 0px 0px 10px",
+            }}
+          >
             <Stack direction="row" alignItems="center" spacing={1}>
               {typeWorkflow === "serial" && (
                 <>
@@ -257,6 +288,10 @@ function Row(props) {
                     style={{}}
                     sx={{
                       my: 0,
+                      "& input #outlined-size-small": {
+                        padding: "0px",
+                        textAlign: "center",
+                      },
                       "& .MuiInputBase-root": {
                         minHeight: "36px",
                         height: "36px",
@@ -264,18 +299,21 @@ function Row(props) {
                         fontSize: "14px",
                         backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
+                        padding: "0px",
                       },
                     }}
-                    value={data.sequenceNumber}
+                    value={
+                      data.sequenceNumber == null ||
+                      data.sequenceNumber === "" ||
+                      data.sequenceNumber == 0
+                        ? data.sequenceNumber
+                        : 1
+                    }
                     onChange={(event) =>
                       handleChangeParticipant(event, "sequenceNumber")
                     }
-                    id="outlined-size-small"
-                    size="small"
-                    inputProps={{
-                      inputMode: "numeric", // chỉ cho phép nhập số
-                      pattern: "[0-9]*", // chỉ cho phép các ký tự số
-                    }}
+                    // id="outlined-size-small"
+                    // size="small"
                   />
                 </>
               )}
@@ -298,7 +336,12 @@ function Row(props) {
           <TableCell style={{ width: "250px" }} align="left">
             {row.email}
           </TableCell>
-          <TableCell>
+          <TableCell
+            style={{
+              borderBottom: "none",
+              borderRadius: "0px 10px 10px 0px",
+            }}
+          >
             <IconButton
               aria-label="expand row"
               variant="plain"
@@ -367,7 +410,13 @@ function Row(props) {
         </TableRow>
 
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <TableCell
+            style={{
+              padding: 0,
+              borderBottom: "none",
+            }}
+            colSpan={6}
+          >
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Stack
                 direction="row"
@@ -377,11 +426,11 @@ function Row(props) {
               >
                 <Box width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.name")}
                   </Typography>
@@ -398,22 +447,23 @@ function Row(props) {
                         color: "#1F2937",
                       },
                     }}
-                    disabled
-                    value={data.fullName}
+                    defaultValue={data.fullName}
                     onChange={(event) =>
                       handleChangeParticipant(event, "fullname")
                     }
-                    id="outlined-size-small"
+                    InputProps={{
+                      readOnly: true,
+                    }}
                     size="small"
                   />
                 </Box>
                 <Box width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.first name")}
                   </Typography>
@@ -424,6 +474,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.firstName}
@@ -436,11 +489,11 @@ function Row(props) {
                 </Box>
                 <Box width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.last name")}
                   </Typography>
@@ -452,6 +505,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.lastName}
@@ -464,11 +520,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.Reason")}
                   </Typography>
@@ -479,6 +535,9 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
                     value={data.customReason}
@@ -491,11 +550,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.Position")}
                   </Typography>
@@ -506,11 +565,14 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
-                    value={data.position}
+                    value={data.metaInformation.position}
                     onChange={(event) =>
-                      handleChangeParticipant(event, "position")
+                      handleChangeParticipant(event, "metaInformationPosition")
                     }
                     id="outlined-size-small"
                     size="small"
@@ -518,11 +580,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.purpose")}
                   </Typography>
@@ -540,6 +602,9 @@ function Row(props) {
                           minHeight: "42px",
                           height: "42px",
                           width: "250px",
+                          fontSize: "14px",
+                          backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                          color: "#1F2937",
                         }}
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -626,11 +691,11 @@ function Row(props) {
                 </Box>
                 <Box pt="5px" width="calc(100% / 3)">
                   <Typography
-                    variant="h6"
-                    color="#1F2937"
-                    fontWeight={600}
+                    fontSize={14}
+                    color="#757575"
+                    fontWeight={400}
                     mb="10px"
-                    height={17}
+                    // height={17}
                   >
                     {t("0-common.Structural subdivision")}
                   </Typography>
@@ -641,11 +706,17 @@ function Row(props) {
                         minHeight: "42px",
                         height: "42px",
                         width: "250px",
+                        fontSize: "14px",
+                        backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                        color: "#1F2937",
                       },
                     }}
-                    value={data.structuralSubdivision}
+                    value={data.metaInformation.structuralSubdivision}
                     onChange={(event) =>
-                      handleChangeParticipant(event, "structuralSubdivision")
+                      handleChangeParticipant(
+                        event,
+                        "metaInformationStructuralSubdivision"
+                      )
                     }
                     id="outlined-size-small"
                     size="small"
@@ -664,7 +735,6 @@ function Row(props) {
       <Draggable key={row.id} draggableId={row.id.toString()} index={index}>
         {(provided) => (
           <Fragment
-
           // style={getItemStyle(
           //   snapshot.isDragging,
           //   provided.draggableProps.style
@@ -676,11 +746,20 @@ function Row(props) {
               {...provided.dragHandleProps}
               sx={{
                 "& > *": { borderBottom: "unset" },
-                backgroundColor: open ? "#d9d9d9" : "inherit",
+                background: open ? "#DBEAFE" : "#FFFFFF",
+                borderRadius: "8px",
               }}
               ref={provided.innerRef}
             >
-              <TableCell component="th" scope="row" sx={{ width: "310px" }}>
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{
+                  width: "310px",
+                  borderBottom: "none",
+                  borderRadius: "10px 0px 0px 10px",
+                }}
+              >
                 <Stack direction="row" alignItems="center" spacing={1}>
                   {typeWorkflow === "serial" && (
                     <>
@@ -702,6 +781,10 @@ function Row(props) {
                             fontSize: "14px",
                             backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
+                          },
+                          "& .MuiOutlinedInput-input": {
+                            padding: "0px",
+                            textAlign: "center",
                           },
                         }}
                         value={data.sequenceNumber}
@@ -732,11 +815,21 @@ function Row(props) {
                   </Typography>
                 </Stack>
               </TableCell>
-              <TableCell align="left">{row.firstName}</TableCell>
-              <TableCell style={{ width: "250px" }} align="left">
+              <TableCell align="left" style={{ borderBottom: "none" }}>
+                {row.firstName}
+              </TableCell>
+              <TableCell
+                style={{ width: "250px", borderBottom: "none" }}
+                align="left"
+              >
                 {row.email}
               </TableCell>
-              <TableCell>
+              <TableCell
+                style={{
+                  borderBottom: "none",
+                  borderRadius: "0px 10px 10px 0px",
+                }}
+              >
                 <IconButton
                   aria-label="expand row"
                   variant="plain"
@@ -764,12 +857,22 @@ function Row(props) {
                       />
                     </span>
                   ) : (
-                    <PencilSquareIcon
-
-                    // style={{
-                    //   display: open ? "none" : "block",
-                    // }}
-                    />
+                    <span
+                      style={{
+                        backgroundColor: "#EFF6FF",
+                        borderRadius: 999,
+                        width: 30,
+                        height: 30,
+                      }}
+                    >
+                      <PencilSquareIcon
+                        style={{
+                          width: 14,
+                          height: 14,
+                          marginTop: 7,
+                        }}
+                      />
+                    </span>
                   )}
                 </IconButton>
                 <IconButton
@@ -803,10 +906,12 @@ function Row(props) {
                 </IconButton>
               </TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell
-                style={{ paddingBottom: 0, paddingTop: 0 }}
+                style={{
+                  padding: 0,
+                  borderBottom: "none",
+                }}
                 colSpan={6}
               >
                 <Collapse in={open} timeout="auto" unmountOnExit>
@@ -818,9 +923,9 @@ function Row(props) {
                   >
                     <Box width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -839,20 +944,22 @@ function Row(props) {
                             color: "#1F2937",
                           },
                         }}
-                        disabled
-                        value={data.fullName}
+                        defaultValue={data.fullName}
                         onChange={(event) =>
                           handleChangeParticipant(event, "fullname")
                         }
-                        id="outlined-size-small"
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        id="outlined-read-only-input"
                         size="small"
                       />
                     </Box>
                     <Box width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -865,21 +972,23 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
+                        id="custom-css-outlined-input"
+                        size="small"
                         value={data.firstName}
                         onChange={(event) =>
                           handleChangeParticipant(event, "firstName")
                         }
-                        id="outlined-size-small"
-                        size="small"
                       />
                     </Box>
                     <Box width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -893,6 +1002,8 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
                         value={data.lastName}
@@ -905,9 +1016,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -920,6 +1031,8 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
                         value={data.customReason}
@@ -932,9 +1045,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -947,11 +1060,16 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
-                        value={data.position}
+                        value={data.metaInformation.position}
                         onChange={(event) =>
-                          handleChangeParticipant(event, "position")
+                          handleChangeParticipant(
+                            event,
+                            "metaInformationPosition"
+                          )
                         }
                         id="outlined-size-small"
                         size="small"
@@ -959,9 +1077,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -981,6 +1099,8 @@ function Row(props) {
                               minHeight: "42px",
                               height: "42px",
                               width: "250px",
+                              backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                              color: "#1F2937",
                             }}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -1073,9 +1193,9 @@ function Row(props) {
                     </Box>
                     <Box pt="5px" width="calc(100% / 3)">
                       <Typography
-                        variant="h6"
-                        color="#1F2937"
-                        fontWeight={600}
+                        fontSize={14}
+                        color="#757575"
+                        fontWeight={400}
                         mb="10px"
                         height={17}
                       >
@@ -1088,13 +1208,15 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
+                            color: "#1F2937",
                           },
                         }}
-                        value={data.structuralSubdivision}
+                        value={data.metaInformation.structuralSubdivision}
                         onChange={(event) =>
                           handleChangeParticipant(
                             event,
-                            "structuralSubdivision"
+                            "metaInformationStructuralSubdivision"
                           )
                         }
                         id="outlined-size-small"
@@ -1188,8 +1310,7 @@ const ParticipantsTable = ({
         aria-label="Vertical tabs example"
         sx={{
           float: "right",
-          border: "2px solid #3B82F6",
-          borderRadius: "6px",
+          // border: "2px solid #3B82F6",
           height: "23px",
           minHeight: "23px",
           // "& .MuiTabs-root": {
@@ -1200,17 +1321,69 @@ const ParticipantsTable = ({
           style: { display: "none" },
         }}
       >
-        <CustomTab label="Serial"></CustomTab>
-        <CustomTab label="Parallel"></CustomTab>
-        <CustomTab label="Individual"></CustomTab>
-        <CustomTab label="Custom"></CustomTab>
+        <CustomTab
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+            borderLeft: "2px solid #3B82F6",
+            borderRadius: "6px 0px 0px 6px",
+            paddingTop: "1.5px",
+          }}
+          label="Serial"
+        ></CustomTab>
+        <CustomTab
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+            paddingTop: "1.5px",
+          }}
+          label="Parallel"
+        ></CustomTab>
+        <CustomTab
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+            paddingTop: "1.5px",
+          }}
+          label="Individual"
+        ></CustomTab>
+        <CustomTab
+          style={{
+            borderBottom: "2px solid #3B82F6",
+            borderTop: "2px solid #3B82F6",
+            borderRight: "2px solid #3B82F6",
+            borderRadius: "0px 6px 6px 0px",
+            paddingTop: "1.5px",
+          }}
+          label="Custom"
+        ></CustomTab>
       </Tabs>
       <TabPanel value={tabValue} index={0}>
-        <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
+        <TableContainer
+          component={Paper}
+          sx={{
+            background: "none",
+            borderRadius: "none",
+            boxShadow: "none",
+          }}
+        >
+          <Table
+            aria-label="collapsible table"
+            sx={{
+              "&.MuiTable-root": {
+                borderSpacing: "0 10px",
+                borderCollapse: "separate",
+              },
+            }}
+          >
             <TableHead>
               <TableRow>
-                <TableCell>Participants</TableCell>
+                <TableCell style={{ paddingLeft: "55px" }}>
+                  Participants
+                </TableCell>
                 <TableCell align="left">Name</TableCell>
                 <TableCell align="left">Email</TableCell>
                 <TableCell />
@@ -1248,13 +1421,40 @@ const ParticipantsTable = ({
         </TableContainer>
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
+        <TableContainer
+          component={Paper}
+          sx={{
+            background: "none",
+            borderRadius: "none",
+            boxShadow: "none",
+          }}
+        >
+          <Table
+            aria-label="collapsible table"
+            sx={{
+              "&.MuiTable-root": {
+                borderSpacing: "0 10px",
+                borderCollapse: "separate",
+              },
+            }}
+          >
             <TableHead>
               <TableRow>
-                <TableCell>Participants</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Email</TableCell>
+                <TableCell style={{ color: "#475569", fontSize: "16px" }}>
+                  Participants
+                </TableCell>
+                <TableCell
+                  style={{ color: "#475569", fontSize: "16px" }}
+                  align="left"
+                >
+                  Name
+                </TableCell>
+                <TableCell
+                  style={{ color: "#475569", fontSize: "16px" }}
+                  align="left"
+                >
+                  Email
+                </TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -1287,8 +1487,23 @@ const ParticipantsTable = ({
         </TableContainer>
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
+        <TableContainer
+          component={Paper}
+          sx={{
+            background: "none",
+            borderRadius: "none",
+            boxShadow: "none",
+          }}
+        >
+          <Table
+            aria-label="collapsible table"
+            sx={{
+              "&.MuiTable-root": {
+                borderSpacing: "0 10px",
+                borderCollapse: "separate",
+              },
+            }}
+          >
             <TableHead>
               <TableRow>
                 <TableCell>Participants</TableCell>
@@ -1322,11 +1537,28 @@ const ParticipantsTable = ({
         </TableContainer>
       </TabPanel>
       <TabPanel value={tabValue} index={3}>
-        <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
+        <TableContainer
+          component={Paper}
+          sx={{
+            background: "none",
+            borderRadius: "none",
+            boxShadow: "none",
+          }}
+        >
+          <Table
+            aria-label="collapsible table"
+            sx={{
+              "&.MuiTable-root": {
+                borderSpacing: "0 10px",
+                borderCollapse: "separate",
+              },
+            }}
+          >
             <TableHead>
               <TableRow>
-                <TableCell>Participants</TableCell>
+                <TableCell style={{ paddingLeft: "85px" }}>
+                  Participants
+                </TableCell>
                 <TableCell align="left">Name</TableCell>
                 <TableCell align="left">Email</TableCell>
                 <TableCell />

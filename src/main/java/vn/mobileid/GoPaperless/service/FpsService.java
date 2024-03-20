@@ -391,6 +391,7 @@ public class FpsService {
 
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("text", data);
+        requestData.put("visible_enabled", true);
 
         // Convert requestData to JSON string
         ObjectMapper objectMapper = new ObjectMapper();
@@ -438,6 +439,7 @@ public class FpsService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
         requestData.put("apply_to_all", data.getApply_to_all());
+        requestData.put("visible_enabled", true);
         if(!data.getApply_to_all()) {
             requestData.put("initial_pages", data.getInitial_pages());
         }

@@ -94,7 +94,7 @@ export const Participants = ({ participantsList, workFlow }) => {
         workFlow={workFlow}
         open={open}
         handleClose={handleClose}
-        title={t("0-common.workflow")}
+        title={t("arrangement.manage_participants")}
         data={participantsList}
       />
     </Box>

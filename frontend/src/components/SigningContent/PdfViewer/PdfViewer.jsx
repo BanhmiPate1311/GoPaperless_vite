@@ -379,7 +379,8 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
           workFlow={workFlow}
           signatures={field?.signature.map((item) => ({
             ...item,
-            selected: item.field_name === fieldSelect.field_name ? true : false,
+            selected:
+              item.field_name === fieldSelect?.field_name ? true : false,
           }))}
           textbox={field?.textbox?.filter((item) => item.type !== "TEXTFIELD")}
           initial={field?.initial}

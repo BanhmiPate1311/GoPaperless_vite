@@ -366,26 +366,38 @@ public class ApiController {
 
     @PostMapping("/approve")
     public ResponseEntity<?> getView(@RequestBody ApproveRequest request) throws Exception {
+        Participants participant = new Participants();
+        connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(participant, request.getSignerToken());
+        String signerName = participant.getLastName() + " " + participant.getFirstName();
+        LastFile lastFile = new LastFile();
+
+        connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, request.getSigningToken());
 
         if (!request.getComment().isEmpty()) {
-            connect.USP_GW_PPL_WORKFLOW_COMMENT_ADD(request.getWorkFlowId(), request.getParticipantID(), request.getComment(), request.getRecipientID(), request.getHmac(), request.getSignerName());
+            connect.USP_GW_PPL_WORKFLOW_COMMENT_ADD(lastFile.getPplWorkflowId(), participant.getId(), request.getComment(), request.getRecipientID(), request.getHmac(), signerName);
         }
 
-        int updateStatus = request.getSignerType() == 2 ? Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_REVIEWER_STATUS_ID_VIEWED : Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_EDITORER_STATUS_ID_EDITED;
+
+        int updateStatus = participant.getSignerType() == 2 ? Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_REVIEWER_STATUS_ID_VIEWED : Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_EDITORER_STATUS_ID_EDITED;
         connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(request.getSignerToken(),
                 updateStatus, "", 0);
 
-        byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
-        checkAndSendMailService.checkAndSendMail(request.getWorkFlowProcessType(), request.getSignerToken(), request.getSigningToken(), request.getSignerName(), request.getSignerEmail(), request.getFileName(), data);
+        byte[] data = fpsService.getByteImagePdf(lastFile.getDocumentId());
+
+        checkAndSendMailService.checkAndSendMail(lastFile.getWorkflowProcessType(), request.getSignerToken(), request.getSigningToken(), signerName, participant.getEmail(), lastFile.getLastPplFileName(), lastFile.getDeadlineAt(), data);
 
         return new ResponseEntity<>("workFlowCommentId", HttpStatus.OK);
     }
+
     @PostMapping("/shareToSign")
-    public ResponseEntity<?> shareToSign(@RequestBody ShareToSignRequest request) throws Exception{
-        System.out.println("request: "+request.getParticipant().getSignerToken());
-        System.out.println("request: "+request.getFileName());
+    public ResponseEntity<?> shareToSign(@RequestBody ShareToSignRequest request) throws Exception {
+        System.out.println("request: " + request.getParticipant().getSignerToken());
+        System.out.println("request: " + request.getFileName());
+        LastFile lastFile = new LastFile();
+
+        connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, request.getSigningToken());
         byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
-        checkAndSendMailService.shareToSign(request.getWorkFlowProcessType(), request.getSigningToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(),request.getParticipant(), data);
+        checkAndSendMailService.shareToSign(lastFile.getDeadlineAt(), request.getWorkFlowProcessType(), request.getSigningToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(), request.getParticipant(), data);
 
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

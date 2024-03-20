@@ -11,8 +11,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter@Setter
 public class ParticipantsObject {
     private String firstName;
     private String lastName;
@@ -24,6 +26,8 @@ public class ParticipantsObject {
     private String signerToken;
     private String workflowProcessType;
     private String signingToken;
+    
+    private MetaInformation metaInformationObj;
 
     public String getFirstName() {
         return firstName;

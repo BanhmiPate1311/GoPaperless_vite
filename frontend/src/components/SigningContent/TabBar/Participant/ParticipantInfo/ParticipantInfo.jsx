@@ -1,9 +1,9 @@
-import { ReactComponent as SendCopyIcon } from "@/assets/images/svg/send_copy.svg";
-import { ReactComponent as SignerIcon } from "@/assets/images/svg/signer.svg";
 import { ReactComponent as EditorIcon } from "@/assets/images/svg/editor.svg";
 import { ReactComponent as ReviewerIcon } from "@/assets/images/svg/reviewer.svg";
+import { ReactComponent as SendCopyIcon } from "@/assets/images/svg/send_copy.svg";
+import { ReactComponent as SignerIcon } from "@/assets/images/svg/signer.svg";
 import { useCommonHook } from "@/hook";
-import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
+import { checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -76,7 +76,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0 }}>
         {participantsList.map((participant, index) => {
-          const status = checkSignerStatus(participant, signerToken);
+          // const status = checkSignerStatus(participant, signerToken);
           const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
