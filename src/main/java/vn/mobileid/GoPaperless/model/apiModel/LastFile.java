@@ -1,5 +1,7 @@
 package vn.mobileid.GoPaperless.model.apiModel;
 
+import java.util.Date;
+
 public class LastFile {
     private int pplWorkflowId;
     private int firstPplFileSignedId;
@@ -11,10 +13,14 @@ public class LastFile {
     private String uploadToken;
     private int documentId;
     private String workflowProcessType;;
+    private String workflowStatus;;
     private String workflowDocumentName;
     private String workflowDocumentFormat;
     private int enterpriseId;
     private String deadlineAt;
+    private String createdBy;
+    private Date createdAt;
+    private Date lastModifiedAt;
 
     public int getPplWorkflowId() {
         return pplWorkflowId;
@@ -127,4 +133,38 @@ public class LastFile {
     public void setWorkflowProcessType(String workflowProcessType) {
         this.workflowProcessType = workflowProcessType;
     }
+
+    public String getWorkflowStatus() {
+        return workflowStatus;
+    }
+
+    public void setWorkflowStatus(String workflowStatus) {
+        this.workflowStatus = workflowStatus;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getLastModifiedAt() {
+        return lastModifiedAt;
+    }
+
+    public void setLastModifiedAt(Date lastModifiedAt) {
+        this.lastModifiedAt = lastModifiedAt;
+    }
+    
+    
 }
