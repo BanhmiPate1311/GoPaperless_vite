@@ -321,6 +321,7 @@ export const ModalEid = ({
       }
       // handleNext();
     } catch (error) {
+      setIsFetching(false);
       console.error("Lỗi khi gọi API updateSubject:", error);
       switch (activeStep) {
         case 7:

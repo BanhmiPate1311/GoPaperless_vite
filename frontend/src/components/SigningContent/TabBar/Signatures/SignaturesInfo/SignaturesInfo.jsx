@@ -92,7 +92,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
                 <Typography variant="h2">{sign.name}</Typography>
                 {signvalue.indication === "TOTAL_PASSED" && (
                   <Typography variant="h2">
-                    {convertTime(signvalue.signingTime)}
+                    {convertTime(signvalue.signing_time)}
                   </Typography>
                 )}
               </Box>
