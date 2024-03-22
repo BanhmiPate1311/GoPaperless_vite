@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -54,33 +55,28 @@ public class ValidationController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/abc/{upload_token}/downloadReport")
+    @GetMapping("/{upload_token}/downloadReport")
     public ResponseEntity<?> downloadReport(@PathVariable String upload_token) throws Exception {
 
         System.out.println("downloadReport o day ne");
         System.out.println("upload_token: " + upload_token);
-        InputStream response = gatewayAPI.downloadReport(upload_token);
-        String fileName = "simple-report.pdf";
+        String response = gatewayAPI.downloadReport(upload_token);
 
-        if (response != null) {
-            // trả về stream input file để download kèm header content type và content
-            // length để browser hiểu
-            HttpHeaders headers = new HttpHeaders();
-            String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString())
-                    .replace("+", "%20");
-//            headers.add("Content-Disposition", "attachment; filename=" + encodedFileName);
-            headers.add("Content-Disposition", "attachment; filename=" + fileName);
-            // jrbFile.getFileName());
-            InputStreamResource inputStreamResource = new InputStreamResource(response);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .headers(headers)
-                    .body(inputStreamResource);
-        } else {
-            // trả về lỗi không tìm thấy file để download
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
-        }
+        // Decode base64 data to byte array
+        byte[] pdfBytes = Base64.getDecoder().decode(response);
+        System.out.println("toi day ne");
+        HttpHeaders headers = new HttpHeaders();
+        String fileName = "file.pdf"; // Tên file PDF muốn trả về
+        String encodedFileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+        headers.add("Content-Disposition", "attachment; filename=" + encodedFileName);
 
+        // Set content length
+        headers.setContentLength(pdfBytes.length);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(pdfBytes);
 
     }
 }

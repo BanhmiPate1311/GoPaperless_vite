@@ -220,6 +220,8 @@ export const Validation = () => {
                 <a
                   style={{ color: "white", textDecoration: "none" }}
                   href={`${window.location.origin}/api/internalusage/validation/${upload_token}/download/report-pdf`}
+                  // href={`http://localhost:8080/view/val/${upload_token}/downloadReport`}
+                  download
                 >
                   <CustomButton
                     startIcon={<FileDownloadOutlinedIcon />}

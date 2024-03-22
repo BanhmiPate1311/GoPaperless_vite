@@ -172,15 +172,15 @@ public class GatewayAPI {
         return responseEntity.getBody();
     }
 
-    public InputStream downloadReport(String uploadToken) throws IOException {
+    public String downloadReport(String uploadToken) throws IOException {
         String baseUrl = getBaseUrl();
         String getValidViewUrl = baseUrl + "/api/internalusage/validation/" + uploadToken + "/download/report-pdf";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new ResourceHttpMessageConverter());
         System.out.println("getValidViewUrl: " + getValidViewUrl);
-        ResponseEntity<InputStreamResource> responseEntity = restTemplate.exchange(getValidViewUrl, HttpMethod.GET, null, InputStreamResource.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(getValidViewUrl, HttpMethod.GET, null, String.class);
 
-        return Objects.requireNonNull(responseEntity.getBody()).getInputStream();
+        return responseEntity.getBody();
     }
 
 
