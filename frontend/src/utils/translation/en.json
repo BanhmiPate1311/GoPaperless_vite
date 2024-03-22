@@ -77,7 +77,8 @@
     "valid_to": "Valid to",
     "preview": "Preview",
     "preview&continue": "Preview & Continue",
-    "attachments": "Attachments"
+    "attachments": "Attachments",
+    "edit": "Edit"
   },
   "batch": {
     "collapse": "Collapse all",

@@ -850,16 +850,30 @@ function Row(props) {
                   </Typography>
                 </Stack>
               </TableCell>
-              <TableCell
-                align="left"
-                style={{
-                  borderBottom: "none",
-                  padding: "0px 0px 0px 0px",
-                  minWidth: "150px",
-                }}
-              >
-                {row.firstName}
-              </TableCell>
+              {typeWorkflow === "serial" && (
+                <TableCell
+                  align="left"
+                  style={{
+                    borderBottom: "none",
+                    padding: "0px 0px 0px 0px",
+                    minWidth: "280px",
+                  }}
+                >
+                  {row.firstName}
+                </TableCell>
+              )}
+              {typeWorkflow === "custom" && (
+                <TableCell
+                  align="left"
+                  style={{
+                    borderBottom: "none",
+                    padding: "0px 0px 0px 0px",
+                    minWidth: "250px",
+                  }}
+                >
+                  {row.firstName}
+                </TableCell>
+              )}
               <TableCell
                 style={{
                   width: "250px",

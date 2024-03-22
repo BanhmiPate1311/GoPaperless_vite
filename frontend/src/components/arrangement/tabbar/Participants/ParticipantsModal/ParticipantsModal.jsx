@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { participantsService } from "@/services/participants_service";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -6,12 +7,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
+import { useQueryClient } from "@tanstack/react-query";
 import { t } from "i18next";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import ParticipantsTable from "./ParticipantsTable";
-import { participantsService } from "@/services/participants_service";
-import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export const ParticipantsModal = ({
   open,
@@ -58,12 +59,16 @@ export const ParticipantsModal = ({
       console.log("response: ", response);
       // setProcess(response.data);
       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+      toast.success("Update participants successful."); // Display success notification
+      // <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+      //   Import successful.
+      // </Alert>;
     } catch (error) {
       console.error("Lỗi khi gọi API updateParticipant:", error);
-      alert("UPDATE PARTICIPANTS ERROR");
+      toast.error("Update participants ERROR");
       // Xử lý lỗi tại đây nếu cần
     }
-    handleClose();
+    // handleClose();
   };
   return (
     <Dialog
