@@ -360,5 +360,11 @@
     "val3": "OID-ga 1.3.6.1.4.1.54720.1.1",
     "validSeal": "kehtivad pitsatid",
     "validSig": "kehtivad allkirjad"
+  },
+  "arrangement": {
+    "manage_participants": "Haldage osalejaid",
+    "setting_documents": "Dokumentide seadistamine",
+    "error-1": "Osalejate jaoks pole piisavalt välju",
+    "share_now": "Jaga kohe"
   }
 }

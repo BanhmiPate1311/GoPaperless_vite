@@ -19,6 +19,7 @@ import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
 import Button from "@mui/material/Button";
 import { fpsService } from "@/services/fps_service";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Arrangement = () => {
   const { t } = useTranslation();
@@ -85,7 +86,7 @@ export const Arrangement = () => {
     };
   };
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
-
+  const queryClient = useQueryClient();
   const handleShareToSign = async () => {
     const fields = await getFields();
     const checkFields = workFlow.data.participants
@@ -108,11 +109,6 @@ export const Arrangement = () => {
                 }
               });
               // If have Signature field for this signer
-              if (!data) {
-                alert("Don't have enough signature field for this signer");
-              }
-            } else {
-              alert("Don't have enough signature field for this signer");
             }
             break;
           case 3:
@@ -127,11 +123,6 @@ export const Arrangement = () => {
                 }
               });
               // If have Signature field for this signer
-              if (!data) {
-                alert("Don't have enough Initial field for this Reviewer");
-              }
-            } else {
-              alert("Don't have enough Initial field for this Reviewer");
             }
             break;
           default:
@@ -161,11 +152,13 @@ export const Arrangement = () => {
       try {
         await apiService.shareToSign(data);
         alert("Share to sign success!!");
+        setSignerToken("");
+        queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
       } catch (error) {
         alert("Share to sign fail!!");
       }
     } else {
-      alert("Don't have enough field for Participants");
+      alert(t("arrangement.error-1"));
     }
   };
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
@@ -173,6 +166,7 @@ export const Arrangement = () => {
   // if (workFlowValid && workFlowValid.data === 0) {
   //   return <NotFound />;
   // } else {
+  console.log("workFlow: ", workFlow.data?.workflowStatus);
   return (
     <Stack height="100%" overflow="auto">
       <Box>
@@ -309,8 +303,12 @@ export const Arrangement = () => {
                 icon={<SaveAltIcon fontSize="small" />}
                 clickable
               />
-              <Button variant="contained" onClick={handleShareToSign}>
-                Share Now
+              <Button
+                variant="contained"
+                onClick={handleShareToSign}
+                disabled={workFlow.data?.workflowStatus > 1}
+              >
+                {t("arrangement.share_now")}
               </Button>
             </Box>
           </Toolbar>

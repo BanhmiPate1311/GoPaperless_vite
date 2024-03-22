@@ -13,13 +13,11 @@ import { ResizableBox } from "react-resizable";
 
 export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
   const signer = getSigner(workFlow);
-  const signerId = signer?.signerId || "ADMIN_PROVIDER";
-  console.log("signerId: ", qrData);
-
+  const signerId =
+    workFlow?.workflowStatus < 2 ? signer?.signerId || "ADMIN_PROVIDER" : null;
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
   const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
-
   const [dragPosition, setDragPosition] = useState({
     x: (qrData.dimension?.x * pdfPage.width) / 100,
     y: (qrData.dimension?.y * pdfPage.height) / 100,
@@ -134,49 +132,49 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
           setIsControlled(true);
           handleDrag("none");
           const draggableComponent = document.querySelector(`.qrbox-${index}`);
-          const targetComponents = document.querySelectorAll(".sig");
+          // const targetComponents = document.querySelectorAll(".sig");
           const containerComponent = document.getElementById(
             `pdf-view-${pdfPage.currentPage - 1}`
           );
 
-          const containerRect = containerComponent.getBoundingClientRect();
+          // const containerRect = containerComponent.getBoundingClientRect();
 
-          const draggableRect = draggableComponent.getBoundingClientRect();
+          // const draggableRect = draggableComponent.getBoundingClientRect();
 
-          if (
-            draggableRect.right > containerRect.right ||
-            draggableRect.left < containerRect.left ||
-            draggableRect.bottom > containerRect.bottom ||
-            draggableRect.top < containerRect.top
-          ) {
-            return;
-          }
-          let isOverTarget = false;
+          // if (
+          //   draggableRect.right > containerRect.right ||
+          //   draggableRect.left < containerRect.left ||
+          //   draggableRect.bottom > containerRect.bottom ||
+          //   draggableRect.top < containerRect.top
+          // ) {
+          //   return;
+          // }
+          // let isOverTarget = false;
 
-          targetComponents.forEach((targetComponent) => {
-            if (isOverTarget) return;
+          // targetComponents.forEach((targetComponent) => {
+          //   if (isOverTarget) return;
 
-            const targetRect = targetComponent.getBoundingClientRect();
+          //   const targetRect = targetComponent.getBoundingClientRect();
 
-            if (draggableComponent === targetComponent) return;
+          //   if (draggableComponent === targetComponent) return;
 
-            if (
-              draggableRect.left < targetRect.right &&
-              draggableRect.right > targetRect.left &&
-              draggableRect.top < targetRect.bottom &&
-              draggableRect.bottom > targetRect.top
-            ) {
-              isOverTarget = true;
-              console.log("Draggable component is over the target component");
-            }
-          });
+          //   if (
+          //     draggableRect.left < targetRect.right &&
+          //     draggableRect.right > targetRect.left &&
+          //     draggableRect.top < targetRect.bottom &&
+          //     draggableRect.bottom > targetRect.top
+          //   ) {
+          //     isOverTarget = true;
+          //     console.log("Draggable component is over the target component");
+          //   }
+          // });
 
-          if (
-            (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
-            isOverTarget
-          ) {
-            return;
-          }
+          // if (
+          //   (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
+          //   isOverTarget
+          // ) {
+          //   return;
+          // }
           setDragPosition({ x: data.x, y: data.y });
           const rectComp = containerComponent.getBoundingClientRect();
           // console.log("rectComp: ", rectComp);
@@ -302,7 +300,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
               borderColor: "#e1e1e1",
             }}
             onMouseMove={(e) => {
-              setShowTopbar(true);
+              workFlow?.workflowStatus < 2 ? setShowTopbar(true) : null;
             }}
             onMouseLeave={(e) => {
               setShowTopbar(false);

@@ -137,6 +137,13 @@ public class ApiController {
             signingWorkflowDto.setDocumentId(lastFile.getDocumentId());
             signingWorkflowDto.setLastFileUuid(lastFile.getLastPplFileUuid());
             signingWorkflowDto.setWorkflowProcessType(lastFile.getWorkflowProcessType());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setWorkflowStatus(lastFile.getWorkflowStatus());
+            signingWorkflowDto.setCreatedBy(lastFile.getCreatedBy());
+            signingWorkflowDto.setCreatedAt(lastFile.getCreatedAt());
+            signingWorkflowDto.setLastModifiedAt(lastFile.getLastModifiedAt());
             if (lastFile.getDeadlineAt() != null) {
                 signingWorkflowDto.setDeadlineAt(CommonFunction.convertToGetTimeZone(lastFile.getDeadlineAt()));
             }
@@ -391,15 +398,19 @@ public class ApiController {
 
     @PostMapping("/shareToSign")
     public ResponseEntity<?> shareToSign(@RequestBody ShareToSignRequest request) throws Exception {
-        System.out.println("request: " + request.getParticipant().getSignerToken());
+        System.out.println("request: " + request.getSigningToken());
         System.out.println("request: " + request.getFileName());
         LastFile lastFile = new LastFile();
-
         connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, request.getSigningToken());
         byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
-        checkAndSendMailService.shareToSign(lastFile.getDeadlineAt(), request.getWorkFlowProcessType(), request.getSigningToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(), request.getParticipant(), data);
+        int result = checkAndSendMailService.shareToSign(lastFile.getDeadlineAt(), request.getWorkFlowProcessType(), request.getSigningToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(), request.getParticipant(), data);
+        if(result == 0){
+//            connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(request.getSigningToken(),2,"Gateway view");
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
     @PostMapping("/checkPerMission")

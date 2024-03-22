@@ -1,5 +1,6 @@
 package vn.mobileid.GoPaperless.dto.apiDto;
 
+import java.util.Date;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public class SigningWorkflowDto {
     private String deadlineAt;
     private String fileType;
     private String workflowProcessType;
+    private String workflowStatus;
+    private String createdBy;
+    private Date createdAt;
+    private Date lastModifiedAt;
 
     public int getDocumentId() {
         return documentId;
@@ -140,4 +145,38 @@ public class SigningWorkflowDto {
     public void setWorkflowProcessType(String workflowProcessType) {
         this.workflowProcessType = workflowProcessType;
     }
+
+    public String getWorkflowStatus() {
+        return workflowStatus;
+    }
+
+    public void setWorkflowStatus(String workflowStatus) {
+        this.workflowStatus = workflowStatus;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getLastModifiedAt() {
+        return lastModifiedAt;
+    }
+
+    public void setLastModifiedAt(Date lastModifiedAt) {
+        this.lastModifiedAt = lastModifiedAt;
+    }
+    
+    
 }

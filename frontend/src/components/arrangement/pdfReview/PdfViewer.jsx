@@ -49,7 +49,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       alert("Error: ", res.message);
     }
   };
-  console.log(workFlow, "workFlow");
+
   // Get fields
   const getFields = async () => {
     const response = await fpsService.getFields({
@@ -423,6 +423,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       value: `${window.location.origin}/view/documents/${qrToken}`,
       signing_token: signingToken,
     };
+    console.log("newInitField: ", newInitField);
     const response = await fpsService.addTextBox(
       newInitField,
       "qrcode",
@@ -446,13 +447,13 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
           {
             column_1: item.lastName + " " + item.firstName,
             column_2: item.email,
-            column_3: "Signing Time: ",
+            column_3: "Signing Time",
           },
           {
             column_1: "",
           },
         ],
-        remark: "table",
+        remark: "signer",
       };
     });
     const fieldName = generateFieldName("ADMIN_PROVIDER", value);
@@ -519,24 +520,30 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
         break;
     }
   };
-
   const renderPage = (props) => {
     return (
       <div
         className={`cuong-page-${props.pageIndex}`}
-        onContextMenu={handleContextMenu(props)}
+        onContextMenu={
+          participantsType[0]?.signerType || tabBar !== 1
+            ? handleContextMenu(props)
+            : null
+        }
         style={{
           width: "100%",
           height: "100%",
         }}
       >
-        <ContextMenu
-          contextMenu={contextMenu}
-          handleClose={handleClose}
-          handleClickMenu={handleClickMenu}
-          tabBar={tabBar}
-          signerType={participantsType[0]?.signerType}
-        />
+        {workFlow.workflowStatus < 2 && (
+          <ContextMenu
+            contextMenu={contextMenu}
+            handleClose={handleClose}
+            handleClickMenu={handleClickMenu}
+            tabBar={tabBar}
+            signerType={participantsType[0]?.signerType}
+          />
+        )}
+
         <Document
           props={props}
           workFlow={workFlow}

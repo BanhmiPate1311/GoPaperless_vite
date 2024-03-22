@@ -18,8 +18,8 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
   const signer = getSigner(workFlow);
-  const signerId = signer?.signerId || "ADMIN_PROVIDER";
-
+  const signerId =
+    workFlow?.workflowStatus < 2 ? signer?.signerId || "ADMIN_PROVIDER" : null;
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
   const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
@@ -161,40 +161,40 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
 
           const draggableRect = draggableComponent.getBoundingClientRect();
 
-          if (
-            draggableRect.right > containerRect.right ||
-            draggableRect.left < containerRect.left ||
-            draggableRect.bottom > containerRect.bottom ||
-            draggableRect.top < containerRect.top
-          ) {
-            return;
-          }
-          let isOverTarget = false;
+          // if (
+          //   draggableRect.right > containerRect.right ||
+          //   draggableRect.left < containerRect.left ||
+          //   draggableRect.bottom > containerRect.bottom ||
+          //   draggableRect.top < containerRect.top
+          // ) {
+          //   return;
+          // }
+          // let isOverTarget = false;
 
-          targetComponents.forEach((targetComponent) => {
-            if (isOverTarget) return;
+          // targetComponents.forEach((targetComponent) => {
+          //   if (isOverTarget) return;
 
-            const targetRect = targetComponent.getBoundingClientRect();
+          //   const targetRect = targetComponent.getBoundingClientRect();
 
-            if (draggableComponent === targetComponent) return;
+          //   if (draggableComponent === targetComponent) return;
 
-            if (
-              draggableRect.left < targetRect.right &&
-              draggableRect.right > targetRect.left &&
-              draggableRect.top < targetRect.bottom &&
-              draggableRect.bottom > targetRect.top
-            ) {
-              isOverTarget = true;
-              console.log("Draggable component is over the target component");
-            }
-          });
+          //   if (
+          //     draggableRect.left < targetRect.right &&
+          //     draggableRect.right > targetRect.left &&
+          //     draggableRect.top < targetRect.bottom &&
+          //     draggableRect.bottom > targetRect.top
+          //   ) {
+          //     isOverTarget = true;
+          //     console.log("Draggable component is over the target component");
+          //   }
+          // });
 
-          if (
-            (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
-            isOverTarget
-          ) {
-            return;
-          }
+          // if (
+          //   (dragPosition?.x === data.x && dragPosition?.y === data.y) ||
+          //   isOverTarget
+          // ) {
+          //   return;
+          // }
           setDragPosition({ x: data.x, y: data.y });
           const rectComp = containerComponent.getBoundingClientRect();
           // console.log("rectComp: ", rectComp);
@@ -320,7 +320,7 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
               borderColor: "#e1e1e1",
             }}
             onMouseMove={(e) => {
-              setShowTopbar(true);
+              workFlow?.workflowStatus < 2 ? setShowTopbar(true) : null;
             }}
             onMouseLeave={(e) => {
               setShowTopbar(false);

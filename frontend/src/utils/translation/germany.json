@@ -360,5 +360,11 @@
     "val3": "mit einer OID 1.3.6.1.4.1.54720.1.1",
     "validSeal": "gültige Siegel",
     "validSig": "gültige Unterschriften"
+  },
+  "arrangement": {
+    "manage_participants": "Teilnehmer verwalten",
+    "setting_documents": "Dokumente einstellen",
+    "error-1": "Nicht genügend Felder für Teilnehmer vorhanden",
+    "share_now": "Jetzt teilen"
   }
 }
