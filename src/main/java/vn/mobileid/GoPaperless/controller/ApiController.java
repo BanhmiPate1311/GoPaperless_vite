@@ -405,7 +405,7 @@ public class ApiController {
         byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
         int result = checkAndSendMailService.shareToSign(lastFile.getDeadlineAt(), request.getWorkFlowProcessType(), request.getSigningToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(), request.getParticipant(), data);
         if(result == 0){
-//            connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(request.getSigningToken(),2,"Gateway view");
+            connect.USP_GW_PPL_WORKFLOW_UPDATE_STATUS(request.getSigningToken(),2,"Gateway view");
             return new ResponseEntity<>("Success", HttpStatus.OK);
         }else{
             return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);

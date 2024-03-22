@@ -92,10 +92,12 @@ export const TabBar = ({
   //   });
   const handleChange = (event, newValue) => {
     setTabBar(newValue);
-    if (newValue !== 1) {
-      workFlow.setSignerToken("");
-    } else {
-      workFlow.setSignerToken(workFlow.participants[0].signerToken);
+    if (workFlow.workflowStatus < 2) {
+      if (newValue !== 1) {
+        workFlow.setSignerToken("");
+      } else {
+        workFlow.setSignerToken(workFlow.participants[0].signerToken);
+      }
     }
   };
   return (
