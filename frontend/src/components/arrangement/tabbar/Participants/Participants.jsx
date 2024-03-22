@@ -87,6 +87,7 @@ export const Participants = ({ participantsList, workFlow }) => {
           participantsList={participantsList}
           setSignerToken={workFlow.setSignerToken}
           signerToken={workFlow.signerToken}
+          workflowStatus={workFlow.workflowStatus}
         />
       )}
 

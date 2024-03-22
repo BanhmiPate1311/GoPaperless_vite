@@ -254,6 +254,8 @@ export const QryptoGeneralForm = ({
                     removeField={removeField}
                     field={field}
                     control={control}
+                    unregister={unregister}
+                    setValue={setValue}
                   />
                 </Box>
               );
@@ -528,7 +530,7 @@ const ChoiceElement = ({
           // defaultValue={true}
           onChange={(e) => {
             const value = e.target.value.trim();
-            console.log();
+
             field.value.map((item, i) => {
               setValue(`items[${index}].value[${i}].choise`, false);
             });
@@ -741,7 +743,15 @@ const SignerElement = ({ register, index, removeField, field, control }) => {
     </Box>
   );
 };
-const TableElement = ({ register, index, removeField, field, control }) => {
+const TableElement = ({
+  register,
+  index,
+  removeField,
+  field,
+  control,
+  unregister,
+  setValue,
+}) => {
   return (
     <Box
       key={index}
@@ -783,102 +793,133 @@ const TableElement = ({ register, index, removeField, field, control }) => {
       </Box>
       <Box sx={{ flexGrow: 1 }}>
         {field.value?.map((values, i) => {
-          if (
-            Object.values(values).length > 1 &&
-            Object.values(values)[Object.values(values).length - 1] !==
-              undefined
-          ) {
+          if (i % 2 == 0) {
             return (
-              <Grid container spacing={1} key={i} sx={{ marginBottom: "10px" }}>
-                <Grid item xs={4}>
-                  <InputField
-                    label=""
-                    name={`items[${index}].value[${i}].column_${i + 1}`}
-                    control={control}
-                    InputLabelProps={{
-                      sx: {
-                        backgroundColor: "signingWFBackground.main",
-                      },
-                    }}
-                    inputProps={{
-                      sx: {
-                        p: "14px 16px",
-                        backgroundColor: "signingWFBackground.main",
-                      },
-                    }}
-                    sx={{ my: 0, height: "45px" }}
-                    disabled={field.mandatory_enable}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <InputField
-                    label=""
-                    name={`items[${index}].value[${i}].column_${i + 2}`}
-                    control={control}
-                    InputLabelProps={{
-                      sx: {
-                        backgroundColor: "signingWFBackground.main",
-                      },
-                    }}
-                    inputProps={{
-                      sx: {
-                        py: "10.5px",
-                        backgroundColor: "signingWFBackground.main",
-                      },
-                    }}
-                    sx={{ my: 0, height: "45px" }}
-                    disabled={field.mandatory_enable}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <InputField
-                    label=""
-                    name={`items[${index}].value[${i}].column_${i + 3}`}
-                    control={control}
-                    InputLabelProps={{
-                      sx: {
-                        backgroundColor: "signingWFBackground.main",
-                      },
-                    }}
-                    inputProps={{
-                      sx: {
-                        py: "10.5px",
-                        backgroundColor: "signingWFBackground.main",
-                      },
-                    }}
-                    sx={{ my: 0, height: "45px" }}
-                    disabled={field.mandatory_enable}
-                  />
-                </Grid>
-              </Grid>
+              <Box sx={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+                <Box>
+                  <Grid
+                    container
+                    spacing={1}
+                    key={i}
+                    sx={{ marginBottom: "10px" }}
+                  >
+                    <Grid item xs={4}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i}].column_${1}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            p: "14px 16px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i}].column_${2}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            py: "10.5px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i}].column_${3}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            py: "10.5px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i + 1}].column_${1}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            p: "10.5px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Button
+                  variant=""
+                  onClick={() => {
+                    unregister(`items.[${index}].value.[${i}]`);
+                    unregister(`items.[${index}].value.[${i + 1}]`);
+                  }}
+                  sx={{ color: "#F24E1E" }}
+                >
+                  <CloseRoundedIcon />
+                </Button>
+              </Box>
             );
           }
-          return (
-            <Grid container spacing={2} key={i}>
-              <Grid item xs={12}>
-                <InputField
-                  label=""
-                  name={`items[${index}].value[${i}].column_${1}`}
-                  control={control}
-                  InputLabelProps={{
-                    sx: {
-                      backgroundColor: "signingWFBackground.main",
-                    },
-                  }}
-                  inputProps={{
-                    sx: {
-                      p: "10.5px",
-                      backgroundColor: "signingWFBackground.main",
-                    },
-                  }}
-                  sx={{ my: 0, height: "45px" }}
-                  disabled={field.mandatory_enable}
-                />
-              </Grid>
-            </Grid>
-          );
         })}
       </Box>
+      <Button
+        onClick={() => {
+          const index1 = field.value.length;
+          setValue(`items[${index}].value[${index1}]`, {
+            column_1: "",
+            column_2: "",
+            column_3: "",
+          });
+          setValue(`items[${index}].value[${index1 + 1}]`, {
+            column_1: "",
+          });
+        }}
+        variant="contained"
+        sx={{ width: "100%", borderRadius: "10px", marginBottom: "10px" }}
+      >
+        <AddRoundedIcon />
+        Add Table Row
+      </Button>
     </Box>
   );
 };

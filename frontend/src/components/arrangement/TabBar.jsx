@@ -94,6 +94,8 @@ export const TabBar = ({
     setTabBar(newValue);
     if (newValue !== 1) {
       workFlow.setSignerToken("");
+    } else {
+      workFlow.setSignerToken(workFlow.participants[0].signerToken);
     }
   };
   return (

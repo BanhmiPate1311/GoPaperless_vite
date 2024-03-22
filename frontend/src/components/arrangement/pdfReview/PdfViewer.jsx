@@ -520,24 +520,30 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
         break;
     }
   };
-
   const renderPage = (props) => {
     return (
       <div
         className={`cuong-page-${props.pageIndex}`}
-        onContextMenu={handleContextMenu(props)}
+        onContextMenu={
+          participantsType[0]?.signerType || tabBar !== 1
+            ? handleContextMenu(props)
+            : null
+        }
         style={{
           width: "100%",
           height: "100%",
         }}
       >
-        <ContextMenu
-          contextMenu={contextMenu}
-          handleClose={handleClose}
-          handleClickMenu={handleClickMenu}
-          tabBar={tabBar}
-          signerType={participantsType[0]?.signerType}
-        />
+        {workFlow.workflowStatus < 2 && (
+          <ContextMenu
+            contextMenu={contextMenu}
+            handleClose={handleClose}
+            handleClickMenu={handleClickMenu}
+            tabBar={tabBar}
+            signerType={participantsType[0]?.signerType}
+          />
+        )}
+
         <Document
           props={props}
           workFlow={workFlow}

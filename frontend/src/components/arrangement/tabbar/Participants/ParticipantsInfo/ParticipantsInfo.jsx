@@ -20,6 +20,7 @@ export const ParticipantsInfo = ({
   participantsList,
   setSignerToken,
   signerToken,
+  workflowStatus,
 }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState([false]);
@@ -119,7 +120,9 @@ null
                 flexGrow={1}
                 sx={{ cursor: "pointer" }}
                 onClick={() => {
-                  setSignerToken(participants.signerToken);
+                  workflowStatus > 1
+                    ? setSignerToken("")
+                    : setSignerToken(participants.signerToken);
                 }}
               >
                 <Typography
