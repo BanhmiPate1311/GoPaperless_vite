@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
+import { ReactComponent as DocumentsIcon } from "@/assets/images/svg/document.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
@@ -34,7 +35,7 @@ export const Documents = ({ workFlow }) => {
         justifyContent="space-between"
       >
         <Stack direction="row" spacing={1} alignItems="center">
-          <ParticipantIcon />
+          <DocumentsIcon />
           <Typography sx={{ fontWeight: "550" }} variant="h3">
             {t("batch.documents")}
           </Typography>
@@ -47,7 +48,8 @@ export const Documents = ({ workFlow }) => {
               fontSize: "10px",
             }}
           >
-            {workFlow.length}
+            {/* {workFlow.length} */}
+            {1}
           </Avatar>
         </Stack>
         {workFlow.length !== 0 && (

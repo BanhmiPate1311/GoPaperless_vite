@@ -2,6 +2,7 @@
 import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
 import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
+import { ReactComponent as DocumentIcon } from "@/assets/images/svg/mdi_file-document-outline.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
@@ -180,7 +181,7 @@ export const TabBar = ({
           label={t("batch.documents")}
           icon={
             <SvgIcon color="inherit">
-              <SealIcon />
+              <DocumentIcon />
             </SvgIcon>
           }
           sx={{ fontSize: "12px" }}

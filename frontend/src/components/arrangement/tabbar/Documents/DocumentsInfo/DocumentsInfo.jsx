@@ -1,8 +1,5 @@
-import { ReactComponent as Signed_Icon } from "@/assets/images/svg/signed_icon2.svg";
-import { ReactComponent as SignerSelected } from "@/assets/images/svg/signer_select.svg";
 import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
-import { useCommonHook } from "@/hook";
-import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
+import { ReactComponent as FigureIcon } from "@/assets/images/svg/figure.svg";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -14,13 +11,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SigningDetail } from "../SigningDetail";
-import { useSearchParams } from "react-router-dom";
 
 export const DocumentsInfo = ({ documentsList, signType }) => {
   console.log("documentsList: ", documentsList);
   console.log("signType: ", signType);
   const { t } = useTranslation();
-  const { signerToken } = useCommonHook();
+  // const { signerToken } = useCommonHook();
   const [isOpen, setIsOpen] = useState([false]);
   // console.log("isOpen: ", isOpen);
 
@@ -32,7 +28,7 @@ export const DocumentsInfo = ({ documentsList, signType }) => {
     setIsOpen(newIsOpen);
   };
   // Begin: Change params for participants
-  let [searchParams, setSearchParams] = useSearchParams();
+  // let [searchParams, setSearchParams] = useSearchParams();
   // End: Change params for participants
   return (
     <Accordion
@@ -105,7 +101,7 @@ export const DocumentsInfo = ({ documentsList, signType }) => {
             ) : check ? (
               <SignerSelected />
             ) : ( */}
-            <WaitingSig width={24} height={24} />
+            <FigureIcon width={24} height={24} />
             {/* )} */}
           </Box>
           <Box
