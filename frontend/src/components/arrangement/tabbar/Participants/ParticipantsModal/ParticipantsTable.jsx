@@ -856,7 +856,7 @@ function Row(props) {
                   style={{
                     borderBottom: "none",
                     padding: "0px 0px 0px 0px",
-                    minWidth: "280px",
+                    minWidth: "150px",
                   }}
                 >
                   {row.firstName}
@@ -868,7 +868,7 @@ function Row(props) {
                   style={{
                     borderBottom: "none",
                     padding: "0px 0px 0px 0px",
-                    minWidth: "250px",
+                    minWidth: "150px",
                   }}
                 >
                   {row.firstName}
