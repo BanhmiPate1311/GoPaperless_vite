@@ -12,7 +12,7 @@ import { useState } from "react";
 import { SignatureDetail } from "../SignatureDetail";
 
 export const SignaturesInfo = ({ sign, signType }) => {
-  // console.log("sign: ", sign);
+  console.log("sign: ", sign);
   const [isOpen, setIsOpen] = useState([false]);
   // console.log("isOpen: ", isOpen);
   // let name = sign.name + " " + signType;
@@ -92,7 +92,7 @@ export const SignaturesInfo = ({ sign, signType }) => {
                 <Typography variant="h2">{sign.name}</Typography>
                 {signvalue.indication === "TOTAL_PASSED" && (
                   <Typography variant="h2">
-                    {convertTime(signvalue.signing_time)}
+                    {convertTime(signvalue.signingTime)}
                   </Typography>
                 )}
               </Box>

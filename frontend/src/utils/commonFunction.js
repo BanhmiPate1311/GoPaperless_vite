@@ -156,6 +156,8 @@ export const convertTypeEid = (criteria) => {
   switch (criteria) {
     case "CITIZEN-IDENTITY-CARD":
       return "CITIZEN_CARD";
+    case "PASSPORT-ID":
+      return "PASSPORT";
     case "MOBILE_ID_SIGNING":
       return "Mobile ID";
     case "SMART_ID_SIGNING":

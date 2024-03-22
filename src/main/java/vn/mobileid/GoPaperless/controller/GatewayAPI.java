@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -13,11 +15,14 @@ import vn.mobileid.GoPaperless.model.gwModal.ValidationResquest;
 import vn.mobileid.GoPaperless.model.gwModal.PrepareSigningRequest;
 import vn.mobileid.GoPaperless.model.gwModal.PrepareSigningResponse;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class GatewayAPI {
@@ -165,6 +170,17 @@ public class GatewayAPI {
         ResponseEntity<String> responseEntity = restTemplate.exchange(getValidViewUrl, HttpMethod.GET, null, String.class);
 
         return responseEntity.getBody();
+    }
+
+    public InputStream downloadReport(String uploadToken) throws IOException {
+        String baseUrl = getBaseUrl();
+        String getValidViewUrl = baseUrl + "/api/internalusage/validation/" + uploadToken + "/download/report-pdf";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(0, new ResourceHttpMessageConverter());
+        System.out.println("getValidViewUrl: " + getValidViewUrl);
+        ResponseEntity<InputStreamResource> responseEntity = restTemplate.exchange(getValidViewUrl, HttpMethod.GET, null, InputStreamResource.class);
+
+        return Objects.requireNonNull(responseEntity.getBody()).getInputStream();
     }
 
 

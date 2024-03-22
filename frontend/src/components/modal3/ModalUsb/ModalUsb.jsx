@@ -363,6 +363,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
                   sx: {
                     py: "10.5px",
                     backgroundColor: "signingWFBackground.main",
+                    textAlign: "center",
                   },
                   maxLength: dataSigning?.tokenDetails?.maxPinLength,
                 }}

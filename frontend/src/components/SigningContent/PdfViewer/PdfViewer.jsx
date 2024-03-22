@@ -17,6 +17,7 @@ import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
 
 export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
+  // console.log("fieldSelect: ", fieldSelect);
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const queryClient = useQueryClient();

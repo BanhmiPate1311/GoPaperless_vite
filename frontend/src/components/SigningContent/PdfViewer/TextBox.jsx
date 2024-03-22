@@ -442,7 +442,10 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
                 sx: { fontWeight: 600, padding: 0 }, // Sử dụng style để đặt fontWeight và padding
               }}
               InputProps={{
-                readOnly: textData.process_status === "PROCESSED",
+                readOnly:
+                  textData.process_status === "PROCESSED" ||
+                  signerId + "_" + textData.type + "_" + textData.suffix !==
+                    textData.field_name,
               }}
             />
             {textData.required && (

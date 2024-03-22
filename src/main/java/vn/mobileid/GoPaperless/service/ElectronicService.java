@@ -238,6 +238,7 @@ public class ElectronicService {
         request.put("lang", faceAndCreateRequest.getLang());
 
         String bodyRequest = gson.toJson(request);
+        System.out.println("bodyRequest: " + bodyRequest);
 
         String createUrl = PadesConstants.BASE_URL + "/v2/e-identity/subject/create";
         System.out.println("createUrl: " + createUrl);

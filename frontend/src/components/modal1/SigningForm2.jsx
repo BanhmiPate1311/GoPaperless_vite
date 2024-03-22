@@ -78,6 +78,7 @@ export const SigningForm2 = ({
   const [unavail, setUnavail] = useState(null);
   const [criteria, setCriteria] = useState("PHONE");
   const [criteriaEid, setCriteriaEid] = useState("CITIZEN-IDENTITY-CARD");
+  // console.log("criteriaEid: ", criteriaEid);
   const [code, setCode] = useState("");
   const [newListCert, setNewListCert] = useState([]);
   const [certSelected, setCertSelected] = useState(0);

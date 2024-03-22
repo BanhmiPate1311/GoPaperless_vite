@@ -13,6 +13,7 @@ import { fpsService } from "@/services/fps_service";
 import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
+import TextField from "@mui/material/TextField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
@@ -20,7 +21,6 @@ import { useTranslation } from "react-i18next";
 import { ResizableBox } from "react-resizable";
 import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
-import { TextField } from "@mui/material";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({
@@ -69,7 +69,6 @@ export const Signature = ({
   // console.log("currentPos: ", newPos.current);
   const [dataSigning, setDataSigning] = useState({});
   const boxRef = useRef(null);
-  const [scrolled, setScrolled] = useState(false);
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
@@ -102,40 +101,9 @@ export const Signature = ({
     });
   }, [signatureData]);
 
-  // useEffect(() => {
-  //   const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
-  //   const newSig1 = sigInfor
-  //     ?.filter((item) => item.value.field_name === signatureData.field_name)
-  //     .map((item) => {
-  //       return { isSigned: true, ...item.value };
-  //     });
-
-  //   const newSig2 = workFlow?.participants
-  //     ?.filter(
-  //       (item) =>
-  //         item.certificate &&
-  //         item.certificate.field_name === signatureData.field_name
-  //     )
-  //     .map((item) => {
-  //       return { isSigned: false, ...item.certificate };
-  //     });
-
-  //   setSigDetail(...newSig1, ...newSig2);
-  // }, [signatureData, workFlow, queryClient]);
-
-  // useEffect(() => {
-  //   if (signatureData.selected && boxRef.current && !scrolled) {
-  //     console.log("boxRef.current: ", boxRef.current);
-  //     boxRef.current.scrollIntoView({ behavior: "auto" });
-  //     setScrolled(true);
-  //   }
-  //   if (!signatureData.selected) {
-  //     setScrolled(false);
-  //   }
-  // }, [signatureData, scrolled]);
   useEffect(() => {
     if (signatureData.selected && boxRef.current) {
-      console.log("object");
+      // console.log("object");
       boxRef.current.focus();
     }
   }, [signatureData.selected]);
@@ -152,7 +120,7 @@ export const Signature = ({
         ?.filter(
           (item) =>
             item.certificate &&
-            item.certificate.fieldName === signatureData.field_name
+            item.certificate.field_name === signatureData.field_name
         )
         ?.map((item) => ({ isSigned: false, ...item.certificate })) || null;
 
@@ -693,9 +661,9 @@ export const Signature = ({
                 }
                 textAlign={"center"}
                 height="45px"
-                // sx={{
-                //   overflow: "hidden",
-                // }}
+                sx={{
+                  overflow: "hidden",
+                }}
               >
                 Signature
                 <br />
@@ -708,6 +676,26 @@ export const Signature = ({
                     color: "#545454",
                   }}
                   // onClick={() => handleOpenSigningForm(index)}
+                />
+                <TextField
+                  // sx={{ width: 0, height: 0, opacity: 0, position: "absolute" }}
+                  sx={{
+                    opacity: 0,
+                    my: 0,
+                    "& .MuiInputBase-root": {
+                      height: 0,
+                      width: 0,
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderWidth: "0",
+                        padding: "0",
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      height: "0",
+                      padding: "0",
+                    },
+                  }}
+                  inputRef={boxRef}
                 />
               </Box>
             </div>

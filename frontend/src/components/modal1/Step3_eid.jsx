@@ -17,6 +17,7 @@ export const Step3_eid = ({
   handleSubmit,
 }) => {
   const { t } = useTranslation();
+  console.log("data: ", data);
 
   useEffect(() => {
     switch (criteria) {

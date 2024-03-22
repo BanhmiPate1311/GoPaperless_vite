@@ -9,6 +9,7 @@ import { PdfViewerDocument } from "./PdfViewer";
 import { TabBar } from "./TabBar";
 import { useEffect, useState } from "react";
 import { Next } from "../next";
+import "@/assets/style/next.css";
 
 export const SigningContent = ({
   workFlow,
@@ -58,11 +59,12 @@ export const SigningContent = ({
     );
   }, [field]);
 
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(null);
+  // console.log("value: ", value);
 
   const handleChange = () => {
     // console.log("object");
-    setValue(value === newFields.length - 1 ? 0 : value + 1);
+    setValue(value === newFields.length ? 1 : value + 1);
   };
 
   // console.log("newFields: ", newFields);
@@ -76,7 +78,7 @@ export const SigningContent = ({
         <PdfViewer
           workFlow={workFlow}
           field={field}
-          fieldSelect={newFields[value]}
+          fieldSelect={newFields[value - 1]}
         />
       );
     }

@@ -1,7 +1,8 @@
-import { ReactComponent as EditorIcon } from "@/assets/images/svg/editor.svg";
-import { ReactComponent as ReviewerIcon } from "@/assets/images/svg/reviewer.svg";
-import { ReactComponent as SendCopyIcon } from "@/assets/images/svg/send_copy.svg";
-import { ReactComponent as SignerIcon } from "@/assets/images/svg/signer.svg";
+import { ReactComponent as EditorSubmitted } from "@/assets/images/participant/editor-submitted.svg";
+import { ReactComponent as EditorWait } from "@/assets/images/participant/editor-wait.svg";
+import { ReactComponent as OnlyView } from "@/assets/images/participant/only-view.svg";
+import { ReactComponent as SignerReviewerSigned } from "@/assets/images/participant/signer-reviewer-signed.svg";
+import { ReactComponent as SignerReviewerWait } from "@/assets/images/participant/signer-reviewer-wait.svg";
 import { useCommonHook } from "@/hook";
 import { checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -28,6 +29,56 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
     const newIsOpen = [...isOpen];
     newIsOpen[index] = !newIsOpen[index];
     setIsOpen(newIsOpen);
+  };
+
+  const renderIcon = (signerType, signerStatus) => {
+    if (signerStatus === 1) {
+      switch (signerType) {
+        case 1:
+        case 2:
+          return <SignerReviewerWait width={24} height={24} />;
+        case 3:
+          return <EditorWait width={24} height={24} />;
+        case 5:
+          return <OnlyView width={24} height={24} />;
+      }
+    } else {
+      switch (signerType) {
+        case 1:
+        case 2:
+          return <SignerReviewerSigned width={24} height={24} />;
+        case 3:
+          return <EditorSubmitted width={24} height={24} />;
+        case 5:
+          return <OnlyView width={24} height={24} />;
+      }
+    }
+  };
+
+  const renderStatus = (signerType, signerStatus) => {
+    if (signerStatus === 1) {
+      switch (signerType) {
+        case 1:
+          return t("signing.wait_signature");
+        case 2:
+          return t("signing.wait_approve");
+        case 3:
+          return t("signing.wait_submit");
+        case 5:
+          return t("signing.only_view");
+      }
+    } else {
+      switch (signerType) {
+        case 1:
+          return t("signing.signature_valid");
+        case 2:
+          return t("signing.approved");
+        case 3:
+          return t("signing.submitted");
+        case 5:
+          return t("signing.only_view");
+      }
+    }
   };
 
   return (
@@ -97,23 +148,15 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
               borderColor="borderColor.main"
               // height="50px"
             >
-              <Box
+              <Stack
+                direction={"row"}
+                justifyContent={"center"}
+                alignItems={"center"}
                 onClick={() => toggleDrawer(index)}
                 sx={{ cursor: "pointer" }}
               >
-                {participant.signerType === 1 && (
-                  <SignerIcon width={24} height={24} />
-                )}
-                {participant.signerType === 2 && (
-                  <ReviewerIcon width={24} height={24} />
-                )}
-                {participant.signerType === 3 && (
-                  <EditorIcon width={24} height={24} />
-                )}
-                {participant.signerType === 5 && (
-                  <SendCopyIcon width={24} height={24} />
-                )}
-              </Box>
+                {renderIcon(participant.signerType, participant.signerStatus)}
+              </Stack>
               <Box flexGrow={1}>
                 <Typography
                   variant="h6"
@@ -127,17 +170,10 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                   variant="h2"
                   color={check ? "signingtextBlue.main" : "signingtext2.main"}
                 >
-                  {/* {status === 2
-                    ? participant.signedType === "NORMAL"
-                      ? t("signing.signature_valid")
-                      : t("validation.sealValidTitle2")
-                    : status === 1
-                    ? t("signing.wait_my_signature")
-                    : t("signing.wait_signature")} */}
-                  {participant.signerType === 1 && "Waiting for signature"}
-                  {participant.signerType === 2 && "Waiting for approve"}
-                  {participant.signerType === 3 && "Signature is valid"}
-                  {participant.signerType === 5 && "Only view"}
+                  {renderStatus(
+                    participant.signerType,
+                    participant.signerStatus
+                  )}
                 </Typography>
               </Box>
               {/* <IconButton onClick={() => toggleDrawer(index)}>

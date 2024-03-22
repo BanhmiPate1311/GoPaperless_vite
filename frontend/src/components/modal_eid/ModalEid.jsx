@@ -42,6 +42,7 @@ export const ModalEid = ({
   setDataSigning,
   handleShowModalSignImage,
 }) => {
+  console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
 
   const [activeStep, setActiveStep] = useState(1);
@@ -297,6 +298,7 @@ export const ModalEid = ({
   };
 
   const updateSubject = async () => {
+    setIsFetching(true);
     const data = {
       lang: lang,
       jwt: jwt,
@@ -307,6 +309,7 @@ export const ModalEid = ({
 
     try {
       const response = await electronicService.updateSubject(data);
+      setIsFetching(false);
       setProcessId(response.data);
       switch (activeStep) {
         case 7:
@@ -572,7 +575,16 @@ export const ModalEid = ({
           onClose();
           handleShowModalSignImage();
         } else {
-          getInformation();
+          switch (assurance) {
+            case "aes":
+              createCertificate();
+              break;
+            case "eseal":
+              getInformation();
+              // setActiveStep(14);
+              break;
+          }
+          // getInformation();
           // setActiveStep(14);
         }
         break;
