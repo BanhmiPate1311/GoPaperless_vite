@@ -25,6 +25,7 @@ import { Typography } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { styled } from "@mui/material/styles";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import avatar from "@/assets/images/avatar.png";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -56,23 +57,37 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].type`, 1);
         setValue(`items[${index}].value`, "");
         setValue(`items[${index}].remark`, "text");
+        setValue(`items[${index}].mandatory_enable`, false);
         break;
       case "boldLabel":
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 6);
         setValue(`items[${index}].remark`, "boldLabel");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "date":
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 1);
-        setValue(`items[${index}].value`, "");
+        setValue(
+          `items[${index}].value`,
+
+          new Date().getMonth +
+            "/" +
+            new Date().getDay +
+            "/" +
+            new Date().getFullYear()
+        );
         setValue(`items[${index}].remark`, "date");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "choice":
         setValue(`items[${index}].field`, label);
         setValue(`items[${index}].type`, 7);
         setValue(`items[${index}].value`, []);
         setValue(`items[${index}].remark`, "choice");
+        setValue(`items[${index}].mandatory_enable`, false);
 
         break;
       case "picture":
@@ -82,6 +97,7 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].remark`, "picture");
         setValue(`items[${index}].file_format`, "");
         setValue(`items[${index}].file_name`, "");
+        setValue(`items[${index}].mandatory_enable`, false);
 
         break;
       case "file":
@@ -91,6 +107,7 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].remark`, "file");
         setValue(`items[${index}].file_format`, "");
         setValue(`items[${index}].file_name`, "");
+        setValue(`items[${index}].mandatory_enable`, false);
 
         break;
       case "table":
@@ -107,6 +124,8 @@ export const QryptoGeneralForm = ({
           },
         ]);
         setValue(`items[${index}].remark`, "table");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "pictureLabel":
         setValue(`items[${index}].field`, label);
@@ -121,6 +140,8 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].remark`, "pictureLabel");
         setValue(`items[${index}].file_format`, "");
         setValue(`items[${index}].file_name`, "");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
       case "url":
         setValue(`items[${index}].field`, label);
@@ -128,6 +149,8 @@ export const QryptoGeneralForm = ({
         setValue(`items[${index}].value.url`, "");
         setValue(`items[${index}].value.label`, "");
         setValue(`items[${index}].remark`, "url");
+        setValue(`items[${index}].mandatory_enable`, false);
+
         break;
     }
   };
@@ -146,6 +169,7 @@ export const QryptoGeneralForm = ({
                   index={index}
                   removeField={removeField}
                   control={control}
+                  field={field}
                 />
               );
             case "boldLabel":
@@ -154,6 +178,7 @@ export const QryptoGeneralForm = ({
                   register={register}
                   index={index}
                   removeField={removeField}
+                  field={field}
                 />
               );
             case "date":
@@ -209,6 +234,18 @@ export const QryptoGeneralForm = ({
                   control={control}
                 />
               );
+            case "signer":
+              return (
+                <Box sx={{ my: "10px" }}>
+                  <SignerElement
+                    register={register}
+                    index={index}
+                    removeField={removeField}
+                    field={field}
+                    control={control}
+                  />
+                </Box>
+              );
             case "table":
               return (
                 <Box sx={{ my: "10px" }}>
@@ -218,6 +255,8 @@ export const QryptoGeneralForm = ({
                     removeField={removeField}
                     field={field}
                     control={control}
+                    unregister={unregister}
+                    setValue={setValue}
                   />
                 </Box>
               );
@@ -228,6 +267,7 @@ export const QryptoGeneralForm = ({
                   index={index}
                   removeField={removeField}
                   control={control}
+                  field={field}
                 />
               );
           }
@@ -252,7 +292,7 @@ export const QryptoGeneralForm = ({
   );
 };
 
-const TextElement = ({ register, index, removeField, control }) => {
+const TextElement = ({ register, index, removeField, control, field }) => {
   return (
     <Box key={index} sx={{ marginBottom: "10px" }}>
       <Box
@@ -275,8 +315,12 @@ const TextElement = ({ register, index, removeField, control }) => {
               fontWeight: 500,
               padding: "0",
             },
+            "& .Mui-disabled": {
+              WebkitTextFillColor: "#1F2937 !important",
+            },
           }}
           {...register(`items[${index}].field`)}
+          disabled={field.mandatory_enable}
         />
         {/* <input
           style={{ display: "none" }}
@@ -301,12 +345,16 @@ const TextElement = ({ register, index, removeField, control }) => {
             backgroundColor: "signingWFBackground.main",
           },
         }}
-        sx={{ my: 0, height: "45px" }}
+        sx={{
+          my: 0,
+          height: "45px",
+        }}
+        disabled={field.mandatory_enable}
       />
     </Box>
   );
 };
-const BoldLabelElement = ({ register, index, removeField }) => {
+const BoldLabelElement = ({ register, index, removeField, field }) => {
   return (
     <Box key={index} sx={{ marginBottom: "10px" }}>
       <Box
@@ -331,11 +379,8 @@ const BoldLabelElement = ({ register, index, removeField }) => {
             },
           }}
           {...register(`items[${index}].field`)}
+          disabled={field.mandatory_enable}
         />
-        {/* <input
-                      style={{ display: "none" }}
-                      {...register(`items[${index}].type`)}
-                    /> */}
         <Button sx={{ color: "#F24E1E" }} onClick={() => removeField(index)}>
           <TrashIcon />
         </Button>
@@ -379,14 +424,20 @@ const DateElement = ({ register, index, removeField, setValue, field }) => {
       </Box>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", backgroundColor: "signingWFBackground.main" }}
           value={dayjs(field.value)}
           onChange={(newValue) => {
             setValue(
               `items[${index}].value`,
-              newValue.month() + "/" + newValue.date() + "/" + newValue.year()
+              newValue.month() +
+                1 +
+                "/" +
+                newValue.date() +
+                "/" +
+                newValue.year()
             );
           }}
+          disabled={field.mandatory_enable}
         />
       </LocalizationProvider>
     </Box>
@@ -425,6 +476,7 @@ const ChoiceElement = ({
             },
           }}
           {...register(`items[${index}].field`)}
+          disabled={field.mandatory_enable}
         />
         {/* <input
         style={{ display: "none" }}
@@ -440,9 +492,13 @@ const ChoiceElement = ({
             labelId="demo-simple-select1-label-step1"
             id="demo-simple-select-step1"
             defaultValue={
-              field.value.filter((item) => item.choise === true)[0]?.element
+              field?.value?.filter((item) => item?.choise === true)
+                ? field?.value?.filter((item) => item?.choise === true)[0]
+                    ?.element
+                : ""
             }
             sx={{
+              maxWidth: "371px",
               "& .MuiListItemSecondaryAction-root": {
                 right: "30px",
                 display: "flex",
@@ -484,7 +540,7 @@ const ChoiceElement = ({
           // defaultValue={true}
           onChange={(e) => {
             const value = e.target.value.trim();
-            console.log();
+
             field.value.map((item, i) => {
               setValue(`items[${index}].value[${i}].choise`, false);
             });
@@ -551,7 +607,7 @@ const ChoiceElement = ({
     </Box>
   );
 };
-const TableElement = ({ register, index, removeField, field, control }) => {
+const SignerElement = ({ register, index, removeField, field, control }) => {
   return (
     <Box
       key={index}
@@ -560,7 +616,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
         borderRadius: "6px",
         marginBottom: "10px",
         padding: "5px",
-        margin: "-5px",
+        margin: "-6px",
       }}
     >
       <Box
@@ -583,8 +639,12 @@ const TableElement = ({ register, index, removeField, field, control }) => {
               fontWeight: 500,
               padding: "0",
             },
+            "& .Mui-disabled": {
+              WebkitTextFillColor: "#1F2937 !important",
+            },
           }}
           {...register(`items[${index}].field`)}
+          disabled={field.mandatory_enable}
         />
         <Button sx={{ color: "#F24E1E" }} onClick={() => removeField(index)}>
           <TrashIcon />
@@ -616,6 +676,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                       },
                     }}
                     sx={{ my: 0, height: "45px" }}
+                    disabled={field.mandatory_enable}
                   />
                 </Grid>
                 <Grid item xs={5.3}>
@@ -635,6 +696,7 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                       },
                     }}
                     sx={{ my: 0, height: "45px" }}
+                    disabled={field.mandatory_enable}
                   />
                 </Grid>
                 <Grid
@@ -684,12 +746,193 @@ const TableElement = ({ register, index, removeField, field, control }) => {
                     },
                   }}
                   sx={{ my: 0, height: "45px" }}
+                  disabled={field.mandatory_enable}
                 />
               </Grid>
             </Grid>
           );
         })}
       </Box>
+    </Box>
+  );
+};
+const TableElement = ({
+  register,
+  index,
+  removeField,
+  field,
+  control,
+  unregister,
+  setValue,
+}) => {
+  return (
+    <Box
+      key={index}
+      sx={{
+        border: "1px solid #E5E7EB",
+        borderRadius: "6px",
+        marginBottom: "10px",
+        padding: "5px",
+        margin: "-6px",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "10px",
+        }}
+      >
+        <TextField
+          sx={{
+            "& .MuiInputBase-root": {
+              height: "auto",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderWidth: "0",
+              },
+            },
+            "& .MuiInputBase-input": {
+              fontWeight: 500,
+              padding: "0",
+            },
+          }}
+          {...register(`items[${index}].field`)}
+          disabled={field.mandatory_enable}
+        />
+        <Button sx={{ color: "#F24E1E" }} onClick={() => removeField(index)}>
+          <TrashIcon />
+        </Button>
+      </Box>
+      <Box sx={{ flexGrow: 1 }}>
+        {field.value?.map((values, i) => {
+          if (i % 2 == 0) {
+            return (
+              <Box sx={{ display: "flex", gap: "5px", marginBottom: "10px" }}>
+                <Box>
+                  <Grid
+                    container
+                    spacing={1}
+                    key={i}
+                    sx={{ marginBottom: "10px" }}
+                  >
+                    <Grid item xs={4}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i}].column_${1}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            p: "14px 16px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i}].column_${2}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            py: "10.5px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i}].column_${3}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            py: "10.5px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <InputField
+                        label=""
+                        name={`items[${index}].value[${i + 1}].column_${1}`}
+                        control={control}
+                        InputLabelProps={{
+                          sx: {
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        inputProps={{
+                          sx: {
+                            p: "10.5px",
+                            backgroundColor: "signingWFBackground.main",
+                          },
+                        }}
+                        sx={{ my: 0, height: "45px" }}
+                        disabled={field.mandatory_enable}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Button
+                  variant=""
+                  onClick={() => {
+                    unregister(`items.[${index}].value.[${i}]`);
+                    unregister(`items.[${index}].value.[${i + 1}]`);
+                  }}
+                  sx={{ color: "#F24E1E" }}
+                >
+                  <CloseRoundedIcon />
+                </Button>
+              </Box>
+            );
+          }
+        })}
+      </Box>
+      <Button
+        onClick={() => {
+          const index1 = field.value.length;
+          setValue(`items[${index}].value[${index1}]`, {
+            column_1: "",
+            column_2: "",
+            column_3: "",
+          });
+          setValue(`items[${index}].value[${index1 + 1}]`, {
+            column_1: "",
+          });
+        }}
+        variant="contained"
+        sx={{ width: "100%", borderRadius: "10px", marginBottom: "10px" }}
+      >
+        <AddRoundedIcon />
+        Add Table Row
+      </Button>
     </Box>
   );
 };
@@ -756,6 +999,17 @@ const PictureElement = ({ register, index, removeField, setValue, field }) => {
               src={`data:${field.file_format};base64,${field.value}`}
             />
           )}
+          {!field.value && (
+            <Box
+              component="img"
+              sx={{
+                width: "100%",
+                height: "100%",
+              }}
+              alt=""
+              src={avatar}
+            />
+          )}
         </Box>
         <Box sx={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <Button
@@ -769,10 +1023,21 @@ const PictureElement = ({ register, index, removeField, setValue, field }) => {
             Upload
             <VisuallyHiddenInput
               type="file"
-              onChange={(e) => readFile(e.target.files[0])}
+              onChange={(e) => {
+                readFile(e.target.files[0]);
+                e.target.value = "";
+              }}
             />
           </Button>
-          <Typography variant="body">
+          <Typography
+            variant="body"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              maxWidth: "200px",
+            }}
+          >
             {field.file_name || "No File Chosen"}
           </Typography>
           {field.file_name && (
@@ -863,6 +1128,17 @@ const PictureLabelElement = ({
               <img
                 style={{ width: "100%", height: "100%" }}
                 src={`data:${field.file_format};base64,${field.value.file_data}`}
+              />
+            )}
+            {!field.value.file_data && (
+              <Box
+                component="img"
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                alt=""
+                src={avatar}
               />
             )}
           </Box>
@@ -956,10 +1232,21 @@ const PictureLabelElement = ({
             Upload
             <VisuallyHiddenInput
               type="file"
-              onChange={(e) => readFile(e.target.files[0])}
+              onChange={(e) => {
+                readFile(e.target.files[0]);
+                e.target.value = "";
+              }}
             />
           </Button>
-          <Typography variant="body">
+          <Typography
+            variant="body"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              maxWidth: "200px",
+            }}
+          >
             {field.file_name || "No File Chosen"}
           </Typography>
           {field.file_name && (
@@ -1039,7 +1326,15 @@ const FileElement = ({ register, index, removeField, setValue, field }) => {
               onChange={(e) => readFile(e.target.files[0])}
             />
           </Button>
-          <Typography variant="body">
+          <Typography
+            variant="body"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              maxWidth: "200px",
+            }}
+          >
             {field.file_name || "No File Chosen"}
           </Typography>
           {field.file_name && (

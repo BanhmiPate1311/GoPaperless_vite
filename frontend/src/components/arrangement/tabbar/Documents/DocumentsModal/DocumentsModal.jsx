@@ -9,11 +9,11 @@ import Typography from "@mui/material/Typography";
 import { t } from "i18next";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
-import ParticipantsTable from "./ParticipantsTable";
+import DocumentsTable from "./DocumentsTable";
 import { participantsService } from "@/services/participants_service";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const ParticipantsModal = ({
+export const DocumentsModal = ({
   open,
   data,
   title,
@@ -51,9 +51,11 @@ export const ParticipantsModal = ({
     //   metaInformation,
     //   signerToken: row.signerToken,
     // };
+    console.log("data: ", data);
 
     try {
       const response = await participantsService.updateParticipant(data);
+      console.log("response: ", response);
       // setProcess(response.data);
       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
     } catch (error) {
@@ -119,7 +121,7 @@ export const ParticipantsModal = ({
           ref={descriptionElementRef}
           tabIndex={-1}
         >
-          <ParticipantsTable
+          <DocumentsTable
             workFlow={workFlow}
             data={data}
             handleClose={handleClose}
@@ -154,11 +156,11 @@ export const ParticipantsModal = ({
   );
 };
 
-ParticipantsModal.propTypes = {
+DocumentsModal.propTypes = {
   open: PropTypes.bool,
   title: PropTypes.string,
   data: PropTypes.array,
   handleClose: PropTypes.func,
 };
 
-export default ParticipantsModal;
+export default DocumentsModal;

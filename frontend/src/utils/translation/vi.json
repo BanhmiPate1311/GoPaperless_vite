@@ -371,5 +371,11 @@
     "cookieSetting14": "Từ chối tất cả",
     "cookieSetting15": "Xác nhận lựa chọn của tôi",
     "cookieSetting16": "Cho phép tất cả"
+  },
+  "arrangement": {
+    "manage_participants": "Quản lý Người tham gia",
+    "setting_documents": "Cài đặt Tài liệu",
+    "error-1": "Không đủ trường cho Người tham gia",
+    "share_now": "Chia sẻ ngay"
   }
 }

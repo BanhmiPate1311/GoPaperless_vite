@@ -1,39 +1,49 @@
 /* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import { QrCodeSettingField } from "@/components/modalField";
+import { QryptoSettingField } from "@/components/modalField";
+import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
+import qrypto from "../../../assets/images/qrcode-qrypto.png";
 
-export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
+export const CheckBox = ({
+  index,
+  pdfPage,
+  qryptoData,
+  workFlow,
+  getFields,
+}) => {
   const signer = getSigner(workFlow);
   const signerId =
     workFlow?.workflowStatus < 2 ? signer?.signerId || "ADMIN_PROVIDER" : null;
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
   const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
+
   const [dragPosition, setDragPosition] = useState({
-    x: (qrData.dimension?.x * pdfPage.width) / 100,
-    y: (qrData.dimension?.y * pdfPage.height) / 100,
+    x: (qryptoData.dimension?.x * pdfPage.width) / 100,
+    y: (qryptoData.dimension?.y * pdfPage.height) / 100,
   });
 
   const maxPosibleResizeWidth =
-    (pdfPage.width * (100 - qrData.dimension?.x)) / 100;
+    (pdfPage.width * (100 - qryptoData.dimension?.x)) / 100;
   const maxPosibleResizeHeight =
-    (pdfPage.height * (100 - qrData.dimension?.y)) / 100;
+    (pdfPage.height * (100 - qryptoData.dimension?.y)) / 100;
 
   useEffect(() => {
     setDragPosition({
-      x: (qrData.dimension?.x * pdfPage.width) / 100,
-      y: (qrData.dimension?.y * pdfPage.height) / 100,
+      x: (qryptoData.dimension?.x * pdfPage.width) / 100,
+      y: (qryptoData.dimension?.y * pdfPage.height) / 100,
     });
-  }, [qrData, pdfPage]);
+  }, [qryptoData, pdfPage]);
 
   const handleOpenModalSetting = (index) => {
     const newValue = [...isOpenModalSetting];
@@ -47,14 +57,26 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
     setIsOpenModalSetting(newValue);
   };
   const removeSignature = async () => {
-    const res = await fpsService.removeSignature(
+    const response = await fpsService.removeSignature1(
       { documentId: workFlow.documentId },
-      qrData.field_name
+      qryptoData.field_name
     );
-    if (res.status === 200) {
+    console.log("response: ", response);
+    if (response === 200) {
       await getFields();
     }
   };
+  // const removeSignature1 = useMutation({
+  //   mutationFn: () => {
+  //     return fpsService.removeSignature(
+  //       { documentId: workFlow.documentId },
+  //       qryptoData.field_name
+  //     );
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["getField"] });
+  //   },
+  // });
 
   const handleRemoveSignature = async () => {
     await removeSignature();
@@ -102,7 +124,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
   };
 
   const handleDrag = (type) => {
-    const elements = document.getElementsByClassName(`qrrauria-${index}`);
+    const elements = document.getElementsByClassName(`qryptorauria-${index}`);
 
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.display = type;
@@ -110,15 +132,15 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
   };
 
   if (
-    (qrData.page !== null && qrData.page !== pdfPage.currentPage) ||
-    qrData.process_status === "PROCESSED"
+    (qryptoData.page !== null && qryptoData.page !== pdfPage.currentPage) ||
+    qryptoData.process_status === "PROCESSED"
   )
     return null;
 
   return (
     <>
       <Draggable
-        handle={`#qrDrag-${index}`}
+        handle={`#qryptoDrag-${index}`}
         // bounds="parent"
         onDrag={() => handleDrag("block")}
         position={dragPosition}
@@ -131,15 +153,17 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
           e.preventDefault();
           setIsControlled(true);
           handleDrag("none");
-          const draggableComponent = document.querySelector(`.qrbox-${index}`);
-          // const targetComponents = document.querySelectorAll(".sig");
+          const draggableComponent = document.querySelector(
+            `.qryptobox-${index}`
+          );
+          const targetComponents = document.querySelectorAll(".sig");
           const containerComponent = document.getElementById(
             `pdf-view-${pdfPage.currentPage - 1}`
           );
 
-          // const containerRect = containerComponent.getBoundingClientRect();
+          const containerRect = containerComponent.getBoundingClientRect();
 
-          // const draggableRect = draggableComponent.getBoundingClientRect();
+          const draggableRect = draggableComponent.getBoundingClientRect();
 
           // if (
           //   draggableRect.right > containerRect.right ||
@@ -189,7 +213,7 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
             (Math.abs(rectItem.top - rectComp.top) * 100) / rectComp.height;
           const putpos = await fpsService.putSignature(
             {
-              field_name: qrData.field_name,
+              field_name: qryptoData.field_name,
               page: pdfPage.currentPage,
               dimension: {
                 x: x,
@@ -199,26 +223,26 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
               },
               visible_enabled: true,
             },
-            "qrcode",
+            "qrcode-qrypto",
             workFlow.documentId
           );
           if (!putpos) return;
           await getFields();
         }}
         disabled={
-          signerId + "_" + qrData.type + "_" + qrData.suffix !==
-          qrData.field_name
+          signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+          qryptoData.field_name
         }
       >
         <ResizableBox
           width={
-            qrData.dimension?.width
-              ? qrData.dimension?.width * (pdfPage.width / 100)
+            qryptoData.dimension?.width
+              ? qryptoData.dimension?.width * (pdfPage.width / 100)
               : Infinity
           }
           height={
-            qrData.dimension?.height
-              ? qrData.dimension?.height * (pdfPage.height / 100)
+            qryptoData.dimension?.height
+              ? qryptoData.dimension?.height * (pdfPage.height / 100)
               : 150
           }
           style={{
@@ -227,31 +251,31 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           minConstraints={[
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.width * (pdfPage.width / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? 120
               : 200,
 
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.height * (pdfPage.height / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? 120
               : 50,
           ]}
           maxConstraints={[
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.width * (pdfPage.width / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? maxPosibleResizeWidth
               : 200,
 
-            signerId + "_" + qrData.type + "_" + qrData.suffix !==
-            qrData.field_name
-              ? qrData.dimension?.height * (pdfPage.height / 100)
+            signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+            qryptoData.field_name
+              ? qryptoData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? maxPosibleResizeHeight
               : 200,
@@ -261,13 +285,13 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
           onResizeStop={async (e, { size }) => {
             // console.log("e: ", e);
             if (
-              signerId + "_" + qrData.type + "_" + qrData.suffix !==
-              qrData.field_name
+              signerId + "_" + qryptoData.type + "_" + qryptoData.suffix !==
+              qryptoData.field_name
             )
               return;
             const putpos = await fpsService.putSignature(
               {
-                field_name: qrData.field_name,
+                field_name: qryptoData.field_name,
                 page: pdfPage.currentPage,
                 dimension: {
                   x: -1,
@@ -277,16 +301,16 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
                 },
                 visible_enabled: true,
               },
-              "qrcode",
+              "qrcode-qrypto",
               workFlow.documentId
             );
             if (!putpos) return;
             await getFields();
           }}
-          className={`sig qrbox-${index}`}
+          className={`sig qryptobox-${index}`}
         >
           <Box
-            id={`qrDrag-${index}`}
+            id={`qryptoDrag-${index}`}
             sx={{
               height: "100%",
               position: "relative",
@@ -311,28 +335,30 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
               }, 500);
             }}
           >
-            {showTopbar && <TopBar qrData={qrData} />}
+            {showTopbar && <TopBar qryptoData={qryptoData} />}
             <span
-              className={`qrrauria-${index} topline`}
+              className={`qryptorauria-${index} topline`}
               style={{ display: "none" }}
             ></span>
             <span
-              className={`qrrauria-${index} rightline`}
+              className={`qryptorauria-${index} rightline`}
               style={{ display: "none" }}
             ></span>
             <span
-              className={`qrrauria-${index} botline`}
+              className={`qryptorauria-${index} botline`}
               style={{ display: "none" }}
             ></span>
             <span
-              className={`qrrauria-${index} leftline`}
+              className={`qryptorauria-${index} leftline`}
               style={{ display: "none" }}
             ></span>
             <Box
               sx={{
                 height: "100%",
                 width: "100%",
-                backgroundImage: `url(data:image/png;base64,${qrData.image_qr})`,
+                backgroundImage: qryptoData.image_qr
+                  ? `url(data:image/png;base64,${qryptoData.image_qr})`
+                  : `url(${qrypto})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -343,22 +369,23 @@ export const QrCode = ({ index, pdfPage, qrData, workFlow, getFields }) => {
         </ResizableBox>
       </Draggable>
       {isOpenModalSetting[index] && (
-        <QrCodeSettingField
+        <QryptoSettingField
           open={isOpenModalSetting[index]}
           onClose={() => handleCloseModalSetting(index)}
-          qrData={qrData}
+          qryptoData={qryptoData}
           workFlow={workFlow}
+          getFields={getFields}
         />
       )}
     </>
   );
 };
 
-QrCode.propTypes = {
+CheckBox.propTypes = {
   index: PropTypes.number,
   pdfPage: PropTypes.object,
-  qrData: PropTypes.object,
+  qryptoData: PropTypes.object,
   workFlow: PropTypes.object,
 };
 
-export default QrCode;
+export default CheckBox;

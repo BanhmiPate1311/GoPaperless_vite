@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import imageNotFound from "@/assets/images/noSignature.png";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-// import { ParticipantModal } from "@/components/SigningContent/TabBar/Participant/ParticipantModal";
 import { Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -10,12 +10,11 @@ import Stack from "@mui/material/Stack";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ParticipantsInfo } from "./ParticipantsInfo";
-import { ParticipantsModal } from "./ParticipantsModal";
-import Tooltip from "@mui/material/Tooltip";
+import { DocumentsInfo } from "./DocumentsInfo";
+import { DocumentsModal } from "./DocumentsModal";
 
 // eslint-disable-next-line react/prop-types
-export const Participants = ({ participantsList, workFlow }) => {
+export const Documents = ({ workFlow }) => {
   const { t } = useTranslation();
   //Begin: Open modal
   const [open, setOpen] = useState(false);
@@ -37,7 +36,7 @@ export const Participants = ({ participantsList, workFlow }) => {
         <Stack direction="row" spacing={1} alignItems="center">
           <ParticipantIcon />
           <Typography sx={{ fontWeight: "550" }} variant="h3">
-            {t("0-common.participants")}
+            {t("batch.documents")}
           </Typography>
 
           <Avatar
@@ -48,26 +47,24 @@ export const Participants = ({ participantsList, workFlow }) => {
               fontSize: "10px",
             }}
           >
-            {participantsList.length}
+            {workFlow.length}
           </Avatar>
         </Stack>
-        {participantsList.length !== 0 && (
+        {workFlow.length !== 0 && (
           <Stack direction="row" justifyContent={"center"}>
-            <Tooltip title={"Manage participants"} arrow placement="top">
-              <IconButton
-                onClick={handleOpen}
-                sx={{
-                  height: "34px",
-                  margin: "auto 0",
-                }}
-              >
-                <SettingIcon />{" "}
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              onClick={handleOpen}
+              sx={{
+                height: "34px",
+                margin: "auto 0",
+              }}
+            >
+              <SettingIcon />
+            </IconButton>
           </Stack>
         )}
       </Stack>
-      {participantsList.length === 0 ? (
+      {workFlow.length === 0 ? (
         <Box>
           <Box width={200} textAlign="center" mx="auto">
             <img
@@ -83,25 +80,19 @@ export const Participants = ({ participantsList, workFlow }) => {
           </Typography>
         </Box>
       ) : (
-        <ParticipantsInfo
-          participantsList={participantsList}
-          setSignerToken={workFlow.setSignerToken}
-          signerToken={workFlow.signerToken}
-          workflowStatus={workFlow.workflowStatus}
-        />
+        <DocumentsInfo documentsList={workFlow} />
       )}
 
-      <ParticipantsModal
+      <DocumentsModal
         workFlow={workFlow}
         open={open}
         handleClose={handleClose}
-        title={t("arrangement.manage_participants")}
-        data={participantsList}
+        title={t("arrangement.setting_documents")}
       />
     </Box>
   );
 };
-Participants.propTypes = {
-  participantsList: PropTypes.array,
+Documents.propTypes = {
+  documentsList: PropTypes.array,
 };
-export default Participants;
+export default Documents;

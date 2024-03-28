@@ -353,5 +353,11 @@
     "val3": "合格的签名验证服务实践声明和政策",
     "validSeal": "无效签名",
     "validSig": "有效签名"
+  },
+  "arrangement": {
+    "manage_participants": "管理参与者",
+    "setting_documents": "设置文件",
+    "error-1": "参与者字段不足",
+    "share_now": "立即分享"
   }
 }

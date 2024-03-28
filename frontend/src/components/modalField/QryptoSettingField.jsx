@@ -63,6 +63,7 @@ export const QryptoSettingField = ({
   getFields,
 }) => {
   const { t } = useTranslation();
+  const [isPending, setIsPending] = useState(false);
   const { control, handleSubmit, watch, register, unregister, setValue } =
     useForm({
       defaultValues: {
@@ -91,7 +92,23 @@ export const QryptoSettingField = ({
   };
 
   const handleFormSubmit = async (data) => {
+    setIsPending(true);
     console.log(data, "data");
+    // console.log(
+    //   data.items
+    //     .filter((item) => item !== null)
+    //     .map((item) => {
+    //       switch (item.remark) {
+    //         case "table":
+    //           return {
+    //             ...item,
+    //             value: item.value.filter((value) => value !== null),
+    //           };
+    //         default:
+    //           return item;
+    //       }
+    //     })
+    // );
     const request = {
       field_name: data.fieldName,
       dimension: {
@@ -102,16 +119,35 @@ export const QryptoSettingField = ({
       },
       visible_enabled: true,
       page: qryptoData.page,
-      items: data.items.filter((item) => item !== null),
+      items: data.items
+        .filter((item) => item !== null)
+        .map((item) => {
+          switch (item.remark) {
+            case "table":
+              return {
+                ...item,
+                value: item.value.filter((value) => value !== null),
+              };
+            default:
+              return item;
+          }
+        }),
     };
-    const response = await fpsService.putSignature(
-      request,
-      "qrcode-qrypto",
-      workFlow.documentId
-    );
-    if (!response) return;
-    await getFields();
-    onClose();
+    try {
+      const response = await fpsService.putSignature(
+        request,
+        "qrcode-qrypto",
+        workFlow.documentId
+      );
+      if (response.status === 200) {
+        await getFields();
+        onClose();
+      }
+      setIsPending(false);
+    } catch (error) {
+      alert(error);
+      setIsPending(false);
+    }
   };
 
   return (
@@ -254,6 +290,7 @@ export const QryptoSettingField = ({
           }}
           onClick={handleSubmitClick}
           type="button"
+          disabled={isPending}
         >
           {t("0-common.save")}
         </Button>

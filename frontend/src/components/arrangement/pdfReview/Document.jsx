@@ -5,6 +5,7 @@ import { checkIsPosition } from "@/utils/commonFunction";
 import { useQueryClient } from "@tanstack/react-query";
 import Signature from "./Signature";
 import { AddText, Initial, QrCode, Qrypto, TextBox } from ".";
+import { CheckBox } from "./CheckBox";
 export const Document = ({
   props,
   workFlow,
@@ -120,6 +121,7 @@ export const Document = ({
       id={`pdf-view-${props.pageIndex}`}
     >
       {props.canvasLayer.children}
+
       {signatures?.map((signatureData, index) => {
         if (signatureData.page !== props.pageIndex + 1) return null;
         return (
@@ -206,6 +208,14 @@ export const Document = ({
             workFlow={workFlow}
             getFields={getFields}
           />
+          // <CheckBox
+          //   key={1}
+          //   index={1}
+          //   pdfPage={pdfPage}
+          //   qryptoData={qryptoData}
+          //   workFlow={workFlow}
+          //   getFields={getFields}
+          // />
         );
       })}
       {props.annotationLayer.children}

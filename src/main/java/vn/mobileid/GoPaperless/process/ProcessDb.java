@@ -237,6 +237,11 @@ public class ProcessDb {
                 response.setEnterpriseId(rs.getInt("ENTERPRISE_ID"));
                 response.setDeadlineAt(rs.getString("DEADLINE_AT"));
                 response.setWorkflowProcessType(rs.getString("WORKFLOW_PROCESS_TYPE"));
+                response.setWorkflowStatus(rs.getString("WORKFLOW_STATUS"));
+                System.out.println("WORKFLOW_STATUS: " + (rs.getString("WORKFLOW_STATUS")));
+                response.setCreatedBy(rs.getString("CREATED_BY"));
+                response.setCreatedAt(rs.getDate("CREATED_AT"));
+                response.setLastModifiedAt(rs.getDate("LAST_MODIFIED_AT"));
             }
 
         } catch (Exception e) {
@@ -893,8 +898,6 @@ public class ProcessDb {
             proc_stmt.setInt("pWORKFLOW_STATUS", pWORKFLOW_STATUS);
             proc_stmt.setString("pLAST_MODIFIED_BY", pLAST_MODIFIED_BY);
             proc_stmt.registerOutParameter("pRESPONSE_CODE", java.sql.Types.NVARCHAR);
-            // System.out.println("USP_PPL_WORKFLOW_UPDATE_STATUS: " +
-            // proc_stmt.toString());
             proc_stmt.execute();
             convrtr = proc_stmt.getString("pRESPONSE_CODE");
         } finally {

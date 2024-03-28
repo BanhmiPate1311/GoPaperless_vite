@@ -65,7 +65,6 @@ export const Signature = ({
             item.certificate.field_name === signatureData.field_name
         )
         ?.map((item) => ({ isSigned: false, ...item.certificate })) || null;
-    console.log("newSig1: ", newSig1);
   }, [signatureData, workFlow, queryClient]);
 
   const maxPosibleResizeWidth =
@@ -83,6 +82,7 @@ export const Signature = ({
       { documentId: workFlow.documentId },
       signatureData.field_name
     );
+
     if (res.status === 200) {
       getFields();
     }
@@ -176,9 +176,6 @@ export const Signature = ({
           setIsControlled(false);
         }}
         onStop={async (e, data) => {
-          // console.log("data: ", data);
-          // console.log("e: ", e);
-
           setIsControlled(true);
           handleDrag("none");
           const draggableComponent = document.querySelector(
@@ -192,8 +189,6 @@ export const Signature = ({
           const containerRect = containerComponent.getBoundingClientRect();
 
           const draggableRect = draggableComponent.getBoundingClientRect();
-          // console.log("draggableRect: ", draggableRect);
-          // console.log("containerRect: ", containerRect);
           if (
             draggableRect.right > containerRect.right ||
             draggableRect.left < containerRect.left ||
