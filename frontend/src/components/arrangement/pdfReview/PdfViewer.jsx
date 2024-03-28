@@ -26,7 +26,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   const [field, setField] = useState(null);
 
   const signer = getSigner(workFlow);
-  // console.log("signer: ", signer);
+  console.log("signer: ", signer);
   const { signingToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
@@ -325,12 +325,12 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       page: signInfo.page,
       value: handleValue(value),
       read_only: false,
-      multiline: false,
+      multiline: value === "TEXTAREA" ? true : false,
       dimension: {
         x: signInfo.x,
         y: signInfo.y,
-        width: 15,
-        height: 2,
+        width: value === "TEXTAREA" ? 24 : 15,
+        height: value === "TEXTAREA" ? 11 : 2,
       },
       place_holder: value,
       suffix: fieldName.suffix,
@@ -504,6 +504,8 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       case "EMAIL":
       case "JOBTITLE":
       case "COMPANY":
+      case "TEXTBOX":
+      case "TEXTAREA":
         textField(value);
         break;
       case "AddText":

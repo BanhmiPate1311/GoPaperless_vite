@@ -1,5 +1,6 @@
-import { ReactComponent as PencilIcon } from "@/assets/images/svg/pencil_wait.svg";
-import { ReactComponent as PersonIcon } from "@/assets/images/svg/person_icon.svg";
+import { ReactComponent as DetailsIcon } from "@/assets/images/svg/material-symbols_info.svg";
+import { ReactComponent as AttachmentsIcon } from "@/assets/images/svg/attachment.svg";
+import { ReactComponent as DocumentsIcon } from "@/assets/images/svg/document.svg";
 import { ReactComponent as SigValidIcon } from "@/assets/images/svg/sig_valid.svg";
 import { useCommonHook } from "@/hook";
 import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
@@ -134,7 +135,7 @@ export const SigningDetail = ({ open, documentsList, handleClose }) => {
             gap={1}
             flexGrow={1}
           >
-            <PersonIcon />
+            <DocumentsIcon />
             <Box>
               <Typography
                 fontWeight="550"
@@ -216,7 +217,7 @@ export const SigningDetail = ({ open, documentsList, handleClose }) => {
                     sx={{ fontSize: 16, color: "primary.main" }}
                     viewBox={"0 0 16 16"}
                   >
-                    <PencilIcon />
+                    <DetailsIcon />
                   </SvgIcon>
                   <Typography
                     variant="h2"
@@ -229,7 +230,7 @@ export const SigningDetail = ({ open, documentsList, handleClose }) => {
                 </>
               ) : (
                 <>
-                  <PencilIcon />
+                  <DetailsIcon />
                   <Typography
                     variant="h2"
                     sx={{
@@ -285,6 +286,7 @@ export const SigningDetail = ({ open, documentsList, handleClose }) => {
               sx={{
                 backgroundColor: "accordingBackGround.main",
                 minHeight: "unset !important",
+                padding: "0px 20px",
                 "& .MuiAccordionSummary-content": {
                   alignItems: "center",
                   gap: 1,
@@ -292,10 +294,10 @@ export const SigningDetail = ({ open, documentsList, handleClose }) => {
               }}
             >
               <SvgIcon
-                sx={{ fontSize: 16, color: "primary.main" }}
+                sx={{ fontSize: 14, color: "primary.main" }}
                 viewBox={"0 0 16 16"}
               >
-                <PencilIcon />
+                <AttachmentsIcon />
               </SvgIcon>
               <Typography
                 variant="h2"

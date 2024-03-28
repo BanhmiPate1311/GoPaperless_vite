@@ -77,7 +77,11 @@
     "valid_to": "Valid to",
     "preview": "Preview",
     "preview&continue": "Preview & Continue",
-    "attachments": "Attachments"
+    "attachments": "Attachments",
+    "edit": "Edit",
+    "text field": "Text Field",
+    "text area": "Text Area",
+    "date time": "Date Time"
   },
   "batch": {
     "collapse": "Collapse all",

@@ -12,6 +12,9 @@ import { ReactComponent as QRCode } from "@/assets/images/contextmenu/qrcode.svg
 import { ReactComponent as Signature } from "@/assets/images/contextmenu/signature.svg";
 import { ReactComponent as AddText } from "@/assets/images/contextmenu/addtext.svg";
 import { ReactComponent as QrQrypto } from "@/assets/images/contextmenu/qrypto.svg";
+import { ReactComponent as TextField } from "@/assets/images/contextmenu/TextField.svg";
+import { ReactComponent as TextArea } from "@/assets/images/contextmenu/TextArea.svg";
+import { ReactComponent as DateTime } from "@/assets/images/contextmenu/DateTime.svg";
 
 export const ContextMenu = ({
   contextMenu,
@@ -55,6 +58,21 @@ export const ContextMenu = ({
       icon: <AddText />,
       label: t("0-common.addtext"),
       value: "AddText",
+    },
+    {
+      icon: <TextField />,
+      label: t("0-common.text field"),
+      value: "TEXTBOX",
+    },
+    {
+      icon: <TextArea />,
+      label: t("0-common.text area"),
+      value: "TEXTAREA",
+    },
+    {
+      icon: <DateTime />,
+      label: t("0-common.date time"),
+      value: "DATETIME",
     },
   ];
   let menu = [];

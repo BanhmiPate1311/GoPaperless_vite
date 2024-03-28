@@ -17,7 +17,7 @@ import { ResizableBox } from "react-resizable";
 export const TextBox = ({ index, pdfPage, textData, workFlow, getFields }) => {
   // console.log("workFlow: ", workFlow);
   // console.log("index: ", index);
-  // console.log("textData: ", textData);
+  console.log("textData: ", textData);
   const queryClient = useQueryClient();
   const putSignature = UseUpdateSig();
 
@@ -407,6 +407,8 @@ export const TextBox = ({ index, pdfPage, textData, workFlow, getFields }) => {
               fullWidth
               size="small"
               margin="normal"
+              multiline={textData.type === "TEXTAREA" ? true : false}
+              rows={5}
               value={textValue}
               autoComplete="off"
               placeholder={textData.place_holder}
