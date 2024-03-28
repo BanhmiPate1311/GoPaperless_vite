@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
-import { Document } from ".";
 
 export const PdfViewer = ({ workFlow, tabBar }) => {
   const { t } = useTranslation();
