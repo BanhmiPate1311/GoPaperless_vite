@@ -65,7 +65,6 @@ export const ParticipantsModal = ({
 
     try {
       const response = await participantsService.updateParticipant(data);
-      console.log("response: ", response);
       // setProcess(response.data);
       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
       if (!btnSave || (btnSave && lastIndex)) {

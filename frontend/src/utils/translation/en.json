@@ -384,6 +384,8 @@
   },
   "arrangement": {
     "manage_participants": "Manage Participants",
-    "setting_documents": "Setting Documents"
+    "setting_documents": "Setting Documents",
+    "error-1": "Don't have enough field for Participants",
+    "share_now": "Share now"
   }
 }
