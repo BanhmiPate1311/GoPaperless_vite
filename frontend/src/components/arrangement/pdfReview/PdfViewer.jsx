@@ -1,25 +1,19 @@
 /* eslint-disable react/prop-types */
 import "@/assets/style/cursor.css";
 import { useCommonHook } from "@/hook";
-import { UseAddSig, UseAddTextField } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
-import {
-  checkIsPosition,
-  checkSignerStatus,
-  getSigner,
-} from "@/utils/commonFunction";
+import { getSigner } from "@/utils/commonFunction";
 import { generateFieldName } from "@/utils/getField";
 import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
-import { ContextMenu } from "../../ContextMenu";
 import { Document } from ".";
+import { ContextMenu } from "../../ContextMenu";
 
 export const PdfViewer = ({ workFlow, tabBar }) => {
   const { t } = useTranslation();
@@ -31,7 +25,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
   const [field, setField] = useState(null);
 
   const signer = getSigner(workFlow);
-  // console.log("signer: ", signer);
+  console.log("signer: ", signer);
   const { signingToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
@@ -176,12 +170,12 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       page: signInfo.page,
       value: handleValue(value),
       read_only: false,
-      multiline: false,
+      multiline: value === "TEXTAREA" ? true : false,
       dimension: {
         x: signInfo.x,
         y: signInfo.y,
-        width: 15,
-        height: 2,
+        width: value === "TEXTAREA" ? 24 : 15,
+        height: value === "TEXTAREA" ? 11 : 2,
       },
       place_holder: value,
       suffix: fieldName.suffix,
@@ -348,6 +342,8 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       case "EMAIL":
       case "JOBTITLE":
       case "COMPANY":
+      case "TEXTBOX":
+      case "TEXTAREA":
         textField(value);
         break;
       case "AddText":

@@ -24,8 +24,12 @@ export const ParticipantsModal = ({
   const descriptionElementRef = useRef(null);
   const queryClient = useQueryClient();
   const handleSubmitClick = () => {
-    participant.map((value) => {
-      updateParticipant(value);
+    participant.map((value, index) => {
+      updateParticipant(
+        value,
+        true,
+        index === participant.length - 1 ? true : false
+      );
     });
     handleClose();
   };
@@ -40,7 +44,11 @@ export const ParticipantsModal = ({
   }, [open]);
   const [participant, setParticipant] = useState([]);
 
-  const updateParticipant = async (data) => {
+  const updateParticipant = async (
+    data,
+    btnSave = false,
+    lastIndex = false
+  ) => {
     // const data = {
     //   fullName,
     //   firstName,
@@ -53,13 +61,17 @@ export const ParticipantsModal = ({
     //   signerToken: row.signerToken,
     // };
     console.log("data: ", data);
+    console.log("open: ", open);
 
     try {
       const response = await participantsService.updateParticipant(data);
       console.log("response: ", response);
       // setProcess(response.data);
       queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
-      toast.success("Update participants successful."); // Display success notification
+      if (!btnSave || (btnSave && lastIndex)) {
+        toast.success("Update participants successful.");
+      }
+      // toast.success("Update participants successful."); // Display success notification
       // <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
       //   Import successful.
       // </Alert>;
