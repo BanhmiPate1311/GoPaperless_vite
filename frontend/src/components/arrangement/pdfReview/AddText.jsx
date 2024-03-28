@@ -1,11 +1,11 @@
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as Save } from "@/assets/images/svg/save1.svg";
-import { UseFillForm, UseUpdateSig } from "@/hook/use-fpsService";
+import { UseFillForm } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
@@ -106,7 +106,7 @@ export const AddText = ({
 }) => {
   // console.log("index: ", index);
   const queryClient = useQueryClient();
-  const putSignature = UseUpdateSig();
+  // const putSignature = UseUpdateSig();
   const fillForm = UseFillForm();
 
   const [isControlled, setIsControlled] = useState(false);
@@ -406,6 +406,7 @@ AddText.propTypes = {
   pdfPage: PropTypes.object,
   addTextData: PropTypes.object,
   workFlow: PropTypes.object,
+  getFields: PropTypes.func,
 };
 
 export default AddText;

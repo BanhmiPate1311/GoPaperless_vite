@@ -18,10 +18,12 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
 import Button from "@mui/material/Button";
 import { fpsService } from "@/services/fps_service";
+import { useState } from "react";
 
 export const Arrangement = () => {
   const { t } = useTranslation();
-  const { signingToken, signerToken } = useCommonHook();
+  const { signingToken } = useCommonHook();
+  const [signerToken, setSignerToken] = useState("");
 
   const workFlow = useQuery({
     queryKey: ["getWorkFlow"],
@@ -53,6 +55,7 @@ export const Arrangement = () => {
         ...newData,
         participants: transformedParticipantsList,
         signerToken: signerToken,
+        setSignerToken: setSignerToken,
       };
     },
   });
@@ -112,7 +115,7 @@ export const Arrangement = () => {
               alert("Don't have enough signature field for this signer");
             }
             break;
-          case 2:
+          case 3:
             if (fields.initial.length > 0) {
               data = false;
               // Check have Signature field for this signer
@@ -155,7 +158,12 @@ export const Arrangement = () => {
         documentId: workFlow.data.documentId,
       };
       console.log(data);
-      await apiService.shareToSign(data);
+      try {
+        await apiService.shareToSign(data);
+        alert("Share to sign success!!");
+      } catch (error) {
+        alert("Share to sign fail!!");
+      }
     } else {
       alert("Don't have enough field for Participants");
     }

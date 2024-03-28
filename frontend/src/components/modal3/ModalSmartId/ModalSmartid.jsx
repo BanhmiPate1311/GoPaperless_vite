@@ -1,5 +1,6 @@
 import { useSmartIdSign } from "@/hook";
 import { rsspService } from "@/services/rssp_service";
+import { capitalLize } from "@/utils/commonFunction";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -127,7 +128,6 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
       onSuccess: (data) => {
         window.parent.postMessage({ data: data.data, status: "Success" }, "*");
         queryClient.invalidateQueries({ queryKey: ["getField"] });
-        queryClient.invalidateQueries({ queryKey: ["verifySignatures"] });
         queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
         onClose();
         return true;
@@ -260,7 +260,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
             <Stack width={"100%"}>
               {smartSign?.error && (
                 <Alert severity="error">
-                  {smartSign?.error?.response?.data.message.toLowerCase()}
+                  {capitalLize(smartSign?.error?.response?.data?.message)}
                 </Alert>
               )}
             </Stack>
@@ -298,9 +298,6 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
                   "*"
                 );
                 queryClient.invalidateQueries({ queryKey: ["getField"] });
-                queryClient.invalidateQueries({
-                  queryKey: ["verifySignatures"],
-                });
                 queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
                 onClose();
                 return true;

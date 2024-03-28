@@ -40,7 +40,6 @@ export const Signature = ({
     y: (signatureData.dimension?.y * pdfPage.height) / 100,
   });
   const signer = getSigner(workFlow);
-
   const signerId = signer?.signerId;
   const [isSetPos, setIsSetPos] = useState(false);
 

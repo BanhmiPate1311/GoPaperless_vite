@@ -1,8 +1,9 @@
-import { ReactComponent as Signed_Icon } from "@/assets/images/svg/signed_icon2.svg";
-import { ReactComponent as SignerSelected } from "@/assets/images/svg/signer_select.svg";
-import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
+import { ReactComponent as EditorIcon } from "@/assets/images/svg/editor.svg";
+import { ReactComponent as ReviewerIcon } from "@/assets/images/svg/reviewer.svg";
+import { ReactComponent as SendCopyIcon } from "@/assets/images/svg/send_copy.svg";
+import { ReactComponent as SignerIcon } from "@/assets/images/svg/signer.svg";
 import { useCommonHook } from "@/hook";
-import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
+import { checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -75,7 +76,7 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0 }}>
         {participantsList.map((participant, index) => {
-          const status = checkSignerStatus(participant, signerToken);
+          // const status = checkSignerStatus(participant, signerToken);
           const check = checkSignerWorkFlow(participant, signerToken);
 
           return (
@@ -100,12 +101,17 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                 onClick={() => toggleDrawer(index)}
                 sx={{ cursor: "pointer" }}
               >
-                {status === 2 ? (
-                  <Signed_Icon />
-                ) : check ? (
-                  <SignerSelected />
-                ) : (
-                  <WaitingSig width={24} height={24} />
+                {participant.signerType === 1 && (
+                  <SignerIcon width={24} height={24} />
+                )}
+                {participant.signerType === 2 && (
+                  <ReviewerIcon width={24} height={24} />
+                )}
+                {participant.signerType === 3 && (
+                  <EditorIcon width={24} height={24} />
+                )}
+                {participant.signerType === 5 && (
+                  <SendCopyIcon width={24} height={24} />
                 )}
               </Box>
               <Box flexGrow={1}>
@@ -121,13 +127,17 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
                   variant="h2"
                   color={check ? "signingtextBlue.main" : "signingtext2.main"}
                 >
-                  {status === 2
+                  {/* {status === 2
                     ? participant.signedType === "NORMAL"
                       ? t("signing.signature_valid")
                       : t("validation.sealValidTitle2")
                     : status === 1
                     ? t("signing.wait_my_signature")
-                    : t("signing.wait_signature")}
+                    : t("signing.wait_signature")} */}
+                  {participant.signerType === 1 && "Waiting for signature"}
+                  {participant.signerType === 2 && "Waiting for approve"}
+                  {participant.signerType === 3 && "Signature is valid"}
+                  {participant.signerType === 5 && "Only view"}
                 </Typography>
               </Box>
               {/* <IconButton onClick={() => toggleDrawer(index)}>

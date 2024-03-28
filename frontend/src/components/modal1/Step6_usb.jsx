@@ -60,12 +60,13 @@ export const Step6_usb = ({
       value={index}
       aria-label="list"
       key={index}
-      onDoubleClick={(e) => {
-        e.preventDefault();
-        if (!isShowCertInfor[index]) {
-          onDoubleClick(index);
-        }
-      }}
+      // onDoubleClick={(e) => {
+      //   if (certSelected === null) return;
+      //   e.preventDefault();
+      //   if (!isShowCertInfor[index]) {
+      //     onDoubleClick(index);
+      //   }
+      // }}
     >
       <Stack direction="row" alignItems="center" sx={{ width: "100%" }}>
         <Tooltip title={t("signing.cert_tooltip")} followCursor>

@@ -4,7 +4,7 @@ import { Cookie } from "@/components/cookie";
 import { useCommonHook } from "@/hook";
 import { apiService } from "@/services/api_service";
 import { fpsService } from "@/services/fps_service";
-import { checkWorkflowStatus } from "@/utils/commonFunction";
+import { checkWorkflowStatus, getSigner } from "@/utils/commonFunction";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { Button } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
@@ -14,7 +14,7 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotFound } from "../NotFound";
@@ -26,6 +26,7 @@ export const Signing = () => {
   const [permit, setPermit] = useState(false);
 
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleClickOpenApprove = () => {
     setOpen(true);
@@ -137,6 +138,70 @@ export const Signing = () => {
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
+  const signer = getSigner(workFlow?.data);
+  // console.log("signer: ", signer);
+
+  useEffect(() => {
+    if (workFlow?.data?.participants) {
+      signer.current = getSigner(workFlow?.data);
+    }
+  }, [workFlow?.data]);
+  // console.log("signer: ", signer.current);
+
+  const checkInit = field?.initial.findIndex(
+    (item) =>
+      item.process_status === "UN_PROCESSED" &&
+      item.field_name.includes(signer.signerId)
+  );
+  // console.log("checkInit: ", checkInit);
+
+  const checkTextBox = field?.textbox.findIndex(
+    (item) =>
+      item.field_name.includes(signer.signerId) &&
+      item.value === "" &&
+      item.required === true
+  );
+  // console.log("checkTextBox: ", checkTextBox);
+
+  const qrypto =
+    field?.qrypto.length > 0 &&
+    field?.qrypto[0].process_status === "UN_PROCESSED"
+      ? field?.qrypto[0].field_name
+      : null;
+  useEffect(() => {
+    if (checkWorkFlowStatus && qrypto) {
+      fpsService.fillQrypto(qrypto, { documentId: workFlow?.data?.documentId });
+      queryClient.invalidateQueries({ queryKey: ["getField"] });
+      queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+    }
+  }, [qrypto, checkWorkFlowStatus, workFlow?.data?.documentId]);
+
+  const checkApprove = (signerType, signerStatus) => {
+    if (signerStatus !== 1) return "none";
+    switch (signerType) {
+      case 2:
+        if (checkInit === -1 && checkTextBox === -1) {
+          return "block";
+        } else {
+          return "none";
+        }
+      case 3:
+        if (
+          field?.initial.findIndex((item) =>
+            item.field_name.includes(signer.signerId)
+          ) !== -1 &&
+          checkInit === -1 &&
+          checkTextBox === -1
+        ) {
+          return "block";
+        } else {
+          return "none";
+        }
+      default:
+        return "none";
+    }
+  };
+
   if ((workFlowValid && workFlowValid.data === 0) || !permit) {
     return <NotFound />;
   } else {
@@ -204,8 +269,19 @@ export const Signing = () => {
                 }
                 clickable
               />
-              <Button variant="contained" onClick={handleClickOpenApprove}>
-                {t("0-common.approve")}
+              <Button
+                variant="contained"
+                onClick={handleClickOpenApprove}
+                sx={{
+                  display: checkApprove(
+                    signer?.signerType,
+                    signer?.signerStatus
+                  ),
+                }}
+              >
+                {signer?.signerType === 2
+                  ? t("0-common.approve")
+                  : t("0-common.submit")}
               </Button>
             </Toolbar>
           </AppBar>
@@ -218,12 +294,19 @@ export const Signing = () => {
             height: (theme) => `calc(100% - ${theme.GoPaperless.appBarHeight})`,
           }}
         >
-          {workFlow.data && <SigningContent workFlow={workFlow.data} />}
+          {workFlow.data && field && (
+            <SigningContent
+              workFlow={workFlow.data}
+              field={field}
+              signer={signer}
+            />
+          )}
         </Container>
         <ApproveModal
           open={open}
           onClose={handleCloseApprove}
           workFlow={workFlow.data}
+          signer={signer}
         />
         <Cookie />
       </Stack>

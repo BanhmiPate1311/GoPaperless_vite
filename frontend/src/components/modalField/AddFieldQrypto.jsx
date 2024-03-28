@@ -18,16 +18,16 @@ export const AddFieldQrypto = ({ open, setOpen, handleAddField }) => {
   const [label, setLabel] = useState("");
   const [type, setType] = useState("");
   const optionType = [
-    { value: 1, label: "Text" },
-    { value: 7, label: "Choice" },
-    // { value: 1, label: "Bold Label" },
-    // { value: 1, label: "Date" },
-    // { value: 5, label: "Non-Editable Element" },
-    // { value: 6, label: "Photo/ Image" },
-    // { value: 7, label: "ID Picture with 4 labels" },
-    // { value: 1, label: "File" },
-    { value: 8, label: "Table" },
-    // { value: 1, label: "URL" },
+    { value: "text", label: "Text" },
+    { value: "choice", label: "Choice" },
+    { value: "boldLabel", label: "Bold Label" },
+    { value: "date", label: "Date" },
+    // { value: "text", label: "Non-Editable Element" },
+    { value: "picture", label: "Photo/ Image" },
+    { value: "pictureLabel", label: "ID Picture with 4 labels" },
+    { value: "file", label: "File" },
+    { value: "table", label: "Table" },
+    { value: "url", label: "URL" },
   ];
   return (
     <Dialog
@@ -91,7 +91,7 @@ export const AddFieldQrypto = ({ open, setOpen, handleAddField }) => {
             height: "100%",
           }}
         >
-          <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
+          <Box sx={{ width: "100%" }}>
             <Box mb="10px">
               <Typography variant="h6" mb="10px">
                 Label

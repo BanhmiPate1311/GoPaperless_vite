@@ -78,18 +78,33 @@ export const ContextMenu = ({
   let menu = [];
   switch (signerType) {
     case 1:
-      menu = data;
+      menu = data.filter(
+        (item) => item.value !== "QR" && item.value !== "QRYPTO"
+      );
       break;
     case 2:
-    case 3:
       menu = data.filter((item) => item.value !== "SIGNATURE");
+      break;
+    case 3:
+      menu = data.filter(
+        (item) =>
+          item.value !== "SIGNATURE" &&
+          item.value !== "QR" &&
+          item.value !== "QRYPTO"
+      );
+      break;
+    case 4:
+      menu = data.filter((item) => item.value !== "SIGNATURE");
+      break;
+    case 5:
+      menu = [];
       break;
   }
   // Arrangement Overview
 
   switch (tabBar) {
     case 0:
-      menu = menu.filter(
+      menu = data.filter(
         (item) => (item.value === "QRYPTO") | (item.value == "QR")
       );
       break;
@@ -98,6 +113,7 @@ export const ContextMenu = ({
       menu = menu.filter(
         (item) => item.value !== "QRYPTO" && item.value !== "QR"
       );
+      signerType ? null : (menu = []);
       break;
     case 2:
       return;

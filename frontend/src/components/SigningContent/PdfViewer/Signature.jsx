@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { ResizableBox } from "react-resizable";
 import { SigDetail } from ".";
 import { SigningForm2 } from "../../modal1";
+import { TextField } from "@mui/material";
 
 /* eslint-disable react/prop-types */
 export const Signature = ({
@@ -38,7 +39,7 @@ export const Signature = ({
   // console.log("initial: ", initial);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
-  // console.log("index: ", index);
+  // console.log("qrypto: ", qrypto);
   // console.log("signatureData: ", signatureData);
 
   const { t } = useTranslation();
@@ -67,6 +68,8 @@ export const Signature = ({
   });
   // console.log("currentPos: ", newPos.current);
   const [dataSigning, setDataSigning] = useState({});
+  const boxRef = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
@@ -120,6 +123,23 @@ export const Signature = ({
   //   setSigDetail(...newSig1, ...newSig2);
   // }, [signatureData, workFlow, queryClient]);
 
+  // useEffect(() => {
+  //   if (signatureData.selected && boxRef.current && !scrolled) {
+  //     console.log("boxRef.current: ", boxRef.current);
+  //     boxRef.current.scrollIntoView({ behavior: "auto" });
+  //     setScrolled(true);
+  //   }
+  //   if (!signatureData.selected) {
+  //     setScrolled(false);
+  //   }
+  // }, [signatureData, scrolled]);
+  useEffect(() => {
+    if (signatureData.selected && boxRef.current) {
+      console.log("object");
+      boxRef.current.focus();
+    }
+  }, [signatureData.selected]);
+
   useEffect(() => {
     const sigInfor = queryClient.getQueryData(["getSignedInfo"]);
     const newSig1 =
@@ -132,7 +152,7 @@ export const Signature = ({
         ?.filter(
           (item) =>
             item.certificate &&
-            item.certificate.field_name === signatureData.field_name
+            item.certificate.fieldName === signatureData.field_name
         )
         ?.map((item) => ({ isSigned: false, ...item.certificate })) || null;
 
@@ -368,8 +388,9 @@ export const Signature = ({
           setIsControlled(false);
         }}
         onStop={(e, data) => {
-          // console.log("data: ", data);
+          // console.log("signatureData: ", signatureData);
           // console.log("e: ", e);
+          if (signatureData.process_status === "PROCESSED") return;
 
           setIsControlled(true);
           handleDrag("none");
@@ -562,6 +583,14 @@ export const Signature = ({
                   signatureData.field_name
                   ? "rgba(217, 223, 228, 0.7)"
                   : "rgba(254, 240, 138, 0.7)",
+              // ...(signatureData.selected && {
+              //   animationName: "banner",
+              //   animationDuration: "6s",
+              //   animationIterationCount: "infinite",
+              //   animationDirection: "normal",
+              //   perspective: "1000",
+              //   backgroundAttachment: "fixed",
+              // }),
               height: "100%",
               position: "relative",
               padding: "10px",
@@ -610,7 +639,12 @@ export const Signature = ({
               ) {
                 console.log("true");
                 return;
-              } else if (e.target.id === `sigDrag-${index}`) {
+              } else if (
+                e.target.id === `sigDrag-${index}` ||
+                e.target.parentElement?.id === "drag" ||
+                e.target.id === "click-duoc" ||
+                e.target.parentElement?.id === "click-duoc"
+              ) {
                 if (checkInit !== -1) {
                   alert(t("signing.init_warning"));
                   return;
@@ -619,11 +653,6 @@ export const Signature = ({
                   alert(t("signing.text_warning"));
                   return;
                 }
-                handleOpenSigningForm(index);
-              } else if (
-                e.target.parentElement?.id === "drag" ||
-                e.target.id === "click-duoc"
-              ) {
                 handleOpenSigningForm(index);
               }
             }}
@@ -647,6 +676,7 @@ export const Signature = ({
                 style={{ display: "none" }}
               ></span>
               <Box
+                // ref={boxRef}
                 id="click-duoc"
                 variant="h5"
                 width={"100%"}
@@ -663,6 +693,9 @@ export const Signature = ({
                 }
                 textAlign={"center"}
                 height="45px"
+                // sx={{
+                //   overflow: "hidden",
+                // }}
               >
                 Signature
                 <br />

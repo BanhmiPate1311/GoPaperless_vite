@@ -16,6 +16,7 @@ import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
 import vn.mobileid.GoPaperless.model.Electronic.datatypes.JwtModel;
 import vn.mobileid.GoPaperless.model.Electronic.request.CheckCertificateRequest;
 import vn.mobileid.GoPaperless.model.apiModel.ConnectorName;
+import vn.mobileid.GoPaperless.model.apiModel.LastFile;
 import vn.mobileid.GoPaperless.model.apiModel.Participants;
 import vn.mobileid.GoPaperless.model.apiModel.WorkFlowList;
 import vn.mobileid.GoPaperless.model.fpsModel.FpsSignRequest;
@@ -478,7 +479,7 @@ public class RsspService {
                         property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
 
                     } else {
-                        property.setRelyingPartyKeyStore("C:/Duy/Project/GoPaperless_Gateway/File_p12/PAPERLESS.p12");
+                        property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
                     }
                 } else if ("KEYSTORE_FILE_URL".equals(name)) {
                     property.setRelyingPartyKeyStore(value);
@@ -646,6 +647,10 @@ public class RsspService {
         }
     }
 
+    public ConnectorName getIdentierConnector(String connectorName) throws Exception {
+        return connect.getIdentierConnector(connectorName);
+    }
+
     public Map<String, Object> getCertificates(RsspRequest request) throws Exception {
         ConnectorName IdentierConnector = connect.getIdentierConnector(request.getConnectorName());
         System.out.println("connectorName: " + request.getConnectorName());
@@ -686,7 +691,7 @@ public class RsspService {
                         if ("SMART_ID_LCA".equals(request.getConnectorName())) {
                             property.setRelyingPartyKeyStore("D:/project/file/LCA_GOPAPERLESS.p12");
                         } else {
-                            property.setRelyingPartyKeyStore("C:/Duy/Project/GoPaperless_Gateway/File_p12/PAPERLESS.p12");
+                            property.setRelyingPartyKeyStore("D:/project/file/PAPERLESS.p12");
                         }
                     } else {
                         property.setRelyingPartyKeyStore(value);
@@ -763,31 +768,28 @@ public class RsspService {
         String codeNumber = signRequest.getCodeNumber();
         String connectorName = signRequest.getConnectorName();
         String country = !Objects.equals(signRequest.getCountry(), "") ? signRequest.getCountry() : signRequest.getCountryRealtime();
-        System.out.println("country: " + country);
-        int documentId = signRequest.getDocumentId();
-        int enterpriseId = signRequest.getEnterpriseId();
-        String fileName = signRequest.getFileName();
+
+        int documentId = 0;
+//        int enterpriseId = signRequest.getEnterpriseId();
+//        String fileName = signRequest.getFileName();
         String imageBase64 = signRequest.getImageBase64();
         String lang = signRequest.getLanguage();
-        int lastFileId = signRequest.getLastFileId();
-        String lastUuid = signRequest.getLastFileUuid();
+//        int lastFileId = signRequest.getLastFileId();
         String requestID = signRequest.getRequestID();
-        String signerId = signRequest.getSignerId();
+        String signerId = "";
         String signerToken = signRequest.getSignerToken();
         String signingOption = signRequest.getSigningOption();
-        String signingPurpose = signRequest.getSigningPurpose();
-        System.out.println("signingPurpose: " + signingPurpose);
+//        String signingPurpose = signRequest.getSigningPurpose();
+//        System.out.println("signingPurpose: " + signingPurpose);
         String signingToken = signRequest.getSigningToken();
-        int workFlowId = signRequest.getWorkFlowId();
-        String relyingParty = signRequest.getRelyingParty();
-        String prefixCode = signRequest.getCertChain().getPrefixCode();
+        String relyingParty = property.getRelyingParty();
         boolean codeEnable = signRequest.isCodeEnable();
         String credentialID = signRequest.getCertChain().getCredentialID();
         String certChain = signRequest.getCertChain().getCert();
         String contactInfor = signRequest.getContactInfor();
         String assurance = signRequest.getAssurance();
         List<TextField> textFields = signRequest.getTextField();
-        String workFlowType = signRequest.getWorkFlowProcessType();
+//        String workFlowType = signRequest.getWorkFlowProcessType();
 
         try {
             System.out.println("connectorName: " + connectorName);
@@ -810,12 +812,23 @@ public class RsspService {
             if (rsParticipant == null || rsParticipant.getSignerStatus() != Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_SIGNER_STATUS_ID_PENDING) {
                 return sResult = "The document has already been signed";
             }
+            signerId = rsParticipant.getSignerId();
 
 //            String meta = rsParticipant.getMetaInformation();
 
 //            int isSetPosition = CommonFunction.checkIsSetPosition(field_name, meta);
 //
 //            System.out.println("isSetPosition: " + isSetPosition);
+
+            LastFile lastFile = new LastFile();
+            connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, signingToken);
+
+            String fileName = lastFile.getLastPplFileName();
+            documentId = lastFile.getDocumentId();
+            String deadline = lastFile.getDeadlineAt();
+            int lastFileId = lastFile.getLastPplFileSignedId();
+            int enterpriseId = lastFile.getEnterpriseId();
+            String workFlowType = lastFile.getWorkflowProcessType();
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
@@ -849,7 +862,7 @@ public class RsspService {
             HashFileRequest hashFileRequest = new HashFileRequest();
 
             hashFileRequest.setCertificateChain(listCertChain);
-            hashFileRequest.setSigningReason(signingPurpose);
+            hashFileRequest.setSigningReason(rsParticipant.getSigningPurpose() != null ? rsParticipant.getSigningPurpose() : "Sign Document");
             hashFileRequest.setSignatureAlgorithm("RSA");
             hashFileRequest.setSignedHash("SHA256");
             hashFileRequest.setSigningLocation(country);
@@ -915,18 +928,19 @@ public class RsspService {
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
+
             fpsService.fillForm(documentId, textFields);
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;
-            postBack.postBack2(rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
+            postBack.postBack2(deadline, rsParticipant, workFlowType, content, dataResponse, signedType, isSetPosition, signerId, fileName, signingToken, pDMS_PROPERTY, signatureId, signerToken, signedTime, rsWFList, lastFileId, certChain, codeNumber, signingOption, uuid, fileSize, enterpriseId, digest, signedHash, signature, request);
             return responseSign;
 
         } catch (Exception e) {
             e.printStackTrace();
-            if (field_name == null || field_name.isEmpty()) {
-                fpsService.deleteSignatue(documentId, signerId);
-            }
+//            if (field_name == null || field_name.isEmpty()) {
+//                fpsService.deleteSignatue(documentId, signerId);
+//            }
 
             throw new Exception(e.getMessage());
         } finally {

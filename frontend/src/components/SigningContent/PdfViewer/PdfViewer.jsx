@@ -2,11 +2,7 @@
 import "@/assets/style/cursor.css";
 import { useCommonHook } from "@/hook";
 import { UseAddSig, UseAddTextField } from "@/hook/use-fpsService";
-import {
-  checkIsPosition,
-  checkSignerStatus,
-  getSigner,
-} from "@/utils/commonFunction";
+import { checkIsPosition, getSigner } from "@/utils/commonFunction";
 import { generateFieldName } from "@/utils/getField";
 import Box from "@mui/material/Box";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
@@ -20,12 +16,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Document } from ".";
 import { ContextMenu } from "../../ContextMenu";
 
-export const PdfViewer = ({ workFlow }) => {
+export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-
-  const field = queryClient.getQueryData(["getField"]);
 
   const [contextMenu, setContextMenu] = useState(null);
   const [openResize, setOpenResize] = useState(false);
@@ -34,7 +28,7 @@ export const PdfViewer = ({ workFlow }) => {
 
   const signer = getSigner(workFlow);
   // console.log("signer: ", signer);
-  const { signingToken, signerToken } = useCommonHook();
+  const { signingToken } = useCommonHook();
 
   const [signInfo, setSignInFo] = useState(null);
   // console.log("signInfo: ", signInfo);
@@ -84,7 +78,7 @@ export const PdfViewer = ({ workFlow }) => {
     // console.log("page: ", event);
     // if (openResize) return;
     if (
-      checkSignerStatus(signer, signerToken) === 2 ||
+      signer.signerStatus !== 1 ||
       (event.target.className !== "rpv-core__text-layer" &&
         event.target.className !== "rpv-core__text-layer-text")
     )
@@ -383,7 +377,11 @@ export const PdfViewer = ({ workFlow }) => {
         <Document
           props={props}
           workFlow={workFlow}
-          signatures={field?.signature}
+          signatures={field?.signature.map((item) => ({
+            ...item,
+            selected:
+              item.field_name === fieldSelect?.field_name ? true : false,
+          }))}
           textbox={field?.textbox?.filter((item) => item.type !== "TEXTFIELD")}
           initial={field?.initial}
           qr={field?.qr}

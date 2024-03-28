@@ -391,6 +391,7 @@ public class FpsService {
 
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("text", data);
+        requestData.put("visible_enabled", true);
 
         // Convert requestData to JSON string
         ObjectMapper objectMapper = new ObjectMapper();
@@ -438,6 +439,7 @@ public class FpsService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
         requestData.put("apply_to_all", data.getApply_to_all());
+        requestData.put("visible_enabled", true);
         if(!data.getApply_to_all()) {
             requestData.put("initial_pages", data.getInitial_pages());
         }
@@ -466,6 +468,51 @@ public class FpsService {
             if (statusCode.value() == 401) {
                 getAccessToken();
                 return fillInit(documentId, data);
+            } else {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public String fillQrypto(int documentId, String qryptoFieldName) throws Exception {
+        System.out.println("fillQrypto");
+        String fillQryptoUrl = "https://fps.mobile-id.vn/fps/v1/documents/" + documentId + "/qrcode-qrypto";
+
+        System.out.println("fillQryptoUrl: " + fillQryptoUrl);
+//        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        Map<String, Object> requestData = new HashMap<>();
+        if(qryptoFieldName != null) {
+        requestData.put("field_name", qryptoFieldName);
+        }
+
+        // Convert requestData to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestDataJson = objectMapper.writeValueAsString(requestData);
+
+        // Log the JSON string
+        System.out.println("Request Data fillQrypto as JSON: " + requestDataJson);
+
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(requestData, headers);
+
+        try {
+//            ResponseEntity<SynchronizeDto> responseEntity = restTemplate.exchange(addSignatureUrl, HttpMethod.POST, httpEntity, SynchronizeDto.class);
+//            return Objects.requireNonNull(responseEntity.getBody()).getDocument_id();
+
+            ResponseEntity<String> response = restTemplate.exchange(fillQryptoUrl, HttpMethod.POST, httpEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error : ");
+            HttpStatus statusCode = e.getStatusCode();
+            System.out.println("HTTP Status Code: " + statusCode.value());
+            if (statusCode.value() == 401) {
+                getAccessToken();
+                return fillQrypto(documentId, qryptoFieldName);
             } else {
                 throw new Exception(e.getMessage());
             }

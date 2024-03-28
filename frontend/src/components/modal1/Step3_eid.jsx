@@ -94,6 +94,7 @@ export const Step3_eid = ({
           margin="normal"
           // name={name}
           value={code}
+          autoFocus={false}
           onChange={(event) => {
             if (criteria === "PASSPORT-ID") {
               setCode(event.target.value);
@@ -109,7 +110,16 @@ export const Step3_eid = ({
               handleSubmit();
             }
           }}
-          sx={{ my: 0, backgroundColor: "signingWFBackground.main" }}
+          sx={{
+            my: 0,
+            backgroundColor: "signingWFBackground.main",
+            // animationName: "banner",
+            // animationDuration: "6s",
+            // animationIterationCount: "infinite",
+            // animationDirection: "normal",
+            // perspective: "1000",
+            // backgroundAttachment: "fixed",
+          }}
           inputProps={{
             maxLength:
               criteria === "CITIZEN-IDENTITY-CARD"

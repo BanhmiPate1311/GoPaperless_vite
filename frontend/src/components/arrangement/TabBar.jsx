@@ -57,9 +57,7 @@ export const TabBar = ({
 }) => {
   // Begin: Change params for participants
   let [searchParams, setSearchParams] = useSearchParams();
-  useEffect(() => {
-    searchParams.get("access_token") ? setTabBar(1) : setTabBar(0);
-  }, []);
+
   // End: Change params for participants
   const { t } = useTranslation();
 
@@ -96,9 +94,7 @@ export const TabBar = ({
   const handleChange = (event, newValue) => {
     setTabBar(newValue);
     if (newValue !== 1) {
-      setSearchParams({});
-    } else {
-      setSearchParams({ access_token: workFlow.participants[0]?.signerToken });
+      workFlow.setSignerToken("");
     }
   };
   return (

@@ -255,7 +255,7 @@ public class ApiController {
                             if (connectorNameItem.getProvider().equals("USB_TOKEN_SIGNING")) {
 
                                 String jsonInput = connectorNameItem.getIdentifier(); // Assuming this is your JSON
-                                                                                      // string
+                                // string
 
                                 try {
                                     ObjectMapper objectMapper = new ObjectMapper();
@@ -306,7 +306,7 @@ public class ApiController {
         }
     }
 
-    @PostMapping(value = { "/getPrefixList" })
+    @PostMapping(value = {"/getPrefixList"})
     public ResponseEntity<?> getPrefixList(@RequestBody ApiDtoRequest request) throws Exception {
         System.out.println("getPrefixList");
         String lang = request.getLanguage();
@@ -353,7 +353,7 @@ public class ApiController {
         }
     }
 
-    @RequestMapping(value = { "/download/checkid" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/download/checkid"}, method = RequestMethod.GET)
     public ResponseEntity<Resource> downloadCheckId() throws IOException {
         // Đọc file checkid.exe từ thư mục tài nguyên tĩnh
         Resource resource = new ClassPathResource("static/checkid_client_installer.exe");
@@ -373,23 +373,38 @@ public class ApiController {
 
     @PostMapping("/approve")
     public ResponseEntity<?> getView(@RequestBody ApproveRequest request) throws Exception {
+        Participants participant = new Participants();
+        connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(participant, request.getSignerToken());
+        String signerName = participant.getLastName() + " " + participant.getFirstName();
+        LastFile lastFile = new LastFile();
 
-        int workFlowCommentId = connect.USP_GW_PPL_WORKFLOW_COMMENT_ADD(request.getWorkFlowId(), request.getParticipantID(), request.getComment(), request.getRecipientID(), request.getHmac(), request.getSignerName());
-        int updateStatus = request.getSignerType() == 2 ? Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_REVIEWER_STATUS_ID_VIEWED : Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_EDITORER_STATUS_ID_EDITED;
+        connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, request.getSigningToken());
+
+        if (!request.getComment().isEmpty()) {
+            connect.USP_GW_PPL_WORKFLOW_COMMENT_ADD(lastFile.getPplWorkflowId(), participant.getId(), request.getComment(), request.getRecipientID(), request.getHmac(), signerName);
+        }
+
+
+        int updateStatus = participant.getSignerType() == 2 ? Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_REVIEWER_STATUS_ID_VIEWED : Difinitions.CONFIG_WORKFLOW_PARTICIPANTS_EDITORER_STATUS_ID_EDITED;
         connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_UPDATE_STATUS(request.getSignerToken(),
                 updateStatus, "", 0);
 
-        byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
-        checkAndSendMailService.checkAndSendMail(request.getWorkFlowProcessType(), request.getSignerToken(), request.getSigningToken(), request.getSignerName(), request.getSignerEmail(), request.getFileName(), data);
+        byte[] data = fpsService.getByteImagePdf(lastFile.getDocumentId());
 
-        return new ResponseEntity<>(workFlowCommentId, HttpStatus.OK);
+        checkAndSendMailService.checkAndSendMail(lastFile.getWorkflowProcessType(), request.getSignerToken(), request.getSigningToken(), signerName, participant.getEmail(), lastFile.getLastPplFileName(), lastFile.getDeadlineAt(), data);
+
+        return new ResponseEntity<>("workFlowCommentId", HttpStatus.OK);
     }
+
     @PostMapping("/shareToSign")
-    public ResponseEntity<?> shareToSign(@RequestBody ShareToSignRequest request) throws Exception{
-        System.out.println("request: "+request.getParticipant().getSignerToken());
-        System.out.println("request: "+request.getFileName());
+    public ResponseEntity<?> shareToSign(@RequestBody ShareToSignRequest request) throws Exception {
+        System.out.println("request: " + request.getParticipant().getSignerToken());
+        System.out.println("request: " + request.getFileName());
+        LastFile lastFile = new LastFile();
+
+        connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, request.getSigningToken());
         byte[] data = fpsService.getByteImagePdf(request.getDocumentId());
-        checkAndSendMailService.shareToSign(request.getWorkFlowProcessType(), request.getParticipant().getSignerToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(),request.getParticipant(), data);
+        checkAndSendMailService.shareToSign(lastFile.getDeadlineAt(), request.getWorkFlowProcessType(), request.getSigningToken(), request.getSignerName(), request.getParticipant().getEmail(), request.getFileName(), request.getParticipant(), data);
 
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
@@ -431,8 +446,8 @@ public class ApiController {
         String validFrom = cert.getNotBefore().toString();
         String validTo = cert.getNotAfter().toString();
         String subjectDN = cert.getSubjectDN().toString();
-        String authorityInformationAccess  = GetFeatureCertificate2.getAccessLocation(cert);
-        String keyUsage = GenFeatureCertificate.getKeyUsage(pemData        );
+        String authorityInformationAccess = GetFeatureCertificate2.getAccessLocation(cert);
+        String keyUsage = GenFeatureCertificate.getKeyUsage(pemData);
         String enhancedKeyUsage = cert.getExtendedKeyUsage() == null ? "" : cert.getExtendedKeyUsage().toString();
         String subjectKeyIdentifier = GetFeatureCertificate2.getSubjectKeyID(cert);
         String authorityKeyIdentifier = GetFeatureCertificate2.getAuthorityKeyIdentifier(cert);

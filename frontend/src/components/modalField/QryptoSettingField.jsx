@@ -62,8 +62,6 @@ export const QryptoSettingField = ({
   workFlow,
   getFields,
 }) => {
-  console.log(qryptoData, "qryptoData");
-  console.log(workFlow, "workFlow");
   const { t } = useTranslation();
   const { control, handleSubmit, watch, register, unregister, setValue } =
     useForm({

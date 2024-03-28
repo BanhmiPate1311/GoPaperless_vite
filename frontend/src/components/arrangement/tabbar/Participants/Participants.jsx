@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ParticipantsInfo } from "./ParticipantsInfo";
 import { ParticipantsModal } from "./ParticipantsModal";
+import Tooltip from "@mui/material/Tooltip";
 
 // eslint-disable-next-line react/prop-types
 export const Participants = ({ participantsList, workFlow }) => {
@@ -52,15 +53,17 @@ export const Participants = ({ participantsList, workFlow }) => {
         </Stack>
         {participantsList.length !== 0 && (
           <Stack direction="row" justifyContent={"center"}>
-            <IconButton
-              onClick={handleOpen}
-              sx={{
-                height: "34px",
-                margin: "auto 0",
-              }}
-            >
-              <SettingIcon />
-            </IconButton>
+            <Tooltip title={"Manage participants"} arrow placement="top">
+              <IconButton
+                onClick={handleOpen}
+                sx={{
+                  height: "34px",
+                  margin: "auto 0",
+                }}
+              >
+                <SettingIcon />{" "}
+              </IconButton>
+            </Tooltip>
           </Stack>
         )}
       </Stack>
@@ -80,7 +83,11 @@ export const Participants = ({ participantsList, workFlow }) => {
           </Typography>
         </Box>
       ) : (
-        <ParticipantsInfo participantsList={participantsList} />
+        <ParticipantsInfo
+          participantsList={participantsList}
+          setSignerToken={workFlow.setSignerToken}
+          signerToken={workFlow.signerToken}
+        />
       )}
 
       <ParticipantsModal

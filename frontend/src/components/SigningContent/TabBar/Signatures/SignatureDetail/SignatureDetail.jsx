@@ -40,6 +40,14 @@ export const SignatureDetail = ({
     ? ", " + signDetail.certificate?.issuer?.C[0]
     : "";
 
+  const validFrom =
+    signDetail.certificate?.valid_from || signDetail.certificate?.validFrom;
+  console.log("validFrom: ", validFrom);
+
+  const validTo =
+    signDetail.certificate?.valid_to || signDetail.certificate?.validTo;
+  console.log("validTo: ", validTo);
+
   //   const signTitle = signType + " is valid";
   // const subTitle = "Electronic " + signType;
 
@@ -81,10 +89,7 @@ export const SignatureDetail = ({
       },
       {
         title: t("0-common.Certificate validity period"),
-        subtitle:
-          convertTime(signDetail.certificate.valid_from) +
-          " - " +
-          convertTime(signDetail.certificate.valid_to),
+        subtitle: convertTime(validFrom) + " - " + convertTime(validTo),
       },
     ].filter((item) => item.subtitle !== null),
   };

@@ -1,7 +1,7 @@
-import { ReactComponent as Signed_Icon } from "@/assets/images/svg/signed_icon2.svg";
-import { ReactComponent as SignerSelected } from "@/assets/images/svg/signer_select.svg";
-import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
-import { useCommonHook } from "@/hook";
+import { ReactComponent as SendCopyIcon } from "@/assets/images/svg/send_copy.svg";
+import { ReactComponent as SignerIcon } from "@/assets/images/svg/signer.svg";
+import { ReactComponent as EditorIcon } from "@/assets/images/svg/editor.svg";
+import { ReactComponent as ReviewerIcon } from "@/assets/images/svg/reviewer.svg";
 import { checkSignerStatus, checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -14,13 +14,14 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SigningDetail } from "../SigningDetail";
-import { useSearchParams } from "react-router-dom";
 
-export const ParticipantsInfo = ({ participantsList, signType }) => {
+export const ParticipantsInfo = ({
+  participantsList,
+  setSignerToken,
+  signerToken,
+}) => {
   const { t } = useTranslation();
-  const { signerToken } = useCommonHook();
   const [isOpen, setIsOpen] = useState([false]);
-  // console.log("isOpen: ", isOpen);
 
   const [expand, setExpand] = useState(true);
 
@@ -29,9 +30,6 @@ export const ParticipantsInfo = ({ participantsList, signType }) => {
     newIsOpen[index] = !newIsOpen[index];
     setIsOpen(newIsOpen);
   };
-  // Begin: Change params for participants
-  let [searchParams, setSearchParams] = useSearchParams();
-  // End: Change params for participants
   return (
     <Accordion
       disableGutters
@@ -61,26 +59,15 @@ export const ParticipantsInfo = ({ participantsList, signType }) => {
         }}
       >
         <Typography variant="h2" color="textBlack.main">
-          {signType === "Signature"
-            ? t("0-common.participants")
-            : t("0-common.seals")}
+          Workflow Name
         </Typography>
-        {/* <Avatar
-          sx={{
-            bgcolor: "signingtextBlue.main",
-            width: 16,
-            height: 16,
-            fontSize: "10px",
-          }}
-        >
-          {participantsList.length}
-        </Avatar> */}
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0 }}>
         {participantsList.map((participants, index) => {
           const status = checkSignerStatus(participants, signerToken);
           // console.log("status: ", status);
           const check = checkSignerWorkFlow(participants, signerToken);
+          console.log(participants.signerType === "1");
 
           return (
             <Stack
@@ -98,34 +85,37 @@ export const ParticipantsInfo = ({ participantsList, signType }) => {
                 index === participantsList.length - 1 ? "1px solid" : ""
               }
               borderColor="borderColor.main"
-              // height="50px"
             >
-              {/* {check ? (
-                  <SignerSelected />
-                ) : (
-                  <WaitingSig width={24} height={24} />
-                )} */}
               <Box
                 onClick={() => toggleDrawer(index)}
                 sx={{ cursor: "pointer" }}
               >
-                {status === 2 ? (
+                {participants.signerType === 1 && (
+                  <SignerIcon width={24} height={24} />
+                )}
+                {participants.signerType === 2 && (
+                  <ReviewerIcon width={24} height={24} />
+                )}
+                {participants.signerType === 3 && (
+                  <EditorIcon width={24} height={24} />
+                )}
+                {participants.signerType === 5 && (
+                  <SendCopyIcon width={24} height={24} />
+                )}
+                {/* {status === 2 ? (
                   <Signed_Icon />
                 ) : check ? (
                   <SignerSelected />
                 ) : (
-                  <WaitingSig width={24} height={24} />
-                )}
+null
+                  // <WaitingSig width={24} height={24} />
+                )} */}
               </Box>
               <Box
                 flexGrow={1}
                 sx={{ cursor: "pointer" }}
                 onClick={() => {
-                  searchParams.get("access_token") === participants.signerToken
-                    ? setSearchParams({})
-                    : setSearchParams({
-                        access_token: participants.signerToken,
-                      });
+                  setSignerToken(participants.signerToken);
                 }}
               >
                 <Typography
@@ -140,13 +130,10 @@ export const ParticipantsInfo = ({ participantsList, signType }) => {
                   variant="h2"
                   color={check ? "signingtextBlue.main" : "signingtext2.main"}
                 >
-                  {status === 2
-                    ? participants.signedType === "NORMAL"
-                      ? t("signing.signature_valid")
-                      : t("validation.sealValidTitle2")
-                    : status === 1
-                    ? t("signing.wait_my_signature")
-                    : t("signing.wait_signature")}
+                  {participants.signerType === 1 && "Waiting for signature"}
+                  {participants.signerType === 2 && "Waiting for approve"}
+                  {participants.signerType === 3 && "Signature is valid"}
+                  {participants.signerType === 5 && "Only view"}
                 </Typography>
               </Box>
               {/* <IconButton onClick={() => toggleDrawer(index)}>

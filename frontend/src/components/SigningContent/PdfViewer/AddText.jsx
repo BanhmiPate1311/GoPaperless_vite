@@ -200,7 +200,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
 
   const handleChange = (value, delta, source, editor) => {
     const content = editor.getContents();
-    console.log("editor: ", editor.getContents());
+    // console.log("editor: ", editor.getContents());
 
     setState({
       value,
