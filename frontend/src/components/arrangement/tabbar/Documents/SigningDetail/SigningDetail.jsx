@@ -1,7 +1,5 @@
-import { ReactComponent as PencilIcon } from "@/assets/images/svg/pencil_wait.svg";
 import { ReactComponent as DetailsIcon } from "@/assets/images/svg/material-symbols_info.svg";
 import { ReactComponent as AttachmentsIcon } from "@/assets/images/svg/attachment.svg";
-import { ReactComponent as PersonIcon } from "@/assets/images/svg/person_icon.svg";
 import { ReactComponent as DocumentsIcon } from "@/assets/images/svg/document.svg";
 import { ReactComponent as SigValidIcon } from "@/assets/images/svg/sig_valid.svg";
 import { useCommonHook } from "@/hook";

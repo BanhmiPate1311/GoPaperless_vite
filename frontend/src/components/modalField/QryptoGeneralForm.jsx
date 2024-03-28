@@ -25,6 +25,7 @@ import { Typography } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { styled } from "@mui/material/styles";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import avatar from "@/assets/images/avatar.png";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -314,6 +315,9 @@ const TextElement = ({ register, index, removeField, control, field }) => {
               fontWeight: 500,
               padding: "0",
             },
+            "& .Mui-disabled": {
+              WebkitTextFillColor: "#1F2937 !important",
+            },
           }}
           {...register(`items[${index}].field`)}
           disabled={field.mandatory_enable}
@@ -341,13 +345,16 @@ const TextElement = ({ register, index, removeField, control, field }) => {
             backgroundColor: "signingWFBackground.main",
           },
         }}
-        sx={{ my: 0, height: "45px" }}
+        sx={{
+          my: 0,
+          height: "45px",
+        }}
         disabled={field.mandatory_enable}
       />
     </Box>
   );
 };
-const BoldLabelElement = ({ register, index, removeField }) => {
+const BoldLabelElement = ({ register, index, removeField, field }) => {
   return (
     <Box key={index} sx={{ marginBottom: "10px" }}>
       <Box
@@ -417,7 +424,7 @@ const DateElement = ({ register, index, removeField, setValue, field }) => {
       </Box>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", backgroundColor: "signingWFBackground.main" }}
           value={dayjs(field.value)}
           onChange={(newValue) => {
             setValue(
@@ -485,7 +492,10 @@ const ChoiceElement = ({
             labelId="demo-simple-select1-label-step1"
             id="demo-simple-select-step1"
             defaultValue={
-              field?.value?.filter((item) => item.choise === true)[0]?.element
+              field?.value?.filter((item) => item?.choise === true)
+                ? field?.value?.filter((item) => item?.choise === true)[0]
+                    ?.element
+                : ""
             }
             sx={{
               maxWidth: "371px",
@@ -628,6 +638,9 @@ const SignerElement = ({ register, index, removeField, field, control }) => {
             "& .MuiInputBase-input": {
               fontWeight: 500,
               padding: "0",
+            },
+            "& .Mui-disabled": {
+              WebkitTextFillColor: "#1F2937 !important",
             },
           }}
           {...register(`items[${index}].field`)}
@@ -986,6 +999,17 @@ const PictureElement = ({ register, index, removeField, setValue, field }) => {
               src={`data:${field.file_format};base64,${field.value}`}
             />
           )}
+          {!field.value && (
+            <Box
+              component="img"
+              sx={{
+                width: "100%",
+                height: "100%",
+              }}
+              alt=""
+              src={avatar}
+            />
+          )}
         </Box>
         <Box sx={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <Button
@@ -1104,6 +1128,17 @@ const PictureLabelElement = ({
               <img
                 style={{ width: "100%", height: "100%" }}
                 src={`data:${field.file_format};base64,${field.value.file_data}`}
+              />
+            )}
+            {!field.value.file_data && (
+              <Box
+                component="img"
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                alt=""
+                src={avatar}
               />
             )}
           </Box>

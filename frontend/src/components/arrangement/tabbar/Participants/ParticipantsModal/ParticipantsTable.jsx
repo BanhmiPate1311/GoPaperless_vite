@@ -127,7 +127,29 @@ function Row(props) {
     signingToken: workFlow.signingToken,
     workflowProcessType: typeWorkflow,
   });
-
+  console.log("row:", row);
+  console.log("data:", data);
+  useEffect(() => {
+    setData({
+      fullName: row.lastName + " " + row.firstName,
+      firstName: row.firstName,
+      lastName: row.lastName,
+      customReason: row.customReason,
+      position: row.metaInformation.position,
+      signingPurpose: row.metaInformation.signing_purpose,
+      purpose: row.signerType,
+      structuralSubdivision: row.metaInformation.structural_subdivision,
+      // metaInformation: JSON.stringify(row.metaInformation),
+      metaInformation: {
+        position: row.metaInformation.position,
+        structuralSubdivision: row.metaInformation.structuralSubdivision,
+      },
+      signerToken: row.signerToken,
+      sequenceNumber: row.sequenceNumber === 0 ? 1 : row.sequenceNumber,
+      signingToken: workFlow.signingToken,
+      workflowProcessType: typeWorkflow,
+    });
+  }, [open]);
   useEffect(() => {
     if (typeWorkflow === "serial") {
       setData({ ...data, sequenceNumber: index + 1 });
@@ -295,7 +317,7 @@ function Row(props) {
                         minHeight: "36px",
                         height: "36px",
                         width: "38px",
-                        fontSize: "14px",
+                        fontSize: "16px",
                         backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
                         padding: "0px",
@@ -326,16 +348,40 @@ function Row(props) {
               ) : (
                 <WaitingSig />
               )}
-              <Typography style={{ width: "190.482px" }}>
+              <Typography
+                style={{
+                  width: "190.482px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  fontFamily: "Montserrat",
+                  fontStyle: "normal",
+                }}
+              >
                 {row.lastName} {row.firstName}
               </Typography>
             </Stack>
           </TableCell>
-          <TableCell align="left" style={{ padding: "0px 0px 0px 0px" }}>
+          <TableCell
+            align="left"
+            style={{
+              padding: "0px 0px 0px 0px",
+              fontSize: "16px",
+              fontWeight: "500",
+              fontFamily: "Montserrat",
+              fontStyle: "normal",
+            }}
+          >
             {row.firstName}
           </TableCell>
           <TableCell
-            style={{ width: "250px", padding: "0px 0px 0px 0px" }}
+            style={{
+              width: "250px",
+              padding: "0px 0px 0px 0px",
+              fontSize: "16px",
+              fontWeight: "500",
+              fontFamily: "Montserrat",
+              fontStyle: "normal",
+            }}
             align="left"
           >
             {row.email}
@@ -444,7 +490,7 @@ function Row(props) {
                   <Typography
                     fontSize={14}
                     color="#757575"
-                    fontWeight={400}
+                    fontWeight={500}
                     mb="10px"
                     height={17}
                     textAlign="left"
@@ -461,6 +507,9 @@ function Row(props) {
                         height: "42px",
                         width: "250px",
                         fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        fontStyle: "normal",
                         backgroundColor: "#E7E7E7", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
                       },
@@ -479,7 +528,7 @@ function Row(props) {
                   <Typography
                     fontSize={14}
                     color="#757575"
-                    fontWeight={400}
+                    fontWeight={500}
                     mb="10px"
                     height={17}
                     textAlign="left"
@@ -495,6 +544,9 @@ function Row(props) {
                         height: "42px",
                         width: "250px",
                         fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        fontStyle: "normal",
                         backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
                       },
@@ -511,7 +563,7 @@ function Row(props) {
                   <Typography
                     fontSize={14}
                     color="#757575"
-                    fontWeight={400}
+                    fontWeight={500}
                     mb="10px"
                     height={17}
                     textAlign="left"
@@ -528,6 +580,9 @@ function Row(props) {
                         height: "42px",
                         width: "250px",
                         fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        fontStyle: "normal",
                         backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
                       },
@@ -544,7 +599,7 @@ function Row(props) {
                   <Typography
                     fontSize={14}
                     color="#757575"
-                    fontWeight={400}
+                    fontWeight={500}
                     mb="10px"
                     height={17}
                     textAlign="left"
@@ -560,6 +615,9 @@ function Row(props) {
                         height: "42px",
                         width: "250px",
                         fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        fontStyle: "normal",
                         backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
                       },
@@ -576,7 +634,7 @@ function Row(props) {
                   <Typography
                     fontSize={14}
                     color="#757575"
-                    fontWeight={400}
+                    fontWeight={500}
                     mb="10px"
                     height={17}
                     textAlign="left"
@@ -592,6 +650,9 @@ function Row(props) {
                         height: "42px",
                         width: "250px",
                         fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        fontStyle: "normal",
                         backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
                       },
@@ -608,7 +669,7 @@ function Row(props) {
                   <Typography
                     fontSize={14}
                     color="#757575"
-                    fontWeight={400}
+                    fontWeight={500}
                     mb="10px"
                     height={17}
                     textAlign="left"
@@ -631,6 +692,9 @@ function Row(props) {
                           height: "42px",
                           width: "250px",
                           fontSize: "14px",
+                          fontWeight: "500",
+                          fontFamily: "Montserrat",
+                          fontStyle: "normal",
                           backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                           color: "#1F2937",
                           textAlign: "left",
@@ -723,7 +787,7 @@ function Row(props) {
                   <Typography
                     fontSize={14}
                     color="#757575"
-                    fontWeight={400}
+                    fontWeight={500}
                     mb="10px"
                     height={17}
                     textAlign="left"
@@ -739,6 +803,9 @@ function Row(props) {
                         height: "42px",
                         width: "250px",
                         fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        fontStyle: "normal",
                         backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                         color: "#1F2937",
                       },
@@ -811,7 +878,7 @@ function Row(props) {
                             minHeight: "36px",
                             height: "36px",
                             width: "38px",
-                            fontSize: "14px",
+                            fontSize: "16px",
                             backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
                           },
@@ -836,14 +903,28 @@ function Row(props) {
 
                   <PerSonIcon style={{ borderRadius: 999 }} />
                   {/* {tableCheckStatus(item, signerToken)} */}
-                  {status === 2 ? (
-                    <SignedIcon />
-                  ) : status === 1 ? (
-                    <WaitingMySig />
+                  {data.purpose === 1 ? (
+                    <Signer />
+                  ) : data.purpose === 2 ? (
+                    <Reviewer />
+                  ) : data.purpose === 3 ? (
+                    <Editor />
+                  ) : data.purpose === 4 ? (
+                    <MeetingHost />
+                  ) : data.purpose === 5 ? (
+                    <SendACopy />
                   ) : (
                     <WaitingSig />
                   )}
-                  <Typography style={{ width: "190.482px" }}>
+                  <Typography
+                    style={{
+                      width: "190.482px",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      fontFamily: "Montserrat",
+                      fontStyle: "normal",
+                    }}
+                  >
                     {row.lastName} {row.firstName}
                   </Typography>
                 </Stack>
@@ -854,6 +935,11 @@ function Row(props) {
                   borderBottom: "none",
                   padding: "0px 0px 0px 0px",
                   minWidth: "150px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  fontFamily: "Montserrat",
+                  fontStyle: "normal",
+                  paddingLeft: "16px",
                 }}
               >
                 {row.firstName}
@@ -863,6 +949,11 @@ function Row(props) {
                   width: "250px",
                   borderBottom: "none",
                   padding: "0px 0px 0px 0px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  fontFamily: "Montserrat",
+                  fontStyle: "normal",
+                  paddingLeft: "16px",
                 }}
                 align="left"
               >
@@ -873,6 +964,10 @@ function Row(props) {
                   borderBottom: "none",
                   borderRadius: "0px 10px 10px 0px",
                   padding: "0px 0px 0px 0px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  fontFamily: "Montserrat",
+                  fontStyle: "normal",
                 }}
               >
                 <IconButton
@@ -970,7 +1065,7 @@ function Row(props) {
                       <Typography
                         fontSize={14}
                         color="#757575"
-                        fontWeight={400}
+                        fontWeight={500}
                         mb="10px"
                         height={17}
                         textAlign="left"
@@ -986,6 +1081,9 @@ function Row(props) {
                             height: "42px",
                             width: "250px",
                             fontSize: "14px",
+                            fontWeight: "500",
+                            fontFamily: "Montserrat",
+                            fontStyle: "normal",
                             backgroundColor: "#E7E7E7", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
                           },
@@ -1005,7 +1103,7 @@ function Row(props) {
                       <Typography
                         fontSize={14}
                         color="#757575"
-                        fontWeight={400}
+                        fontWeight={500}
                         mb="10px"
                         height={17}
                         textAlign="left"
@@ -1020,6 +1118,10 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            fontFamily: "Montserrat",
+                            fontStyle: "normal",
                             backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
                           },
@@ -1036,7 +1138,7 @@ function Row(props) {
                       <Typography
                         fontSize={14}
                         color="#757575"
-                        fontWeight={400}
+                        fontWeight={500}
                         mb="10px"
                         height={17}
                         textAlign="left"
@@ -1052,6 +1154,10 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            fontFamily: "Montserrat",
+                            fontStyle: "normal",
                             backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
                           },
@@ -1068,7 +1174,7 @@ function Row(props) {
                       <Typography
                         fontSize={14}
                         color="#757575"
-                        fontWeight={400}
+                        fontWeight={500}
                         mb="10px"
                         height={17}
                         textAlign="left"
@@ -1083,6 +1189,10 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            fontFamily: "Montserrat",
+                            fontStyle: "normal",
                             backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
                           },
@@ -1099,7 +1209,7 @@ function Row(props) {
                       <Typography
                         fontSize={14}
                         color="#757575"
-                        fontWeight={400}
+                        fontWeight={500}
                         mb="10px"
                         height={17}
                         textAlign="left"
@@ -1114,6 +1224,10 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            fontFamily: "Montserrat",
+                            fontStyle: "normal",
                             backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
                           },
@@ -1133,7 +1247,7 @@ function Row(props) {
                       <Typography
                         fontSize={14}
                         color="#757575"
-                        fontWeight={400}
+                        fontWeight={500}
                         mb="10px"
                         height={17}
                         textAlign="left"
@@ -1155,6 +1269,10 @@ function Row(props) {
                               minHeight: "42px",
                               height: "42px",
                               width: "250px",
+                              fontSize: "14px",
+                              fontWeight: "500",
+                              fontFamily: "Montserrat",
+                              fontStyle: "normal",
                               backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                               color: "#1F2937",
                               textAlign: "left",
@@ -1253,7 +1371,7 @@ function Row(props) {
                       <Typography
                         fontSize={14}
                         color="#757575"
-                        fontWeight={400}
+                        fontWeight={500}
                         mb="10px"
                         height={17}
                         textAlign="left"
@@ -1268,6 +1386,10 @@ function Row(props) {
                             minHeight: "42px",
                             height: "42px",
                             width: "250px",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            fontFamily: "Montserrat",
+                            fontStyle: "normal",
                             backgroundColor: "#FFFFFF", // Màu nền khi vô hiệu hóa
                             color: "#1F2937",
                           },
@@ -1441,11 +1563,39 @@ const ParticipantsTable = ({
           >
             <TableHead>
               <TableRow>
-                <TableCell style={{ paddingLeft: "55px" }}>
+                <TableCell
+                  style={{
+                    paddingLeft: "55px",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                >
                   Participants
                 </TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Email</TableCell>
+                <TableCell
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                  align="left"
+                >
+                  Name
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                  align="left"
+                >
+                  Email
+                </TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -1500,17 +1650,37 @@ const ParticipantsTable = ({
           >
             <TableHead>
               <TableRow>
-                <TableCell style={{ color: "#475569", fontSize: "16px" }}>
+                <TableCell
+                  style={{
+                    color: "#475569",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                >
                   Participants
                 </TableCell>
                 <TableCell
-                  style={{ color: "#475569", fontSize: "16px" }}
+                  style={{
+                    color: "#475569",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
                   align="left"
                 >
                   Name
                 </TableCell>
                 <TableCell
-                  style={{ color: "#475569", fontSize: "16px" }}
+                  style={{
+                    color: "#475569",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
                   align="left"
                 >
                   Email
@@ -1566,9 +1736,38 @@ const ParticipantsTable = ({
           >
             <TableHead>
               <TableRow>
-                <TableCell>Participants</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Email</TableCell>
+                <TableCell
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                >
+                  Participants
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                  align="left"
+                >
+                  Name
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                  align="left"
+                >
+                  Email
+                </TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -1616,11 +1815,39 @@ const ParticipantsTable = ({
           >
             <TableHead>
               <TableRow>
-                <TableCell style={{ paddingLeft: "85px" }}>
+                <TableCell
+                  style={{
+                    paddingLeft: "85px",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                >
                   Participants
                 </TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Email</TableCell>
+                <TableCell
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                  align="left"
+                >
+                  Name
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    fontStyle: "normal",
+                  }}
+                  align="left"
+                >
+                  Email
+                </TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>

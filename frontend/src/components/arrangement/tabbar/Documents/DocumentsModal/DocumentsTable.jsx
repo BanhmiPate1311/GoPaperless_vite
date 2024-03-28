@@ -9,6 +9,7 @@ import { ReactComponent as UserCheckIcon } from "@/assets/images/svg/uil_user-ch
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
@@ -72,24 +73,6 @@ const DocumentsTable = ({
             />
           </DemoItem>
         </DemoContainer>
-        {/* <DemoContainer
-          components={[
-            "DateTimePicker",
-            "MobileDateTimePicker",
-            "DesktopDateTimePicker",
-            "StaticDateTimePicker",
-          ]}
-          sx={{
-            "& .MuiStack-root": {
-              overflow: "hidden",
-              width: "219px",
-            },
-          }}
-        >
-          <DemoItem>
-            <MobileDateTimePicker defaultValue={dayjs("2022-04-17T15:30")} />
-          </DemoItem>
-        </DemoContainer> */}
       </LocalizationProvider>
       <Box>
         <Typography

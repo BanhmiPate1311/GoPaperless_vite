@@ -14,6 +14,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import { ReactComponent as TextField } from "@/assets/images/contextmenu/TextField.svg";
+import { ReactComponent as TextArea } from "@/assets/images/contextmenu/TextArea.svg";
+import { ReactComponent as DateTime } from "@/assets/images/contextmenu/DateTime.svg";
 
 export const ContextMenu = ({
   contextMenu,
@@ -68,6 +71,21 @@ export const ContextMenu = ({
       icon: <Camera />,
       label: t("0-common.camera"),
       value: "CAMERA",
+    },
+    {
+      icon: <TextField />,
+      label: t("0-common.text field"),
+      value: "TEXTBOX",
+    },
+    {
+      icon: <TextArea />,
+      label: t("0-common.text area"),
+      value: "TEXTAREA",
+    },
+    {
+      icon: <DateTime />,
+      label: t("0-common.date time"),
+      value: "DATETIME",
     },
   ];
   let menu = [];

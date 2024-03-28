@@ -1,4 +1,3 @@
-import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
 import { ReactComponent as FigureIcon } from "@/assets/images/svg/figure.svg";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -61,7 +60,7 @@ export const DocumentsInfo = ({ documentsList, signType }) => {
         <Typography variant="h2" color="textBlack.main">
           {signType === "Signature"
             ? t("0-common.participants")
-            : t("0-common.seals")}
+            : t("batch.documents")}
         </Typography>
         {/* <Avatar
           sx={{

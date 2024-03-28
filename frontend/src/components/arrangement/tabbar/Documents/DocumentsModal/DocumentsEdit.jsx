@@ -1,20 +1,26 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/jsx-no-undef */
-import { Step, Stepper, StepButton, StepContent } from "@mui/material";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import SettingsIcon from "@mui/icons-material/Settings";
+import VideoLabelIcon from "@mui/icons-material/VideoLabel";
+import { Step, Stepper } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import StepIndicator from "@mui/joy/StepIndicator";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
+import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import CheckBox from "@mui/icons-material/CheckBox";
-import Check from "@mui/icons-material/Check";
 
 const steps = [
   {
@@ -27,6 +33,164 @@ const steps = [
       "For documents without legal form requirement and with low liability risk. Document recipients can choose all levels, as low as simple electronic signature.",
   },
 ];
+
+// const steps = [
+//   "Select campaign settings",
+//   "Create an ad group",
+//   "Create an ad",
+// ];
+
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 10,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#357EEB",
+      margin: "-27px 0px -10px",
+      height: "53px",
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#357EEB",
+      margin: "-27px 0px -10px",
+      height: "53px",
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    borderColor:
+      theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
+    borderTopWidth: 3,
+    borderRadius: 1,
+  },
+}));
+
+const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
+  color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
+  display: "flex",
+  height: 22,
+  alignItems: "center",
+  ...(ownerState.active && {
+    color: "#357EEB",
+  }),
+  "& .QontoStepIcon-completedIcon": {
+    color: "#357EEB",
+    zIndex: 1,
+    fontSize: 18,
+  },
+  "& .QontoStepIcon-circle": {
+    width: 8,
+    height: 8,
+    borderRadius: "50%",
+    backgroundColor: "currentColor",
+  },
+}));
+
+function QontoStepIcon(props) {
+  const { active, completed, className, handleActive, index } = props;
+
+  return (
+    <QontoStepIconRoot ownerState={{ active }} className={className}>
+      {completed ? (
+        // <Check className="QontoStepIcon-completedIcon" />
+        <Checkbox
+          sx={{ padding: "0px" }}
+          defaultChecked
+          onClick={() => (index === 0 ? null : handleActive(index))}
+        />
+      ) : (
+        // <div className="QontoStepIcon-circle" />
+        <Checkbox
+          sx={{ padding: "0px" }}
+          onClick={() => (index === 0 ? null : handleActive(index))}
+        />
+      )}
+    </QontoStepIconRoot>
+  );
+}
+
+QontoStepIcon.propTypes = {
+  /**
+   * Whether this step is active.
+   * @default false
+   */
+  active: PropTypes.bool,
+  className: PropTypes.string,
+  /**
+   * Mark the step as completed. Is passed to child components.
+   * @default false
+   */
+  completed: PropTypes.bool,
+};
+
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 22,
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundImage:
+        "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundImage:
+        "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    height: 3,
+    border: 0,
+    backgroundColor:
+      theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
+    borderRadius: 1,
+  },
+}));
+
+const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
+  backgroundColor:
+    theme.palette.mode === "dark" ? theme.palette.grey[700] : "#ccc",
+  zIndex: 1,
+  color: "#fff",
+  width: 50,
+  height: 50,
+  display: "flex",
+  borderRadius: "50%",
+  justifyContent: "center",
+  alignItems: "center",
+  ...(ownerState.active && {
+    backgroundImage:
+      "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+    boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
+  }),
+  ...(ownerState.completed && {
+    backgroundImage:
+      "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+  }),
+}));
+
+function ColorlibStepIcon(props) {
+  const { active, completed, className } = props;
+
+  const icons = {
+    1: <SettingsIcon />,
+    2: <GroupAddIcon />,
+    3: <VideoLabelIcon />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
 
 // const steps = ["Order placed", "In review", "Approved"];
 
@@ -54,12 +218,10 @@ const DocumentsEdit = ({ open, title, handleClose }) => {
 
   const [activeStep, setActiveStep] = useState(1);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const handleActive = (index) => {
+    console.log(index);
+    if (index === 0) return;
+    setActiveStep(activeStep === 1 ? 0 : 1);
   };
 
   //   const handleReset = () => {
@@ -124,45 +286,39 @@ const DocumentsEdit = ({ open, title, handleClose }) => {
 
       <DialogContent sx={{ backgroundColor: "dialogBackground.main" }}>
         <Box sx={{ maxWidth: 400 }}>
-          <Stepper orientation="vertical">
-            {steps.map((step, index) => (
-              <Step
-                key={step}
-                indicator={
-                  <StepIndicator
-                    variant={activeStep <= index ? "soft" : "solid"}
-                    color={activeStep < index ? "neutral" : "primary"}
-                  >
-                    {activeStep <= index ? index + 1 : <Check />}
-                  </StepIndicator>
-                }
-                sx={{
-                  "&::after": {
-                    ...(activeStep > index &&
-                      index !== 2 && { bgcolor: "primary.solidBg" }),
-                  },
-                }}
-              >
-                <StepButton onClick={() => setActiveStep(index)}>
-                  {/* <StepContent> */}
+          <Stepper
+            orientation="vertical"
+            // alternativeLabel
+            activeStep={activeStep}
+            connector={<QontoConnector />}
+          >
+            {steps.map((label, index) => (
+              <Step key={label}>
+                <StepLabel
+                  StepIconComponent={QontoStepIcon}
+                  sx={{ alignItems: "start" }}
+                >
                   <Typography
                     sx={{
-                      fontSize: "14px",
                       color: "#1F2937",
+                      fontFamily: "Montserrat",
+                      fontSize: "14px",
+                      fontWeight: "500",
                     }}
                   >
-                    {step.label}
+                    {label.label}
                   </Typography>
                   <Typography
                     sx={{
-                      fontSize: "12px",
                       color: "#6B7280",
+                      fontFamily: "Montserrat",
+                      fontSize: "12px",
+                      fontWeight: "500",
                     }}
                   >
-                    {step.description}
+                    {label.description}
                   </Typography>
-                  {/* </StepContent> */}
-                </StepButton>
+                </StepLabel>
               </Step>
             ))}
           </Stepper>

@@ -61,7 +61,7 @@ export const ParticipantsInfo = ({
         }}
       >
         <Typography variant="h2" color="textBlack.main">
-          Workflow Name
+          {t("0-common.workflowName")}
         </Typography>
       </AccordionSummary>
       <AccordionDetails sx={{ p: 0 }}>
