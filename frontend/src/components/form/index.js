@@ -9,3 +9,4 @@ export * from "./toggle-alignment";
 export * from "./upload-field";
 export * from "./password-field";
 export * from "./phone_input_field.jsx";
+export * from "./auto_multiple_field.jsx";

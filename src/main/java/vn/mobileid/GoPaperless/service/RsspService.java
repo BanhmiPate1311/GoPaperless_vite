@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import ua_parser.Client;
 import ua_parser.Parser;
@@ -138,6 +139,10 @@ public class RsspService {
 //            } else {
             throw new Exception(e.getMessage());
 //            }
+        } catch (HttpServerErrorException e) {
+            // Bắt các lỗi 5xx và hiển thị thông báo chung
+            System.out.println("Server error: " + e.getRawStatusCode());
+            throw new Exception("Server error occurred. Please try again later.");
         }
 
 //        return "response";
@@ -719,6 +724,9 @@ public class RsspService {
         List<CertResponse> listCertificate = new ArrayList<>();
         if (credentialList.getCerts().size() > 0) {
             for (CredentialItem credential : credentialList.getCerts()) {
+                if (credential.getValidTo() == null || credentialList.getCerts().isEmpty() || CommonFunction.checkTimeExpired(credential.getValidTo())) {
+                    continue;
+                }
                 String credentialID = credential.getCredentialID();
                 credentialinFo = getCredentialinFo(request.getLanguage(), credentialID);
                 if (credentialinFo != null) {
@@ -836,7 +844,9 @@ public class RsspService {
 //            String sSignatureHash = signerToken + millis;
 //            String sSignature_id = prefixCode + "-" + CommonFunction.toHexString(CommonFunction.hashPass(sSignatureHash)).toUpperCase();
 
-
+            if (textFields.size() > 0) {
+                fpsService.fillForm(documentId, textFields);
+            }
             // get user-agent
             String userAgent = request.getHeader("User-Agent");
             Parser parser = new Parser();
@@ -929,7 +939,6 @@ public class RsspService {
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary
 
-            fpsService.fillForm(documentId, textFields);
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;

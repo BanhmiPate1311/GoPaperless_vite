@@ -1,7 +1,7 @@
-import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { InputField, SelectField } from "../form";
@@ -9,12 +9,6 @@ import { InputField, SelectField } from "../form";
 export const GeneralTextBoxForm = ({ participants, control }) => {
   // console.log("participants: ", participants);
   const { t } = useTranslation();
-
-  //   Begin: Select
-  // const [assign, setAssign] = useState(0);
-  // const [validation, setValidation] = useState("");
-  // const [fontType, setFontType] = useState("");
-  // const [fontSize, setFontSize] = useState(1);
 
   const valid = [
     {

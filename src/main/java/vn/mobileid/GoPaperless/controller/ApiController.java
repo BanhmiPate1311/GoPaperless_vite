@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.mobileid.GoPaperless.dto.apiDto.ApiDtoRequest;
 import vn.mobileid.GoPaperless.dto.apiDto.SigningWorkflowDto;
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
 import vn.mobileid.GoPaperless.model.apiModel.*;
 import vn.mobileid.GoPaperless.process.ProcessDb;
 import vn.mobileid.GoPaperless.service.CheckAndSendMailService;
@@ -373,12 +374,19 @@ public class ApiController {
 
     @PostMapping("/approve")
     public ResponseEntity<?> getView(@RequestBody ApproveRequest request) throws Exception {
+
+
         Participants participant = new Participants();
         connect.USP_GW_PPL_WORKFLOW_PARTICIPANTS_GET(participant, request.getSignerToken());
         String signerName = participant.getLastName() + " " + participant.getFirstName();
         LastFile lastFile = new LastFile();
 
         connect.USP_GW_PPL_WORKFLOW_GET_LAST_FILE(lastFile, request.getSigningToken());
+
+        List<TextField> textFields = request.getTextField();
+        if (textFields.size() > 0) {
+            fpsService.fillForm(lastFile.getDocumentId(), textFields);
+        }
 
         if (!request.getComment().isEmpty()) {
             connect.USP_GW_PPL_WORKFLOW_COMMENT_ADD(lastFile.getPplWorkflowId(), participant.getId(), request.getComment(), request.getRecipientID(), request.getHmac(), signerName);

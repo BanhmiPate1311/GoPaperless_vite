@@ -1,6 +1,5 @@
 import { useSmartIdSign } from "@/hook";
 import { rsspService } from "@/services/rssp_service";
-import { capitalLize } from "@/utils/commonFunction";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -260,7 +259,7 @@ export const ModalSmartid = ({ open, onClose, dataSigning }) => {
             <Stack width={"100%"}>
               {smartSign?.error && (
                 <Alert severity="error">
-                  {capitalLize(smartSign?.error?.response?.data?.message)}
+                  {smartSign?.error?.response?.data?.message}
                 </Alert>
               )}
             </Stack>

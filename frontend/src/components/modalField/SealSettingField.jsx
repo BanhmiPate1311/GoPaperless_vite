@@ -8,16 +8,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ReplicateForm } from ".";
-import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
 import { useQueryClient } from "@tanstack/react-query";
 import { UseUpdateSig } from "@/hook/use-fpsService";
+import { useForm } from "react-hook-form";
+import { useRef, useState } from "react";
+import { DetailsTextBoxForm, GeneralSealForm, ReplicateForm } from ".";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,56 +56,71 @@ function a11yProps(index) {
   };
 }
 
-export const InitialsFieldSetting = ({
+export const SealSettingField = ({
   open,
   onClose,
   signer,
-  initData,
+  sealData,
   totalPages,
   workFlow,
-  initList,
+  sealList,
 }) => {
-  // console.log("initData: ", initData);
-  // console.log("signer: ", signer);
   const { t } = useTranslation();
 
-  const { control, handleSubmit } = useForm({
+  const queryClient = useQueryClient();
+  const putSignature = UseUpdateSig();
+
+  // eslint-disable-next-line no-unused-vars
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: {
-      fieldName: initData.field_name,
-      left: initData.dimension.x,
-      top: initData.dimension.y,
-      width: initData.dimension.width,
-      height: initData.dimension.height,
+      assign: signer.signerId,
       replicate: [],
+      fieldName: sealData.field_name,
+      left: sealData.dimension.x,
+      top: sealData.dimension.y,
+      width: sealData.dimension.width,
+      height: sealData.dimension.height,
     },
   });
 
   const formRef = useRef();
 
-  const queryClient = useQueryClient();
-  const putSignature = UseUpdateSig();
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const handleSubmitClick = () => {
     formRef.current.requestSubmit();
   };
 
   const handleFormSubmit = (data) => {
-    // console.log("data: ", data);
+    console.log("data: ", data);
     const newDimension = {
-      x: data.left !== initData.dimension.x ? parseFloat(data.left) : -1,
-      y: data.top !== initData.dimension.y ? parseFloat(data.top) : -1,
+      x: data.left !== sealData.dimension.x ? parseFloat(data.left) : -1,
+      y: data.top !== sealData.dimension.y ? parseFloat(data.top) : -1,
       width:
-        data.width !== initData.dimension.width ? parseFloat(data.width) : -1,
+        data.width !== sealData.dimension.width ? parseFloat(data.width) : -1,
       height:
-        data.height !== initData.dimension.height
+        data.height !== sealData.dimension.height
           ? parseFloat(data.height)
           : -1,
     };
+    const secondLastUnderscoreIndex = sealData.field_name.lastIndexOf(
+      "_",
+      sealData.field_name.lastIndexOf("_") - 1
+    );
+    // console.log("secondLastUnderscoreIndex: ", secondLastUnderscoreIndex);
+    const suffixString = sealData.field_name.substring(
+      secondLastUnderscoreIndex
+    );
+    // console.log("suffixString: ", suffixString);
+    const replacedString = data.assign + suffixString;
 
     putSignature.mutate(
       {
         body: {
-          field_name: initData.field_name,
+          field_name: sealData.field_name,
           dimension: newDimension,
           font: {
             name: data.font,
@@ -120,8 +133,10 @@ export const InitialsFieldSetting = ({
             data.replicate.length === totalPages || data.replicate.length === 0
               ? null
               : data.replicate,
+          renamed_as:
+            sealData.field_name !== replacedString ? replacedString : null,
         },
-        field: "initial",
+        field: "image",
         documentId: workFlow.documentId,
       },
       {
@@ -133,10 +148,6 @@ export const InitialsFieldSetting = ({
     );
   };
 
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   return (
     <Dialog
       // keepMounted={false}
@@ -177,7 +188,7 @@ export const InitialsFieldSetting = ({
             paddingBottom: "5px",
           }}
         >
-          {t("modal.edit_initials")}
+          {t("modal.edit_seal")}
         </Typography>
       </DialogTitle>
 
@@ -242,7 +253,7 @@ export const InitialsFieldSetting = ({
                   // icon={<DrawIcon fontSize="small" />}
                   iconPosition="start"
                   label={t("modal.replicate_initials")}
-                  {...a11yProps(1)}
+                  {...a11yProps(2)}
                   sx={{
                     height: "45px",
                     minHeight: "45px", //set height for tabs and tab
@@ -251,29 +262,14 @@ export const InitialsFieldSetting = ({
                 />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <Box>
-                  <Typography variant="h6" mb="10px">
-                    {t("0-common.recipient")}
-                  </Typography>
-
-                  <TextField
-                    fullWidth
-                    size="small"
-                    margin="normal"
-                    // name={name}
-                    defaultValue={signer.lastName + " " + signer.firstName}
-                    sx={{ my: 0, height: "44px" }}
-                    disabled
-                    InputProps={{
-                      readOnly: true,
-                      sx: {
-                        height: "44px",
-                        backgroundColor: "signingWFBackground.main",
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
-                </Box>
+                {/* <GeneralTextBoxForm
+                  participants={participants}
+                  control={control}
+                /> */}
+                <GeneralSealForm
+                  participants={workFlow.participants}
+                  control={control}
+                />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <DetailsTextBoxForm control={control} />
@@ -284,8 +280,8 @@ export const InitialsFieldSetting = ({
                   name="replicate"
                   totalPages={totalPages}
                   workFlow={workFlow}
-                  initList={initList}
-                  type="initials"
+                  initList={sealList}
+                  type="seals"
                 />
               </TabPanel>
             </AppBar>
@@ -321,15 +317,14 @@ export const InitialsFieldSetting = ({
   );
 };
 
-InitialsFieldSetting.propTypes = {
+SealSettingField.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  type: PropTypes.string,
   signer: PropTypes.object,
-  initData: PropTypes.object,
+  sealData: PropTypes.object,
   totalPages: PropTypes.number,
   workFlow: PropTypes.object,
-  initList: PropTypes.array,
+  sealList: PropTypes.array,
 };
 
-export default InitialsFieldSetting;
+export default SealSettingField;

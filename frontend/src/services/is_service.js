@@ -15,6 +15,7 @@ export const isService = {
       country: data.country,
       countryRealtime: data.countryRealtime,
       imageBase64: data.imageBase64,
+      textField: data.textField,
     };
     return api.post("/is/getHash", request);
   },

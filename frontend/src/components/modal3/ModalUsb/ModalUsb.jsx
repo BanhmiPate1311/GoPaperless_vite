@@ -4,7 +4,6 @@ import ISPluginClient from "@/assets/js/checkid";
 import { PasswordField } from "@/components/form";
 import { usePending, useUsbHash, useUsbPackFile } from "@/hook";
 import {
-  capitalLize,
   convertTime,
   getLang,
   getUrlWithoutProtocol,
@@ -28,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
-  console.log("dataSigning: ", dataSigning);
+  // console.log("dataSigning: ", dataSigning);
   const { control, handleSubmit, watch, reset } = useForm({
     defaultValues: {
       pin: "",
@@ -220,9 +219,9 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
     const error1 =
       getCertificate?.error?.message ||
       packFile?.error?.message ||
-      usbHash?.error?.message;
+      usbHash?.error?.response?.data?.message;
     setErrorApi(error1);
-  }, [getCertificate?.error, packFile?.error]);
+  }, [getCertificate?.error, packFile?.error, usbHash?.error]);
   return (
     <Dialog
       // keepMounted={false}
@@ -380,9 +379,7 @@ export const ModalUsb = ({ open, onClose, dataSigning, setDataSigning }) => {
               />
             </Box>
             <Stack width={"100%"}>
-              {errorApi && (
-                <Alert severity="error">{capitalLize(errorApi)}</Alert>
-              )}
+              {errorApi && <Alert severity="error">{errorApi}</Alert>}
             </Stack>
           </Stack>
         </DialogContentText>

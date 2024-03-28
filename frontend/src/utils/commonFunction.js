@@ -255,12 +255,12 @@ export const checkEseal = (cert) => {
   const certElement = cert.name;
   // const certElement = "CN=CMC-CA Test, S=HCM, C=VN";
 
-  const cccdRegex = /\bCCCD\b/;
-  const cmndRegex = /\bCMND\b/;
-  const bhxhRegex = /\bBHXH\b/;
-  const hcRegex = /\bHC\b/;
-  const pidRegex = /\bPID\b/;
-  const ppidRegex = /\bPPID\b/;
+  const cccdRegex = /\bCCCD:\b/;
+  const cmndRegex = /\bCMND:\b/;
+  const bhxhRegex = /\bBHXH:\b/;
+  const hcRegex = /\bHC:\b/;
+  const pidRegex = /\bPID:\b/;
+  const ppidRegex = /\bPPID:\b/;
 
   // const cert =
   //   "OID.2.5.4.20=0901790767, EMAILADDRESS=huynhcuong@gmail.com, UID=CCCD:079083011315, CN=Huỳnh Cường, ST=Hồ Chí Minh, C=VN";
@@ -320,5 +320,5 @@ export function capitalLize(str) {
   });
 
   // Kết hợp lại các câu thành một chuỗi và trả về
-  return capitalizedSentences.join(". ") + ".";
+  return capitalizedSentences.join(". ");
 }

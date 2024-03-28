@@ -29,6 +29,7 @@ export const ReplicateForm = ({
   totalPages,
   initList,
   workFlow,
+  type,
 }) => {
   // console.log("totalPages: ", totalPages);
   const { t } = useTranslation();
@@ -171,7 +172,10 @@ export const ReplicateForm = ({
           <TableHead>
             <TableRow>
               <TableCell sx={{ width: "116px" }}>
-                {t("0-common.initials")} ({initList.length})
+                {type === "initials"
+                  ? t("0-common.initials")
+                  : t("0-common.seals")}{" "}
+                ({initList.length})
               </TableCell>
               <TableCell align="center" sx={{ width: "208px" }}>
                 {t("modal.document_name")}
@@ -220,7 +224,7 @@ export const ReplicateForm = ({
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  Initials {index + 1}
+                  {row.type} {index + 1}
                 </TableCell>
                 <TableCell align="center">{row.documentName}</TableCell>
                 <TableCell align="center">{row.page}</TableCell>
@@ -247,4 +251,5 @@ ReplicateForm.propTypes = {
   totalPages: PropTypes.number,
   initList: PropTypes.array,
   workFlow: PropTypes.object,
+  type: PropTypes.string,
 };

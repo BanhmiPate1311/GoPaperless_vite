@@ -1,4 +1,3 @@
-import { capitalLize } from "@/utils/commonFunction";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
@@ -202,7 +201,7 @@ export const Step2_smartid = ({
 
       {errorApi && (
         <Box width={"100%"}>
-          <Alert severity="error">{capitalLize(errorApi)}</Alert>
+          <Alert severity="error">{errorApi}</Alert>
         </Box>
       )}
     </Stack>

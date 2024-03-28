@@ -94,6 +94,8 @@ export const Signing = () => {
     },
   });
 
+  let signer = getSigner(workFlow?.data);
+
   const { data: field } = useQuery({
     queryKey: ["getField"],
     queryFn: () =>
@@ -107,7 +109,8 @@ export const Signing = () => {
           (item) =>
             item.type !== "TEXTFIELD" &&
             item.process_status !== "PROCESSED" &&
-            item.value !== ""
+            item.value !== "" &&
+            item.field_name.includes(signer.signerId)
         )
         .map((item) => {
           return {
@@ -138,15 +141,14 @@ export const Signing = () => {
   let checkWorkFlowStatus = checkWorkflowStatus(workFlow?.data);
   // console.log("checkWorkFlowStatusRef: ", checkWorkFlowStatus);
 
-  const signer = getSigner(workFlow?.data);
   // console.log("signer: ", signer);
 
-  useEffect(() => {
-    if (workFlow?.data?.participants) {
-      signer.current = getSigner(workFlow?.data);
-    }
-  }, [workFlow?.data]);
-  // console.log("signer: ", signer.current);
+  // useEffect(() => {
+  //   if (workFlow?.data?.participants) {
+  //     signer = getSigner(workFlow?.data);
+  //   }
+  // }, [workFlow?.data]);
+  // console.log("signer: ", signer);
 
   const checkInit = field?.initial.findIndex(
     (item) =>
@@ -307,6 +309,7 @@ export const Signing = () => {
           onClose={handleCloseApprove}
           workFlow={workFlow.data}
           signer={signer}
+          textField={field?.textField}
         />
         <Cookie />
       </Stack>

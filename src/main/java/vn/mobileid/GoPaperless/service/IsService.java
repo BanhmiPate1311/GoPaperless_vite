@@ -48,6 +48,7 @@ public class IsService {
         String country = !Objects.equals(data.getCountry(), "") ? data.getCountry() : data.getCountryRealtime();
         String imageBase64 = data.getImageBase64();
         String contactInfor = data.getContactInfor();
+        List<TextField> textFields = data.getTextField();
 
         try {
             Participants rsParticipant = new Participants();
@@ -56,6 +57,11 @@ public class IsService {
                 sResult = "Signer Status invalid";// trạng thái không hợp lệ
                 throw new Exception(sResult);
             }
+
+            if (textFields.size() > 0) {
+                fpsService.fillForm(documentId, textFields);
+            }
+//            fpsService.fillForm(documentId, textFields);
 
             List<String> listCertChain = new ArrayList<>();
             listCertChain.add(certChain);
@@ -138,6 +144,8 @@ public class IsService {
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
+//            fpsService.fillForm(documentId, textFields);
+
 //            String sSignature_id = data.getUsbCertId();
 //            System.out.println("sSignature_id: " + sSignature_id);
             String signature = signatures.get(0);
@@ -168,7 +176,6 @@ public class IsService {
             JsonNode dataNode = objectMapper.readTree(dataResponse);
             String signatureId = dataNode.get("id").asText();
 
-            fpsService.fillForm(documentId, textFields);
 
 //            String sSignature_id = gatewayService.getSignatureId(uuid, fileName);
 //            String sSignature_id = requestID; // temporary

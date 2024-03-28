@@ -3,9 +3,16 @@
 import mouse from "@/assets/images/svg/mouse-right2.svg";
 import { checkIsPosition } from "@/utils/commonFunction";
 import { useQueryClient } from "@tanstack/react-query";
-import { Initial, QrCode, Qrypto, TextBox } from ".";
+import {
+  CameraField,
+  Initial,
+  QrCode,
+  Qrypto,
+  SealField,
+  Signature,
+  TextBox,
+} from ".";
 import AddText from "./AddText";
-import Signature from "./Signature";
 // import Signature from "./Signature";
 export const Document = ({
   props,
@@ -17,6 +24,8 @@ export const Document = ({
   qrypto,
   textField,
   addText,
+  sealField,
+  cameraField,
   openResize,
   setOpenResize,
 }) => {
@@ -177,7 +186,11 @@ export const Document = ({
             workFlow={workFlow}
             totalPages={props.doc._pdfInfo.numPages}
             initList={initial.map((item) => {
-              return { ...item, documentName: workFlow.documentName };
+              return {
+                ...item,
+                documentName: workFlow.documentName,
+                documentId: workFlow.documentId,
+              };
             })}
           />
         );
@@ -202,6 +215,38 @@ export const Document = ({
             index={index}
             pdfPage={pdfPage}
             qryptoData={qryptoData}
+            workFlow={workFlow}
+          />
+        );
+      })}
+      {sealField?.map((sealData, index) => {
+        if (sealData.page !== props.pageIndex + 1) return null;
+        return (
+          <SealField
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            totalPages={props.doc._pdfInfo.numPages}
+            sealData={sealData}
+            workFlow={workFlow}
+            sealList={sealField.map((item) => {
+              return {
+                ...item,
+                documentName: workFlow.documentName,
+                documentId: workFlow.documentId,
+              };
+            })}
+          />
+        );
+      })}
+      {cameraField?.map((cameraData, index) => {
+        if (cameraData.page !== props.pageIndex + 1) return null;
+        return (
+          <CameraField
+            key={index}
+            index={index}
+            pdfPage={pdfPage}
+            cameraData={cameraData}
             workFlow={workFlow}
           />
         );

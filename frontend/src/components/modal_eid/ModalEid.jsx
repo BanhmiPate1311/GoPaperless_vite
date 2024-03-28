@@ -2,7 +2,7 @@
 import ISPluginClient from "@/assets/js/checkid";
 import { useConnectorList } from "@/hook";
 import { electronicService } from "@/services/electronic_service";
-import { capitalLize, getLang, isValidEmail } from "@/utils/commonFunction";
+import { getLang, isValidEmail } from "@/utils/commonFunction";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -778,11 +778,11 @@ export const ModalEid = ({
                   {/* Hết nội dung */}
                   {!faceSuccess && errorPG && (
                     <Alert severity="error" sx={{ mt: "10px" }}>
-                      {capitalLize(errorPG)}
+                      {errorPG}
                     </Alert>
                   )}
                   {faceSuccess && (
-                    <Alert severity="success">{capitalLize(faceSuccess)}</Alert>
+                    <Alert severity="success">{faceSuccess}</Alert>
                   )}
                 </Stack>
               )

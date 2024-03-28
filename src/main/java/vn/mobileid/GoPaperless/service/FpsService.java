@@ -158,6 +158,9 @@ public class FpsService {
         requestData.put("suffix", data.getSuffix());
         requestData.put("dimension", data.getDimension());
         requestData.put("visible_enabled", data.getVisibleEnabled());
+        if(data.getRemark() != null) {
+            requestData.put("remark", data.getRemark());
+        }
 
         System.out.println("requestData: " + requestData);
         List<String> list = new ArrayList<>();
@@ -319,6 +322,9 @@ public class FpsService {
         Map<String, Object> requestData = new HashMap<>();
         requestData.put("field_name", data.getFieldName());
         requestData.put("page", data.getPage());
+        if(data.getRemark() != null) {
+            requestData.put("remark", data.getRemark());
+        }
         if(data.getType() != null) {
             requestData.put("type", data.getType());
         }

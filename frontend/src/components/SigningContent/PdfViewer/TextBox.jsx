@@ -29,6 +29,7 @@ export const TextBox = ({ index, pdfPage, textData, workFlow }) => {
   const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
   // console.log("isControlled: ", isControlled);
   const [showTopbar, setShowTopbar] = useState(false);
+
   const [dragPosition, setDragPosition] = useState({
     x: (textData.dimension?.x * pdfPage.width) / 100,
     y: (textData.dimension?.y * pdfPage.height) / 100,

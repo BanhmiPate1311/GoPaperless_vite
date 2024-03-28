@@ -159,6 +159,7 @@ export const SigningForm2 = ({
       }
     },
   });
+  console.log("certificateInfor: ", certificateInfor);
 
   useEffect(() => {
     const ipWS = "127.0.0.1";

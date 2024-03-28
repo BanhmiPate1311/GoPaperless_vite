@@ -289,6 +289,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       suffix: signatureField.suffix,
       visible_enabled: true,
       workFlowId: workFlow.workFlowId,
+      remark: [signerId],
     };
     const response = await fpsService.addSignature(
       newSignature,
@@ -334,6 +335,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       },
       place_holder: value,
       suffix: fieldName.suffix,
+      remark: [signerId],
     };
 
     const response = await fpsService.addTextBox(
@@ -365,6 +367,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
         height: 5,
       },
       suffix: fieldName.suffix,
+      remark: [signerId],
     };
     const response = await fpsService.addTextBox(
       newTextField,
@@ -391,6 +394,7 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
       },
       suffix: fieldName.suffix,
       required: true,
+      remark: [signerId],
     };
     const response = await fpsService.addTextBox(
       newInitField,
@@ -494,6 +498,32 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
     await getFields();
   };
 
+  const camera = async (value) => {
+    console.log("value: ", value);
+    const cameraField = generateFieldName("ADMIN_PROVIDER", value);
+    const newCameraField = {
+      type: value,
+      field_name: cameraField.value,
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 20,
+        height: 13,
+      },
+      suffix: cameraField.suffix,
+      visible_enabled: true,
+      remark: [],
+    };
+    const response = await fpsService.addTextBox(
+      newCameraField,
+      "image",
+      workFlow.documentId
+    );
+    if (!response) return;
+    await getFields();
+  };
+
   const handleClickMenu = (value) => () => {
     handleClose();
     switch (value) {
@@ -517,6 +547,9 @@ export const PdfViewer = ({ workFlow, tabBar }) => {
         break;
       case "QRYPTO":
         QrQrypto(value);
+        break;
+      case "CAMERA":
+        camera(value);
         break;
     }
   };

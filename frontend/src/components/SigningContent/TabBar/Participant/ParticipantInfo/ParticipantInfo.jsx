@@ -1,9 +1,4 @@
-import { ReactComponent as EditorSubmitted } from "@/assets/images/participant/editor-submitted.svg";
-import { ReactComponent as EditorWait } from "@/assets/images/participant/editor-wait.svg";
-import { ReactComponent as OnlyView } from "@/assets/images/participant/only-view.svg";
-import { ReactComponent as SignerReviewerSigned } from "@/assets/images/participant/signer-reviewer-signed.svg";
-import { ReactComponent as SignerReviewerWait } from "@/assets/images/participant/signer-reviewer-wait.svg";
-import { useCommonHook } from "@/hook";
+import { renderIcon, useCommonHook } from "@/hook";
 import { checkSignerWorkFlow } from "@/utils/commonFunction";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Accordion from "@mui/material/Accordion";
@@ -31,29 +26,29 @@ export const ParticipantInfo = ({ participantsList, signType }) => {
     setIsOpen(newIsOpen);
   };
 
-  const renderIcon = (signerType, signerStatus) => {
-    if (signerStatus === 1) {
-      switch (signerType) {
-        case 1:
-        case 2:
-          return <SignerReviewerWait width={24} height={24} />;
-        case 3:
-          return <EditorWait width={24} height={24} />;
-        case 5:
-          return <OnlyView width={24} height={24} />;
-      }
-    } else {
-      switch (signerType) {
-        case 1:
-        case 2:
-          return <SignerReviewerSigned width={24} height={24} />;
-        case 3:
-          return <EditorSubmitted width={24} height={24} />;
-        case 5:
-          return <OnlyView width={24} height={24} />;
-      }
-    }
-  };
+  // const renderIcon = (signerType, signerStatus) => {
+  //   if (signerStatus === 1) {
+  //     switch (signerType) {
+  //       case 1:
+  //       case 2:
+  //         return <SignerReviewerWait width={24} height={24} />;
+  //       case 3:
+  //         return <EditorWait width={24} height={24} />;
+  //       case 5:
+  //         return <OnlyView width={24} height={24} />;
+  //     }
+  //   } else {
+  //     switch (signerType) {
+  //       case 1:
+  //       case 2:
+  //         return <SignerReviewerSigned width={24} height={24} />;
+  //       case 3:
+  //         return <EditorSubmitted width={24} height={24} />;
+  //       case 5:
+  //         return <OnlyView width={24} height={24} />;
+  //     }
+  //   }
+  // };
 
   const renderStatus = (signerType, signerStatus) => {
     if (signerStatus === 1) {

@@ -235,7 +235,7 @@ export const AddText = ({ index, pdfPage, addTextData, workFlow }) => {
             },
             font: {
               name: font + bold + italic,
-              size: size || 13,
+              size: size - 6 || 7,
             },
             visible_enabled: true,
             value: "",

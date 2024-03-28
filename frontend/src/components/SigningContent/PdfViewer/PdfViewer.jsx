@@ -119,10 +119,14 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
 
   const signatureField = (value) => {
     for (const item of field.signature) {
-      if (
-        item.field_name.substring(0, item.field_name.length - 7) ===
-        signerId + "_" + value
-      ) {
+      // if (
+      //   item.field_name.substring(0, item.field_name.length - 7) ===
+      //   signerId + "_" + value
+      // ) {
+      //   alert(t("signing.sig_warning"));
+      //   return;
+      // }
+      if (item.remark && item.remark[0] === signerId) {
         alert(t("signing.sig_warning"));
         return;
       }
@@ -143,6 +147,7 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
       suffix: signatureField.suffix,
       visible_enabled: true,
       workFlowId: workFlow.workFlowId,
+      remark: [signerId],
     };
     addSignature.mutate(
       {
@@ -191,11 +196,42 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
       },
       place_holder: value,
       suffix: fieldName.suffix,
+      remark: [signerId],
     };
     addTextBox.mutate(
       {
         body: newTextField,
         field: "text",
+        documentId: workFlow.documentId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["getField"] });
+        },
+      }
+    );
+  };
+
+  const seal = (value) => {
+    const sealField = generateFieldName(signerId, value);
+    const newSeal = {
+      type: value,
+      field_name: sealField.value,
+      page: signInfo.page,
+      dimension: {
+        x: signInfo.x,
+        y: signInfo.y,
+        width: 22,
+        height: 5,
+      },
+      suffix: sealField.suffix,
+      visible_enabled: true,
+      remark: [signerId],
+    };
+    addTextBox.mutate(
+      {
+        body: newSeal,
+        field: "image",
         documentId: workFlow.documentId,
       },
       {
@@ -224,6 +260,7 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
         height: 5,
       },
       suffix: fieldName.suffix,
+      remark: [signerId],
     };
     addTextBox.mutate(
       {
@@ -253,6 +290,7 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
       },
       suffix: fieldName.suffix,
       required: true,
+      remark: [signerId],
     };
     addTextBox.mutate(
       {
@@ -356,6 +394,9 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
       case "QRYPTO":
         QrQrypto(value);
         break;
+      case "SEAL":
+        seal(value);
+        break;
     }
   };
 
@@ -389,6 +430,8 @@ export const PdfViewer = ({ workFlow, field, fieldSelect }) => {
           qrypto={field?.qrypto}
           textField={field?.textField}
           addText={field?.textbox?.filter((item) => item.type === "TEXTFIELD")}
+          sealField={field?.image?.filter((item) => item.type === "SEAL")}
+          cameraField={field?.image?.filter((item) => item.type === "CAMERA")}
           openResize={openResize}
           setOpenResize={setOpenResize}
         />

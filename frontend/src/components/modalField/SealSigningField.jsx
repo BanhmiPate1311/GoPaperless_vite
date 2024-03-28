@@ -1,23 +1,27 @@
-/* eslint-disable no-unused-vars */
+import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
+import UploadIcon from "@mui/icons-material/Upload";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
-import { useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { GeneralTextBoxForm } from ".";
-import { DetailsTextBoxForm } from "./DetailsTextBoxForm";
-import { useForm } from "react-hook-form";
-import { UseUpdateSig } from "@/hook/use-fpsService";
 import { useQueryClient } from "@tanstack/react-query";
+import html2canvas from "html2canvas";
+import { useTranslation } from "react-i18next";
+import { Controller, useForm } from "react-hook-form";
+import { usePending } from "@/hook";
+import { UploadInitForm } from ".";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,117 +62,66 @@ function a11yProps(index) {
   };
 }
 
-export const TextBoxSettingField = ({
-  open,
-  onClose,
-  type,
-  signer,
-  textData,
-  participants,
-  workFlow,
-}) => {
-  // console.log("initData: ", initData);
-  // console.log("textData: ", textData);
+export const SealSigningField = ({ open, onClose, sealData, workFlow }) => {
   const { t } = useTranslation();
-
-  const queryClient = useQueryClient();
-  const putSignature = UseUpdateSig();
-
-  // const signerIndex = participants.findIndex(
-  //   (participant) => participant.signerId === signer.signerId
-  // );
-
-  // console.log("signerIndex: ", signerIndex);
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
-      assign: signer.signerId,
-      valid: textData.required,
-      length: textData.max_length || 1000,
-      placeHolder: textData.place_holder,
-      font: textData.font?.name || "vernada",
-      fontSize: textData.font?.size || 13,
-      fieldName: textData.field_name,
-      left: textData.dimension.x,
-      top: textData.dimension.y,
-      width: textData.dimension.width,
-      height: textData.dimension.height,
+      fileUrl: "",
+      imageScrop: "",
+      apply: false,
     },
   });
 
-  const formRef = useRef();
+  const queryClient = useQueryClient();
+  const isPending = usePending();
 
   const [value, setValue] = useState(0);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+
+  const textElement = useRef();
+  const formRef = useRef();
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const handletype = (type) => {
-    switch (type) {
-      case "NAME":
-        return t("modal.edit_name");
-      case "EMAIL":
-        return t("modal.edit_email");
-      case "JOBTITLE":
-        return t("modal.edit_jobtitle");
-      case "COMPANY":
-        return t("modal.edit_company");
-    }
-  };
-  // console.log(handletype(type));
 
-  const handleSubmitClick = () => {
-    formRef.current.requestSubmit();
+  const handleDisableSubmit = (disabled) => {
+    setIsSubmitDisabled(disabled);
   };
 
   const handleFormSubmit = (data) => {
     console.log("data: ", data);
-    const newDimension = {
-      x: data.left !== textData.dimension.x ? parseFloat(data.left) : -1,
-      y: data.top !== textData.dimension.y ? parseFloat(data.top) : -1,
-      width:
-        data.width !== textData.dimension.width ? parseFloat(data.width) : -1,
-      height:
-        data.height !== textData.dimension.height
-          ? parseFloat(data.height)
-          : -1,
-    };
-    const secondLastUnderscoreIndex = textData.field_name.lastIndexOf(
-      "_",
-      textData.field_name.lastIndexOf("_") - 1
-    );
-    // console.log("secondLastUnderscoreIndex: ", secondLastUnderscoreIndex);
-    const suffixString = textData.field_name.substring(
-      secondLastUnderscoreIndex
-    );
-    // console.log("suffixString: ", suffixString);
-    const replacedString = data.assign + suffixString;
 
-    putSignature.mutate(
-      {
-        body: {
-          field_name: textData.field_name,
-          dimension: newDimension,
-          font: {
-            name: data.font,
-            size: data.fontSize,
-          },
-          visible_enabled: true,
-          required: data.valid,
-          max_length: data.length,
-          place_holder: data.placeHolder,
-          renamed_as:
-            textData.field_name !== replacedString ? replacedString : null,
-        },
-        field: "text",
-        documentId: workFlow.documentId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["getField"] });
-          onClose();
-        },
-      }
-    );
+    // html2canvas(textElement.current, { backgroundColor: null }).then(
+    //   (canvas) => {
+    //     const data64 = canvas.toDataURL();
+    //     console.log("data64: ", data64);
+    //     fillInit.mutate(
+    //       {
+    //         body: {
+    //           field_name: initData.field_name,
+    //           apply_to_all: data.apply,
+    //           initial_pages: [initData.page],
+    //           image: removeBase64Prefix(data64),
+    //         },
+
+    //         documentId: workFlow.documentId,
+    //       },
+    //       {
+    //         onSuccess: () => {
+    //           queryClient.invalidateQueries({ queryKey: ["getField"] });
+    //           queryClient.invalidateQueries({ queryKey: ["getWorkFlow"] });
+    //           onClose();
+    //         },
+    //       }
+    //     );
+    //   }
+    // );
+  };
+
+  const handleSubmitClick = () => {
+    formRef.current.requestSubmit();
   };
 
   return (
@@ -211,7 +164,7 @@ export const TextBoxSettingField = ({
             paddingBottom: "5px",
           }}
         >
-          {handletype(type)}
+          {t("modal.initmodal_title")}
         </Typography>
       </DialogTitle>
 
@@ -251,9 +204,9 @@ export const TextBoxSettingField = ({
                 }}
               >
                 <Tab
-                  // icon={<KeyboardIcon fontSize="small" />}
+                  icon={<UploadIcon fontSize="small" />}
                   iconPosition="start"
-                  label={t("0-common.general")}
+                  label={t("0-common.upload")}
                   {...a11yProps(0)}
                   sx={{
                     height: "45px",
@@ -261,30 +214,30 @@ export const TextBoxSettingField = ({
                     textTransform: "none",
                   }} //set height for tabs and tab
                 />
-                <Tab
-                  // icon={<DrawIcon fontSize="small" />}
-                  iconPosition="start"
-                  label={t("0-common.details")}
-                  {...a11yProps(1)}
-                  sx={{
-                    height: "45px",
-                    minHeight: "45px", //set height for tabs and tab
-                    textTransform: "none",
-                  }} //set height for tabs and tab
-                />
               </Tabs>
+
               <TabPanel value={value} index={0}>
-                <GeneralTextBoxForm
-                  participants={participants}
+                <UploadInitForm
+                  ref={textElement}
+                  watch={watch}
                   control={control}
+                  onDisableSubmit={handleDisableSubmit}
                 />
-                {/* text */}
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <DetailsTextBoxForm control={control} />
               </TabPanel>
             </AppBar>
           </Box>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Controller
+                  name="apply"
+                  control={control}
+                  render={({ field }) => <Checkbox {...field} />}
+                />
+              }
+              label={t("modal.initmodal_1")}
+            />
+          </FormGroup>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ p: "15px 20px", height: "70px" }}>
@@ -293,14 +246,14 @@ export const TextBoxSettingField = ({
           sx={{ borderRadius: "10px", borderColor: "borderColor.main" }}
           onClick={onClose}
         >
-          {t("0-common.close")}
+          {t("0-common.cancel")}
         </Button>
         <Button
           variant="contained"
-          // disabled={isPending || isSubmitDisabled}
-          // startIcon={
-          //   isPending ? <CircularProgress color="inherit" size="1em" /> : null
-          // }
+          disabled={isPending || isSubmitDisabled}
+          startIcon={
+            isPending ? <CircularProgress color="inherit" size="1em" /> : null
+          }
           sx={{
             borderRadius: "10px",
             borderColor: "borderColor.main",
@@ -309,21 +262,18 @@ export const TextBoxSettingField = ({
           onClick={handleSubmitClick}
           type="button"
         >
-          {t("0-common.save")}
+          {t("0-common.sign")}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-TextBoxSettingField.propTypes = {
+SealSigningField.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  type: PropTypes.string,
-  signer: PropTypes.object,
-  textData: PropTypes.object,
-  participants: PropTypes.array,
+  sealData: PropTypes.object,
   workFlow: PropTypes.object,
 };
 
-export default TextBoxSettingField;
+export default SealSigningField;

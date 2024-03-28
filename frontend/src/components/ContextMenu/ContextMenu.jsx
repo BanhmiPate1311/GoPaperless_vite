@@ -1,17 +1,19 @@
-import { ListItemIcon, ListItemText } from "@mui/material";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
+import { ReactComponent as AddText } from "@/assets/images/contextmenu/addtext.svg";
 import { ReactComponent as Company } from "@/assets/images/contextmenu/checkbox.svg";
 import { ReactComponent as Email } from "@/assets/images/contextmenu/email.svg";
 import { ReactComponent as Initial } from "@/assets/images/contextmenu/initial.svg";
 import { ReactComponent as JobTitle } from "@/assets/images/contextmenu/jobtitle.svg";
 import { ReactComponent as Name } from "@/assets/images/contextmenu/name.svg";
 import { ReactComponent as QRCode } from "@/assets/images/contextmenu/qrcode.svg";
-import { ReactComponent as Signature } from "@/assets/images/contextmenu/signature.svg";
-import { ReactComponent as AddText } from "@/assets/images/contextmenu/addtext.svg";
 import { ReactComponent as QrQrypto } from "@/assets/images/contextmenu/qrypto.svg";
+import { ReactComponent as Seal } from "@/assets/images/contextmenu/seal.svg";
+import { ReactComponent as Signature } from "@/assets/images/contextmenu/signature.svg";
+import { ReactComponent as Camera } from "@/assets/images/contextmenu/camera.svg";
+import { ListItemIcon, ListItemText } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 export const ContextMenu = ({
   contextMenu,
@@ -32,6 +34,12 @@ export const ContextMenu = ({
       label: t("0-common.initials"),
       value: "INITIAL",
     },
+    {
+      icon: <Seal />,
+      label: t("0-common.seal"),
+      value: "SEAL",
+    },
+
     { icon: <Name />, label: t("0-common.name"), value: "NAME" },
     { icon: <Email />, label: t("0-common.email"), value: "EMAIL" },
     {
@@ -55,6 +63,11 @@ export const ContextMenu = ({
       icon: <AddText />,
       label: t("0-common.addtext"),
       value: "AddText",
+    },
+    {
+      icon: <Camera />,
+      label: t("0-common.camera"),
+      value: "CAMERA",
     },
   ];
   let menu = [];
@@ -87,7 +100,10 @@ export const ContextMenu = ({
   switch (tabBar) {
     case 0:
       menu = data.filter(
-        (item) => (item.value === "QRYPTO") | (item.value == "QR")
+        (item) =>
+          (item.value === "QRYPTO") |
+          (item.value == "QR") |
+          (item.value == "CAMERA")
       );
       break;
 

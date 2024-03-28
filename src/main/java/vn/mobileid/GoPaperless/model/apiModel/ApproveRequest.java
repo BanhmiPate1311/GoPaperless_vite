@@ -1,19 +1,20 @@
 package vn.mobileid.GoPaperless.model.apiModel;
 
+import vn.mobileid.GoPaperless.dto.rsspDto.TextField;
+
+import java.util.List;
+
 public class ApproveRequest {
     private int workFlowId;
-//    private int participantID;
     private String comment;
     private int recipientID;
     private String hmac;
-//    private String signerName;
     private String signerToken;
     private String signingToken;
     private int documentId;
     private String workFlowProcessType;
     private String fileName;
-//    private String signerEmail;
-//    private int signerType;
+    private List<TextField> textField;
 
     public int getWorkFlowId() {
         return workFlowId;
@@ -90,4 +91,11 @@ public class ApproveRequest {
         this.fileName = fileName;
     }
 
+    public List<TextField> getTextField() {
+        return textField;
+    }
+
+    public void setTextField(List<TextField> textField) {
+        this.textField = textField;
+    }
 }

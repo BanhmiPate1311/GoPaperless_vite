@@ -1,10 +1,6 @@
 import { ReactComponent as PerSonIcon } from "@/assets/images/svg/person_icon.svg";
-import { ReactComponent as SignedIcon } from "@/assets/images/svg/signed_icon.svg";
-import { ReactComponent as WaitingMySig } from "@/assets/images/svg/waiting_mysig.svg";
-import { ReactComponent as WaitingSig } from "@/assets/images/svg/waiting_sig.svg";
 import { ReactComponent as WarningIcon } from "@/assets/images/svg/warning_icon.svg";
-import { useCommonHook } from "@/hook";
-import { checkSignerStatus } from "@/utils/commonFunction";
+import { renderIcon } from "@/hook";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
@@ -19,14 +15,14 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ParticipantDetail } from ".";
+import { capitalLize } from "@/utils/commonFunction";
 // import DialogField from "./Dialog_field";
 
-const ParticipantTable = ({ data }) => {
+const ParticipantTable = ({ workFlow }) => {
+  // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
 
   const [open, setOpen] = useState([false]);
-
-  const { signerToken } = useCommonHook();
 
   const columns = [
     { id: "stt", label: "#", minWidth: 40 },
@@ -58,7 +54,7 @@ const ParticipantTable = ({ data }) => {
     },
   ];
 
-  const Signed = data.reduce((count, item) => {
+  const Signed = workFlow.participants.reduce((count, item) => {
     // If the status is 1, increment the count
     if (item.signerStatus === 2) {
       count++;
@@ -112,7 +108,8 @@ const ParticipantTable = ({ data }) => {
                   p: "15px 20px",
                 }}
               >
-                {t("0-common.parallel")} ({Signed}/{data.length})
+                {capitalLize(workFlow.workflowProcessType)} ({Signed}/
+                {workFlow.participants.length})
               </TableCell>
             </TableRow>
             <TableRow sx={{ height: "46px" }}>
@@ -141,72 +138,64 @@ const ParticipantTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((item, index) => {
-              const status = checkSignerStatus(item, signerToken);
-              return (
-                <TableRow
-                  key={index}
+            {workFlow.participants.map((item, index) => (
+              <TableRow
+                key={index}
+                sx={{
+                  backgroundColor: "white",
+                  fontSize: "16px",
+                  height: "45px",
+                }}
+              >
+                <TableCell
+                  component="th"
+                  scope="row"
                   sx={{
-                    backgroundColor: "white",
-                    fontSize: "16px",
-                    height: "45px",
+                    borderTopLeftRadius: "10px",
+                    borderBottomLeftRadius: "10px",
+                    p: "10px 26px",
                   }}
                 >
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{
-                      borderTopLeftRadius: "10px",
-                      borderBottomLeftRadius: "10px",
-                      p: "10px 26px",
-                    }}
+                  {index + 1}
+                </TableCell>
+                <TableCell align="left" sx={{ p: "10px 26px" }}>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <PerSonIcon />
+                    {/* {tableCheckStatus(item, signerToken)} */}
+                    {renderIcon(item.signerType, item.signerStatus, 17)}
+                    <Typography>
+                      {item.lastName} {item.firstName}
+                    </Typography>
+                  </Stack>
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: "16px", p: "10px 26px" }}
+                >
+                  {item.firstName}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: "16px", p: "10px 26px" }}
+                >
+                  {item.email}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    borderTopRightRadius: "10px",
+                    borderBottomRightRadius: "10px",
+                    p: "10px 26px",
+                  }}
+                >
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleClickOpen(index)}
                   >
-                    {index + 1}
-                  </TableCell>
-                  <TableCell align="left" sx={{ p: "10px 26px" }}>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <PerSonIcon />
-                      {/* {tableCheckStatus(item, signerToken)} */}
-                      {status === 2 ? (
-                        <SignedIcon />
-                      ) : status === 1 ? (
-                        <WaitingMySig />
-                      ) : (
-                        <WaitingSig />
-                      )}
-                      <Typography>
-                        {item.lastName} {item.firstName}
-                      </Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{ fontSize: "16px", p: "10px 26px" }}
-                  >
-                    {item.firstName}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{ fontSize: "16px", p: "10px 26px" }}
-                  >
-                    {item.email}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      borderTopRightRadius: "10px",
-                      borderBottomRightRadius: "10px",
-                      p: "10px 26px",
-                    }}
-                  >
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleClickOpen(index)}
-                    >
-                      <WarningIcon />
-                    </IconButton>
-                  </TableCell>
-                  {/* {open[index] && (
+                    <WarningIcon />
+                  </IconButton>
+                </TableCell>
+                {/* {open[index] && (
                     <DialogField
                       open={open[index]}
                       title={"signer information"}
@@ -214,17 +203,16 @@ const ParticipantTable = ({ data }) => {
                       handleClose={() => handleClose(index)}
                     />
                   )} */}
-                  {open[index] && (
-                    <ParticipantDetail
-                      open={open[index]}
-                      title={t("signing.participant_information")}
-                      data={item}
-                      handleClose={() => handleClose(index)}
-                    />
-                  )}
-                </TableRow>
-              );
-            })}
+                {open[index] && (
+                  <ParticipantDetail
+                    open={open[index]}
+                    title={t("signing.participant_information")}
+                    data={item}
+                    handleClose={() => handleClose(index)}
+                  />
+                )}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -241,6 +229,7 @@ const ParticipantTable = ({ data }) => {
 
 ParticipantTable.propTypes = {
   data: PropTypes.array,
+  workFlow: PropTypes.object,
 };
 
 export default ParticipantTable;

@@ -35,7 +35,7 @@ export const Signature = ({
   openResize,
   setOpenResize,
 }) => {
-  // console.log("textbox: ", textbox);
+  // console.log("textField: ", textField);
   // console.log("initial: ", initial);
   // console.log("workFlow: ", workFlow);
   // console.log("page: ", page);
@@ -57,6 +57,7 @@ export const Signature = ({
   });
   // console.log("dragPosition: ", dragPosition);
   const [isControlled, setIsControlled] = useState(true);
+  // const [scrolled, setScrolled] = useState(false);
 
   const [showTopbar, setShowTopbar] = useState(false);
   const [isShowSigDetail, setIsShowSigDetail] = useState([false]);
@@ -101,6 +102,16 @@ export const Signature = ({
     });
   }, [signatureData]);
 
+  // useEffect(() => {
+  //   if (signatureData.selected && boxRef.current && !scrolled) {
+  //     console.log("boxRef.current: ", boxRef.current);
+  //     boxRef.current.scrollIntoView({ behavior: "auto" });
+  //     setScrolled(true);
+  //   }
+  //   if (!signatureData.selected) {
+  //     setScrolled(false);
+  //   }
+  // }, [signatureData, scrolled]);
   useEffect(() => {
     if (signatureData.selected && boxRef.current) {
       // console.log("object");
@@ -271,12 +282,15 @@ export const Signature = ({
           top: -25,
           right: -2,
           zIndex: 10,
+          // display:
+          //   signerId + "_" + signatureData.type + "_" + signatureData.suffix ===
+          //   signatureData.field_name
+          //     ? "flex"
+          //     : "none",
           display:
-            signerId + "_" + signatureData.type + "_" + signatureData.suffix ===
-            signatureData.field_name
+            signatureData.remark && signatureData.remark[0] === signerId
               ? "flex"
               : "none",
-          // width: "100%",
           backgroundColor: "#D9DFE4",
         }}
         className="topBar"
@@ -446,8 +460,8 @@ export const Signature = ({
         }}
         disabled={
           isSetPos ||
-          signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-            signatureData.field_name
+          (signatureData.remark && signatureData.remark[0] !== signerId) ||
+          signatureData.process_status === "PROCESSED"
         }
       >
         <ResizableBox
@@ -469,15 +483,16 @@ export const Signature = ({
           }}
           minConstraints={[
             isSetPos ||
-            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-              signatureData.field_name
+            signatureData.process_status === "PROCESSED" ||
+            (signatureData.remark && signatureData.remark[0] !== signerId)
               ? signatureData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? (pdfPage.width * 20) / 100
               : 200,
+
             isSetPos ||
-            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-              signatureData.field_name
+            signatureData.process_status === "PROCESSED" ||
+            (signatureData.remark && signatureData.remark[0] !== signerId)
               ? signatureData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? (pdfPage.height * 5) / 100
@@ -485,15 +500,18 @@ export const Signature = ({
           ]}
           maxConstraints={[
             isSetPos ||
-            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-              signatureData.field_name
+            signatureData.process_status === "PROCESSED" ||
+            (signatureData.remark && signatureData.remark[0] !== signerId)
               ? signatureData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? maxPosibleResizeWidth
               : 200,
+
             isSetPos ||
-            signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
-              signatureData.field_name
+            signatureData.process_status === "PROCESSED" ||
+            // signerId + "_" + signatureData.type + "_" + signatureData.suffix !==
+            //   signatureData.field_name
+            (signatureData.remark && signatureData.remark[0] !== signerId)
               ? signatureData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? maxPosibleResizeHeight
@@ -504,12 +522,8 @@ export const Signature = ({
             // console.log("e: ", e);
             if (
               isSetPos ||
-              signerId +
-                "_" +
-                signatureData.type +
-                "_" +
-                signatureData.suffix !==
-                signatureData.field_name
+              signatureData.process_status === "PROCESSED" ||
+              (signatureData.remark && signatureData.remark[0] !== signerId)
             )
               return;
             console.log(size, pdfPage, size.width / pdfPage.width);

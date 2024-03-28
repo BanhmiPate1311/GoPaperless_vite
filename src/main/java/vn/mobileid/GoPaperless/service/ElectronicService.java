@@ -551,6 +551,9 @@ public class ElectronicService {
             List<CertResponse> listCertificate = new ArrayList<>();
             if (credentialList.getCerts().size() > 0) {
                 for (CredentialItem credential : credentialList.getCerts()) {
+                    if (credential.getValidTo() == null || credentialList.getCerts().isEmpty() || CommonFunction.checkTimeExpired(credential.getValidTo())) {
+                        continue;
+                    }
                     String credentialID = credential.getCredentialID();
                     credentialinFo = rsspService.getCredentialinFo(checkCertificateRequest.getLang(), credentialID);
                     if (credentialinFo != null) {
@@ -715,6 +718,10 @@ public class ElectronicService {
 
             String pDMS_PROPERTY = CommonFunction.getPropertiesFMS();
 
+            if (textFields.size() > 0) {
+                fpsService.fillForm(documentId, textFields);
+            }
+
             List<String> listCertChain = new ArrayList<>();
             listCertChain.add(certChain);
 
@@ -770,7 +777,7 @@ public class ElectronicService {
             JsonNode dataNode = objectMapper.readTree(dataResponse);
             String signatureId = dataNode.get("id").asText();
 
-            fpsService.fillForm(documentId, textFields);
+
 
             String signedType = assurance.equals("aes") ? "NORMAL" : "ESEAL";
             int isSetPosition = 1;

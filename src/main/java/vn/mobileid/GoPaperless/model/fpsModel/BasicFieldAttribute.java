@@ -40,6 +40,7 @@ public class BasicFieldAttribute {
     private List<Integer> replicate;
     private AddTextValue font;
     private List<Object> items;
+    private List<String> remark;
 }
 
 

@@ -12,7 +12,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { forwardRef, useEffect, useMemo, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Step1, Step2 } from ".";
 
@@ -20,7 +20,14 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export const ApproveModal = ({ open, onClose, workFlow, signer }) => {
+export const ApproveModal = ({
+  open,
+  onClose,
+  workFlow,
+  signer,
+  textField,
+}) => {
+  // console.log("textField: ", textField);
   // console.log("workFlow: ", workFlow);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -69,6 +76,7 @@ export const ApproveModal = ({ open, onClose, workFlow, signer }) => {
       workFlowProcessType: workFlow.workflowProcessType,
       documentId: workFlow.documentId,
       signerType: signer.signerType,
+      textField: textField,
     };
     try {
       await apiService.approve(data);
@@ -91,14 +99,24 @@ export const ApproveModal = ({ open, onClose, workFlow, signer }) => {
     setActiveStep(1);
   }, [open]);
 
-  let title = useMemo(() => {
+  // let title = useMemo(() => {
+  //   switch (activeStep) {
+  //     case 1:
+  //       return t("modal.legal_notice");
+  //     case 2:
+  //       return t("modal.approve_documents");
+  //   }
+  // }, [activeStep]);
+  // console.log("title: ", title);
+
+  const title = () => {
     switch (activeStep) {
       case 1:
         return t("modal.legal_notice");
       case 2:
         return t("modal.approve_documents");
     }
-  }, [activeStep]);
+  };
 
   return (
     <Dialog
@@ -141,8 +159,10 @@ export const ApproveModal = ({ open, onClose, workFlow, signer }) => {
             paddingBottom: "5px",
           }}
         >
-          {title}
-          {/* title */}
+          {/* {activeStep === 1
+            ? t("modal.legal_notice")
+            : t("modal.approve_documents")} */}
+          {title()}
         </Typography>
       </DialogTitle>
 
@@ -208,6 +228,7 @@ ApproveModal.propTypes = {
   onClose: PropTypes.func,
   workFlow: PropTypes.object,
   signer: PropTypes.object,
+  textField: PropTypes.array,
 };
 
 export default ApproveModal;

@@ -599,4 +599,11 @@ public class CommonFunction {
                 && !UID.contains("PID")
                 && !UID.contains("PPID"));
     }
+
+    public static boolean checkTimeExpired(String time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
+        LocalDateTime now = LocalDateTime.now();
+        return localDateTime.isBefore(now);
+    }
 }

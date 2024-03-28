@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { ReactComponent as GarbageIcon } from "@/assets/images/svg/garbage_icon.svg";
 import { ReactComponent as SettingIcon } from "@/assets/images/svg/setting_icon.svg";
-import { ReactComponent as SignIcon } from "@/assets/images/svg/sign_icon.svg";
-import { InitialsField, InitialsFieldSetting } from "@/components/modalField";
 import { UseUpdateSig } from "@/hook/use-fpsService";
 import { fpsService } from "@/services/fps_service";
 import { getSigner } from "@/utils/commonFunction";
@@ -14,34 +11,25 @@ import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 
-export const Initial = ({
-  index,
-  pdfPage,
-  initData,
-  workFlow,
-  totalPages,
-  initList,
-}) => {
+export const CameraField = ({ index, pdfPage, cameraData, workFlow }) => {
   const queryClient = useQueryClient();
 
   const [dragPosition, setDragPosition] = useState({
-    x: (initData.dimension?.x * pdfPage.width) / 100,
-    y: (initData.dimension?.y * pdfPage.height) / 100,
+    x: (cameraData.dimension?.x * pdfPage.width) / 100,
+    y: (cameraData.dimension?.y * pdfPage.height) / 100,
   });
   const [isControlled, setIsControlled] = useState(false);
   const [showTopbar, setShowTopbar] = useState(false);
-  const [isOpenSigningForm, setOpenSigningForm] = useState([false]);
   const [isOpenModalSetting, setIsOpenModalSetting] = useState([false]);
 
   const newPos = useRef({ x: null, y: null });
-
   const signer = getSigner(workFlow);
   const signerId = signer.signerId;
 
   const maxPosibleResizeWidth =
-    (pdfPage.width * (100 - initData.dimension?.x)) / 100;
+    (pdfPage.width * (100 - cameraData.dimension?.x)) / 100;
   const maxPosibleResizeHeight =
-    (pdfPage.height * (100 - initData.dimension?.y)) / 100;
+    (pdfPage.height * (100 - cameraData.dimension?.y)) / 100;
 
   const putSignature = UseUpdateSig();
 
@@ -49,7 +37,7 @@ export const Initial = ({
     mutationFn: () => {
       return fpsService.removeSignature(
         { documentId: workFlow.documentId },
-        initData.field_name
+        cameraData.field_name
       );
     },
     onSuccess: () => {
@@ -59,33 +47,10 @@ export const Initial = ({
 
   useEffect(() => {
     setDragPosition({
-      x: (initData.dimension?.x * pdfPage.width) / 100,
-      y: (initData.dimension?.y * pdfPage.height) / 100,
+      x: (cameraData.dimension?.x * pdfPage.width) / 100,
+      y: (cameraData.dimension?.y * pdfPage.height) / 100,
     });
-  }, [initData]);
-
-  const handleOpenSigningForm = (index) => {
-    const newValue = [...isOpenSigningForm];
-    newValue[index] = true;
-    setOpenSigningForm(newValue);
-  };
-
-  const handleCloseSigningForm = (index) => {
-    const newValue = [...isOpenSigningForm];
-    newValue[index] = false;
-    setOpenSigningForm(newValue);
-  };
-  const handleOpenModalSetting = (index) => {
-    const newValue = [...isOpenModalSetting];
-    newValue[index] = true;
-    setIsOpenModalSetting(newValue);
-  };
-
-  const handleCloseModalSetting = (index) => {
-    const newValue = [...isOpenModalSetting];
-    newValue[index] = false;
-    setIsOpenModalSetting(newValue);
-  };
+  }, [cameraData, pdfPage]);
 
   const handleRemoveSignature = async () => {
     // console.log("remove");
@@ -93,7 +58,7 @@ export const Initial = ({
     removeSignature.mutate();
   };
 
-  const TopBar = ({ initData }) => {
+  const TopBar = ({ cameraData }) => {
     return (
       <div
         style={{
@@ -102,27 +67,16 @@ export const Initial = ({
           top: -25,
           right: -2,
           zIndex: 10,
-          display:
-            signerId + "_" + initData.type + "_" + initData.suffix ===
-            initData.field_name
-              ? "flex"
-              : "none",
+          // display:
+          //   signerId + "_" + cameraData.type + "_" + cameraData.suffix ===
+          //   cameraData.field_name
+          //     ? "flex"
+          //     : "none",
           // width: "100%",
           backgroundColor: "#D9DFE4",
         }}
         className="topBar"
       >
-        <SvgIcon
-          component={SignIcon}
-          inheritViewBox
-          sx={{
-            width: "15px",
-            height: "15px",
-            color: "#545454",
-            cursor: "pointer",
-          }}
-          onClick={() => handleOpenSigningForm(index)}
-        />
         <SvgIcon
           component={SettingIcon}
           inheritViewBox
@@ -133,7 +87,7 @@ export const Initial = ({
             cursor: "pointer",
             mx: "5px",
           }}
-          onClick={() => handleOpenModalSetting(index)}
+          // onClick={() => handleOpenModalSetting(index)}
         />
         <SvgIcon
           component={GarbageIcon}
@@ -152,7 +106,7 @@ export const Initial = ({
   };
 
   const handleDrag = (type) => {
-    const elements = document.getElementsByClassName(`initRauria-${index}`);
+    const elements = document.getElementsByClassName(`cameraRauria-${index}`);
 
     for (let i = 0; i < elements.length; i++) {
       elements[i].style.display = type;
@@ -160,15 +114,15 @@ export const Initial = ({
   };
 
   if (
-    (initData.page !== null && initData.page !== pdfPage.currentPage) ||
-    initData.process_status === "PROCESSED"
+    (cameraData.page !== null && cameraData.page !== pdfPage.currentPage) ||
+    cameraData.process_status === "PROCESSED"
   )
     return null;
 
   return (
     <>
       <Draggable
-        handle={`#initDrag-${index}`}
+        handle={`#cameraDrag-${index}`}
         // bounds="parent"
         onDrag={() => handleDrag("block")}
         position={dragPosition}
@@ -185,7 +139,7 @@ export const Initial = ({
 
           setIsControlled(true);
           handleDrag("none");
-          const draggableComponent = document.querySelector(`.init-${index}`);
+          const draggableComponent = document.querySelector(`.camera-${index}`);
           const targetComponents = document.querySelectorAll(".sig");
           const containerComponent = document.getElementById(
             `pdf-view-${pdfPage.currentPage - 1}`
@@ -243,7 +197,7 @@ export const Initial = ({
             putSignature.mutate(
               {
                 body: {
-                  field_name: initData.field_name,
+                  field_name: cameraData.field_name,
                   page: pdfPage.currentPage,
                   dimension: {
                     x: x,
@@ -253,7 +207,7 @@ export const Initial = ({
                   },
                   visible_enabled: true,
                 },
-                field: "initial",
+                field: "image",
                 documentId: workFlow.documentId,
               },
               {
@@ -265,67 +219,66 @@ export const Initial = ({
           }
         }}
         disabled={
-          signerId + "_" + initData.type + "_" + initData.suffix !==
-          initData.field_name
+          signerId + "_" + cameraData.type + "_" + cameraData.suffix !==
+            cameraData.field_name || cameraData.process_status === "PROCESSED"
         }
       >
         <ResizableBox
           width={
-            initData.dimension?.width
-              ? initData.dimension?.width * (pdfPage.width / 100)
+            cameraData.dimension?.width
+              ? cameraData.dimension?.width * (pdfPage.width / 100)
               : Infinity
           }
           height={
-            initData.dimension?.height
-              ? initData.dimension?.height * (pdfPage.height / 100)
+            cameraData.dimension?.height
+              ? cameraData.dimension?.height * (pdfPage.height / 100)
               : 150
           }
           style={{
             position: "absolute",
             zIndex: 100,
-            opacity: initData.verification === undefined ? 1 : 0.1,
+            opacity: cameraData.verification === undefined ? 1 : 0.1,
             transition: isControlled ? `transform 0.3s` : `none`,
           }}
           minConstraints={[
-            initData.process_status === "PROCESSED" ||
-            (initData.remark && initData.remark[0] !== signerId)
-              ? initData.dimension?.width * (pdfPage.width / 100)
+            cameraData.process_status === "PROCESSED" ||
+            (cameraData.remark && cameraData.remark[0] !== signerId)
+              ? cameraData.dimension?.width * (pdfPage.width / 100)
               : 0,
-
-            initData.process_status === "PROCESSED" ||
-            (initData.remark && initData.remark[0] !== signerId)
-              ? initData.dimension?.height * (pdfPage.height / 100)
+            cameraData.process_status === "PROCESSED" ||
+            (cameraData.remark && cameraData.remark[0] !== signerId)
+              ? cameraData.dimension?.height * (pdfPage.height / 100)
               : 0,
           ]}
           maxConstraints={[
-            initData.process_status === "PROCESSED" ||
-            signerId + "_" + initData.type + "_" + initData.suffix !==
-              initData.field_name
-              ? initData.dimension?.width * (pdfPage.width / 100)
+            cameraData.process_status === "PROCESSED" ||
+            signerId + "_" + cameraData.type + "_" + cameraData.suffix !==
+              cameraData.field_name
+              ? cameraData.dimension?.width * (pdfPage.width / 100)
               : pdfPage
               ? maxPosibleResizeWidth
               : 200,
-
-            initData.process_status === "PROCESSED" ||
-            signerId + "_" + initData.type + "_" + initData.suffix !==
-              initData.field_name
-              ? initData.dimension?.height * (pdfPage.height / 100)
+            cameraData.process_status === "PROCESSED" ||
+            signerId + "_" + cameraData.type + "_" + cameraData.suffix !==
+              cameraData.field_name
+              ? cameraData.dimension?.height * (pdfPage.height / 100)
               : pdfPage
               ? maxPosibleResizeHeight
               : 200,
           ]}
+          // eslint-disable-next-line no-unused-vars
           onResize={(e, { size }) => {}}
           onResizeStop={(e, { size }) => {
             // console.log("e: ", e);
             if (
-              signerId + "_" + initData.type + "_" + initData.suffix !==
-              initData.field_name
+              signerId + "_" + cameraData.type + "_" + cameraData.suffix !==
+              cameraData.field_name
             )
               return;
             putSignature.mutate(
               {
                 body: {
-                  field_name: initData.field_name,
+                  field_name: cameraData.field_name,
                   page: pdfPage.currentPage,
                   dimension: {
                     x: -1,
@@ -335,7 +288,7 @@ export const Initial = ({
                   },
                   visible_enabled: true,
                 },
-                field: "initial",
+                field: "image",
                 documentId: workFlow.documentId,
               },
               {
@@ -345,15 +298,15 @@ export const Initial = ({
               }
             );
           }}
-          className={`sig init-${index}`}
+          className={`sig camera-${index}`}
         >
           <Box
-            id={`initDrag-${index}`}
+            id={`cameraDrag-${index}`}
             sx={{
               backgroundColor:
-                initData.verification ||
-                signerId + "_" + initData.type + "_" + initData.suffix !==
-                  initData.field_name
+                cameraData.verification ||
+                signerId + "_" + cameraData.type + "_" + cameraData.suffix !==
+                  cameraData.field_name
                   ? "rgba(217, 223, 228, 0.7)"
                   : "rgba(254, 240, 138, 0.7)",
               height: "100%",
@@ -366,106 +319,84 @@ export const Initial = ({
 
               border: "2px dashed",
               borderColor:
-                initData.verification ||
-                signerId + "_" + initData.type + "_" + initData.suffix !==
-                  initData.field_name
+                cameraData.verification ||
+                signerId + "_" + cameraData.type + "_" + cameraData.suffix !==
+                  cameraData.field_name
                   ? "black"
                   : "#EAB308",
             }}
-            onMouseMove={(e) => {
+            onMouseMove={() => {
               setShowTopbar(true);
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={() => {
               setShowTopbar(false);
             }}
-            onMouseDown={(e) => {
+            onMouseDown={() => {
               setTimeout(() => {
                 setShowTopbar(false);
               }, 500);
             }}
-            onClick={(e) => {
-              if (
-                signerId + "_" + initData.type + "_" + initData.suffix !==
-                  initData.field_name ||
-                (newPos.current.x !== dragPosition.x &&
-                  newPos.current.y !== dragPosition.y)
-              ) {
-                return;
-              } else if (
-                e.target.id === `initDrag-${index}` ||
-                e.target.parentElement?.id === `initDrag-${index}` ||
-                e.target.id === "click-duoc"
-              ) {
-                // Your existing logic for opening the signing form...
-                handleOpenSigningForm(index);
-              }
-            }}
+            // onClick={(e) => {
+            //   if (
+            //     signerId + "_" + cameraData.type + "_" + cameraData.suffix !==
+            //       cameraData.field_name ||
+            //     (newPos.current.x !== dragPosition.x &&
+            //       newPos.current.y !== dragPosition.y)
+            //   ) {
+            //     return;
+            //   } else if (
+            //     e.target.id === `sealDrag-${index}` ||
+            //     e.target.parentElement?.id === `sealDrag-${index}` ||
+            //     e.target.id === "click-duoc"
+            //   ) {
+            //     handleOpenSigningForm(index);
+            //   }
+            // }}
           >
             <div>
-              {showTopbar && <TopBar initData={initData} />}
+              {showTopbar && <TopBar cameraData={cameraData} />}
               <span
-                className={`initRauria-${index} topline`}
+                className={`cameraRauria-${index} topline`}
                 style={{ display: "none" }}
               ></span>
               <span
-                className={`initRauria-${index} rightline`}
+                className={`cameraRauria-${index} rightline`}
                 style={{ display: "none" }}
               ></span>
               <span
-                className={`initRauria-${index} botline`}
+                className={`cameraRauria-${index} botline`}
                 style={{ display: "none" }}
               ></span>
               <span
-                className={`initRauria-${index} leftline`}
+                className={`cameraRauria-${index} leftline`}
                 style={{ display: "none" }}
               ></span>
-              <span
-                style={{
-                  position: "absolute",
-                  right: "2px",
-                  top: "-2px",
-                  color: "#EAB308",
-                }}
-              >
-                *
-              </span>
-              Initials
+              Camera
             </div>
           </Box>
         </ResizableBox>
       </Draggable>
 
-      {isOpenSigningForm[index] && (
-        <InitialsField
-          open={isOpenSigningForm[index]}
-          onClose={() => handleCloseSigningForm(index)}
-          signer={signer}
-          initData={initData}
-          workFlow={workFlow}
-        />
-      )}
-      {isOpenModalSetting[index] && (
-        <InitialsFieldSetting
-          open={isOpenModalSetting[index]}
-          onClose={() => handleCloseModalSetting(index)}
-          signer={signer}
-          initData={initData}
-          totalPages={totalPages}
-          workFlow={workFlow}
-          initList={initList}
-        />
-      )}
+      {/* {isOpenModalSetting[index] && (
+    <SealSettingField
+      open={isOpenModalSetting[index]}
+      onClose={() => handleCloseModalSetting(index)}
+      signer={signer}
+      cameraData={cameraData}
+      totalPages={totalPages}
+      workFlow={workFlow}
+      sealList={sealList}
+    />
+  )} */}
     </>
   );
 };
 
-Initial.propTypes = {
+CameraField.propTypes = {
   index: PropTypes.number,
   pdfPage: PropTypes.object,
-  initData: PropTypes.object,
+  cameraData: PropTypes.object,
   workFlow: PropTypes.object,
-  totalPages: PropTypes.number,
-  initList: PropTypes.array,
 };
 
-export default Initial;
+export default CameraField;

@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
+import { ReactComponent as DocumentIcon } from "@/assets/images/svg/mdi_file-document-outline.svg";
 import { ReactComponent as OverviewIcon } from "@/assets/images/svg/overview.svg";
 import { ReactComponent as ParticipantIcon } from "@/assets/images/svg/participant.svg";
-import { ReactComponent as SealIcon } from "@/assets/images/svg/seal.svg";
-import { ReactComponent as DocumentIcon } from "@/assets/images/svg/mdi_file-document-outline.svg";
 import { ReactComponent as SignatureIcon } from "@/assets/images/svg/signature.svg";
 import Box from "@mui/material/Box";
 import SvgIcon from "@mui/material/SvgIcon";
@@ -10,12 +9,10 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
 import { Signatures } from "../SigningContent/TabBar/Signatures";
+import { Documents } from "./tabbar/Documents/Documents";
 import OverView from "./tabbar/Overview";
 import { Participants } from "./tabbar/participants/Participants";
-import { Documents } from "./tabbar/Documents/Documents";
-import { useEffect } from "react";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,9 +52,6 @@ export const TabBar = ({
   tabBar,
   setTabBar,
 }) => {
-  // Begin: Change params for participants
-  let [searchParams, setSearchParams] = useSearchParams();
-
   // End: Change params for participants
   const { t } = useTranslation();
 

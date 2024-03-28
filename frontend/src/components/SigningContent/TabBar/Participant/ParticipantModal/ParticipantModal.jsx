@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 import ParticipantTable from "./ParticipantTable";
 
-export const ParticipantModal = ({ open, data, title, handleClose }) => {
+export const ParticipantModal = ({ open, workFlow, title, handleClose }) => {
   const descriptionElementRef = useRef(null);
   useEffect(() => {
     if (open) {
@@ -76,7 +76,7 @@ export const ParticipantModal = ({ open, data, title, handleClose }) => {
           ref={descriptionElementRef}
           tabIndex={-1}
         >
-          <ParticipantTable data={data} />
+          <ParticipantTable workFlow={workFlow} />
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: "24px" }}>
@@ -95,7 +95,7 @@ export const ParticipantModal = ({ open, data, title, handleClose }) => {
 ParticipantModal.propTypes = {
   open: PropTypes.bool,
   title: PropTypes.string,
-  data: PropTypes.array,
+  workFlow: PropTypes.object,
   handleClose: PropTypes.func,
 };
 

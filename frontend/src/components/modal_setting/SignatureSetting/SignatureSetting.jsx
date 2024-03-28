@@ -1,3 +1,4 @@
+import { assurance } from "@/utils/Constant";
 import AppBar from "@mui/material/AppBar";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -226,7 +227,7 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
                   id="tags-outlined"
                   size="small"
                   forcePopupIcon={false}
-                  options={top100Films}
+                  options={assurance}
                   getOptionLabel={(option) => option.title}
                   filterSelectedOptions
                   disableClearable
@@ -595,11 +596,6 @@ export const SignatureSetting = ({ open, onClose, signer, signatureData }) => {
     </Dialog>
   );
 };
-
-const top100Films = [
-  { title: "Advanced Electronic (AES)", value: "aes" },
-  { title: "Electronic Seal (eSeal)", value: "seal" },
-];
 
 SignatureSetting.propTypes = {
   open: PropTypes.bool,

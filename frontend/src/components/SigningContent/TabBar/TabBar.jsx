@@ -183,10 +183,7 @@ export const TabBar = ({ workFlow, signedInfo, qrSigning }) => {
         <OverView workFlow={workFlow} qrSigning={qrSigning} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Participant
-          participantsList={workFlow.participants}
-          signType="Signature"
-        />
+        <Participant workFlow={workFlow} signType="Signature" />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Signatures sigList1={sigList1} sigList2={sigList2} />

@@ -14,7 +14,8 @@ import { ParticipantInfo } from "./ParticipantInfo";
 import { ParticipantModal } from "./ParticipantModal";
 
 // eslint-disable-next-line react/prop-types
-export const Participant = ({ participantsList, signType }) => {
+export const Participant = ({ workFlow, signType }) => {
+  // console.log("workFlow: ", workFlow);
   // console.log("participantsList: ", participantsList);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -50,10 +51,10 @@ export const Participant = ({ participantsList, signType }) => {
               fontSize: "10px",
             }}
           >
-            {participantsList.length}
+            {workFlow.participants.length}
           </Avatar>
         </Stack>
-        {participantsList.length !== 0 && (
+        {workFlow.participants.length !== 0 && (
           <Stack direction="row" justifyContent={"center"}>
             <IconButton
               onClick={handleOpen}
@@ -67,7 +68,7 @@ export const Participant = ({ participantsList, signType }) => {
           </Stack>
         )}
       </Stack>
-      {participantsList.length === 0 ? (
+      {workFlow.participants.length === 0 ? (
         <Box>
           <Box width={200} textAlign="center" mx="auto">
             <img
@@ -94,7 +95,7 @@ export const Participant = ({ participantsList, signType }) => {
         </Box>
       ) : (
         <ParticipantInfo
-          participantsList={participantsList}
+          participantsList={workFlow.participants}
           signType={signType}
         />
       )}
@@ -110,12 +111,13 @@ export const Participant = ({ participantsList, signType }) => {
         open={open}
         handleClose={handleClose}
         title={t("0-common.workflow")}
-        data={participantsList}
+        workFlow={workFlow}
       />
     </Box>
   );
 };
 Participant.propTypes = {
   participantsList: PropTypes.array,
+  workFlow: PropTypes.object,
 };
 export default Participant;
