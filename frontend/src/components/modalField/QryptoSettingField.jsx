@@ -93,7 +93,7 @@ export const QryptoSettingField = ({
 
   const handleFormSubmit = async (data) => {
     setIsPending(true);
-    // console.log(data, "data");
+    console.log(data, "data");
     // console.log(
     //   data.items
     //     .filter((item) => item !== null)

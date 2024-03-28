@@ -14,7 +14,13 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import qrypto from "../../../assets/images/qrcode-qrypto.png";
 
-export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
+export const CheckBox = ({
+  index,
+  pdfPage,
+  qryptoData,
+  workFlow,
+  getFields,
+}) => {
   const signer = getSigner(workFlow);
   const signerId =
     workFlow?.workflowStatus < 2 ? signer?.signerId || "ADMIN_PROVIDER" : null;
@@ -375,11 +381,11 @@ export const Qrypto = ({ index, pdfPage, qryptoData, workFlow, getFields }) => {
   );
 };
 
-Qrypto.propTypes = {
+CheckBox.propTypes = {
   index: PropTypes.number,
   pdfPage: PropTypes.object,
   qryptoData: PropTypes.object,
   workFlow: PropTypes.object,
 };
 
-export default Qrypto;
+export default CheckBox;
